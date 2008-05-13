@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Net;
-using System.IO;
 using System.Xml;
-using System.Globalization;
+using System.IO;
 
 namespace Twitterizer.Framework
 {
@@ -39,7 +39,7 @@ namespace Twitterizer.Framework
                 readStream = new StreamReader(receiveStream, Encoding.UTF8);
 
                 Data.Response = readStream.ReadToEnd();
-                Data.Statuses = ParseResponseData(Data);
+                Data = ParseResponseData(Data);
 
                 Response.Close();
                 readStream.Close();
@@ -52,12 +52,10 @@ namespace Twitterizer.Framework
             return Data;
         }
 
-        private TwitterStatusCollection ParseResponseData(TwitterRequestData Data)
+        private TwitterRequestData ParseResponseData(TwitterRequestData Data)
         {
             if (Data == null || Data.Response == string.Empty)
                 return null;
-
-            TwitterStatusCollection Collection = new TwitterStatusCollection();
 
             XmlDocument ResultXmlDocument = new XmlDocument();
             ResultXmlDocument.LoadXml(Data.Response);
@@ -65,8 +63,30 @@ namespace Twitterizer.Framework
             switch (ResultXmlDocument.DocumentElement.Name.ToLower())
             {
                 case "status":
-                    Collection.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
+                    Data.Statuses = new TwitterStatusCollection();
+                    Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
                     break;
+                case "statuses":
+                    Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
+                    break;
+                case "users":
+                    Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
+                    break;
+                case "user":
+                    Data.Users = new TwitterUserCollection();
+                    Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                    break;
+            }
+
+            return Data;
+        }
+        #region Parse Statuses
+        private TwitterStatusCollection ParseStatuses(XmlElement Element)
+        {
+            TwitterStatusCollection Collection = new TwitterStatusCollection();
+            foreach (XmlElement Child in Element.GetElementsByTagName("status"))
+            {
+                Collection.Add(ParseStatusNode(Child));
             }
 
             return Collection;
@@ -77,10 +97,71 @@ namespace Twitterizer.Framework
             TwitterStatus Status = new TwitterStatus();
 
             //Mon May 12 15:56:07 +0000 2008
+            Status.ID = int.Parse(Element["id"].InnerText);
+            Status.Created = ParseDateString(Element["created_at"].InnerText);
+            Status.Text = Element["text"].InnerText;
+            Status.Source = Element["source"].InnerText;
+            Status.IsTruncated = bool.Parse(Element["truncated"].InnerText);
+            if (Element["in_reply_to_status_id"].InnerText != string.Empty)
+                Status.InReplyToStatusID = int.Parse(Element["in_reply_to_status_id"].InnerText);
+            if (Element["in_reply_to_user_id"].InnerText != string.Empty) 
+                Status.InReplyToUserID = int.Parse(Element["in_reply_to_user_id"].InnerText);
+            Status.IsFavorited = bool.Parse(Element["favorited"].InnerText);
 
-            Status.Created = DateTime.ParseExact(Element["created_at"].InnerText, "ddd MMMM dd hh:mm:ss K yyyy", new CultureInfo("en-US"));
+            Status.TwitterUser = ParseUserNode(Element["user"]);
 
             return Status;
+        }
+        #endregion
+
+        #region Parse Users
+        private TwitterUserCollection ParseUsers(XmlElement Element)
+        {
+            TwitterUserCollection Collection = new TwitterUserCollection();
+            foreach (XmlElement Child in Element.GetElementsByTagName("user"))
+            {
+                Collection.Add(ParseUserNode(Child));
+            }
+
+            return Collection;
+        }
+
+        private TwitterUser ParseUserNode(XmlElement Element)
+        {
+            TwitterUser User = new TwitterUser();
+            User.ID = int.Parse(Element["id"].InnerText);
+            User.UserName = Element["name"].InnerText;
+            User.ScreenName = Element["screen_name"].InnerText;
+            User.Location = Element["location"].InnerText;
+            User.Description = Element["description"].InnerText;
+            if (Element["profile_image_url"].InnerText != string.Empty)
+                User.ProfileImageUri = new Uri(Element["profile_image_url"].InnerText);
+            if (Element["url"].InnerText != string.Empty)
+                User.ProfileUri = new Uri(Element["url"].InnerText);
+            User.IsProtected = bool.Parse(Element["protected"].InnerText);
+            User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
+            
+            return User;
+        }
+        #endregion
+
+        private DateTime ParseDateString(string DateString)
+        {
+            DateTime parsedDate = DateTime.Now;
+
+            Regex re = new Regex(@"(?<DayName>[^ ]+) (?<MonthName>[^ ]+) (?<Day>[^ ]{1,2}) (?<Hour>[0-9]{1,2}):(?<Minute>[0-9]{1,2}):(?<Second>[0-9]{1,2}) (?<TimeZone>[+-][0-9]{4}) (?<Year>[0-9]{4})");
+            Match CreatedAt = re.Match(DateString);
+            parsedDate = DateTime.Parse(
+                string.Format(
+                    "{0} {1} {2} {3}:{4}:{5}",
+                    CreatedAt.Groups["MonthName"].Value,
+                    CreatedAt.Groups["Day"].Value,
+                    CreatedAt.Groups["Year"].Value,
+                    CreatedAt.Groups["Hour"].Value,
+                    CreatedAt.Groups["Minute"].Value,
+                    CreatedAt.Groups["Second"].Value));
+
+            return parsedDate;
         }
     }
 }

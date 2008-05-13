@@ -68,6 +68,10 @@ namespace Twitterizer.Framework
             get { return numberOfFollowers; }
             set { numberOfFollowers = value; }
         }
-	
+
+        public override string ToString()
+        {
+            return this.userName;
+        }
     }
 }

@@ -40,7 +40,9 @@
     <Compile Include="TwitterRequest.cs" />
     <Compile Include="TwitterRequestData.cs" />
     <Compile Include="TwitterStatus.cs" />
+    <Compile Include="TwitterStatusCollection.cs" />
     <Compile Include="TwitterUser.cs" />
+    <Compile Include="TwitterUserCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

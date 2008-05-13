@@ -17,8 +17,7 @@ namespace Twitterizer.Framework
             password = Password;
         }
 
-
-        public bool Update(string Status)
+        public TwitterStatus Update(string Status)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -31,10 +30,10 @@ namespace Twitterizer.Framework
 
             Data = Request.PerformWebRequest(Data);
 
-            return true;
+            return Data.Statuses[0];
         }
 
-        public bool Delete(int ID)
+        public bool Destroy(int ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -64,6 +63,34 @@ namespace Twitterizer.Framework
             Data = Request.PerformWebRequest(Data);
 
             return true;
+        }
+
+        public TwitterStatusCollection FriendsTimeline()
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.FriendsTimeLine"]);
+
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Statuses;
+        }
+
+        public TwitterUserCollection Friends()
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.Friends"]);
+
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Users;
         }
     }
 }

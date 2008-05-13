@@ -51,6 +51,14 @@ namespace Twitterizer.Framework
             get { return statuses; }
             set { statuses = value; }
         }
+
+        private TwitterUserCollection users;
+        public TwitterUserCollection Users
+        {
+            get { return users; }
+            set { users = value; }
+        }
+	
         #endregion
     }
 }
