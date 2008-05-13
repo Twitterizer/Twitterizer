@@ -69,6 +69,14 @@ namespace Twitterizer.Framework
             set { numberOfFollowers = value; }
         }
 
+        private TwitterStatus status;
+        public TwitterStatus Status
+        {
+            get { return status; }
+            set { status = value; }
+        }
+	
+
         public override string ToString()
         {
             return this.userName;

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twitter.cs" />
+    <Compile Include="TwitterizerException.cs" />
     <Compile Include="TwitterRequest.cs" />
     <Compile Include="TwitterRequestData.cs" />
     <Compile Include="TwitterStatus.cs" />

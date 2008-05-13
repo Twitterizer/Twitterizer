@@ -80,6 +80,7 @@ namespace Twitterizer.Framework
 
             return Data;
         }
+
         #region Parse Statuses
         private TwitterStatusCollection ParseStatuses(XmlElement Element)
         {
@@ -128,6 +129,9 @@ namespace Twitterizer.Framework
 
         private TwitterUser ParseUserNode(XmlElement Element)
         {
+            if (Element == null)
+                return null;
+
             TwitterUser User = new TwitterUser();
             User.ID = int.Parse(Element["id"].InnerText);
             User.UserName = Element["name"].InnerText;
@@ -140,7 +144,10 @@ namespace Twitterizer.Framework
                 User.ProfileUri = new Uri(Element["url"].InnerText);
             User.IsProtected = bool.Parse(Element["protected"].InnerText);
             User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
-            
+
+            if (Element["status"] != null)
+                User.Status = ParseStatusNode(Element["status"]);
+
             return User;
         }
         #endregion
