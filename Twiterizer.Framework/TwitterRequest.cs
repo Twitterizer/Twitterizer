@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Twitterizer.Framework
 {
-    public class TwitterRequest
+    internal class TwitterRequest
     {
         public TwitterRequestData PerformWebRequest(TwitterRequestData Data)
         {
@@ -44,9 +44,9 @@ namespace Twitterizer.Framework
                 Response.Close();
                 readStream.Close();
             }
-            catch (WebException wex)
+            catch (Exception ex)
             {
-                throw new TwitterizerException(wex.Message, Data, wex);
+                throw new TwitterizerException(ex.Message, Data, ex);
             }
 
             return Data;
@@ -57,28 +57,37 @@ namespace Twitterizer.Framework
             if (Data == null || Data.Response == string.Empty)
                 return null;
 
-            XmlDocument ResultXmlDocument = new XmlDocument();
-            ResultXmlDocument.LoadXml(Data.Response);
-
-            switch (ResultXmlDocument.DocumentElement.Name.ToLower())
+            try
             {
-                case "status":
-                    Data.Statuses = new TwitterStatusCollection();
-                    Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
-                    break;
-                case "statuses":
-                    Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
-                    break;
-                case "users":
-                    Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
-                    break;
-                case "user":
-                    Data.Users = new TwitterUserCollection();
-                    Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
-                    break;
-                default:
-                    throw new TwitterizerException("Invalid response from Twitter", null);
-                    break;
+
+
+                XmlDocument ResultXmlDocument = new XmlDocument();
+                ResultXmlDocument.LoadXml(Data.Response);
+
+                switch (ResultXmlDocument.DocumentElement.Name.ToLower())
+                {
+                    case "status":
+                        Data.Statuses = new TwitterStatusCollection();
+                        Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
+                        break;
+                    case "statuses":
+                        Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
+                        break;
+                    case "users":
+                        Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
+                        break;
+                    case "user":
+                        Data.Users = new TwitterUserCollection();
+                        Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                        break;
+                    default:
+                        throw new Exception("Invalid response from Twitter");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new TwitterizerException("Error Parsing Twitter Response.", Data, ex);
             }
 
             return Data;

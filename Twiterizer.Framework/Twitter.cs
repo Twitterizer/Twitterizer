@@ -33,7 +33,7 @@ namespace Twitterizer.Framework
             return Data.Statuses[0];
         }
 
-        public bool Destroy(int ID)
+        public void Destroy(int ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -45,8 +45,6 @@ namespace Twitterizer.Framework
                   ID));
 
             Data = Request.PerformWebRequest(Data);
-
-            return true;
         }
 
         public TwitterStatus Show(int ID)
