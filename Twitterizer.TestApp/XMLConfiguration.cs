@@ -29,7 +29,7 @@ namespace Twitterizer.TestApp
 
         public static string[] Load(string Path)
         {
-            if (!File.Exists(Path))
+            if (!File.Exists(string.Format("{0}\\user_data.xml", Path)))
                 return null;
 
             string[] config = new string[2];

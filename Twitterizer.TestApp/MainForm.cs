@@ -11,6 +11,8 @@ namespace Twitterizer.TestApp
 {
     public partial class MainForm : Form
     {
+        private ConfigureForm ConfigFormSingleton = new ConfigureForm();
+
         private string userName;
         public string UserName
         {
@@ -40,7 +42,7 @@ namespace Twitterizer.TestApp
             }
             else
             {
-                (new ConfigureForm()).Show();
+                ConfigFormSingleton.Show();
             }
         }
 
@@ -55,7 +57,7 @@ namespace Twitterizer.TestApp
 
         private void configureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            (new ConfigureForm()).Show();
+            ConfigFormSingleton.Show();
         }
 
         private void MainFormTabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -83,34 +85,60 @@ namespace Twitterizer.TestApp
         private void friendsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.FriendsTimeline();
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
 
-            Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
-            TimelineDataGridView.DataSource = t.FriendsTimeline();
             MainFormTabControl.SelectedIndex = 2;
-
-            Cursor = Cursors.Default;
         }
 
         private void publicToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-
-            Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
-            TimelineDataGridView.DataSource = t.PublicTimeline();
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.PublicTimeline();
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
             MainFormTabControl.SelectedIndex = 2;
-
-            Cursor = Cursors.Default;
         }
 
         private void userToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.UserTimeline();
+                MainFormTabControl.SelectedIndex = 2;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
 
-            Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
-            TimelineDataGridView.DataSource = t.UserTimeline();
-            MainFormTabControl.SelectedIndex = 2;
-
-            Cursor = Cursors.Default;
         }
         #endregion
 
@@ -118,10 +146,19 @@ namespace Twitterizer.TestApp
         {
             Cursor = Cursors.WaitCursor;
 
-            Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
-            t.Update(UpdateTextBox.Text);
-
-            Cursor = Cursors.Default;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                t.Update(UpdateTextBox.Text);
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         #region Friends and Followers
@@ -129,22 +166,38 @@ namespace Twitterizer.TestApp
         private void friendsToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-
-            Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
-            FriendsDataGridView.DataSource = t.Friends();
-            MainFormTabControl.SelectedIndex = 1;
-            
-            Cursor = Cursors.Default;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                FriendsDataGridView.DataSource = t.Friends();
+                MainFormTabControl.SelectedIndex = 1;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
         private void followersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-
-            Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
-            FriendsDataGridView.DataSource = t.Followers();
-            MainFormTabControl.SelectedIndex = 1;
-
-            Cursor = Cursors.Default;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                FriendsDataGridView.DataSource = t.Followers();
+                MainFormTabControl.SelectedIndex = 1;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         #endregion

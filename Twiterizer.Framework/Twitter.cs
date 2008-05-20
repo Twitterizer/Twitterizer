@@ -8,8 +8,6 @@ namespace Twitterizer.Framework
 {
     public class Twitter
     {
-        
-
         private string userName;
         private string password;
 

@@ -46,7 +46,7 @@ namespace Twitterizer.Framework
             }
             catch (WebException wex)
             {
-                Data.ResponseException = wex;
+                throw new TwitterizerException(wex.Message, Data, wex);
             }
 
             return Data;
@@ -75,6 +75,9 @@ namespace Twitterizer.Framework
                 case "user":
                     Data.Users = new TwitterUserCollection();
                     Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                    break;
+                default:
+                    throw new TwitterizerException("Invalid response from Twitter", null);
                     break;
             }
 
