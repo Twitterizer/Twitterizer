@@ -95,6 +95,7 @@ namespace Twitterizer.TestApp
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ConfigureForm";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConfigureForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

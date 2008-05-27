@@ -30,7 +30,21 @@ namespace Twitterizer.TestApp
             ((MainForm)Application.OpenForms["MainForm"]).UserName = UserNameTextBox.Text;
             ((MainForm)Application.OpenForms["MainForm"]).Password = PasswordTextBox.Text;
 
-            this.Close();
+            this.Hide();
+        }
+
+        private void ConfigureForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            switch (e.CloseReason)
+            {
+                case CloseReason.None:
+                case CloseReason.UserClosing:
+                    e.Cancel = true;
+                    this.Hide();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
