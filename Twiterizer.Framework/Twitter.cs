@@ -77,6 +77,64 @@ namespace Twitterizer.Framework
             return Data.Statuses;
         }
 
+        public TwitterStatusCollection DirectMessages(ulong since_id)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(
+                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Messages"],
+                since_id));
+
+            Data = Request.PerformWebRequest(Data,"GET");
+
+            return Data.Statuses;
+        }
+
+        public TwitterStatusCollection DirectMessagesSent()
+        {
+            return DirectMessagesSent(0);
+        }
+
+        public TwitterStatusCollection DirectMessagesSent(ulong since_id)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(
+                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.MessagesSent"],
+                since_id));
+
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Statuses;
+        }
+
+        public TwitterStatusCollection Archive()
+        {
+            return Archive(0);
+        }
+        public TwitterStatusCollection Archive(ulong since_id)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(
+                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Archive"],
+                since_id));
+
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Statuses;
+        }
+
+
         public TwitterUserCollection Friends()
         {
             TwitterRequest Request = new TwitterRequest();

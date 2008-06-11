@@ -46,5 +46,10 @@ namespace Twitterizer.TestApp
                     break;
             }
         }
+
+        private void ConfigureForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

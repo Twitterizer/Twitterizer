@@ -200,6 +200,50 @@ namespace Twitterizer.TestApp
             }
         }
 
+        private void directMessagesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.DirectMessages(31696943);
+                MainFormTabControl.SelectedIndex = 1;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
         #endregion
+
+        private void directMessagesSentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.DirectMessagesSent(0);
+                MainFormTabControl.SelectedIndex = 1;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+
+        }
+
+       
+
+      
+
+      
     }
 }
