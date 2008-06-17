@@ -47,7 +47,8 @@ namespace Twitterizer.Framework
             Data = Request.PerformWebRequest(Data);
         }
 
-        public TwitterStatus Show(int ID)
+       
+        public TwitterUser Show(string id_or_ScreenName)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -56,11 +57,11 @@ namespace Twitterizer.Framework
 
             Data.ActionUri = new Uri(
                 string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Show"],
-                  ID));
+                  id_or_ScreenName));
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
-            return Data.Statuses[0];
+            return Data.Users[0];
         }
 
         public TwitterStatusCollection FriendsTimeline()
@@ -134,14 +135,21 @@ namespace Twitterizer.Framework
             return Data.Statuses;
         }
 
-
         public TwitterUserCollection Friends()
         {
+            return (Friends(1));
+        }
+
+        public TwitterUserCollection Friends(int page)
+        {
+            // page 0 == page 1 is the start
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
-            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.Friends"]);
+           
+            Data.ActionUri = new Uri(
+                    string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Friends"], page));
 
             Data = Request.PerformWebRequest(Data);
 
@@ -188,12 +196,19 @@ namespace Twitterizer.Framework
 
         public TwitterUserCollection Followers()
         {
+            return (Followers(0));
+        }
+
+        public TwitterUserCollection Followers(int page)
+        {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
 
-            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.Followers"]);
+            
+             Data.ActionUri = new Uri(
+                    string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Followers"], page));
 
             Data = Request.PerformWebRequest(Data);
 

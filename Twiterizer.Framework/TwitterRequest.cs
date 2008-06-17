@@ -223,6 +223,11 @@ namespace Twitterizer.Framework
             User.IsProtected = bool.Parse(Element["protected"].InnerText);
             User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
 
+            if (Element["friends_count"] != null)
+                User.Friends_count = int.Parse(Element["friends_count"].InnerText);
+            else
+                User.Friends_count = -1;        // flag that we don't know, which is different than having zero friends
+
             if (Element["status"] != null)
                 User.Status = ParseStatusNode(Element["status"]);
 

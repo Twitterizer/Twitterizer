@@ -34,6 +34,13 @@ namespace Twitterizer.Framework
             set { location = value; }
         }
 
+        private string timeZone = "";
+        public string TimeZone
+        {
+            get { return timeZone; }
+            set { timeZone = value; }
+        }
+
         private string description = "";
         public string Description
         {
@@ -67,6 +74,13 @@ namespace Twitterizer.Framework
         {
             get { return numberOfFollowers; }
             set { numberOfFollowers = value; }
+        }
+
+        private int friends_count = 0;
+        public int Friends_count
+        {
+            get { return friends_count; }
+            set { friends_count = value; }
         }
 
         private TwitterStatus status;
