@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
@@ -25,17 +24,17 @@ namespace Twitterizer.Framework
 
             Request.Method = HTTPMethod;
 
-            Stream receiveStream;
             StreamReader readStream;
 
             // Some limitations
             Request.MaximumAutomaticRedirections = 4;
             Request.MaximumResponseHeadersLength = 4;
+            Request.ContentLength = 0;
 
             // Set our credentials
             Request.Credentials = new NetworkCredential(Data.UserName, Data.Password);
 
-            HttpWebResponse Response = null;
+            HttpWebResponse Response;
 
             // Get the respon
             try
@@ -43,7 +42,7 @@ namespace Twitterizer.Framework
                 Response = (HttpWebResponse)Request.GetResponse();
 
                 // Get the stream associated with the response.
-                receiveStream = Response.GetResponseStream();
+                Stream receiveStream = Response.GetResponseStream();
 
                 // Pipes the stream to a higher level stream reader with the required encoding format. 
                 readStream = new StreamReader(receiveStream, Encoding.UTF8);
@@ -69,45 +68,41 @@ namespace Twitterizer.Framework
 
             try
             {
-
-
                 XmlDocument ResultXmlDocument = new XmlDocument();
                 ResultXmlDocument.LoadXml(Data.Response);
 
-                
+                if (ResultXmlDocument.DocumentElement != null)
+                    switch (ResultXmlDocument.DocumentElement.Name.ToLower())
+                    {
+                        case "status":
+                            Data.Statuses = new TwitterStatusCollection();
+                            Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
+                            break;
+                        case "statuses":
+                            Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
+                            break;
+                        case "users":
+                            Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
+                            break;
+                        case "user":
+                            Data.Users = new TwitterUserCollection();
+                            Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                            break;
+                        case "direct-messages":
+                            Data.Statuses = new TwitterStatusCollection();
+                            Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
+                            break;
 
-                switch (ResultXmlDocument.DocumentElement.Name.ToLower())
-                {
-                    case "status":
-                        Data.Statuses = new TwitterStatusCollection();
-                        Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
-                        break;
-                    case "statuses":
-                        Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
-                        break;
-                    case "users":
-                        Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
-                        break;
-                    case "user":
-                        Data.Users = new TwitterUserCollection();
-                        Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
-                        break;
-                    case "direct-messages":
-                        Data.Statuses = new TwitterStatusCollection();
-                        Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
-                        break;
+                        case "nil-classes":
+                            // do nothing, this seems to be a null response i.e. no messages since
+                            break;
 
-                    case "nil-classes":
-                        // do nothing, this seems to be a null response i.e. no messages since
-                        break;
-
-                    case "error":
-                        throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
-                    default:
+                        case "error":
+                            throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
+                        default:
                         
-                        throw new Exception("Invalid response from Twitter");
-                }
-
+                            throw new Exception("Invalid response from Twitter");
+                    }
             }
             catch (Exception ex)
             {
@@ -129,9 +124,11 @@ namespace Twitterizer.Framework
             return Collection;
         }
 
-        private TwitterStatus ParseStatusNode(XmlElement Element)
+        private TwitterStatus ParseStatusNode(XmlNode Element)
         {
             TwitterStatus Status = new TwitterStatus();
+
+            if (Element == null) return null;
 
             //Mon May 12 15:56:07 +0000 2008
             Status.ID = int.Parse(Element["id"].InnerText);
@@ -143,7 +140,11 @@ namespace Twitterizer.Framework
                 Status.InReplyToStatusID = int.Parse(Element["in_reply_to_status_id"].InnerText);
             if (Element["in_reply_to_user_id"].InnerText != string.Empty) 
                 Status.InReplyToUserID = int.Parse(Element["in_reply_to_user_id"].InnerText);
-            Status.IsFavorited = bool.Parse(Element["favorited"].InnerText);
+            
+            // Fix for Issued #4
+            bool isFavorited;
+            bool.TryParse(Element["favorited"].InnerText, out isFavorited);
+            Status.IsFavorited = isFavorited;
 
             Status.TwitterUser = ParseUserNode(Element["user"]);
 
@@ -152,7 +153,7 @@ namespace Twitterizer.Framework
         #endregion
 
         #region Parse DirectMessages
-        private TwitterStatusCollection ParseDirectMessages(XmlElement Element)
+        private static TwitterStatusCollection ParseDirectMessages(XmlElement Element)
         {
             TwitterStatusCollection Collection = new TwitterStatusCollection();
             foreach (XmlElement Child in Element.GetElementsByTagName("direct_message"))
@@ -163,25 +164,20 @@ namespace Twitterizer.Framework
             return Collection;
         }
 
-        private TwitterStatus ParseDirectMessageNode(XmlElement Element)
+        private static TwitterStatus ParseDirectMessageNode(XmlNode Element)
         {
+            if (Element == null) return null;
+
             TwitterStatus Status = new TwitterStatus();
 
-            //Mon May 12 15:56:07 +0000 2008
             Status.ID = int.Parse(Element["id"].InnerText);
             Status.Created = ParseDateString(Element["created_at"].InnerText);
             Status.Text = Element["text"].InnerText;
             
-            //if (Element["in_reply_to_status_id"].InnerText != string.Empty)
-            //    Status.InReplyToStatusID = int.Parse(Element["in_reply_to_status_id"].InnerText);
-            //if (Element["in_reply_to_user_id"].InnerText != string.Empty)
-            //    Status.InReplyToUserID = int.Parse(Element["in_reply_to_user_id"].InnerText);
-           
-           if (Element["favorited"] != null && (Element["in_reply_to_status_id"].InnerText != string.Empty))
+            if (Element["favorited"] != null && (Element["in_reply_to_status_id"].InnerText != string.Empty))
                 Status.IsFavorited = bool.Parse(Element["favorited"].InnerText);
 
             Status.TwitterUser = new TwitterUser();
-           // Status.TwitterUser = ParseUserNode(Element["user"]);
             Status.TwitterUser.ScreenName = Element["sender_screen_name"].InnerText;
             Status.TwitterUser.ID = int.Parse(Element["sender_id"].InnerText);
             Status.RecipientID = int.Parse(Element["recipient_id"].InnerText);
@@ -196,6 +192,8 @@ namespace Twitterizer.Framework
         #region Parse Users
         private TwitterUserCollection ParseUsers(XmlElement Element)
         {
+            if (Element == null) return null;
+
             TwitterUserCollection Collection = new TwitterUserCollection();
             foreach (XmlElement Child in Element.GetElementsByTagName("user"))
             {
@@ -205,7 +203,7 @@ namespace Twitterizer.Framework
             return Collection;
         }
 
-        private TwitterUser ParseUserNode(XmlElement Element)
+        private TwitterUser ParseUserNode(XmlNode Element)
         {
             if (Element == null)
                 return null;
@@ -235,13 +233,11 @@ namespace Twitterizer.Framework
         }
         #endregion
 
-        private DateTime ParseDateString(string DateString)
+        private static DateTime ParseDateString(string DateString)
         {
-            DateTime parsedDate = DateTime.Now;
-
             Regex re = new Regex(@"(?<DayName>[^ ]+) (?<MonthName>[^ ]+) (?<Day>[^ ]{1,2}) (?<Hour>[0-9]{1,2}):(?<Minute>[0-9]{1,2}):(?<Second>[0-9]{1,2}) (?<TimeZone>[+-][0-9]{4}) (?<Year>[0-9]{4})");
             Match CreatedAt = re.Match(DateString);
-            parsedDate = DateTime.Parse(
+            DateTime parsedDate = DateTime.Parse(
                 string.Format(
                     "{0} {1} {2} {3}:{4}:{5}",
                     CreatedAt.Groups["MonthName"].Value,

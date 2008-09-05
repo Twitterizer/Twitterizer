@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Twitterizer.Framework
 {
@@ -62,21 +60,21 @@ namespace Twitterizer.Framework
             set { profileUri = value; }
         }
 
-        private bool isProtected  = false;
+        private bool isProtected;
         public bool IsProtected
         {
             get { return isProtected; }
             set { isProtected = value; }
         }
 
-        private int numberOfFollowers = 0;
+        private int numberOfFollowers;
         public int NumberOfFollowers
         {
             get { return numberOfFollowers; }
             set { numberOfFollowers = value; }
         }
 
-        private int friends_count = 0;
+        private int friends_count;
         public int Friends_count
         {
             get { return friends_count; }
@@ -93,7 +91,7 @@ namespace Twitterizer.Framework
 
         public override string ToString()
         {
-            return this.userName;
+            return userName;
         }
     }
 }

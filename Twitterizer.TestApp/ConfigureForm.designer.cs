@@ -50,6 +50,7 @@ namespace Twitterizer.TestApp
             this.UserNameTextBox.Name = "UserNameTextBox";
             this.UserNameTextBox.Size = new System.Drawing.Size(181, 20);
             this.UserNameTextBox.TabIndex = 1;
+            this.UserNameTextBox.Text = "Twit_er_izer";
             // 
             // PasswordLabel
             // 
@@ -66,6 +67,7 @@ namespace Twitterizer.TestApp
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.Size = new System.Drawing.Size(100, 20);
             this.PasswordTextBox.TabIndex = 3;
+            this.PasswordTextBox.Text = "23uSWutr";
             // 
             // SaveButton
             // 

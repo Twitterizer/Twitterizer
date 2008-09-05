@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Twitterizer.Framework
 {
@@ -14,7 +11,7 @@ namespace Twitterizer.Framework
             set { created = value; }
         }
 
-        private int id = 0;
+        private int id;
         public int ID
         {
             get { return id; }
@@ -35,35 +32,35 @@ namespace Twitterizer.Framework
             set { source = value; }
         }
 
-        private int recipientID = 0;
+        private int recipientID;
         public int RecipientID
         {
             get { return recipientID; }
             set { recipientID = value; }
         }
 
-        private bool isTruncated = false;
+        private bool isTruncated;
         public bool IsTruncated
         {
             get { return isTruncated; }
             set { isTruncated = value; }
         }
 
-        private bool isFavorited = false;
+        private bool isFavorited;
         public bool IsFavorited
         {
             get { return isFavorited; }
             set { isFavorited = value; }
         }
 
-        private int inReplyToStatusID = 0;
+        private int inReplyToStatusID;
         public int InReplyToStatusID
         {
             get { return inReplyToStatusID; }
             set { inReplyToStatusID = value; }
         }
 
-        private int inReplyToUserID = 0;
+        private int inReplyToUserID;
         public int InReplyToUserID
         {
             get { return inReplyToUserID; }

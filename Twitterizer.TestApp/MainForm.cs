@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Twitterizer.Framework;
 
@@ -11,7 +6,7 @@ namespace Twitterizer.TestApp
 {
     public partial class MainForm : Form
     {
-        private ConfigureForm ConfigFormSingleton = new ConfigureForm();
+        private readonly ConfigureForm ConfigFormSingleton = new ConfigureForm();
 
         private string userName;
         public string UserName
@@ -31,19 +26,12 @@ namespace Twitterizer.TestApp
         {
             InitializeComponent();
 
-            this.Width = 541;
-            this.Height = 209;
+            Width = 541;
+            Height = 209;
 
-            string[] config = XMLConfiguration.Load(Application.StartupPath);
-            if (config != null)
-            {
-                userName = config[0];
-                password = config[1];
-            }
-            else
-            {
-                ConfigFormSingleton.Show();
-            }
+            // Shared twitter test account
+            userName = "Twit_er_izer";
+            password = "23uSWutr";
         }
 
         private void UpdateTextBox_TextChanged(object sender, EventArgs e)
@@ -65,16 +53,16 @@ namespace Twitterizer.TestApp
             switch (MainFormTabControl.SelectedTab.Name)
             {
                 case "UpdateTabPage":
-                    this.Width = 541;
-                    this.Height = 209;
+                    Width = 541;
+                    Height = 209;
                     break;
                 case "TimelineTabPage":
-                    this.Width = 789;
-                    this.Height = 599;
+                    Width = 789;
+                    Height = 599;
                     break;
                 case "FriendsTabPage":
-                    this.Width = 789;
-                    this.Height = 599;
+                    Width = 789;
+                    Height = 599;
                     break;
                 default:
                     break;
@@ -87,7 +75,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.FriendsTimeline();
             }
             catch (TwitterizerException ex)
@@ -107,7 +95,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.PublicTimeline();
             }
             catch (TwitterizerException ex)
@@ -126,7 +114,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.UserTimeline();
                 MainFormTabControl.SelectedIndex = 2;
             }
@@ -148,7 +136,7 @@ namespace Twitterizer.TestApp
 
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 t.Update(UpdateTextBox.Text);
             }
             catch (TwitterizerException ex)
@@ -168,7 +156,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 FriendsDataGridView.DataSource = t.Friends();
                 MainFormTabControl.SelectedIndex = 1;
             }
@@ -186,7 +174,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 FriendsDataGridView.DataSource = t.Followers();
                 MainFormTabControl.SelectedIndex = 1;
             }
@@ -205,7 +193,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.DirectMessages(31696943);
                 MainFormTabControl.SelectedIndex = 1;
             }
@@ -225,7 +213,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitterizer.Framework.Twitter t = new Twitterizer.Framework.Twitter(userName, password);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.DirectMessagesSent(0);
                 MainFormTabControl.SelectedIndex = 1;
             }

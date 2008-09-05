@@ -37,20 +37,6 @@ namespace Twitterizer.TestApp
             this.UpdateTabPage = new System.Windows.Forms.TabPage();
             this.FriendsTabPage = new System.Windows.Forms.TabPage();
             this.FriendsDataGridView = new System.Windows.Forms.DataGridView();
-            this.CurrentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TimelineTabPage = new System.Windows.Forms.TabPage();
-            this.TimelineDataGridView = new System.Windows.Forms.DataGridView();
-            this.TimelinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.friendsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.publicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.directMessagesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.configureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.friendsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.friendsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.followersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.directMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.screenNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,21 +45,36 @@ namespace Twitterizer.TestApp
             this.profileUriDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.isProtectedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.numberOfFollowersDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CurrentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.twitterUserCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.TimelineTabPage = new System.Windows.Forms.TabPage();
+            this.TimelineDataGridView = new System.Windows.Forms.DataGridView();
+            this.twitterStatusCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.TimelinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.friendsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.publicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.directMessagesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.directMessagesSentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.friendsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.friendsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.followersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.directMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.IsFavorited = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.twitterUserDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.twitterStatusCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.directMessagesSentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl.SuspendLayout();
             this.UpdateTabPage.SuspendLayout();
             this.FriendsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FriendsDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).BeginInit();
             this.TimelineTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TimelineDataGridView)).BeginInit();
-            this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // UpdateButton
@@ -185,131 +186,6 @@ namespace Twitterizer.TestApp
             this.FriendsDataGridView.Size = new System.Drawing.Size(802, 500);
             this.FriendsDataGridView.TabIndex = 0;
             // 
-            // CurrentStatus
-            // 
-            this.CurrentStatus.DataPropertyName = "Status.Text";
-            this.CurrentStatus.HeaderText = "Current Status";
-            this.CurrentStatus.Name = "CurrentStatus";
-            this.CurrentStatus.ReadOnly = true;
-            // 
-            // TimelineTabPage
-            // 
-            this.TimelineTabPage.Controls.Add(this.TimelineDataGridView);
-            this.TimelineTabPage.Location = new System.Drawing.Point(4, 22);
-            this.TimelineTabPage.Name = "TimelineTabPage";
-            this.TimelineTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.TimelineTabPage.Size = new System.Drawing.Size(808, 506);
-            this.TimelineTabPage.TabIndex = 1;
-            this.TimelineTabPage.Text = "Timeline";
-            this.TimelineTabPage.UseVisualStyleBackColor = true;
-            // 
-            // TimelineDataGridView
-            // 
-            this.TimelineDataGridView.AllowUserToAddRows = false;
-            this.TimelineDataGridView.AllowUserToDeleteRows = false;
-            this.TimelineDataGridView.AutoGenerateColumns = false;
-            this.TimelineDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TimelineDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.twitterUserDataGridViewTextBoxColumn,
-            this.textDataGridViewTextBoxColumn,
-            this.createdDataGridViewTextBoxColumn});
-            this.TimelineDataGridView.DataSource = this.twitterStatusCollectionBindingSource;
-            this.TimelineDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TimelineDataGridView.Location = new System.Drawing.Point(3, 3);
-            this.TimelineDataGridView.Name = "TimelineDataGridView";
-            this.TimelineDataGridView.ReadOnly = true;
-            this.TimelineDataGridView.RowHeadersVisible = false;
-            this.TimelineDataGridView.Size = new System.Drawing.Size(802, 500);
-            this.TimelineDataGridView.TabIndex = 0;
-            // 
-            // TimelinesToolStripMenuItem
-            // 
-            this.TimelinesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.friendsToolStripMenuItem,
-            this.publicToolStripMenuItem,
-            this.userToolStripMenuItem,
-            this.directMessagesToolStripMenuItem1,
-            this.directMessagesSentToolStripMenuItem});
-            this.TimelinesToolStripMenuItem.Name = "TimelinesToolStripMenuItem";
-            this.TimelinesToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.TimelinesToolStripMenuItem.Text = "Timelines";
-            // 
-            // friendsToolStripMenuItem
-            // 
-            this.friendsToolStripMenuItem.Name = "friendsToolStripMenuItem";
-            this.friendsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.friendsToolStripMenuItem.Text = "Friends";
-            this.friendsToolStripMenuItem.Click += new System.EventHandler(this.friendsToolStripMenuItem_Click);
-            // 
-            // publicToolStripMenuItem
-            // 
-            this.publicToolStripMenuItem.Name = "publicToolStripMenuItem";
-            this.publicToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.publicToolStripMenuItem.Text = "Public";
-            this.publicToolStripMenuItem.Click += new System.EventHandler(this.publicToolStripMenuItem_Click);
-            // 
-            // userToolStripMenuItem
-            // 
-            this.userToolStripMenuItem.Name = "userToolStripMenuItem";
-            this.userToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.userToolStripMenuItem.Text = "User";
-            this.userToolStripMenuItem.Click += new System.EventHandler(this.userToolStripMenuItem_Click);
-            // 
-            // directMessagesToolStripMenuItem1
-            // 
-            this.directMessagesToolStripMenuItem1.Name = "directMessagesToolStripMenuItem1";
-            this.directMessagesToolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
-            this.directMessagesToolStripMenuItem1.Text = "DirectMessages";
-            this.directMessagesToolStripMenuItem1.Click += new System.EventHandler(this.directMessagesToolStripMenuItem1_Click);
-            // 
-            // configureToolStripMenuItem
-            // 
-            this.configureToolStripMenuItem.Name = "configureToolStripMenuItem";
-            this.configureToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
-            this.configureToolStripMenuItem.Text = "Configure";
-            this.configureToolStripMenuItem.Click += new System.EventHandler(this.configureToolStripMenuItem_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.friendsToolStripMenuItem1,
-            this.TimelinesToolStripMenuItem,
-            this.configureToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(840, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // friendsToolStripMenuItem1
-            // 
-            this.friendsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.friendsToolStripMenuItem2,
-            this.followersToolStripMenuItem,
-            this.directMessagesToolStripMenuItem});
-            this.friendsToolStripMenuItem1.Name = "friendsToolStripMenuItem1";
-            this.friendsToolStripMenuItem1.Size = new System.Drawing.Size(54, 20);
-            this.friendsToolStripMenuItem1.Text = "Friends";
-            // 
-            // friendsToolStripMenuItem2
-            // 
-            this.friendsToolStripMenuItem2.Name = "friendsToolStripMenuItem2";
-            this.friendsToolStripMenuItem2.Size = new System.Drawing.Size(130, 22);
-            this.friendsToolStripMenuItem2.Text = "Friends";
-            this.friendsToolStripMenuItem2.Click += new System.EventHandler(this.friendsToolStripMenuItem2_Click);
-            // 
-            // followersToolStripMenuItem
-            // 
-            this.followersToolStripMenuItem.Name = "followersToolStripMenuItem";
-            this.followersToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            this.followersToolStripMenuItem.Text = "Followers";
-            this.followersToolStripMenuItem.Click += new System.EventHandler(this.followersToolStripMenuItem_Click);
-            // 
-            // directMessagesToolStripMenuItem
-            // 
-            this.directMessagesToolStripMenuItem.Name = "directMessagesToolStripMenuItem";
-            this.directMessagesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            // 
             // userNameDataGridViewTextBoxColumn
             // 
             this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
@@ -370,9 +246,153 @@ namespace Twitterizer.TestApp
             this.numberOfFollowersDataGridViewTextBoxColumn.Name = "numberOfFollowersDataGridViewTextBoxColumn";
             this.numberOfFollowersDataGridViewTextBoxColumn.ReadOnly = true;
             // 
+            // CurrentStatus
+            // 
+            this.CurrentStatus.DataPropertyName = "Status.Text";
+            this.CurrentStatus.HeaderText = "Current Status";
+            this.CurrentStatus.Name = "CurrentStatus";
+            this.CurrentStatus.ReadOnly = true;
+            // 
             // twitterUserCollectionBindingSource
             // 
             this.twitterUserCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterUserCollection);
+            // 
+            // TimelineTabPage
+            // 
+            this.TimelineTabPage.Controls.Add(this.TimelineDataGridView);
+            this.TimelineTabPage.Location = new System.Drawing.Point(4, 22);
+            this.TimelineTabPage.Name = "TimelineTabPage";
+            this.TimelineTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.TimelineTabPage.Size = new System.Drawing.Size(808, 506);
+            this.TimelineTabPage.TabIndex = 1;
+            this.TimelineTabPage.Text = "Timeline";
+            this.TimelineTabPage.UseVisualStyleBackColor = true;
+            // 
+            // TimelineDataGridView
+            // 
+            this.TimelineDataGridView.AllowUserToAddRows = false;
+            this.TimelineDataGridView.AllowUserToDeleteRows = false;
+            this.TimelineDataGridView.AutoGenerateColumns = false;
+            this.TimelineDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TimelineDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.IsFavorited,
+            this.twitterUserDataGridViewTextBoxColumn,
+            this.textDataGridViewTextBoxColumn,
+            this.createdDataGridViewTextBoxColumn});
+            this.TimelineDataGridView.DataSource = this.twitterStatusCollectionBindingSource;
+            this.TimelineDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TimelineDataGridView.Location = new System.Drawing.Point(3, 3);
+            this.TimelineDataGridView.Name = "TimelineDataGridView";
+            this.TimelineDataGridView.ReadOnly = true;
+            this.TimelineDataGridView.RowHeadersVisible = false;
+            this.TimelineDataGridView.Size = new System.Drawing.Size(802, 500);
+            this.TimelineDataGridView.TabIndex = 0;
+            // 
+            // twitterStatusCollectionBindingSource
+            // 
+            this.twitterStatusCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterStatusCollection);
+            // 
+            // TimelinesToolStripMenuItem
+            // 
+            this.TimelinesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.friendsToolStripMenuItem,
+            this.publicToolStripMenuItem,
+            this.userToolStripMenuItem,
+            this.directMessagesToolStripMenuItem1,
+            this.directMessagesSentToolStripMenuItem});
+            this.TimelinesToolStripMenuItem.Name = "TimelinesToolStripMenuItem";
+            this.TimelinesToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.TimelinesToolStripMenuItem.Text = "Timelines";
+            // 
+            // friendsToolStripMenuItem
+            // 
+            this.friendsToolStripMenuItem.Name = "friendsToolStripMenuItem";
+            this.friendsToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.friendsToolStripMenuItem.Text = "Friends";
+            this.friendsToolStripMenuItem.Click += new System.EventHandler(this.friendsToolStripMenuItem_Click);
+            // 
+            // publicToolStripMenuItem
+            // 
+            this.publicToolStripMenuItem.Name = "publicToolStripMenuItem";
+            this.publicToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.publicToolStripMenuItem.Text = "Public";
+            this.publicToolStripMenuItem.Click += new System.EventHandler(this.publicToolStripMenuItem_Click);
+            // 
+            // userToolStripMenuItem
+            // 
+            this.userToolStripMenuItem.Name = "userToolStripMenuItem";
+            this.userToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.userToolStripMenuItem.Text = "User";
+            this.userToolStripMenuItem.Click += new System.EventHandler(this.userToolStripMenuItem_Click);
+            // 
+            // directMessagesToolStripMenuItem1
+            // 
+            this.directMessagesToolStripMenuItem1.Name = "directMessagesToolStripMenuItem1";
+            this.directMessagesToolStripMenuItem1.Size = new System.Drawing.Size(200, 22);
+            this.directMessagesToolStripMenuItem1.Text = "DirectMessages";
+            this.directMessagesToolStripMenuItem1.Click += new System.EventHandler(this.directMessagesToolStripMenuItem1_Click);
+            // 
+            // directMessagesSentToolStripMenuItem
+            // 
+            this.directMessagesSentToolStripMenuItem.Name = "directMessagesSentToolStripMenuItem";
+            this.directMessagesSentToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.directMessagesSentToolStripMenuItem.Text = "DirectMessagesSent";
+            this.directMessagesSentToolStripMenuItem.Click += new System.EventHandler(this.directMessagesSentToolStripMenuItem_Click);
+            // 
+            // configureToolStripMenuItem
+            // 
+            this.configureToolStripMenuItem.Name = "configureToolStripMenuItem";
+            this.configureToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.configureToolStripMenuItem.Text = "Configure";
+            this.configureToolStripMenuItem.Click += new System.EventHandler(this.configureToolStripMenuItem_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.friendsToolStripMenuItem1,
+            this.TimelinesToolStripMenuItem,
+            this.configureToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(840, 24);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // friendsToolStripMenuItem1
+            // 
+            this.friendsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.friendsToolStripMenuItem2,
+            this.followersToolStripMenuItem,
+            this.directMessagesToolStripMenuItem});
+            this.friendsToolStripMenuItem1.Name = "friendsToolStripMenuItem1";
+            this.friendsToolStripMenuItem1.Size = new System.Drawing.Size(60, 20);
+            this.friendsToolStripMenuItem1.Text = "Friends";
+            // 
+            // friendsToolStripMenuItem2
+            // 
+            this.friendsToolStripMenuItem2.Name = "friendsToolStripMenuItem2";
+            this.friendsToolStripMenuItem2.Size = new System.Drawing.Size(138, 22);
+            this.friendsToolStripMenuItem2.Text = "Friends";
+            this.friendsToolStripMenuItem2.Click += new System.EventHandler(this.friendsToolStripMenuItem2_Click);
+            // 
+            // followersToolStripMenuItem
+            // 
+            this.followersToolStripMenuItem.Name = "followersToolStripMenuItem";
+            this.followersToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.followersToolStripMenuItem.Text = "Followers";
+            this.followersToolStripMenuItem.Click += new System.EventHandler(this.followersToolStripMenuItem_Click);
+            // 
+            // directMessagesToolStripMenuItem
+            // 
+            this.directMessagesToolStripMenuItem.Name = "directMessagesToolStripMenuItem";
+            this.directMessagesToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            // 
+            // IsFavorited
+            // 
+            this.IsFavorited.DataPropertyName = "IsFavorited";
+            this.IsFavorited.HeaderText = "Fav?";
+            this.IsFavorited.Name = "IsFavorited";
+            this.IsFavorited.ReadOnly = true;
             // 
             // twitterUserDataGridViewTextBoxColumn
             // 
@@ -398,17 +418,6 @@ namespace Twitterizer.TestApp
             this.createdDataGridViewTextBoxColumn.ReadOnly = true;
             this.createdDataGridViewTextBoxColumn.Width = 125;
             // 
-            // twitterStatusCollectionBindingSource
-            // 
-            this.twitterStatusCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterStatusCollection);
-            // 
-            // directMessagesSentToolStripMenuItem
-            // 
-            this.directMessagesSentToolStripMenuItem.Name = "directMessagesSentToolStripMenuItem";
-            this.directMessagesSentToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.directMessagesSentToolStripMenuItem.Text = "DirectMessagesSent";
-            this.directMessagesSentToolStripMenuItem.Click += new System.EventHandler(this.directMessagesSentToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,12 +433,12 @@ namespace Twitterizer.TestApp
             this.UpdateTabPage.PerformLayout();
             this.FriendsTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FriendsDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).EndInit();
             this.TimelineTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TimelineDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -450,9 +459,6 @@ namespace Twitterizer.TestApp
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.DataGridView TimelineDataGridView;
         private System.Windows.Forms.BindingSource twitterStatusCollectionBindingSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn twitterUserDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripMenuItem publicToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem userToolStripMenuItem;
         private System.Windows.Forms.TabPage FriendsTabPage;
@@ -473,5 +479,9 @@ namespace Twitterizer.TestApp
         private System.Windows.Forms.ToolStripMenuItem directMessagesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem directMessagesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem directMessagesSentToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsFavorited;
+        private System.Windows.Forms.DataGridViewTextBoxColumn twitterUserDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
     }
 }

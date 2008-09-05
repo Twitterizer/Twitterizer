@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Configuration;
 using System.Web;
 
 namespace Twitterizer.Framework
 {
     public class Twitter
     {
-        private string userName;
-        private string password;
+        private readonly string userName;
+        private readonly string password;
 
         public Twitter(string UserName, string Password)
         {
@@ -25,8 +22,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
             
             Data.ActionUri = new Uri(
-                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Update"],
-                  HttpUtility.UrlEncode(Status)));
+                string.Format("http://twitter.com/statuses/update.xml?status={0}", HttpUtility.UrlEncode(Status)));
 
             Data = Request.PerformWebRequest(Data);
 
@@ -41,10 +37,9 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Destroy"],
-                  ID));
+                string.Format("http://twitter.com/statuses/destroy/{0}.xml", ID));
 
-            Data = Request.PerformWebRequest(Data);
+            Request.PerformWebRequest(Data);
         }
 
        
@@ -56,8 +51,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Show"],
-                  id_or_ScreenName));
+                string.Format("http://twitter.com/users/show/{0}.xml", id_or_ScreenName));
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -71,7 +65,7 @@ namespace Twitterizer.Framework
             Data.UserName = userName;
             Data.Password = password;
 
-            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.FriendsTimeLine"]);
+            Data.ActionUri = new Uri("http://twitter.com/statuses/friends_timeline.xml");
 
             Data = Request.PerformWebRequest(Data);
 
@@ -86,8 +80,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Messages"],
-                since_id));
+                string.Format("http://twitter.com/direct_messages.xml?since_id={0}", since_id));
 
             Data = Request.PerformWebRequest(Data,"GET");
 
@@ -107,8 +100,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.MessagesSent"],
-                since_id));
+                string.Format("http://twitter.com/direct_messages/sent.xml?since_id={0}", since_id));
 
             Data = Request.PerformWebRequest(Data);
 
@@ -127,8 +119,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Archive"],
-                since_id));
+                string.Format("http://twitter.com/account/archive.xml?since_id={0}", since_id));
 
             Data = Request.PerformWebRequest(Data);
 
@@ -149,7 +140,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
            
             Data.ActionUri = new Uri(
-                    string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Friends"], page));
+                    string.Format("http://twitter.com/statuses/friends.xml?page={0}", page));
 
             Data = Request.PerformWebRequest(Data);
 
@@ -161,7 +152,7 @@ namespace Twitterizer.Framework
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
 
-            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.UserTimeLine"]);
+            Data.ActionUri = new Uri("http://twitter.com/statuses/user_timeline.xml");
 
             Data = Request.PerformWebRequest(Data);
 
@@ -173,7 +164,7 @@ namespace Twitterizer.Framework
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
 
-            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.PublicTimeLine"]);
+            Data.ActionUri = new Uri("http://twitter.com/statuses/public_timeline.xml");
 
             Data = Request.PerformWebRequest(Data);
 
@@ -187,7 +178,7 @@ namespace Twitterizer.Framework
             Data.UserName = userName;
             Data.Password = password;
 
-            Data.ActionUri = new Uri(ConfigurationManager.AppSettings["Twitterizer.Framework.Replies"]);
+            Data.ActionUri = new Uri("http://twitter.com/statuses/replies.xml");
 
             Data = Request.PerformWebRequest(Data);
 
@@ -208,7 +199,7 @@ namespace Twitterizer.Framework
 
             
              Data.ActionUri = new Uri(
-                    string.Format(ConfigurationManager.AppSettings["Twitterizer.Framework.Followers"], page));
+                    string.Format("http://twitter.com/statuses/followers.xml?page={0}", page));
 
             Data = Request.PerformWebRequest(Data);
 
