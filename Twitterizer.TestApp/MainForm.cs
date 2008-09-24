@@ -76,7 +76,9 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                TimelineDataGridView.DataSource = t.FriendsTimeline();
+                TwitterParameters Parameters = new TwitterParameters();
+                Parameters.Add(TwitterParameterNames.Since, new DateTime(2008, 8, 1));
+                TimelineDataGridView.DataSource = t.Status.FriendsTimeline(Parameters);
             }
             catch (TwitterizerException ex)
             {
@@ -96,7 +98,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                TimelineDataGridView.DataSource = t.PublicTimeline();
+                TimelineDataGridView.DataSource = t.Status.PublicTimeline();
             }
             catch (TwitterizerException ex)
             {
@@ -115,7 +117,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                TimelineDataGridView.DataSource = t.UserTimeline();
+                TimelineDataGridView.DataSource = t.Status.UserTimeline();
                 MainFormTabControl.SelectedIndex = 2;
             }
             catch (TwitterizerException ex)
@@ -137,7 +139,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                t.Update(UpdateTextBox.Text);
+                t.Status.Update(UpdateTextBox.Text);
             }
             catch (TwitterizerException ex)
             {
@@ -157,7 +159,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                FriendsDataGridView.DataSource = t.Friends();
+                FriendsDataGridView.DataSource = t.User.Friends();
                 MainFormTabControl.SelectedIndex = 1;
             }
             catch (TwitterizerException ex)
@@ -175,7 +177,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                FriendsDataGridView.DataSource = t.Followers();
+                FriendsDataGridView.DataSource = t.User.Followers();
                 MainFormTabControl.SelectedIndex = 1;
             }
             catch (TwitterizerException ex)
@@ -194,7 +196,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                TimelineDataGridView.DataSource = t.DirectMessages(31696943);
+                TimelineDataGridView.DataSource = t.DirectMessages.DirectMessages(null);
                 MainFormTabControl.SelectedIndex = 1;
             }
             catch (TwitterizerException ex)
@@ -214,7 +216,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
-                TimelineDataGridView.DataSource = t.DirectMessagesSent(0);
+                TimelineDataGridView.DataSource = t.DirectMessages.DirectMessagesSent(null);
                 MainFormTabControl.SelectedIndex = 1;
             }
             catch (TwitterizerException ex)
@@ -227,11 +229,5 @@ namespace Twitterizer.TestApp
             }
 
         }
-
-       
-
-      
-
-      
     }
 }
