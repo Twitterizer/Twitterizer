@@ -6,6 +6,7 @@ namespace Twitterizer.Framework
 {
     public enum TwitterParameterNames
     {
+        ID,
         Since,
         SinceID,
         Count,

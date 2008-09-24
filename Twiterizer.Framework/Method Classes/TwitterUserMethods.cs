@@ -32,11 +32,20 @@ namespace Twitterizer.Framework
             password = Password;
         }
 
+        /// <summary>
+        /// Returns the authenticating user's followers, each with current status.
+        /// </summary>
+        /// <returns></returns>
         public TwitterUserCollection Followers()
         {
             return (Followers(null));
         }
 
+        /// <summary>
+        /// Returns the authenticating user's followers, each with current status.
+        /// </summary>
+        /// <param name="Parameters">Optional. Accepts ID and Page parameters.</param>
+        /// <returns></returns>
         public TwitterUserCollection Followers(TwitterParameters Parameters)
         {
             TwitterRequest Request = new TwitterRequest();
@@ -53,11 +62,20 @@ namespace Twitterizer.Framework
             return Data.Users;
         }
 
+        /// <summary>
+        /// Returns up to 100 of the authenticating user's friends who have most recently updated, each with current status.
+        /// </summary>
+        /// <returns></returns>
         public TwitterUserCollection Friends()
         {
             return (Friends(null));
         }
 
+        /// <summary>
+        /// Returns up to 100 of the authenticating user's friends who have most recently updated, each with current status.
+        /// </summary>
+        /// <param name="Parameters">Optional. Accepts ID, Page, and Since parameters.</param>
+        /// <returns></returns>
         public TwitterUserCollection Friends(TwitterParameters Parameters)
         {
             // page 0 == page 1 is the start

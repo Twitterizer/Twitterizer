@@ -33,11 +33,20 @@ namespace Twitterizer.Framework
             password = Password;
         }
 
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
+        /// </summary>
+        /// <returns>A collection of <typeparamref name="TwitterStatus"/>TwitterStatus</returns> objects
         public TwitterStatusCollection DirectMessages()
         {
             return DirectMessages(null);
         }
 
+        /// <summary>
+        /// Returns a list of the most recent direct messages sent to the authenticating user.
+        /// </summary>
+        /// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
+        /// <returns></returns>
         public TwitterStatusCollection DirectMessages(TwitterParameters Parameters)
         {
             TwitterRequest Request = new TwitterRequest();
@@ -53,11 +62,20 @@ namespace Twitterizer.Framework
             return Data.Statuses;
         }
 
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <returns></returns>
         public TwitterStatusCollection DirectMessagesSent()
         {
             return DirectMessagesSent(null);
         }
 
+        /// <summary>
+        /// Returns a list of the most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
+        /// <returns></returns>
         public TwitterStatusCollection DirectMessagesSent(TwitterParameters Parameters)
         {
             TwitterRequest Request = new TwitterRequest();
