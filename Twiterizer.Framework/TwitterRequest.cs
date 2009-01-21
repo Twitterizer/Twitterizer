@@ -243,13 +243,18 @@ namespace Twitterizer.Framework
             User.ScreenName = Element["screen_name"].InnerText;
             User.Location = Element["location"].InnerText;
             User.Description = Element["description"].InnerText;
-            if (Element["profile_image_url"].InnerText != string.Empty)
-                User.ProfileImageUri = new Uri(Element["profile_image_url"].InnerText);
-            if (Element["url"].InnerText != string.Empty)
-                User.ProfileUri = new Uri(Element["url"].InnerText);
             User.IsProtected = bool.Parse(Element["protected"].InnerText);
             User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
 
+            Uri ProfileImageUri;
+            if (Uri.TryCreate(Element["profile_image_url"].InnerText,
+            UriKind.RelativeOrAbsolute, out ProfileImageUri))
+                User.ProfileImageUri = ProfileImageUri;
+
+            Uri ProfileUri;
+            if (Uri.TryCreate(Element["url"].InnerText, UriKind.RelativeOrAbsolute, out ProfileUri))
+                User.ProfileUri = ProfileUri;
+            
             if (Element["friends_count"] != null)
                 User.Friends_count = int.Parse(Element["friends_count"].InnerText);
             else

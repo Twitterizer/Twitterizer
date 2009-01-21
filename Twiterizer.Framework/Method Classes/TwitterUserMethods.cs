@@ -100,5 +100,24 @@ namespace Twitterizer.Framework
 
             return Data.Users;
         }
+
+		/// <summary>
+		/// Creates a new friendship with a user. Returns the user that was followed.
+		/// </summary>
+		/// <param name="User">The User to follow.</param>
+		/// <returns></returns>
+		public TwitterUserCollection FollowUser(TwitterUser User)
+		{
+			TwitterRequest Request = new TwitterRequest();
+			TwitterRequestData Data = new TwitterRequestData();
+			Data.UserName = userName;
+			Data.Password = password;
+
+			string actionUri = string.Format("http://twitter.com/friendships/create/{0}.xml", User.ScreenName);
+			Data.ActionUri = new Uri(actionUri);
+			Data = Request.PerformWebRequest(Data);
+
+			return Data.Users;
+		}
     }
 }

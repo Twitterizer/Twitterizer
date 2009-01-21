@@ -9,6 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Twitterizer.Framework</RootNamespace>
     <AssemblyName>Twitterizer.Framework</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Twitterizer.Framework.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +51,9 @@
     <Compile Include="Data Transfer Objects\TwitterUser.cs" />
     <Compile Include="Data Transfer Objects\TwitterUserCollection.cs" />
     <Compile Include="Method Classes\TwitterUserMethods.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Twitterizer.Framework.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
