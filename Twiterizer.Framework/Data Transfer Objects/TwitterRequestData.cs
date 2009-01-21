@@ -49,6 +49,13 @@ namespace Twitterizer.Framework
             set { password = value; }
         }
 
+        private string source;
+        public string Source
+        {
+            get { return source; }
+            set { source = value; }
+        }
+
         private Uri actionUri;
         public Uri ActionUri
         {

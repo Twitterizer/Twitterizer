@@ -36,11 +36,13 @@ namespace Twitterizer.Framework
     {
         private readonly string userName;
         private readonly string password;
+        private readonly string source;
 
-        public TwitterStatusMethods(string UserName, string Password)
+        public TwitterStatusMethods(string UserName, string Password, string Source)
         {
             userName = UserName;
             password = Password;
+            source = Source;
         }
 
         /// <summary>
@@ -61,6 +63,8 @@ namespace Twitterizer.Framework
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/user_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/user_timeline.xml"));
             Data.ActionUri = new Uri(actionUri);
@@ -137,11 +141,12 @@ namespace Twitterizer.Framework
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
+            Data.Source = source;
 
 
 
             Data.ActionUri = new Uri(
-                string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id{1}", HttpUtility.UrlEncode(Status), InReplyToStatusID));
+                string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id{1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID, source));
 
             Data = Request.PerformWebRequest(Data);
 
