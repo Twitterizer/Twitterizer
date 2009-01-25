@@ -36,17 +36,13 @@ namespace Twitterizer.Framework
 	{
 		private readonly string userName;
 		private readonly string password;
-		private readonly string source;
 
-		public TwitterDirectMessageMethods(string UserName, string Password)
-			: this(UserName, Password, null) { }
-
-		public TwitterDirectMessageMethods(string UserName, string Password, string Source)
+		public TwitterDirectMessageMethods(string UserName, string Password) 
 		{
 			userName = UserName;
 			password = Password;
-			source = Source;
 		}
+
 
 		/// <summary>
 		/// Returns a list of the 20 most recent direct messages sent to the authenticating user.
@@ -119,16 +115,8 @@ namespace Twitterizer.Framework
 			data.UserName = userName;
 			data.Password = password;
 
-			//if (!string.IsNullOrEmpty(source))
-			//{
-			//    data.ActionUri = new Uri(
-			//        string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}&source={2}", user, message, source));
-			//}
-			//else
-			//{
-				data.ActionUri = new Uri(
-					string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message)));
-			//}
+			data.ActionUri = new Uri(
+				string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message)));
 
 			data = request.PerformWebRequest(data);
 			return data.Statuses[0];
