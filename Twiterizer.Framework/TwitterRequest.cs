@@ -122,18 +122,15 @@ namespace Twitterizer.Framework
 							Data.Statuses.Add(ParseDirectMessageNode(ResultXmlDocument.DocumentElement));
 							break;
 						case "direct-messages":
-
 							Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
 							break;
-
+						case "nilclasses":
 						case "nil-classes":
 							// do nothing, this seems to be a null response i.e. no messages since
 							break;
-
 						case "error":
 							throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
 						default:
-
 							throw new Exception("Invalid response from Twitter");
 					}
 			}
