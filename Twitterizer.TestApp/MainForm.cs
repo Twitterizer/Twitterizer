@@ -228,7 +228,25 @@ namespace Twitterizer.TestApp
             {
                 Cursor = Cursors.Default;
             }
-
         }
+
+		private void DirectMessageButton_Click(object sender, EventArgs e)
+		{
+			Cursor = Cursors.WaitCursor;
+
+			try
+			{
+				Twitter t = new Twitter(userName, password, SRC);
+				t.DirectMessages.New(DirectMessageUserTextBox.Text, UpdateTextBox.Text);
+			}
+			catch (TwitterizerException ex)
+			{
+				MessageBox.Show(this, ex.Message, "Error");
+			}
+			finally
+			{
+				Cursor = Cursors.Default;
+			}
+		}
     }
 }

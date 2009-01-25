@@ -28,76 +28,110 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 using System;
+using System.Web;
 
 namespace Twitterizer.Framework
 {
-    public class TwitterDirectMessageMethods
-    {
-        private readonly string userName;
-        private readonly string password;
+	public class TwitterDirectMessageMethods
+	{
+		private readonly string userName;
+		private readonly string password;
+		private readonly string source;
 
-        public TwitterDirectMessageMethods(string UserName, string Password)
-        {
-            userName = UserName;
-            password = Password;
-        }
+		public TwitterDirectMessageMethods(string UserName, string Password)
+			: this(UserName, Password, null) { }
 
-        /// <summary>
-        /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
-        /// </summary>
-        /// <returns>A collection of <typeparamref name="TwitterStatus"/>TwitterStatus</returns> objects
-        public TwitterStatusCollection DirectMessages()
-        {
-            return DirectMessages(null);
-        }
+		public TwitterDirectMessageMethods(string UserName, string Password, string Source)
+		{
+			userName = UserName;
+			password = Password;
+			source = Source;
+		}
 
-        /// <summary>
-        /// Returns a list of the most recent direct messages sent to the authenticating user.
-        /// </summary>
-        /// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
-        /// <returns></returns>
-        public TwitterStatusCollection DirectMessages(TwitterParameters Parameters)
-        {
-            TwitterRequest Request = new TwitterRequest();
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+		/// <summary>
+		/// Returns a list of the 20 most recent direct messages sent to the authenticating user.
+		/// </summary>
+		/// <returns>A collection of <typeparamref name="TwitterStatus"/>TwitterStatus</returns> objects
+		public TwitterStatusCollection DirectMessages()
+		{
+			return DirectMessages(null);
+		}
 
-            string actionUri = (Parameters == null ? "http://twitter.com/direct_messages.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages.xml"));
-            Data.ActionUri = new Uri(actionUri);
+		/// <summary>
+		/// Returns a list of the most recent direct messages sent to the authenticating user.
+		/// </summary>
+		/// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
+		/// <returns></returns>
+		public TwitterStatusCollection DirectMessages(TwitterParameters Parameters)
+		{
+			TwitterRequest Request = new TwitterRequest();
+			TwitterRequestData Data = new TwitterRequestData();
+			Data.UserName = userName;
+			Data.Password = password;
 
-            Data = Request.PerformWebRequest(Data, "GET");
+			string actionUri = (Parameters == null ? "http://twitter.com/direct_messages.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages.xml"));
+			Data.ActionUri = new Uri(actionUri);
 
-            return Data.Statuses;
-        }
+			Data = Request.PerformWebRequest(Data, "GET");
 
-        /// <summary>
-        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
-        /// </summary>
-        /// <returns></returns>
-        public TwitterStatusCollection DirectMessagesSent()
-        {
-            return DirectMessagesSent(null);
-        }
+			return Data.Statuses;
+		}
 
-        /// <summary>
-        /// Returns a list of the most recent direct messages sent by the authenticating user.
-        /// </summary>
-        /// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
-        /// <returns></returns>
-        public TwitterStatusCollection DirectMessagesSent(TwitterParameters Parameters)
-        {
-            TwitterRequest Request = new TwitterRequest();
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+		/// <summary>
+		/// Returns a list of the 20 most recent direct messages sent by the authenticating user.
+		/// </summary>
+		/// <returns></returns>
+		public TwitterStatusCollection DirectMessagesSent()
+		{
+			return DirectMessagesSent(null);
+		}
 
-            string actionUri = (Parameters == null ? "http://twitter.com/direct_messages/sent.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages/sent.xml"));
-            Data.ActionUri = new Uri(actionUri);
+		/// <summary>
+		/// Returns a list of the most recent direct messages sent by the authenticating user.
+		/// </summary>
+		/// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
+		/// <returns></returns>
+		public TwitterStatusCollection DirectMessagesSent(TwitterParameters Parameters)
+		{
+			TwitterRequest Request = new TwitterRequest();
+			TwitterRequestData Data = new TwitterRequestData();
+			Data.UserName = userName;
+			Data.Password = password;
 
-            Data = Request.PerformWebRequest(Data);
+			string actionUri = (Parameters == null ? "http://twitter.com/direct_messages/sent.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages/sent.xml"));
+			Data.ActionUri = new Uri(actionUri);
 
-            return Data.Statuses;
-        }
-    }
+			Data = Request.PerformWebRequest(Data);
+
+			return Data.Statuses;
+		}
+
+		/// <summary>
+		/// Sends a new direct message to a user.
+		/// </summary>
+		/// <param name="user">The user to send the direct message to.</param>
+		/// <param name="message">The message to send.</param>
+		/// <returns></returns>
+		public TwitterStatus New(string user, string message)
+		{
+			TwitterRequest request = new TwitterRequest();
+			TwitterRequestData data = new TwitterRequestData();
+			data.UserName = userName;
+			data.Password = password;
+
+			//if (!string.IsNullOrEmpty(source))
+			//{
+			//    data.ActionUri = new Uri(
+			//        string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}&source={2}", user, message, source));
+			//}
+			//else
+			//{
+				data.ActionUri = new Uri(
+					string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message)));
+			//}
+
+			data = request.PerformWebRequest(data);
+			return data.Statuses[0];
+		}
+	}
 }

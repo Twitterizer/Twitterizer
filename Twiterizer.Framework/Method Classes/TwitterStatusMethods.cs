@@ -143,10 +143,16 @@ namespace Twitterizer.Framework
             Data.Password = password;
             Data.Source = source;
 
-
-
-            Data.ActionUri = new Uri(
-                string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id{1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID, source));
+			if (InReplyToStatusID.HasValue)
+			{
+				Data.ActionUri = new Uri(
+					string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID.Value, source));
+			}
+			else
+			{
+				Data.ActionUri = new Uri(
+					string.Format("http://twitter.com/statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(Status), source));
+			}
 
             Data = Request.PerformWebRequest(Data);
 

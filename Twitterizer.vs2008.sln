@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.Framework", "Twiterizer.Framework\Twitterizer.Framework.csproj", "{CE6E8A9A-565C-4823-BE7E-2CE8A4D5FE22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.Framework.vs2008", "Twiterizer.Framework\Twitterizer.Framework.vs2008.csproj", "{CE6E8A9A-565C-4823-BE7E-2CE8A4D5FE22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.TestApp", "Twitterizer.TestApp\Twitterizer.TestApp.csproj", "{66ECEE41-1DB9-48C7-A01B-1E528FBFEB0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.TestApp.vs2008", "Twitterizer.TestApp\Twitterizer.TestApp.vs2008.csproj", "{66ECEE41-1DB9-48C7-A01B-1E528FBFEB0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
