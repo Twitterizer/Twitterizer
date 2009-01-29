@@ -27,26 +27,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
+using System;
 namespace Twitterizer.Framework
 {
-    public class Twitter
-    {
-        public TwitterDirectMessageMethods DirectMessages;
-        public TwitterStatusMethods Status;
-        public TwitterUserMethods User;
+	public class Twitter
+	{
+		public TwitterDirectMessageMethods DirectMessages;
+		public TwitterStatusMethods Status;
+		public TwitterUserMethods User;
 
-        public Twitter(string UserName, string Password)
-        {
-            DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-            Status = new TwitterStatusMethods(UserName, Password, "");
-            User = new TwitterUserMethods(UserName, Password);
-        }
+		public Twitter(string UserName, string Password)
+		{
+			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
+			Status = new TwitterStatusMethods(UserName, Password, "");
+			User = new TwitterUserMethods(UserName, Password);
+		}
 
-        public Twitter(string UserName, string Password, string Source)
-        {
-            DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-            Status = new TwitterStatusMethods(UserName, Password, Source);
-            User = new TwitterUserMethods(UserName, Password);
-        }
-    }
+		public Twitter(string UserName, string Password, string Source)
+		{
+			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
+			Status = new TwitterStatusMethods(UserName, Password, Source);
+			User = new TwitterUserMethods(UserName, Password);
+		}
+
+		public static bool VerifyCredentials(string username, string password)
+		{
+			TwitterRequest request = new TwitterRequest();
+			TwitterRequestData data = new TwitterRequestData();
+			data.UserName = username;
+			data.Password = password;
+			data.ActionUri = new Uri("http://twitter.com/account/verify_credentials.xml");
+
+			try
+			{
+				data = request.PerformWebRequest(data, "GET");
+				if (data.Users[0].ScreenName == username)
+				{
+					return true;
+				}
+			}
+			catch { } // ignore exeptions - authentication failed
+
+			return false;
+		}
+	}
 }

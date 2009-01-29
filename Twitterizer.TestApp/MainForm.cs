@@ -248,5 +248,21 @@ namespace Twitterizer.TestApp
 				Cursor = Cursors.Default;
 			}
 		}
+
+		private void btnVCSubmit_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				lblVCMessage.Text = Twitter.VerifyCredentials(tbVCUsername.Text, tbVCPassword.Text).ToString();
+			}
+			catch (TwitterizerException ex)
+			{
+				MessageBox.Show(this, ex.Message, "Error");
+			}
+			finally
+			{
+				Cursor = Cursors.Default;
+			}
+		}
     }
 }
