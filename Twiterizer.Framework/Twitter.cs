@@ -39,7 +39,7 @@ namespace Twitterizer.Framework
 		public Twitter(string UserName, string Password)
 		{
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-			Status = new TwitterStatusMethods(UserName, Password, "");
+			Status = new TwitterStatusMethods(UserName, Password, "Twitterizer");
 			User = new TwitterUserMethods(UserName, Password);
 		}
 
