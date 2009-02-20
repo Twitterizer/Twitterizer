@@ -6,7 +6,7 @@ namespace Twitterizer.TestApp
 {
     public partial class MainForm : Form
     {
-        const string SRC = "twirssi"; //The Name of this Application (must be a registered source of Twitter)
+        const string SRC = "Twitterizer"; //The Name of this Application (must be a registered source of Twitter)
         private readonly ConfigureForm ConfigFormSingleton = new ConfigureForm();
 
         private string userName;
