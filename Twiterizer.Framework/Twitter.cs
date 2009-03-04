@@ -56,7 +56,7 @@ namespace Twitterizer.Framework
 			TwitterRequestData data = new TwitterRequestData();
 			data.UserName = username;
 			data.Password = password;
-			data.ActionUri = new Uri("http://twitter.com/account/verify_credentials.xml");
+			data.ActionUri = new Uri("https://twitter.com/account/verify_credentials.xml");
 
 			try
 			{
