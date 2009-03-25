@@ -28,11 +28,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 using System;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Xml;
 using System.IO;
+using Newtonsoft.Json.Linq;
+using Twitterizer.Framework.Data_Transfer_Objects;
+using JsonSerializer=Newtonsoft.Json.JsonSerializer;
 
 namespace Twitterizer.Framework
 {
@@ -95,54 +99,120 @@ namespace Twitterizer.Framework
 			if (Data == null || Data.Response == string.Empty)
 				return null;
 
-			try
-			{
-				XmlDocument ResultXmlDocument = new XmlDocument();
-				ResultXmlDocument.LoadXml(Data.Response);
+            if (Data.IsJSON)
+                ParseJSONResponseData(Data);
+            else
+                ParseXmlResponseData(Data);
 
-				if (ResultXmlDocument.DocumentElement != null)
-					switch (ResultXmlDocument.DocumentElement.Name.ToLower())
-					{
-						case "status":
-							Data.Statuses = new TwitterStatusCollection();
-							Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
-							break;
-						case "statuses":
-							Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
-							break;
-						case "users":
-							Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
-							break;
-						case "user":
-							Data.Users = new TwitterUserCollection();
-							Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
-							break;
-						case "direct_message":
-							Data.Statuses = new TwitterStatusCollection();
-							Data.Statuses.Add(ParseDirectMessageNode(ResultXmlDocument.DocumentElement));
-							break;
-						case "direct-messages":
-							Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
-							break;
-						case "nilclasses":
-						case "nil-classes":
-							// do nothing, this seems to be a null response i.e. no messages since
-							break;
-						case "error":
-							throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
-						default:
-							throw new Exception("Invalid response from Twitter");
-					}
-			}
-			catch (Exception ex)
-			{
-				throw new TwitterizerException("Error Parsing Twitter Response.", Data, ex);
-			}
-
-			return Data;
+		    return Data;
 		}
 
-		#region Parse Statuses
+        /// <summary>
+        /// Simple method which uses JSON.net's deserialization to convert the JSON response
+        /// into a collection of our TwitterSearchResult objects
+        /// </summary>
+        /// <param name="data"></param>
+	    private void ParseJSONResponseData(TwitterRequestData data)
+	    {
+            //JSON = JavaScript Object Notation
+            try
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                JObject jsonObject = JObject.Parse(data.Response);
+
+                //LINQ to JSON.
+                var results = from o in jsonObject["results"].Children()
+                              select (TwitterSearchResult)serializer.Deserialize(o.CreateReader(), typeof (TwitterSearchResult));
+                data.SearchResults = results.ToList();
+            }
+            catch(Exception ex)
+            {
+                throw new TwitterizerException("Unable to Parse Search Results", data, ex);
+            }
+
+            /*
+             * Sample twitter search results json:
+             * [results] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [text] => I read everyone's 'tweets' about #Fallout3 dlc 'The Pitt', and calm my panic - my game sits dusty on the shelf, unplayed - must play soon!
+                    [to_user_id] => 
+                    [from_user] => iLoxy
+                    [id] => 1388505191
+                    [from_user_id] => 3131419
+                    [iso_language_code] => en
+                    [source] => <a href="http://twitterfon.net/">TwitterFon</a>
+                    [profile_image_url] => http://s3.amazonaws.com/twitter_production/profile_images/108656830/iLoxy_tile01_normal.png
+                    [created_at] => Wed, 25 Mar 2009 15:31:07 +0000
+                )
+
+            [1] => stdClass Object
+                (
+                    [text] => Wishing I had time to play with the G.E.C.K., for Fallout3.
+                    [to_user_id] => 
+                    [from_user] => jeff_henderson
+                    [id] => 1388495046
+                    [from_user_id] => 3469262
+                    [iso_language_code] => en
+                    [source] => <a href="http://help.twitter.com/index.php?pg=kb.page&id=75">txt</a>
+                    [profile_image_url] => http://s3.amazonaws.com/twitter_production/profile_images/70232418/jh_normal.JPG
+                    [created_at] => Wed, 25 Mar 2009 15:29:16 +0000
+                )
+           )
+             */
+
+
+        }
+
+	    private void ParseXmlResponseData(TwitterRequestData Data)
+	    {
+            try
+            {
+                XmlDocument ResultXmlDocument = new XmlDocument();
+                ResultXmlDocument.LoadXml(Data.Response);
+
+                if (ResultXmlDocument.DocumentElement != null)
+                    switch (ResultXmlDocument.DocumentElement.Name.ToLower())
+                    {
+                        case "status":
+                            Data.Statuses = new TwitterStatusCollection();
+                            Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
+                            break;
+                        case "statuses":
+                            Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
+                            break;
+                        case "users":
+                            Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
+                            break;
+                        case "user":
+                            Data.Users = new TwitterUserCollection();
+                            Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                            break;
+                        case "direct_message":
+                            Data.Statuses = new TwitterStatusCollection();
+                            Data.Statuses.Add(ParseDirectMessageNode(ResultXmlDocument.DocumentElement));
+                            break;
+                        case "direct-messages":
+                            Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
+                            break;
+                        case "nilclasses":
+                        case "nil-classes":
+                            // do nothing, this seems to be a null response i.e. no messages since
+                            break;
+                        case "error":
+                            throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
+                        default:
+                            throw new Exception("Invalid response from Twitter");
+                    }
+            }
+            catch (Exception ex)
+            {
+                throw new TwitterizerException("Error Parsing Twitter Response.", Data, ex);
+            }
+	    }
+
+	    #region Parse Statuses
 		private TwitterStatusCollection ParseStatuses(XmlElement Element)
 		{
 			TwitterStatusCollection Collection = new TwitterStatusCollection();

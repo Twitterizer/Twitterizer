@@ -28,12 +28,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 using System;
+using System.Collections.Generic;
 using System.Net;
+using Twitterizer.Framework.Data_Transfer_Objects;
 
 namespace Twitterizer.Framework
 {
     public class TwitterRequestData
     {
+        private bool _isJSON;
+        public bool IsJSON
+        {
+            get { return _isJSON; }
+            set { _isJSON = value; }
+        }
+
         #region Request Properties
         private string userName;
         public string UserName
@@ -92,7 +101,14 @@ namespace Twitterizer.Framework
             get { return users; }
             set { users = value; }
         }
-	
+
+        private IList<TwitterSearchResult> _searchResults;
+        public IList<TwitterSearchResult> SearchResults
+        {
+            get { return _searchResults; }
+            set { _searchResults = value; }
+        }
+
         #endregion
     }
 }

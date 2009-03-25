@@ -9,33 +9,66 @@ namespace Twitterizer.Framework.Method_Classes
     {
         TextSearch,
         TweetedToUser,
-        TweetedFromUser,
-        TweetReferencesUser
+        TweetedFromUser
     }
     public class TwitterSearchMethods
     {
+        private readonly string _userName;
+        private readonly string _password;
+        private TwitterParameters _parameters;
+
+        public TwitterSearchMethods(string userName, string password)
+        {
+            _userName = userName;
+            _password = password;
+        }
+
+
         public void SetParameters(TwitterParameters parameters)
         {
-            throw new NotImplementedException();
+            if (parameters == null) throw new ArgumentNullException("parameters");
+            _parameters = parameters;
         }
-        public void ClearParameters(TwitterParameters parameters)
+
+        public void ClearParameters()
         {
-            throw new NotImplementedException();
+            _parameters = null;
         }
 
         public IList<TwitterSearchResult> Search(string text)
         {
-            throw new NotImplementedException();
+            TwitterSearchTerm term = new TwitterSearchTerm(TwitterSearchType.TextSearch, text);
+            return Search(term);
         }
 
         public IList<TwitterSearchResult> Search(TwitterSearchTerm searchTerm)
         {
-            throw new NotImplementedException();
+            IList<TwitterSearchTerm> terms = new List<TwitterSearchTerm>();
+            terms.Add(searchTerm);
+            return Search(terms);
         }
 
         public IList<TwitterSearchResult> Search(IList<TwitterSearchTerm> searchTerms)
         {
-            throw new NotImplementedException();
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = _userName;
+            Data.Password = _password;
+
+            string baseURL = "http://search.twitter.com/search.json";
+
+
+            string actionUri = (_parameters == null ? baseURL : _parameters.BuildActionUri(baseURL));
+
+            foreach (TwitterSearchTerm t in searchTerms)
+                actionUri = string.Format("{0}&{1}", actionUri, t.ToWebString());
+
+            Data.ActionUri = new Uri(actionUri);
+            Data.IsJSON = true;
+
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.SearchResults;
         }
     }
 
