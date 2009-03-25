@@ -28,6 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 using System;
+using Twitterizer.Framework.Method_Classes;
 namespace Twitterizer.Framework
 {
 	public class Twitter
@@ -35,6 +36,7 @@ namespace Twitterizer.Framework
 		public TwitterDirectMessageMethods DirectMessages;
 		public TwitterStatusMethods Status;
 		public TwitterUserMethods User;
+	    public TwitterSearchMethods Search;
 
 		public Twitter(string UserName, string Password)
 		{
