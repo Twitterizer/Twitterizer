@@ -39,7 +39,8 @@ namespace Twitterizer.Framework
         Since,
         SinceID,
         Count,
-        Page
+        Page,
+        MaxId
     }
 
     public class TwitterParameters : Dictionary<TwitterParameterNames, object>
@@ -66,6 +67,9 @@ namespace Twitterizer.Framework
                         break;
                     case TwitterParameterNames.Page:
                         parameterString = string.Format("{0}&page={1}", parameterString, this[key]);
+                        break;
+                    case TwitterParameterNames.MaxId:
+                        parameterString = string.Format("{0}&max_id={1}", parameterString, this[key]);
                         break;
                 }
             }

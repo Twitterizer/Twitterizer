@@ -119,5 +119,34 @@ namespace Twitterizer.Framework
 
 			return Data.Users;
 		}
+
+        public void StopFollowingUser(TwitterUser user)
+        {
+            TwitterRequest request = new TwitterRequest();
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = userName;
+            data.Password = password;
+
+            string actionUri = string.Format("http://twitter.com/friendships/destroy/{0}.xml", user.ID);
+            data.ActionUri = new Uri(actionUri);
+            request.PerformWebRequest(data);
+        }
+
+        public TwitterUser Show(string ID)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(
+                string.Format("http://twitter.com/users/show/{0}.xml", ID));
+
+            Data = Request.PerformWebRequest(Data, "GET");
+
+            return Data.Users[0];
+        }
+
+
     }
 }

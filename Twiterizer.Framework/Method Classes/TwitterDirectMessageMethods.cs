@@ -28,6 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 using System;
+using System.Text;
 using System.Web;
 
 namespace Twitterizer.Framework
@@ -114,11 +115,12 @@ namespace Twitterizer.Framework
 			TwitterRequestData data = new TwitterRequestData();
 			data.UserName = userName;
 			data.Password = password;
+		    string formattedMessage = HttpUtility.UrlEncode(message, Encoding.UTF8);
 
 			data.ActionUri = new Uri(
-				string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message)));
+				string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}", user, formattedMessage));
 
-			data = request.PerformWebRequest(data);
+			data = request.PerformWebRequest(data, "POST");
 			return data.Statuses[0];
 		}
 	}

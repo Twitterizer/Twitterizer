@@ -2,14 +2,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE6E8A9A-565C-4823-BE7E-2CE8A4D5FE22}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Twitterizer.Framework</RootNamespace>
     <AssemblyName>Twitterizer.Framework</AssemblyName>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>Twitterizer.Framework.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <FileUpgradeFlags>
@@ -17,6 +17,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,14 +37,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data Transfer Objects\TwitterSearchResult.cs" />
     <Compile Include="Method Classes\TwitterDirectMessageMethods.cs" />
+    <Compile Include="Method Classes\TwitterSearchMethods.cs" />
+    <Compile Include="Method Classes\TwitterSearchTerm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twitter.cs" />
     <Compile Include="TwitterizerException.cs" />
@@ -59,6 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Twitterizer.Framework.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="JSON\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

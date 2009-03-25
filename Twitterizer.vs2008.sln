@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.Framework.vs200
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.TestApp.vs2008", "Twitterizer.TestApp\Twitterizer.TestApp.vs2008.csproj", "{66ECEE41-1DB9-48C7-A01B-1E528FBFEB0E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{CD977D24-A72D-4575-8638-6FAA0103BAC4}"
+	ProjectSection(SolutionItems) = preProject
+		References\Newtonsoft.Json.dll = References\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -181,7 +181,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
         /// <returns></returns>
-        public TwitterUser Show(string ID)
+        public TwitterStatus Show(string ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -189,11 +189,11 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format("http://twitter.com/users/show/{0}.xml", ID));
+                string.Format("http://twitter.com/statuses/show/{0}.xml", ID));
 
             Data = Request.PerformWebRequest(Data, "GET");
 
-            return Data.Users[0];
+            return Data.Statuses[0];
         }
 
         /// <summary>

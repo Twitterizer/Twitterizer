@@ -88,7 +88,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Twiterizer.Framework\Twitterizer.Framework.vs2008.csproj">
       <Project>{CE6E8A9A-565C-4823-BE7E-2CE8A4D5FE22}</Project>
-      <Name>Twitterizer.Framework</Name>
+      <Name>Twitterizer.Framework.vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
