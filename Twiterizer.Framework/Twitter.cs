@@ -38,11 +38,8 @@ namespace Twitterizer.Framework
 		public TwitterUserMethods User;
 	    public TwitterSearchMethods Search;
 
-		public Twitter(string UserName, string Password)
+		public Twitter(string UserName, string Password) : this(UserName, Password, "Twitterizer")
 		{
-			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-			Status = new TwitterStatusMethods(UserName, Password, "Twitterizer");
-			User = new TwitterUserMethods(UserName, Password);
 		}
 
 		public Twitter(string UserName, string Password, string Source)
@@ -50,6 +47,7 @@ namespace Twitterizer.Framework
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
 			Status = new TwitterStatusMethods(UserName, Password, Source);
 			User = new TwitterUserMethods(UserName, Password);
+		    Search = new TwitterSearchMethods(UserName, Password);
 		}
 
 		public static bool VerifyCredentials(string username, string password)
