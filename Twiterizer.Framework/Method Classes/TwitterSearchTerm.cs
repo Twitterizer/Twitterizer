@@ -1,3 +1,4 @@
+using System.Web;
 namespace Twitterizer.Framework.Method_Classes
 {
     public class TwitterSearchTerm
@@ -13,7 +14,7 @@ namespace Twitterizer.Framework.Method_Classes
 
         public string ToWebString()
         {
-            return string.Format("q={0}{1}", TypeParse(SearchType), SearchText);
+            return string.Format("q={0}{1}", TypeParse(SearchType), HttpUtility.UrlEncode(SearchText));
         }
 
         private string TypeParse(TwitterSearchType type)
