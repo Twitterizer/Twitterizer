@@ -69,7 +69,7 @@ namespace Twitterizer.Framework
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/user_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/user_timeline.xml"));
             Data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.Statuses;
         }
@@ -85,7 +85,7 @@ namespace Twitterizer.Framework
 
             Data.ActionUri = new Uri("http://twitter.com/statuses/public_timeline.xml");
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.Statuses;
         }
@@ -114,7 +114,7 @@ namespace Twitterizer.Framework
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/friends_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/friends_timeline.xml"));
             Data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.Statuses;
         }
@@ -220,7 +220,7 @@ namespace Twitterizer.Framework
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/replies.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
             Data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.Statuses;
         }

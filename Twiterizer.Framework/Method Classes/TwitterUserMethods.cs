@@ -66,7 +66,7 @@ namespace Twitterizer.Framework
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/followers.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/followers.xml"));
             Data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.Users;
         }
@@ -96,7 +96,7 @@ namespace Twitterizer.Framework
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/friends.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/friends.xml"));
             Data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.Users;
         }

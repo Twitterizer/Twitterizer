@@ -97,7 +97,7 @@ namespace Twitterizer.Framework
 			string actionUri = (Parameters == null ? "http://twitter.com/direct_messages/sent.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages/sent.xml"));
 			Data.ActionUri = new Uri(actionUri);
 
-			Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
 			return Data.Statuses;
 		}
