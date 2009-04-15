@@ -54,7 +54,7 @@ namespace Twitterizer.Framework
 		{
 			HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(Data.ActionUri);
 
-
+		    Request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
 			Request.Method = HTTPMethod;
 
 			StreamReader readStream;
@@ -63,6 +63,7 @@ namespace Twitterizer.Framework
 			Request.MaximumAutomaticRedirections = 4;
 			Request.MaximumResponseHeadersLength = 4;
 			Request.ContentLength = 0;
+		    Request.Timeout = 20*1000;
 
 			// Set our credentials
 			Request.Credentials = new NetworkCredential(Data.UserName, Data.Password);

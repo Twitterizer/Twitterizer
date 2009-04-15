@@ -66,7 +66,7 @@ namespace Twitterizer.Framework.Method_Classes
             Data.ActionUri = new Uri(actionUri);
             Data.IsJSON = true;
 
-            Data = Request.PerformWebRequest(Data);
+            Data = Request.PerformWebRequest(Data, "GET");
 
             return Data.SearchResults;
         }
