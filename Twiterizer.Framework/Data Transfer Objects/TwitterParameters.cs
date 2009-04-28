@@ -67,6 +67,9 @@ namespace Twitterizer.Framework
                     case TwitterParameterNames.Page:
                         parameterString = string.Format("{0}&page={1}", parameterString, this[key]);
                         break;
+                    case TwitterParameterNames.ID:
+                        parameterString = string.Format("{0}&id={1}", parameterString, this[key]);
+                        break;
                 }
             }
 
