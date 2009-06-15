@@ -161,13 +161,13 @@ namespace Twitterizer.Framework
 			if (Element == null) return null;
 
 			//Mon May 12 15:56:07 +0000 2008
-			Status.ID = int.Parse(Element["id"].InnerText);
+			Status.ID = Int64.Parse(Element["id"].InnerText);
 			Status.Created = ParseDateString(Element["created_at"].InnerText);
 			Status.Text = Element["text"].InnerText;
 			Status.Source = Element["source"].InnerText;
 			Status.IsTruncated = bool.Parse(Element["truncated"].InnerText);
 			if (Element["in_reply_to_status_id"].InnerText != string.Empty)
-				Status.InReplyToStatusID = int.Parse(Element["in_reply_to_status_id"].InnerText);
+				Status.InReplyToStatusID = Int64.Parse(Element["in_reply_to_status_id"].InnerText);
 			if (Element["in_reply_to_user_id"].InnerText != string.Empty)
 				Status.InReplyToUserID = int.Parse(Element["in_reply_to_user_id"].InnerText);
 
@@ -200,7 +200,7 @@ namespace Twitterizer.Framework
 
 			TwitterStatus Status = new TwitterStatus();
 
-			Status.ID = int.Parse(Element["id"].InnerText);
+			Status.ID = Int64.Parse(Element["id"].InnerText);
 			Status.Created = ParseDateString(Element["created_at"].InnerText);
 			Status.Text = Element["text"].InnerText;
 

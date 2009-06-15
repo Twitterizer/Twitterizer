@@ -135,7 +135,7 @@ namespace Twitterizer.Framework
         /// <param name="Status">Required.  The text of your status update.</param>
         /// <param name="InReplyToStatusID">Optional.  The ID of an existing status that the status to be posted is in reply to.</param>
         /// <returns></returns>
-        public TwitterStatus Update(string Status, int? InReplyToStatusID)
+        public TwitterStatus Update(string Status, Int64? InReplyToStatusID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -163,7 +163,7 @@ namespace Twitterizer.Framework
         /// Destroys the status specified by the required ID parameter.  The authenticating user must be the author of the specified status.
         /// </summary>
         /// <param name="ID">Required.  The ID of the status to destroy.</param>
-        public void Destroy(int ID)
+        public void Destroy(Int64 ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -181,7 +181,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
         /// <returns></returns>
-        public TwitterUser Show(string ID)
+        public TwitterUser Show(Int64 ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();

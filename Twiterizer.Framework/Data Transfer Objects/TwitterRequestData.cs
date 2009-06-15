@@ -35,64 +35,17 @@ namespace Twitterizer.Framework
     public class TwitterRequestData
     {
         #region Request Properties
-        private string userName;
-        public string UserName
-        {
-            get { return userName; }
-            set { userName = value; }
-        }
-
-        private string password;
-        public string Password
-        {
-            get { return password; }
-            set { password = value; }
-        }
-
-        private string source;
-        public string Source
-        {
-            get { return source; }
-            set { source = value; }
-        }
-
-        private Uri actionUri;
-        public Uri ActionUri
-        {
-            get { return actionUri; }
-            set { actionUri = value; }
-        }
-
-        private string response;
-        public string Response
-        {
-            get { return response; }
-            set { response = value; }
-        }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Source { get; set; }
+        public Uri ActionUri { get; set; }
+        public string Response { get; set; }
         #endregion
 
         #region Response Properties
-        private WebException responseException;
-        public WebException ResponseException
-        {
-            get { return responseException; }
-            set { responseException = value; }
-        }
-
-        private TwitterStatusCollection statuses;
-        public TwitterStatusCollection Statuses
-        {
-            get { return statuses; }
-            set { statuses = value; }
-        }
-
-        private TwitterUserCollection users;
-        public TwitterUserCollection Users
-        {
-            get { return users; }
-            set { users = value; }
-        }
-	
+        public WebException ResponseException { get; set; }
+        public TwitterStatusCollection Statuses { get; set; }
+        public TwitterUserCollection Users { get; set; }
         #endregion
     }
 }

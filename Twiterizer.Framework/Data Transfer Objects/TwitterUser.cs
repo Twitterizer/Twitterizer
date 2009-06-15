@@ -33,94 +33,22 @@ namespace Twitterizer.Framework
 {
     public class TwitterUser
     {
-        private int id;
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
-
-        private string userName = "";
-        public string UserName
-        {
-            get { return userName; }
-            set { userName = value; }
-        }
-
-        private string screenName = "";
-        public string ScreenName
-        {
-            get { return screenName; }
-            set { screenName = value; }
-        }
-
-        private string location = "";
-        public string Location
-        {
-            get { return location; }
-            set { location = value; }
-        }
-
-        private string timeZone = "";
-        public string TimeZone
-        {
-            get { return timeZone; }
-            set { timeZone = value; }
-        }
-
-        private string description = "";
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
-
-        private Uri profileImageUri;
-        public Uri ProfileImageUri
-        {
-            get { return profileImageUri; }
-            set { profileImageUri = value; }
-        }
-
-        private Uri profileUri;
-        public Uri ProfileUri
-        {
-            get { return profileUri; }
-            set { profileUri = value; }
-        }
-
-        private bool isProtected;
-        public bool IsProtected
-        {
-            get { return isProtected; }
-            set { isProtected = value; }
-        }
-
-        private int numberOfFollowers;
-        public int NumberOfFollowers
-        {
-            get { return numberOfFollowers; }
-            set { numberOfFollowers = value; }
-        }
-
-        private int friends_count;
-        public int Friends_count
-        {
-            get { return friends_count; }
-            set { friends_count = value; }
-        }
-
-        private TwitterStatus status;
-        public TwitterStatus Status
-        {
-            get { return status; }
-            set { status = value; }
-        }
-	
-
+        public int ID { get; set; }
+        public string UserName { get; set; }
+        public string ScreenName { get; set; }
+        public string Location { get; set; }
+        public string TimeZone { get; set; }
+        public string Description { get; set; }
+        public Uri ProfileImageUri { get; set; }
+        public Uri ProfileUri { get; set; }
+        public bool IsProtected { get; set; }
+        public int NumberOfFollowers { get; set; }
+        public int Friends_count { get; set; }
+        public TwitterStatus Status { get; set; }
+        
         public override string ToString()
         {
-            return userName;
+            return this.UserName;
         }
     }
 }
