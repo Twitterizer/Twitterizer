@@ -135,7 +135,7 @@ namespace Twitterizer.Framework
         /// <param name="Status">Required.  The text of your status update.</param>
         /// <param name="InReplyToStatusID">Optional.  The ID of an existing status that the status to be posted is in reply to.</param>
         /// <returns></returns>
-        public TwitterStatus Update(string Status, int? InReplyToStatusID)
+        public TwitterStatus Update(string Status, long? InReplyToStatusID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();

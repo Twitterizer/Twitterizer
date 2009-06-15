@@ -40,8 +40,8 @@ namespace Twitterizer.Framework
             set { created = value; }
         }
 
-        private int id;
-        public int ID
+        private long id;
+        public long ID
         {
             get { return id; }
             set { id = value; }
@@ -82,8 +82,8 @@ namespace Twitterizer.Framework
             set { isFavorited = value; }
         }
 
-        private int inReplyToStatusID;
-        public int InReplyToStatusID
+        private long inReplyToStatusID;
+        public long InReplyToStatusID
         {
             get { return inReplyToStatusID; }
             set { inReplyToStatusID = value; }
