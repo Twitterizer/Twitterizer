@@ -181,7 +181,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
         /// <returns></returns>
-        public TwitterUser Show(Int64 ID)
+        public TwitterUser Show(string ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
