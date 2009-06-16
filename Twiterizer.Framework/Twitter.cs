@@ -61,10 +61,8 @@ namespace Twitterizer.Framework
 			try
 			{
 				data = request.PerformWebRequest(data, "GET");
-				if (data.Users[0].ScreenName == username)
-				{
-					return true;
-				}
+
+                return true;
 			}
 			catch { } // ignore exeptions - authentication failed
 

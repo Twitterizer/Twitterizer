@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using Twitterizer.Framework;
 
 namespace Twitterizer.TestApp
 {
@@ -25,6 +26,12 @@ namespace Twitterizer.TestApp
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            if (!Twitter.VerifyCredentials(UserNameTextBox.Text, PasswordTextBox.Text))
+            {
+                MessageBox.Show("Error verifiying user credentials", "Error");
+                return;
+            }
+
             XMLConfiguration.Save(UserNameTextBox.Text, PasswordTextBox.Text, Application.StartupPath);
 
             ((MainForm)Application.OpenForms["MainForm"]).UserName = UserNameTextBox.Text;
