@@ -119,5 +119,63 @@ namespace Twitterizer.Framework
 
 			return Data.Users;
 		}
+
+        /// <summary>
+        /// Destroys an existing friendship with a user.
+        /// </summary>
+        /// <param name="User">The user with which a friendship exists and should been destroyed.</param>
+        /// <returns>The user with which a friendship has been destroyed.</returns>
+        public TwitterUserCollection UnFollowUser(TwitterUser User)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            string actionUri = string.Format("http://twitter.com/friendships/destroy/{0}.xml", User.ScreenName);
+            Data.ActionUri = new Uri(actionUri);
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Users;
+        }
+
+        /// <summary>
+        /// Destroys an existing friendship with a user.
+        /// </summary>
+        /// <param name="ScreenName">The user with which a friendship exists and should been destroyed.</param>
+        /// <returns>The user with which a friendship has been destroyed.</returns>
+        public TwitterUserCollection UnFollowUser(String ScreenName)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            string actionUri = string.Format("http://twitter.com/friendships/destroy.xml?screen_name={0}", ScreenName);
+            Data.ActionUri = new Uri(actionUri);
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Users;
+        }
+
+        /// <summary>
+        /// Destroys an existing friendship with a user.
+        /// </summary>
+        /// <param name="UserID">The user with which a friendship exists and should been destroyed.</param>
+        /// <returns>The user with which a friendship has been destroyed.</returns>
+        public TwitterUserCollection UnFollowUser(Int64 UserID)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            string actionUri = string.Format("http://twitter.com/friendships/destroy.xml?user_id={0}", UserID);
+            Data.ActionUri = new Uri(actionUri);
+            Data = Request.PerformWebRequest(Data);
+
+            return Data.Users;
+        }
+    
     }
 }

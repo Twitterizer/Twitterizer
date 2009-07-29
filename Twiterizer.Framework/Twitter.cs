@@ -36,6 +36,11 @@ namespace Twitterizer.Framework
 		public TwitterStatusMethods Status;
 		public TwitterUserMethods User;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
 		public Twitter(string UserName, string Password)
 		{
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
@@ -43,6 +48,12 @@ namespace Twitterizer.Framework
 			User = new TwitterUserMethods(UserName, Password);
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        /// <param name="Source">The source.</param>
 		public Twitter(string UserName, string Password, string Source)
 		{
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
@@ -50,6 +61,12 @@ namespace Twitterizer.Framework
 			User = new TwitterUserMethods(UserName, Password);
 		}
 
+        /// <summary>
+        /// Verifies the given credentials.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
 		public static bool VerifyCredentials(string username, string password)
 		{
 			TwitterRequest request = new TwitterRequest();
@@ -61,10 +78,7 @@ namespace Twitterizer.Framework
 			try
 			{
 				data = request.PerformWebRequest(data, "GET");
-				if (data.Users[0].ScreenName == username)
-				{
-					return true;
-				}
+                return (data != null && data.Users != null && data.Users.Count > 0 && data.Users[0].ScreenName.ToLower() == username.ToLower());
 			}
 			catch { } // ignore exeptions - authentication failed
 
