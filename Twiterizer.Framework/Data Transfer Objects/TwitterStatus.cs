@@ -31,6 +31,7 @@ using System;
 
 namespace Twitterizer.Framework
 {
+    [Serializable]
     public class TwitterStatus
     {
         public DateTime Created { get; set; }

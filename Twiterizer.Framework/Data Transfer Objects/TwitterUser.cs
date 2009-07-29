@@ -31,6 +31,7 @@ using System;
 
 namespace Twitterizer.Framework
 {
+    [Serializable]
     public class TwitterUser
     {
         public int ID { get; set; }

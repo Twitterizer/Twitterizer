@@ -42,6 +42,7 @@ namespace Twitterizer.Framework
         Page
     }
 
+    [Serializable]
     public class TwitterParameters : Dictionary<TwitterParameterNames, object>
     {
         public string BuildActionUri(string Uri)

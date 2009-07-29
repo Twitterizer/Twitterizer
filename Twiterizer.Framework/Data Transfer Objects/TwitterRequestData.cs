@@ -32,6 +32,7 @@ using System.Net;
 
 namespace Twitterizer.Framework
 {
+    [Serializable]
     public class TwitterRequestData
     {
         #region Request Properties
