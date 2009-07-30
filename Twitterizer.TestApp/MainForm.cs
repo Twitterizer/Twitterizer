@@ -249,6 +249,11 @@ namespace Twitterizer.TestApp
 			}
 		}
 
+        /// <summary>
+        /// Handles the Click event of the btnVCSubmit control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void btnVCSubmit_Click(object sender, EventArgs e)
 		{
 			try
@@ -264,5 +269,29 @@ namespace Twitterizer.TestApp
 				Cursor = Cursors.Default;
 			}
 		}
+
+        /// <summary>
+        /// Handles the Click event of the DeleteRowMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void DeleteRowMenuItem_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow selectedRow = TimelineDataGridView.SelectedRows[0];
+            TwitterStatus status = selectedRow.DataBoundItem as TwitterStatus;
+
+            if (status == null)
+                return;
+
+            if (MessageBox.Show("Are you sure you would like to delete this message from Twitter?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Cursor = Cursors.WaitCursor;
+                Twitter t = new Twitter(userName, password);
+                t.Status.Destroy(status.ID);
+                Cursor = Cursors.Default;
+                MessageBox.Show("The message has been deleted!");
+                
+            }
+        }
     }
 }

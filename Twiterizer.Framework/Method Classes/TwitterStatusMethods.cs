@@ -173,7 +173,7 @@ namespace Twitterizer.Framework
             Data.ActionUri = new Uri(
                 string.Format("http://twitter.com/statuses/destroy/{0}.xml", ID));
 
-            Request.PerformWebRequest(Data);
+            Request.PerformWebRequest(Data, "POST");
         }
 
         /// <summary>
