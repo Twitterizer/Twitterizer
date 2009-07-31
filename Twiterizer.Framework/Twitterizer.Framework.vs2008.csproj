@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Method Classes\TwitterDirectMessageMethods.cs" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twitter.cs" />
     <Compile Include="TwitterizerException.cs" />
     <Compile Include="Data Transfer Objects\TwitterParameters.cs" />
