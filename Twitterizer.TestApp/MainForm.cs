@@ -29,10 +29,6 @@ namespace Twitterizer.TestApp
 
             Width = 541;
             Height = 209;
-
-            // Shared twitter test account
-            userName = "Twit_er_izer";
-            password = "23uSWutr";
         }
 
         private void UpdateTextBox_TextChanged(object sender, EventArgs e)
@@ -131,6 +127,44 @@ namespace Twitterizer.TestApp
             }
 
         }
+
+        private void mentionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitter t = new Twitter(userName, password, SRC);
+                TimelineDataGridView.DataSource = t.Status.Mentions();
+                MainFormTabControl.SelectedIndex = 2;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void repliesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitter t = new Twitter(userName, password, SRC);
+                TimelineDataGridView.DataSource = t.Status.Replies();
+                MainFormTabControl.SelectedIndex = 2;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
         #endregion
 
         private void UpdateButton_Click(object sender, EventArgs e)
@@ -211,6 +245,7 @@ namespace Twitterizer.TestApp
         }
         #endregion
 
+        #region Direct Messages
         private void directMessagesSentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -247,7 +282,8 @@ namespace Twitterizer.TestApp
 			{
 				Cursor = Cursors.Default;
 			}
-		}
+        }
+        #endregion
 
         /// <summary>
         /// Handles the Click event of the btnVCSubmit control.
@@ -287,12 +323,12 @@ namespace Twitterizer.TestApp
             {
                 Cursor = Cursors.WaitCursor;
                 Twitter t = new Twitter(userName, password);
-                if (status.Recipient == null)
-                    t.Status.Destroy(status);
-                else
+                if (status.IsDirectMessage)
                     t.DirectMessages.Destroy(status);
+                else
+                    t.Status.Destroy(status);
                 Cursor = Cursors.Default;
-                MessageBox.Show("The message has been deleted!");
+                MessageBox.Show("The message has been deleted! Please re-query the timeline.");
                 
             }
         }

@@ -236,5 +236,26 @@ namespace Twitterizer.Framework
 
             return Data.Statuses;
         }
+
+
+        public TwitterStatusCollection Mentions()
+        {
+            return Mentions(null);
+        }
+
+        public TwitterStatusCollection Mentions(TwitterParameters Parameters)
+        {
+            TwitterRequest Request = new TwitterRequest();
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            string actionUri = (Parameters == null ? "http://twitter.com/statuses/mentions.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
+            Data.ActionUri = new Uri(actionUri);
+
+            Data = Request.PerformWebRequest(Data, "GET");
+
+            return Data.Statuses;
+        }
     }
 }

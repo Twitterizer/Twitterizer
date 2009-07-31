@@ -40,23 +40,11 @@ namespace Twitterizer.TestApp
             this.DirectMessageButton = new System.Windows.Forms.Button();
             this.FriendsTabPage = new System.Windows.Forms.TabPage();
             this.FriendsDataGridView = new System.Windows.Forms.DataGridView();
-            this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.screenNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profileImageUriDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.profileUriDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.isProtectedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.numberOfFollowersDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CurrentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.twitterUserCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.TimelineTabPage = new System.Windows.Forms.TabPage();
             this.TimelineDataGridView = new System.Windows.Forms.DataGridView();
-            this.IsFavorited = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.twitterUserDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.twitterStatusCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.DeleteRowMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.VerifyCredentialsTabPAge = new System.Windows.Forms.TabPage();
             this.btnVCSubmit = new System.Windows.Forms.Button();
             this.lblVCMessage = new System.Windows.Forms.Label();
@@ -76,19 +64,36 @@ namespace Twitterizer.TestApp
             this.friendsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.followersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.DeleteRowMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mentionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.repliesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.screenNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profileImageUriDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.profileUriDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.isProtectedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.numberOfFollowersDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.twitterUserCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.twitterStatusCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.IsFavorited = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.IsDirectMessage = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.twitterUserDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Recipient = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MainFormTabControl.SuspendLayout();
             this.UpdateTabPage.SuspendLayout();
             this.FriendsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FriendsDataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).BeginInit();
             this.TimelineTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TimelineDataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).BeginInit();
+            this.ContextMenuStrip.SuspendLayout();
             this.VerifyCredentialsTabPAge.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.ContextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // UpdateButton
@@ -233,76 +238,12 @@ namespace Twitterizer.TestApp
             this.FriendsDataGridView.Size = new System.Drawing.Size(802, 500);
             this.FriendsDataGridView.TabIndex = 0;
             // 
-            // userNameDataGridViewTextBoxColumn
-            // 
-            this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
-            this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
-            this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
-            this.userNameDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // screenNameDataGridViewTextBoxColumn
-            // 
-            this.screenNameDataGridViewTextBoxColumn.DataPropertyName = "ScreenName";
-            this.screenNameDataGridViewTextBoxColumn.HeaderText = "ScreenName";
-            this.screenNameDataGridViewTextBoxColumn.Name = "screenNameDataGridViewTextBoxColumn";
-            this.screenNameDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // locationDataGridViewTextBoxColumn
-            // 
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
-            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
-            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // profileImageUriDataGridViewTextBoxColumn
-            // 
-            this.profileImageUriDataGridViewTextBoxColumn.DataPropertyName = "ProfileImageUri";
-            this.profileImageUriDataGridViewTextBoxColumn.HeaderText = "ProfileImageUri";
-            this.profileImageUriDataGridViewTextBoxColumn.Name = "profileImageUriDataGridViewTextBoxColumn";
-            this.profileImageUriDataGridViewTextBoxColumn.ReadOnly = true;
-            this.profileImageUriDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.profileImageUriDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // profileUriDataGridViewTextBoxColumn
-            // 
-            this.profileUriDataGridViewTextBoxColumn.DataPropertyName = "ProfileUri";
-            this.profileUriDataGridViewTextBoxColumn.HeaderText = "ProfileUri";
-            this.profileUriDataGridViewTextBoxColumn.Name = "profileUriDataGridViewTextBoxColumn";
-            this.profileUriDataGridViewTextBoxColumn.ReadOnly = true;
-            this.profileUriDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.profileUriDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // isProtectedDataGridViewCheckBoxColumn
-            // 
-            this.isProtectedDataGridViewCheckBoxColumn.DataPropertyName = "IsProtected";
-            this.isProtectedDataGridViewCheckBoxColumn.HeaderText = "IsProtected";
-            this.isProtectedDataGridViewCheckBoxColumn.Name = "isProtectedDataGridViewCheckBoxColumn";
-            this.isProtectedDataGridViewCheckBoxColumn.ReadOnly = true;
-            // 
-            // numberOfFollowersDataGridViewTextBoxColumn
-            // 
-            this.numberOfFollowersDataGridViewTextBoxColumn.DataPropertyName = "NumberOfFollowers";
-            this.numberOfFollowersDataGridViewTextBoxColumn.HeaderText = "NumberOfFollowers";
-            this.numberOfFollowersDataGridViewTextBoxColumn.Name = "numberOfFollowersDataGridViewTextBoxColumn";
-            this.numberOfFollowersDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
             // CurrentStatus
             // 
             this.CurrentStatus.DataPropertyName = "Status.Text";
             this.CurrentStatus.HeaderText = "Current Status";
             this.CurrentStatus.Name = "CurrentStatus";
             this.CurrentStatus.ReadOnly = true;
-            // 
-            // twitterUserCollectionBindingSource
-            // 
-            this.twitterUserCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterUserCollection);
             // 
             // TimelineTabPage
             // 
@@ -323,9 +264,12 @@ namespace Twitterizer.TestApp
             this.TimelineDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TimelineDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.IsFavorited,
+            this.IsDirectMessage,
             this.twitterUserDataGridViewTextBoxColumn,
+            this.Recipient,
             this.textDataGridViewTextBoxColumn,
-            this.createdDataGridViewTextBoxColumn});
+            this.createdDataGridViewTextBoxColumn,
+            this.Column1});
             this.TimelineDataGridView.DataSource = this.twitterStatusCollectionBindingSource;
             this.TimelineDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TimelineDataGridView.Location = new System.Drawing.Point(3, 3);
@@ -338,36 +282,19 @@ namespace Twitterizer.TestApp
             this.TimelineDataGridView.Size = new System.Drawing.Size(802, 500);
             this.TimelineDataGridView.TabIndex = 0;
             // 
-            // IsFavorited
+            // ContextMenuStrip
             // 
-            this.IsFavorited.DataPropertyName = "IsFavorited";
-            this.IsFavorited.HeaderText = "Fav?";
-            this.IsFavorited.Name = "IsFavorited";
+            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DeleteRowMenuItem});
+            this.ContextMenuStrip.Name = "ContextMenuStrip";
+            this.ContextMenuStrip.Size = new System.Drawing.Size(155, 26);
             // 
-            // twitterUserDataGridViewTextBoxColumn
+            // DeleteRowMenuItem
             // 
-            this.twitterUserDataGridViewTextBoxColumn.DataPropertyName = "TwitterUser";
-            this.twitterUserDataGridViewTextBoxColumn.HeaderText = "TwitterUser";
-            this.twitterUserDataGridViewTextBoxColumn.Name = "twitterUserDataGridViewTextBoxColumn";
-            this.twitterUserDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // textDataGridViewTextBoxColumn
-            // 
-            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
-            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
-            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
-            this.textDataGridViewTextBoxColumn.Width = 450;
-            // 
-            // createdDataGridViewTextBoxColumn
-            // 
-            this.createdDataGridViewTextBoxColumn.DataPropertyName = "Created";
-            this.createdDataGridViewTextBoxColumn.HeaderText = "Created";
-            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
-            this.createdDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // twitterStatusCollectionBindingSource
-            // 
-            this.twitterStatusCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterStatusCollection);
+            this.DeleteRowMenuItem.Name = "DeleteRowMenuItem";
+            this.DeleteRowMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.DeleteRowMenuItem.Text = "Delete Update";
+            this.DeleteRowMenuItem.Click += new System.EventHandler(this.DeleteRowMenuItem_Click);
             // 
             // VerifyCredentialsTabPAge
             // 
@@ -442,7 +369,9 @@ namespace Twitterizer.TestApp
             this.publicToolStripMenuItem,
             this.userToolStripMenuItem,
             this.directMessagesToolStripMenuItem1,
-            this.directMessagesSentToolStripMenuItem});
+            this.directMessagesSentToolStripMenuItem,
+            this.mentionsToolStripMenuItem,
+            this.repliesToolStripMenuItem});
             this.TimelinesToolStripMenuItem.Name = "TimelinesToolStripMenuItem";
             this.TimelinesToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.TimelinesToolStripMenuItem.Text = "Timelines";
@@ -530,19 +459,136 @@ namespace Twitterizer.TestApp
             this.directMessagesToolStripMenuItem.Name = "directMessagesToolStripMenuItem";
             this.directMessagesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             // 
-            // ContextMenuStrip
+            // mentionsToolStripMenuItem
             // 
-            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DeleteRowMenuItem});
-            this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(155, 26);
+            this.mentionsToolStripMenuItem.Name = "mentionsToolStripMenuItem";
+            this.mentionsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.mentionsToolStripMenuItem.Text = "Mentions";
+            this.mentionsToolStripMenuItem.Click += new System.EventHandler(this.mentionsToolStripMenuItem_Click);
             // 
-            // DeleteRowMenuItem
+            // repliesToolStripMenuItem
             // 
-            this.DeleteRowMenuItem.Name = "DeleteRowMenuItem";
-            this.DeleteRowMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.DeleteRowMenuItem.Text = "Delete Update";
-            this.DeleteRowMenuItem.Click += new System.EventHandler(this.DeleteRowMenuItem_Click);
+            this.repliesToolStripMenuItem.Name = "repliesToolStripMenuItem";
+            this.repliesToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.repliesToolStripMenuItem.Text = "Replies";
+            this.repliesToolStripMenuItem.Click += new System.EventHandler(this.repliesToolStripMenuItem_Click);
+            // 
+            // userNameDataGridViewTextBoxColumn
+            // 
+            this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
+            this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
+            this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
+            this.userNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // screenNameDataGridViewTextBoxColumn
+            // 
+            this.screenNameDataGridViewTextBoxColumn.DataPropertyName = "ScreenName";
+            this.screenNameDataGridViewTextBoxColumn.HeaderText = "ScreenName";
+            this.screenNameDataGridViewTextBoxColumn.Name = "screenNameDataGridViewTextBoxColumn";
+            this.screenNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // locationDataGridViewTextBoxColumn
+            // 
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // profileImageUriDataGridViewTextBoxColumn
+            // 
+            this.profileImageUriDataGridViewTextBoxColumn.DataPropertyName = "ProfileImageUri";
+            this.profileImageUriDataGridViewTextBoxColumn.HeaderText = "ProfileImageUri";
+            this.profileImageUriDataGridViewTextBoxColumn.Name = "profileImageUriDataGridViewTextBoxColumn";
+            this.profileImageUriDataGridViewTextBoxColumn.ReadOnly = true;
+            this.profileImageUriDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.profileImageUriDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // profileUriDataGridViewTextBoxColumn
+            // 
+            this.profileUriDataGridViewTextBoxColumn.DataPropertyName = "ProfileUri";
+            this.profileUriDataGridViewTextBoxColumn.HeaderText = "ProfileUri";
+            this.profileUriDataGridViewTextBoxColumn.Name = "profileUriDataGridViewTextBoxColumn";
+            this.profileUriDataGridViewTextBoxColumn.ReadOnly = true;
+            this.profileUriDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.profileUriDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // isProtectedDataGridViewCheckBoxColumn
+            // 
+            this.isProtectedDataGridViewCheckBoxColumn.DataPropertyName = "IsProtected";
+            this.isProtectedDataGridViewCheckBoxColumn.HeaderText = "IsProtected";
+            this.isProtectedDataGridViewCheckBoxColumn.Name = "isProtectedDataGridViewCheckBoxColumn";
+            this.isProtectedDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // numberOfFollowersDataGridViewTextBoxColumn
+            // 
+            this.numberOfFollowersDataGridViewTextBoxColumn.DataPropertyName = "NumberOfFollowers";
+            this.numberOfFollowersDataGridViewTextBoxColumn.HeaderText = "NumberOfFollowers";
+            this.numberOfFollowersDataGridViewTextBoxColumn.Name = "numberOfFollowersDataGridViewTextBoxColumn";
+            this.numberOfFollowersDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // twitterUserCollectionBindingSource
+            // 
+            this.twitterUserCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterUserCollection);
+            // 
+            // twitterStatusCollectionBindingSource
+            // 
+            this.twitterStatusCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterStatusCollection);
+            // 
+            // IsFavorited
+            // 
+            this.IsFavorited.DataPropertyName = "IsFavorited";
+            this.IsFavorited.HeaderText = "Fav?";
+            this.IsFavorited.Name = "IsFavorited";
+            this.IsFavorited.Width = 32;
+            // 
+            // IsDirectMessage
+            // 
+            this.IsDirectMessage.DataPropertyName = "IsDirectMessage";
+            this.IsDirectMessage.HeaderText = "DM?";
+            this.IsDirectMessage.Name = "IsDirectMessage";
+            this.IsDirectMessage.ReadOnly = true;
+            this.IsDirectMessage.Width = 32;
+            // 
+            // twitterUserDataGridViewTextBoxColumn
+            // 
+            this.twitterUserDataGridViewTextBoxColumn.DataPropertyName = "TwitterUser";
+            this.twitterUserDataGridViewTextBoxColumn.HeaderText = "TwitterUser";
+            this.twitterUserDataGridViewTextBoxColumn.Name = "twitterUserDataGridViewTextBoxColumn";
+            this.twitterUserDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // Recipient
+            // 
+            this.Recipient.DataPropertyName = "Recipient";
+            this.Recipient.HeaderText = "Recipient";
+            this.Recipient.Name = "Recipient";
+            this.Recipient.ReadOnly = true;
+            // 
+            // textDataGridViewTextBoxColumn
+            // 
+            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
+            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
+            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
+            this.textDataGridViewTextBoxColumn.Width = 450;
+            // 
+            // createdDataGridViewTextBoxColumn
+            // 
+            this.createdDataGridViewTextBoxColumn.DataPropertyName = "Created";
+            this.createdDataGridViewTextBoxColumn.HeaderText = "Created";
+            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
+            this.createdDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "Created";
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
             // 
             // MainForm
             // 
@@ -559,15 +605,15 @@ namespace Twitterizer.TestApp
             this.UpdateTabPage.PerformLayout();
             this.FriendsTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FriendsDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).EndInit();
             this.TimelineTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TimelineDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).EndInit();
+            this.ContextMenuStrip.ResumeLayout(false);
             this.VerifyCredentialsTabPAge.ResumeLayout(false);
             this.VerifyCredentialsTabPAge.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.ContextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.twitterUserCollectionBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -608,10 +654,6 @@ namespace Twitterizer.TestApp
         private System.Windows.Forms.ToolStripMenuItem directMessagesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem directMessagesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem directMessagesSentToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn IsFavorited;
-        private System.Windows.Forms.DataGridViewTextBoxColumn twitterUserDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
 		private System.Windows.Forms.Button DirectMessageButton;
 		private System.Windows.Forms.TextBox DirectMessageUserTextBox;
 		private System.Windows.Forms.Label label2;
@@ -624,5 +666,14 @@ namespace Twitterizer.TestApp
 		private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem DeleteRowMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mentionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem repliesToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsFavorited;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsDirectMessage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn twitterUserDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Recipient;
+        private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     }
 }

@@ -38,6 +38,11 @@ namespace Twitterizer.Framework
 {
 	internal class TwitterRequest
 	{
+        /// <summary>
+        /// Performs the web request.
+        /// </summary>
+        /// <param name="Data">The data.</param>
+        /// <returns></returns>
 		public TwitterRequestData PerformWebRequest(TwitterRequestData Data)
 		{
 			PerformWebRequest(Data, "POST");
@@ -46,6 +51,12 @@ namespace Twitterizer.Framework
 
 		}
 
+        /// <summary>
+        /// Performs the web request.
+        /// </summary>
+        /// <param name="Data">The data.</param>
+        /// <param name="HTTPMethod">The HTTP method.</param>
+        /// <returns></returns>
 		public TwitterRequestData PerformWebRequest(TwitterRequestData Data, string HTTPMethod)
 		{
 			HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(Data.ActionUri);
@@ -90,6 +101,11 @@ namespace Twitterizer.Framework
 			return Data;
 		}
 
+        /// <summary>
+        /// Parses the response data.
+        /// </summary>
+        /// <param name="Data">The data.</param>
+        /// <returns></returns>
 		private TwitterRequestData ParseResponseData(TwitterRequestData Data)
 		{
 			if (Data == null || Data.Response == string.Empty)
@@ -143,6 +159,11 @@ namespace Twitterizer.Framework
 		}
 
 		#region Parse Statuses
+        /// <summary>
+        /// Parses multiple status nodes and returns a collection of status objects.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <returns></returns>
 		private static TwitterStatusCollection ParseStatuses(XmlElement Element)
 		{
 			TwitterStatusCollection Collection = new TwitterStatusCollection();
@@ -154,9 +175,15 @@ namespace Twitterizer.Framework
 			return Collection;
 		}
 
+        /// <summary>
+        /// Parses a single status node and returns a status object.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <returns></returns>
 		private static TwitterStatus ParseStatusNode(XmlNode Element)
 		{
 			TwitterStatus Status = new TwitterStatus();
+            Status.IsDirectMessage = false;
 
 			if (Element == null) return null;
 
@@ -187,6 +214,11 @@ namespace Twitterizer.Framework
 		#endregion
 
 		#region Parse DirectMessages
+        /// <summary>
+        /// Parses multiple direct messages and returns a collection of statuses.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <returns></returns>
 		private static TwitterStatusCollection ParseDirectMessages(XmlElement Element)
 		{
 			TwitterStatusCollection Collection = new TwitterStatusCollection();
@@ -198,12 +230,18 @@ namespace Twitterizer.Framework
 			return Collection;
 		}
 
+        /// <summary>
+        /// Parses a single direct message node and returns a status object.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <returns></returns>
 		private static TwitterStatus ParseDirectMessageNode(XmlNode Element)
 		{
 			if (Element == null) return null;
 
 			TwitterStatus Status = new TwitterStatus();
 
+            Status.IsDirectMessage = true;
 			Status.ID = Int64.Parse(Element["id"].InnerText);
 			Status.Created = ParseDateString(Element["created_at"].InnerText);
 			Status.Text = Element["text"].InnerText;
@@ -220,6 +258,11 @@ namespace Twitterizer.Framework
 		#endregion
 
 		#region Parse Users
+        /// <summary>
+        /// Parses multiple users nodes and returns a collection of user objects.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <returns></returns>
 		private static TwitterUserCollection ParseUsers(XmlElement Element)
 		{
 			if (Element == null) return null;
@@ -233,6 +276,11 @@ namespace Twitterizer.Framework
 			return Collection;
 		}
 
+        /// <summary>
+        /// Parses a single user node and returns a user object.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <returns></returns>
 		private static TwitterUser ParseUserNode(XmlNode Element)
 		{
 			if (Element == null)
@@ -260,6 +308,12 @@ namespace Twitterizer.Framework
 		}
 		#endregion
 
+        /// <summary>
+        /// Parses a date string into a strongly typed DateTime object.
+        /// </summary>
+        /// <param name="DateString">The date string.</param>
+        /// <returns></returns>
+        /// <remarks>Format example: Wed Apr 08 20:30:04 +0000 2009</remarks>
 		private static DateTime ParseDateString(string DateString)
 		{
 			Regex re = new Regex(@"(?<DayName>[^ ]+) (?<MonthName>[^ ]+) (?<Day>[^ ]{1,2}) (?<Hour>[0-9]{1,2}):(?<Minute>[0-9]{1,2}):(?<Second>[0-9]{1,2}) (?<TimeZone>[+-][0-9]{4}) (?<Year>[0-9]{4})");
