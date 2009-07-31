@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE6E8A9A-565C-4823-BE7E-2CE8A4D5FE22}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Method Classes\TwitterDirectMessageMethods.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <Compile Include="Twitter.cs" />
     <Compile Include="TwitterizerException.cs" />
     <Compile Include="Data Transfer Objects\TwitterParameters.cs" />
@@ -68,4 +68,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)Lib\TortoiseSVN\subwcrev.exe $(ProjectDir). $(ProjectDir)Properties\AssemblyInfo.cs.tmpl $(ProjectDir)Properties\AssemblyInfo.cs</PreBuildEvent>
+  </PropertyGroup>
 </Project>

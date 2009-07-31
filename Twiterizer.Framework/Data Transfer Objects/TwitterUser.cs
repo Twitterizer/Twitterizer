@@ -40,8 +40,8 @@ namespace Twitterizer.Framework
         public string Location { get; set; }
         public string TimeZone { get; set; }
         public string Description { get; set; }
-        public Uri ProfileImageUri { get; set; }
-        public Uri ProfileUri { get; set; }
+        public string ProfileImageUri { get; set; }
+        public string ProfileUri { get; set; }
         public bool IsProtected { get; set; }
         public int NumberOfFollowers { get; set; }
         public int Friends_count { get; set; }
