@@ -163,7 +163,8 @@ namespace Twitterizer.Framework
         /// Destroys the status specified by the required ID parameter.  The authenticating user must be the author of the specified status.
         /// </summary>
         /// <param name="ID">Required.  The ID of the status to destroy.</param>
-        public void Destroy(Int64 ID)
+        /// <returns></returns>
+        public TwitterStatus Destroy(Int64 ID)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
@@ -173,7 +174,18 @@ namespace Twitterizer.Framework
             Data.ActionUri = new Uri(
                 string.Format("http://twitter.com/statuses/destroy/{0}.xml", ID));
 
-            Request.PerformWebRequest(Data, "POST");
+            Data = Request.PerformWebRequest(Data, "POST");
+            return Data.Statuses[0];
+        }
+
+        /// <summary>
+        /// Destroys the status specified by the required ID parameter.  The authenticating user must be the author of the specified status.
+        /// </summary>
+        /// <param name="Status">The status.</param>
+        /// <returns></returns>
+        public TwitterStatus Destroy(TwitterStatus Status)
+        {
+            return Destroy(Status.ID);
         }
 
         /// <summary>

@@ -143,7 +143,7 @@ namespace Twitterizer.Framework
 		}
 
 		#region Parse Statuses
-		private TwitterStatusCollection ParseStatuses(XmlElement Element)
+		private static TwitterStatusCollection ParseStatuses(XmlElement Element)
 		{
 			TwitterStatusCollection Collection = new TwitterStatusCollection();
 			foreach (XmlElement Child in Element.GetElementsByTagName("status"))
@@ -154,7 +154,7 @@ namespace Twitterizer.Framework
 			return Collection;
 		}
 
-		private TwitterStatus ParseStatusNode(XmlNode Element)
+		private static TwitterStatus ParseStatusNode(XmlNode Element)
 		{
 			TwitterStatus Status = new TwitterStatus();
 
@@ -177,6 +177,10 @@ namespace Twitterizer.Framework
 			Status.IsFavorited = isFavorited;
 
 			Status.TwitterUser = ParseUserNode(Element["user"]);
+            if (Element["sender"] != null)
+                Status.TwitterUser = ParseUserNode(Element["sender"]);
+            if (Element["recipient"] != null)
+                Status.Recipient = ParseUserNode(Element["recipient"]);
 
 			return Status;
 		}
@@ -207,20 +211,16 @@ namespace Twitterizer.Framework
 			if (Element["favorited"] != null && (Element["in_reply_to_status_id"].InnerText != string.Empty))
 				Status.IsFavorited = bool.Parse(Element["favorited"].InnerText);
 
-			Status.TwitterUser = new TwitterUser();
-			Status.TwitterUser.ScreenName = Element["sender_screen_name"].InnerText;
-			Status.TwitterUser.ID = int.Parse(Element["sender_id"].InnerText);
+            Status.TwitterUser = ParseUserNode(Element["sender"]);
 			Status.RecipientID = int.Parse(Element["recipient_id"].InnerText);
-
-
-
-
+            Status.Recipient = ParseUserNode(Element["recipient"]);
+            
 			return Status;
 		}
 		#endregion
 
 		#region Parse Users
-		private TwitterUserCollection ParseUsers(XmlElement Element)
+		private static TwitterUserCollection ParseUsers(XmlElement Element)
 		{
 			if (Element == null) return null;
 
@@ -233,7 +233,7 @@ namespace Twitterizer.Framework
 			return Collection;
 		}
 
-		private TwitterUser ParseUserNode(XmlNode Element)
+		private static TwitterUser ParseUserNode(XmlNode Element)
 		{
 			if (Element == null)
 				return null;

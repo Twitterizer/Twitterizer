@@ -49,7 +49,7 @@ namespace Twitterizer.Framework
         
         public override string ToString()
         {
-            return this.UserName;
+            return (string.IsNullOrEmpty(this.UserName) ? this.ScreenName : this.UserName);
         }
     }
 }

@@ -121,5 +121,34 @@ namespace Twitterizer.Framework
 			data = request.PerformWebRequest(data);
 			return data.Statuses[0];
 		}
+
+        /// <summary>
+        /// Destroys the specified direct message.
+        /// </summary>
+        /// <param name="ID">The ID of the direct message.</param>
+        /// <returns></returns>
+        public TwitterStatus Destroy(Int64 ID)
+        {
+            TwitterRequest request = new TwitterRequest();
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = userName;
+            data.Password = password;
+
+            data.ActionUri = new Uri(
+                string.Format("http://twitter.com/direct_messages/destroy/{0}.xml", ID));
+
+            data = request.PerformWebRequest(data, "POST");
+            return data.Statuses[0];
+        }
+
+        /// <summary>
+        /// Destroys the specified direct message.
+        /// </summary>
+        /// <param name="Status">The status to destroy.</param>
+        /// <returns></returns>
+        public TwitterStatus Destroy(TwitterStatus Status)
+        {
+            return Destroy(Status.ID);
+        }
 	}
 }

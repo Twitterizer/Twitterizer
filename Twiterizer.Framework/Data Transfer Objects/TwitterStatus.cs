@@ -44,5 +44,7 @@ namespace Twitterizer.Framework
         public Int64 InReplyToStatusID { get; set; }
         public int InReplyToUserID { get; set; }
         public TwitterUser TwitterUser { get; set; }
+        public TwitterUser Recipient { get; set; }
+        public Boolean IsDirectMessage { get; set; }
     }
 }

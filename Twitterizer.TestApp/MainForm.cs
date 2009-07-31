@@ -198,7 +198,7 @@ namespace Twitterizer.TestApp
             {
                 Twitter t = new Twitter(userName, password, SRC);
                 TimelineDataGridView.DataSource = t.DirectMessages.DirectMessages(null);
-                MainFormTabControl.SelectedIndex = 1;
+                MainFormTabControl.SelectedIndex = 2;
             }
             catch (TwitterizerException ex)
             {
@@ -218,7 +218,7 @@ namespace Twitterizer.TestApp
             {
                 Twitter t = new Twitter(userName, password, SRC);
                 TimelineDataGridView.DataSource = t.DirectMessages.DirectMessagesSent(null);
-                MainFormTabControl.SelectedIndex = 1;
+                MainFormTabControl.SelectedIndex = 2;
             }
             catch (TwitterizerException ex)
             {
@@ -287,7 +287,10 @@ namespace Twitterizer.TestApp
             {
                 Cursor = Cursors.WaitCursor;
                 Twitter t = new Twitter(userName, password);
-                t.Status.Destroy(status.ID);
+                if (status.Recipient == null)
+                    t.Status.Destroy(status);
+                else
+                    t.DirectMessages.Destroy(status);
                 Cursor = Cursors.Default;
                 MessageBox.Show("The message has been deleted!");
                 
