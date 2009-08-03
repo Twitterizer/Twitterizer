@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
  * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
@@ -27,40 +27,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 using System;
 
 namespace Twitterizer.Framework
 {
-    public class TwitterizerException : Exception
+    public class InvalidTwitterParameterException : ArgumentException
     {
-        /// <summary>
-        /// Contains the Request Data that is used in the Twitter API request.
-        /// </summary>
-        /// <value>The request data.</value>
-        public TwitterRequestData RequestData { get; set; }
+        public TwitterParameterNames Parameter { get; set; }
 
-        /// <summary>
-        /// Contains the raw xml returned by the Twitter API.
-        /// </summary>
-        /// <value>The raw XML.</value>
-        public string RawXML
+        public InvalidTwitterParameterException(TwitterParameterNames Parameter)
         {
-            get
-            {
-                return (RequestData == null ? string.Empty : RequestData.Response);
-            }
-        }
-
-        public TwitterizerException(string Message, TwitterRequestData RequestData)
-            : base(Message)
-        {
-            this.RequestData = RequestData;
-        }
-
-        public TwitterizerException(string Message, TwitterRequestData RequestData, Exception InnerException)
-            : base(Message, InnerException)
-        {
-            this.RequestData = RequestData;
+            this.Parameter = Parameter;
         }
     }
 }

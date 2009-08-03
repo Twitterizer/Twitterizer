@@ -55,6 +55,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Parameters">Optional. Accepts ID and Page parameters.</param>
         /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0followers </remarks>
         public TwitterUserCollection Followers(TwitterParameters Parameters)
         {
             TwitterRequest Request = new TwitterRequest();
@@ -62,6 +63,19 @@ namespace Twitterizer.Framework
             Data.UserName = userName;
             Data.Password = password;
 
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.ID:
+                        case TwitterParameterNames.UserID:
+                        case TwitterParameterNames.ScreenName:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param);
+                    }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/followers.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/followers.xml"));
             Data.ActionUri = new Uri(actionUri);
@@ -85,6 +99,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Parameters">Optional. Accepts ID, Page, and Since parameters.</param>
         /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0friends </remarks>
         public TwitterUserCollection Friends(TwitterParameters Parameters)
         {
             // page 0 == page 1 is the start
@@ -92,6 +107,20 @@ namespace Twitterizer.Framework
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
+
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.ID:
+                        case TwitterParameterNames.UserID:
+                        case TwitterParameterNames.ScreenName:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param);
+                    }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/friends.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/friends.xml"));
             Data.ActionUri = new Uri(actionUri);

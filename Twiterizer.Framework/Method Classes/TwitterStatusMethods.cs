@@ -104,12 +104,28 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Parameters">Accepts Since, SinceID, Count, and Page parameters.</param>
         /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-friends_timeline </remarks>
         public TwitterStatusCollection FriendsTimeline(TwitterParameters Parameters)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
+
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.SinceID:
+                        case TwitterParameterNames.MaxID:
+                        case TwitterParameterNames.Count:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param);
+                    }
+
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/friends_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/friends_timeline.xml"));
             Data.ActionUri = new Uri(actionUri);
@@ -143,16 +159,16 @@ namespace Twitterizer.Framework
             Data.Password = password;
             Data.Source = source;
 
-			if (InReplyToStatusID.HasValue)
-			{
-				Data.ActionUri = new Uri(
-					string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID.Value, source));
-			}
-			else
-			{
-				Data.ActionUri = new Uri(
-					string.Format("http://twitter.com/statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(Status), source));
-			}
+            if (InReplyToStatusID.HasValue)
+            {
+                Data.ActionUri = new Uri(
+                    string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID.Value, source));
+            }
+            else
+            {
+                Data.ActionUri = new Uri(
+                    string.Format("http://twitter.com/statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(Status), source));
+            }
 
             Data = Request.PerformWebRequest(Data);
 
@@ -164,6 +180,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">Required.  The ID of the status to destroy.</param>
         /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0destroy </remarks>
         public TwitterStatus Destroy(Int64 ID)
         {
             TwitterRequest Request = new TwitterRequest();
@@ -183,6 +200,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Status">The status.</param>
         /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0destroy </remarks>
         public TwitterStatus Destroy(TwitterStatus Status)
         {
             return Destroy(Status.ID);
@@ -229,6 +247,20 @@ namespace Twitterizer.Framework
             Data.UserName = userName;
             Data.Password = password;
 
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.SinceID:
+                        case TwitterParameterNames.MaxID:
+                        case TwitterParameterNames.Count:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param);
+                    }
+
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/replies.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
             Data.ActionUri = new Uri(actionUri);
 
@@ -238,17 +270,42 @@ namespace Twitterizer.Framework
         }
 
 
+        /// <summary>
+        /// Returns a timeline of statuses where the authenticated user is mentioned.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-mentions </remarks>
         public TwitterStatusCollection Mentions()
         {
             return Mentions(null);
         }
 
+        /// <summary>
+        /// Returns a timeline of statuses where the authenticated user is mentioned.
+        /// </summary>
+        /// <param name="Parameters">The parameters.</param>
+        /// <returns></returns>
+        /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-mentions </remarks>
         public TwitterStatusCollection Mentions(TwitterParameters Parameters)
         {
             TwitterRequest Request = new TwitterRequest();
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
+
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.SinceID:
+                        case TwitterParameterNames.MaxID:
+                        case TwitterParameterNames.Count:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param);
+                    }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/mentions.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
             Data.ActionUri = new Uri(actionUri);

@@ -38,8 +38,11 @@ namespace Twitterizer.Framework
         ID,
         Since,
         SinceID,
+        MaxID,
         Count,
-        Page
+        Page,
+        UserID,
+        ScreenName
     }
 
     [Serializable]
@@ -70,6 +73,15 @@ namespace Twitterizer.Framework
                         break;
                     case TwitterParameterNames.ID:
                         parameterString = string.Format("{0}&id={1}", parameterString, this[key]);
+                        break;
+                    case TwitterParameterNames.MaxID:
+                        parameterString = string.Format("{0}&max_id={1}", parameterString, this[key]);
+                        break;
+                    case TwitterParameterNames.UserID:
+                        parameterString = string.Format("{0}&user_id={1}", parameterString, this[key]);
+                        break;
+                    case TwitterParameterNames.ScreenName:
+                        parameterString = string.Format("{0}&screen_name={1}", parameterString, this[key]);
                         break;
                 }
             }

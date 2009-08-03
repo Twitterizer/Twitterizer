@@ -76,7 +76,7 @@ namespace Twitterizer.Framework
 
 			HttpWebResponse Response;
 
-			// Get the respon
+			// Get the response
 			try
 			{
 				Response = (HttpWebResponse)Request.GetResponse();
@@ -106,57 +106,49 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Data">The data.</param>
         /// <returns></returns>
-		private TwitterRequestData ParseResponseData(TwitterRequestData Data)
-		{
-			if (Data == null || Data.Response == string.Empty)
-				return null;
+        private TwitterRequestData ParseResponseData(TwitterRequestData Data)
+        {
+            if (Data == null || Data.Response == string.Empty)
+                return null;
 
-			try
-			{
-				XmlDocument ResultXmlDocument = new XmlDocument();
-				ResultXmlDocument.LoadXml(Data.Response);
+            XmlDocument ResultXmlDocument = new XmlDocument();
+            ResultXmlDocument.LoadXml(Data.Response);
 
-				if (ResultXmlDocument.DocumentElement != null)
-					switch (ResultXmlDocument.DocumentElement.Name.ToLower())
-					{
-						case "status":
-							Data.Statuses = new TwitterStatusCollection();
-							Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
-							break;
-						case "statuses":
-							Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
-							break;
-						case "users":
-							Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
-							break;
-						case "user":
-							Data.Users = new TwitterUserCollection();
-							Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
-							break;
-						case "direct_message":
-							Data.Statuses = new TwitterStatusCollection();
-							Data.Statuses.Add(ParseDirectMessageNode(ResultXmlDocument.DocumentElement));
-							break;
-						case "direct-messages":
-							Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
-							break;
-						case "nilclasses":
-						case "nil-classes":
-							// do nothing, this seems to be a null response i.e. no messages since
-							break;
-						case "error":
-							throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
-						default:
-							throw new Exception("Invalid response from Twitter");
-					}
-			}
-			catch (Exception ex)
-			{
-				throw new TwitterizerException("Error Parsing Twitter Response.", Data, ex);
-			}
-
-			return Data;
-		}
+            if (ResultXmlDocument.DocumentElement != null)
+                switch (ResultXmlDocument.DocumentElement.Name.ToLower())
+                {
+                    case "status":
+                        Data.Statuses = new TwitterStatusCollection();
+                        Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
+                        break;
+                    case "statuses":
+                        Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
+                        break;
+                    case "users":
+                        Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
+                        break;
+                    case "user":
+                        Data.Users = new TwitterUserCollection();
+                        Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                        break;
+                    case "direct_message":
+                        Data.Statuses = new TwitterStatusCollection();
+                        Data.Statuses.Add(ParseDirectMessageNode(ResultXmlDocument.DocumentElement));
+                        break;
+                    case "direct-messages":
+                        Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
+                        break;
+                    case "nilclasses":
+                    case "nil-classes":
+                        // do nothing, this seems to be a null response i.e. no messages since
+                        break;
+                    case "error":
+                        throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
+                    default:
+                        throw new Exception("Invalid response from Twitter");
+                }
+            return Data;
+        }
 
 		#region Parse Statuses
         /// <summary>

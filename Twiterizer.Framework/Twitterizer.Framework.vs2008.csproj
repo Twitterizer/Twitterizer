@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvalidTwitterParameterException.cs" />
     <Compile Include="Method Classes\TwitterDirectMessageMethods.cs" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <Compile Include="Properties\AssemblyInfo.cs" />
