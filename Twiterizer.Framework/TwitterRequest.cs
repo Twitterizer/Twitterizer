@@ -66,7 +66,7 @@ namespace Twitterizer.Framework
 		{
 			PerformWebRequest(Data, "POST");
 
-			return (Data);
+			return Data;
 
 		}
 
@@ -80,8 +80,16 @@ namespace Twitterizer.Framework
 		{
 			HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(Data.ActionUri);
 
+            // Check if a proxy address was given, if so, we need to parse it and give it to the HttpWebRequest object.
             if (!string.IsNullOrEmpty(proxyUri))
-                Request.Proxy = new WebProxy(this.proxyUri);
+            {
+                UriBuilder proxyUriBuilder = new UriBuilder(proxyUri);
+                Request.Proxy = new WebProxy(proxyUriBuilder.Host, proxyUriBuilder.Port);
+
+                // Add the proxy credentials if they are supplied.
+                if (!string.IsNullOrEmpty(proxyUriBuilder.UserName))
+                    Request.Proxy.Credentials = new NetworkCredential(proxyUriBuilder.UserName, proxyUriBuilder.Password);
+            }
             
 			Request.Method = HTTPMethod;
 
