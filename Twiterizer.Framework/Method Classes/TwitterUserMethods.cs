@@ -34,11 +34,30 @@ namespace Twitterizer.Framework
     {
         private readonly string userName;
         private readonly string password;
+        private readonly string proxyUri = string.Empty;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterUserMethods"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
         public TwitterUserMethods(string UserName, string Password)
         {
             userName = UserName;
             password = Password;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterUserMethods"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        /// <param name="ProxyUri">The proxy URI.</param>
+        public TwitterUserMethods(string UserName, string Password, string ProxyUri)
+        {
+            userName = UserName;
+            password = Password;
+            proxyUri = ProxyUri;
         }
 
         /// <summary>
@@ -58,7 +77,7 @@ namespace Twitterizer.Framework
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0followers </remarks>
         public TwitterUserCollection Followers(TwitterParameters Parameters)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -103,7 +122,7 @@ namespace Twitterizer.Framework
         public TwitterUserCollection Friends(TwitterParameters Parameters)
         {
             // page 0 == page 1 is the start
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -137,7 +156,7 @@ namespace Twitterizer.Framework
 		/// <returns></returns>
 		public TwitterUserCollection FollowUser(TwitterUser User)
 		{
-			TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
 			TwitterRequestData Data = new TwitterRequestData();
 			Data.UserName = userName;
 			Data.Password = password;
@@ -156,7 +175,7 @@ namespace Twitterizer.Framework
         /// <returns>The user with which a friendship has been destroyed.</returns>
         public TwitterUserCollection UnFollowUser(TwitterUser User)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -175,7 +194,7 @@ namespace Twitterizer.Framework
         /// <returns>The user with which a friendship has been destroyed.</returns>
         public TwitterUserCollection UnFollowUser(String ScreenName)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -194,7 +213,7 @@ namespace Twitterizer.Framework
         /// <returns>The user with which a friendship has been destroyed.</returns>
         public TwitterUserCollection UnFollowUser(Int64 UserID)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;

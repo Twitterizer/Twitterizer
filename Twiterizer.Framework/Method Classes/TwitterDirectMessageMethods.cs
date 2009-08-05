@@ -36,12 +36,31 @@ namespace Twitterizer.Framework
 	{
 		private readonly string userName;
 		private readonly string password;
+        private readonly string proxyUri = string.Empty;
 
-		public TwitterDirectMessageMethods(string UserName, string Password) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterDirectMessageMethods"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        /// <param name="uri_proxy">The uri_proxy.</param>
+        public TwitterDirectMessageMethods(string UserName, string Password, string ProxyUri) 
 		{
 			userName = UserName;
 			password = Password;
+            proxyUri = ProxyUri;
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterDirectMessageMethods"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        public TwitterDirectMessageMethods(string UserName, string Password)
+        {
+            userName = UserName;
+            password = Password;
+        }
 
 
 		/// <summary>
@@ -60,7 +79,7 @@ namespace Twitterizer.Framework
 		/// <returns></returns>
 		public TwitterStatusCollection DirectMessages(TwitterParameters Parameters)
 		{
-			TwitterRequest Request = new TwitterRequest();
+			TwitterRequest Request = new TwitterRequest(proxyUri);
 			TwitterRequestData Data = new TwitterRequestData();
 			Data.UserName = userName;
 			Data.Password = password;
@@ -89,7 +108,7 @@ namespace Twitterizer.Framework
 		/// <returns></returns>
 		public TwitterStatusCollection DirectMessagesSent(TwitterParameters Parameters)
 		{
-			TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
 			TwitterRequestData Data = new TwitterRequestData();
 			Data.UserName = userName;
 			Data.Password = password;
@@ -110,7 +129,7 @@ namespace Twitterizer.Framework
 		/// <returns></returns>
 		public TwitterStatus New(string user, string message)
 		{
-			TwitterRequest request = new TwitterRequest();
+            TwitterRequest request = new TwitterRequest(proxyUri);
 			TwitterRequestData data = new TwitterRequestData();
 			data.UserName = userName;
 			data.Password = password;
@@ -129,7 +148,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatus Destroy(Int64 ID)
         {
-            TwitterRequest request = new TwitterRequest();
+            TwitterRequest request = new TwitterRequest(proxyUri);
             TwitterRequestData data = new TwitterRequestData();
             data.UserName = userName;
             data.Password = password;

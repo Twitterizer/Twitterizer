@@ -37,7 +37,29 @@ namespace Twitterizer.Framework
         private readonly string userName;
         private readonly string password;
         private readonly string source;
+        private readonly string proxyUri = string.Empty;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterStatusMethods"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        /// <param name="Source">The source.</param>
+        /// <param name="uri_proxy">The uri_proxy.</param>
+        public TwitterStatusMethods(string UserName, string Password, string Source, string ProxyUri)
+        {
+            userName = UserName;
+            password = Password;
+            source = Source;
+            proxyUri = ProxyUri;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterStatusMethods"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        /// <param name="Source">The source.</param>
         public TwitterStatusMethods(string UserName, string Password, string Source)
         {
             userName = UserName;
@@ -61,7 +83,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection UserTimeline(TwitterParameters Parameters)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -80,7 +102,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection PublicTimeline()
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
 
             Data.ActionUri = new Uri("http://twitter.com/statuses/public_timeline.xml");
@@ -107,7 +129,7 @@ namespace Twitterizer.Framework
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-friends_timeline </remarks>
         public TwitterStatusCollection FriendsTimeline(TwitterParameters Parameters)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -153,7 +175,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatus Update(string Status, Int64? InReplyToStatusID)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -183,7 +205,7 @@ namespace Twitterizer.Framework
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0destroy </remarks>
         public TwitterStatus Destroy(Int64 ID)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -213,7 +235,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterUser Show(string ID)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -242,7 +264,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection Replies(TwitterParameters Parameters)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;
@@ -288,7 +310,7 @@ namespace Twitterizer.Framework
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-mentions </remarks>
         public TwitterStatusCollection Mentions(TwitterParameters Parameters)
         {
-            TwitterRequest Request = new TwitterRequest();
+            TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
             Data.UserName = userName;
             Data.Password = password;

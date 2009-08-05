@@ -35,9 +35,28 @@ using System.Xml;
 using System.IO;
 
 namespace Twitterizer.Framework
-{
+{    
 	internal class TwitterRequest
 	{
+        private string proxyUri = string.Empty;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterRequest"/> class.
+        /// </summary>
+        /// <param name="ProxyUri">The proxy URI.</param>
+        public TwitterRequest(string ProxyUri)
+        {
+            proxyUri = ProxyUri;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterRequest"/> class.
+        /// </summary>
+        public TwitterRequest()
+        {
+            
+        }
+
         /// <summary>
         /// Performs the web request.
         /// </summary>
@@ -61,7 +80,9 @@ namespace Twitterizer.Framework
 		{
 			HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(Data.ActionUri);
 
-
+            if (!string.IsNullOrEmpty(proxyUri))
+                Request.Proxy = new WebProxy(this.proxyUri);
+            
 			Request.Method = HTTPMethod;
 
 			StreamReader readStream;

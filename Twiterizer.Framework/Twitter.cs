@@ -36,6 +36,8 @@ namespace Twitterizer.Framework
 		public TwitterStatusMethods Status;
 		public TwitterUserMethods User;
 
+        public string ProxyUri { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Twitter"/> class.
         /// </summary>
@@ -45,8 +47,9 @@ namespace Twitterizer.Framework
 		{
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
 			Status = new TwitterStatusMethods(UserName, Password, "Twitterizer");
-			User = new TwitterUserMethods(UserName, Password);
-		}
+			User = new TwitterUserMethods(UserName, Password);            
+            
+		}        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Twitter"/> class.
@@ -62,15 +65,30 @@ namespace Twitterizer.Framework
 		}
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        /// <param name="UserName">Name of the user.</param>
+        /// <param name="Password">The password.</param>
+        /// <param name="Source">The source.</param>
+        /// <param name="ProxyURI">If you have proxy set this variable URI</param>
+        public Twitter(string UserName, string Password, string Source, string ProxyURI)
+        {
+            DirectMessages = new TwitterDirectMessageMethods(UserName, Password, ProxyURI);
+            Status = new TwitterStatusMethods(UserName, Password, Source, ProxyURI);
+            User = new TwitterUserMethods(UserName, Password, ProxyURI);
+        }
+
+        /// <summary>
         /// Verifies the given credentials.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
+        /// <param name="ProxyUri">The proxy URI.</param>
         /// <returns></returns>
-		public static bool VerifyCredentials(string username, string password)
+		public static bool VerifyCredentials(string username, string password, string ProxyUri)
 		{
-			TwitterRequest request = new TwitterRequest();
-			TwitterRequestData data = new TwitterRequestData();
+            TwitterRequest request = new TwitterRequest(ProxyUri);
+			TwitterRequestData data = new TwitterRequestData();            
 			data.UserName = username;
 			data.Password = password;
 			data.ActionUri = new Uri("https://twitter.com/account/verify_credentials.xml");
@@ -84,5 +102,16 @@ namespace Twitterizer.Framework
 
 			return false;
 		}
+
+        /// <summary>
+        /// Verifies the given credentials.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
+        public static bool VerifyCredentials(string username, string password)
+        {
+            return VerifyCredentials(username, password, string.Empty);
+        }
 	}
 }
