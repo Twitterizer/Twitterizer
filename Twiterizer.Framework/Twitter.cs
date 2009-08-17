@@ -38,17 +38,26 @@ namespace Twitterizer.Framework
 
         public string ProxyUri { get; set; }
 
+        public const string DefaultSource = "Twitterizer";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        public Twitter()
+            : this(string.Empty, string.Empty, DefaultSource)
+        {
+
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Twitter"/> class.
         /// </summary>
         /// <param name="UserName">Name of the user.</param>
         /// <param name="Password">The password.</param>
-		public Twitter(string UserName, string Password)
+		public Twitter(string UserName, string Password) :
+            this(UserName, Password, DefaultSource)
 		{
-			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-			Status = new TwitterStatusMethods(UserName, Password, "Twitterizer");
-			User = new TwitterUserMethods(UserName, Password);            
-            
+			
 		}        
 
         /// <summary>
@@ -60,8 +69,10 @@ namespace Twitterizer.Framework
 		public Twitter(string UserName, string Password, string Source)
 		{
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-			Status = new TwitterStatusMethods(UserName, Password, Source);
-			User = new TwitterUserMethods(UserName, Password);
+            User = new TwitterUserMethods(UserName, Password);
+
+            if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
+                Status = new TwitterStatusMethods(UserName, Password, Source);
 		}
 
         /// <summary>
@@ -98,7 +109,7 @@ namespace Twitterizer.Framework
 				data = request.PerformWebRequest(data, "GET");
                 return (data != null && data.Users != null && data.Users.Count > 0 && data.Users[0].ScreenName.ToLower() == username.ToLower());
 			}
-			catch { } // ignore exeptions - authentication failed
+			catch(Exception ex) { } // ignore exeptions - authentication failed
 
 			return false;
 		}
