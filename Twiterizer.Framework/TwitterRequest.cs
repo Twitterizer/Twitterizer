@@ -124,7 +124,7 @@ namespace Twitterizer.Framework
 			}
 			catch (Exception ex)
 			{
-				throw new TwitterizerException(ex.Message, Data, ex);
+                throw new TwitterizerException(TwitterizerException.ParseErrorMessage(Data.Response), Data, ex);
 			}
 
 			return Data;

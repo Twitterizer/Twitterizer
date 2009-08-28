@@ -70,9 +70,7 @@ namespace Twitterizer.Framework
 		{
 			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
             User = new TwitterUserMethods(UserName, Password);
-
-            if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
-                Status = new TwitterStatusMethods(UserName, Password, Source);
+            Status = new TwitterStatusMethods(UserName, Password, Source);
 		}
 
         /// <summary>

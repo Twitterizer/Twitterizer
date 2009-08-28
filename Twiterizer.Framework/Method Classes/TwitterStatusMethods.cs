@@ -85,8 +85,19 @@ namespace Twitterizer.Framework
         {
             TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+
+            // If not login information is supplied, the ID parameter is required.
+            if (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password) && 
+                (Parameters == null || Parameters.Count == 0 || !Parameters.ContainsKey(TwitterParameterNames.ID)))
+            {
+                throw new InvalidTwitterParameterException(TwitterParameterNames.ID, InvalidTwitterParameterReason.MissingRequiredParameter);
+            }
+
+            if (!string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password))
+            {
+                Data.UserName = userName;
+                Data.Password = password;
+            }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/user_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/user_timeline.xml"));
             Data.ActionUri = new Uri(actionUri);
@@ -145,7 +156,7 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.Page:
                             break;
                         default:
-                            throw new InvalidTwitterParameterException(param);
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
 
@@ -233,7 +244,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
         /// <returns></returns>
-        public TwitterUser Show(string ID)
+        public TwitterStatus Show(Int64 ID)
         {
             TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
@@ -241,11 +252,11 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format("http://twitter.com/users/show/{0}.xml", ID));
+                string.Format("http://twitter.com/statuses/show/{0}.xml", ID));
 
             Data = Request.PerformWebRequest(Data, "GET");
 
-            return Data.Users[0];
+            return Data.Statuses[0];
         }
 
         /// <summary>
@@ -280,7 +291,7 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.Page:
                             break;
                         default:
-                            throw new InvalidTwitterParameterException(param);
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/replies.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
@@ -326,7 +337,7 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.Page:
                             break;
                         default:
-                            throw new InvalidTwitterParameterException(param);
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/mentions.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));

@@ -28,6 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 using System;
+using System.Text.RegularExpressions;
 
 namespace Twitterizer.Framework
 {
@@ -61,6 +62,20 @@ namespace Twitterizer.Framework
             : base(Message, InnerException)
         {
             this.RequestData = RequestData;
+        }
+
+        /// <summary>
+        /// Parses the error message.
+        /// </summary>
+        public static string ParseErrorMessage(string XML)
+        {
+            if (string.IsNullOrEmpty(XML))
+                return string.Empty;
+
+            if (!Regex.IsMatch(XML, "<error>.+</error>", RegexOptions.IgnoreCase))
+                return string.Empty;
+
+            return Regex.Match(XML, "(?:<error>).+(?:</error>)", RegexOptions.IgnoreCase).Value;
         }
     }
 }

@@ -61,6 +61,26 @@ namespace Twitterizer.Framework
         }
 
         /// <summary>
+        /// Returns a single status, specified by the id parameter
+        /// </summary>
+        /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
+        /// <returns></returns>
+        public TwitterUser Show(string ID)
+        {
+            TwitterRequest Request = new TwitterRequest(proxyUri);
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(
+                string.Format("http://twitter.com/users/show/{0}.xml", ID));
+
+            Data = Request.PerformWebRequest(Data, "GET");
+
+            return Data.Users[0];
+        }
+
+        /// <summary>
         /// Returns the authenticating user's followers, each with current status.
         /// </summary>
         /// <returns></returns>
@@ -93,7 +113,7 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.Page:
                             break;
                         default:
-                            throw new InvalidTwitterParameterException(param);
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/followers.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/followers.xml"));
@@ -138,7 +158,7 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.Page:
                             break;
                         default:
-                            throw new InvalidTwitterParameterException(param);
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
             string actionUri = (Parameters == null ? "http://twitter.com/statuses/friends.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/friends.xml"));

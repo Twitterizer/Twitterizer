@@ -6,7 +6,6 @@ namespace Twitterizer.TestApp
 {
     public partial class MainForm : Form
     {
-        const string SRC = "Twitterizer"; //The Name of this Application (must be a registered source of Twitter)
         private readonly ConfigureForm ConfigFormSingleton = new ConfigureForm();
 
         private string userName;
@@ -72,7 +71,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 TwitterParameters Parameters = new TwitterParameters();
                 Parameters.Add(TwitterParameterNames.Since, new DateTime(2008, 8, 1));
                 TimelineDataGridView.DataSource = t.Status.FriendsTimeline(Parameters);
@@ -94,7 +93,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.Status.PublicTimeline();
             }
             catch (TwitterizerException ex)
@@ -108,12 +107,44 @@ namespace Twitterizer.TestApp
             MainFormTabControl.SelectedIndex = 2;
         }
 
+        private void twitterizerTimelineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitter t = null;
+                if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+                    t = new Twitter(userName, password);
+                else
+                    t = new Twitter();
+
+                TwitterParameters param = new TwitterParameters();
+                param.Add(TwitterParameterNames.ID, "Twit_er_izer");
+
+                TimelineDataGridView.DataSource = t.Status.UserTimeline(param);
+                MainFormTabControl.SelectedIndex = 2;
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
         private void userToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = null;
+                if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+                    t = new Twitter(userName, password);
+                else
+                    t = new Twitter();
+                
                 TimelineDataGridView.DataSource = t.Status.UserTimeline();
                 MainFormTabControl.SelectedIndex = 2;
             }
@@ -133,7 +164,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.Status.Mentions();
                 MainFormTabControl.SelectedIndex = 2;
             }
@@ -152,7 +183,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.Status.Replies();
                 MainFormTabControl.SelectedIndex = 2;
             }
@@ -173,7 +204,7 @@ namespace Twitterizer.TestApp
 
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 t.Status.Update(UpdateTextBox.Text);
             }
             catch (TwitterizerException ex)
@@ -193,7 +224,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 FriendsDataGridView.DataSource = t.User.Friends();
                 MainFormTabControl.SelectedIndex = 1;
             }
@@ -211,7 +242,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 FriendsDataGridView.DataSource = t.User.Followers();
                 MainFormTabControl.SelectedIndex = 1;
             }
@@ -230,7 +261,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.DirectMessages.DirectMessages(null);
                 MainFormTabControl.SelectedIndex = 2;
             }
@@ -251,7 +282,7 @@ namespace Twitterizer.TestApp
             Cursor = Cursors.WaitCursor;
             try
             {
-                Twitter t = new Twitter(userName, password, SRC);
+                Twitter t = new Twitter(userName, password);
                 TimelineDataGridView.DataSource = t.DirectMessages.DirectMessagesSent(null);
                 MainFormTabControl.SelectedIndex = 2;
             }
@@ -271,7 +302,7 @@ namespace Twitterizer.TestApp
 
 			try
 			{
-				Twitter t = new Twitter(userName, password, SRC);
+				Twitter t = new Twitter(userName, password);
 				t.DirectMessages.New(DirectMessageUserTextBox.Text, UpdateTextBox.Text);
 			}
 			catch (TwitterizerException ex)
@@ -332,5 +363,7 @@ namespace Twitterizer.TestApp
                 
             }
         }
+
+        
     }
 }

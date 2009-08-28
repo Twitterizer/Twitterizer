@@ -32,13 +32,33 @@ using System;
 
 namespace Twitterizer.Framework
 {
+    public enum InvalidTwitterParameterReason
+    {
+        /// <summary>
+        /// A required parameter was not supplied.
+        /// </summary>
+        MissingRequiredParameter = 0,
+        
+        /// <summary>
+        /// The parameter value was invalid.
+        /// </summary>
+        ValueOutOfRange = 1,
+
+        /// <summary>
+        /// The parameter is not supported for the method invoked.
+        /// </summary>
+        ParameterNotSupported = 2
+    }
+
     public class InvalidTwitterParameterException : ArgumentException
     {
         public TwitterParameterNames Parameter { get; set; }
+        public InvalidTwitterParameterReason Reason { get; set; }
 
-        public InvalidTwitterParameterException(TwitterParameterNames Parameter)
+        public InvalidTwitterParameterException(TwitterParameterNames Parameter, InvalidTwitterParameterReason Reason)
         {
             this.Parameter = Parameter;
+            this.Reason = Reason;
         }
     }
 }
