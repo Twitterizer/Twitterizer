@@ -93,7 +93,7 @@ namespace Twitterizer.Framework
                 throw new InvalidTwitterParameterException(TwitterParameterNames.ID, InvalidTwitterParameterReason.MissingRequiredParameter);
             }
 
-            if (!string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 Data.UserName = userName;
                 Data.Password = password;
