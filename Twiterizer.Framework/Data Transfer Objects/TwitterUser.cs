@@ -44,7 +44,7 @@ namespace Twitterizer.Framework
         public string ProfileUri { get; set; }
         public bool IsProtected { get; set; }
         public int NumberOfFollowers { get; set; }
-        public int Friends_count { get; set; }
+        public int NumberOfFriends { get; set; }
         public TwitterStatus Status { get; set; }
         
         public override string ToString()

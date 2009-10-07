@@ -103,29 +103,67 @@ namespace Twitterizer.Framework
 			// Set our credentials
 			Request.Credentials = new NetworkCredential(Data.UserName, Data.Password);
 
-			HttpWebResponse Response;
+			HttpWebResponse Response = null;
 
 			// Get the response
-			try
-			{
-				Response = (HttpWebResponse)Request.GetResponse();
+            try
+            {
+                Response = (HttpWebResponse)Request.GetResponse();
+            }
+            catch (WebException wex)
+            {
+                // If this was a 'real' exception (connection error, etc) throw the exception.
+                if (wex.Status != WebExceptionStatus.ProtocolError || wex.Response.ContentLength == 0)
+                    throw new TwitterizerException(wex.Message, Data, wex);
 
-				// Get the stream associated with the response.
-				Stream receiveStream = Response.GetResponseStream();
+                Response = (HttpWebResponse)wex.Response;
+                
+                // Determine what the protocol error was and throw the exception accordingly.
+                switch (Response.StatusCode)
+                {
+                    case HttpStatusCode.NotModified:
+                    case HttpStatusCode.NotFound:
+                        // There was no data to return
+                        return Data;
+                    
+                    case HttpStatusCode.BadRequest:
+                    case HttpStatusCode.Forbidden:
+                        // There is an error message returned as the response. We should get it and return it in the exception.
+                        readStream = new StreamReader(wex.Response.GetResponseStream(), Encoding.UTF8);
+                        throw new TwitterizerException(TwitterizerException.ParseErrorMessage(readStream.ReadToEnd()), Data, wex);
+                    
+                    case HttpStatusCode.Unauthorized:
+                        throw new TwitterizerException("Authorization Failed", Data);
 
-				// Pipes the stream to a higher level stream reader with the required encoding format. 
-				readStream = new StreamReader(receiveStream, Encoding.UTF8);
+                    case HttpStatusCode.BadGateway:
+                    case HttpStatusCode.InternalServerError:
+                        throw new TwitterizerException("Twitter is currently unavailable.", Data);
 
-				Data.Response = readStream.ReadToEnd();
-				Data = ParseResponseData(Data);
+                    case HttpStatusCode.ServiceUnavailable:
+                        throw new TwitterizerException("Twitter is overloaded or you are being rate limited.", Data);
 
-				Response.Close();
-				readStream.Close();
-			}
-			catch (Exception ex)
-			{
-                throw new TwitterizerException(TwitterizerException.ParseErrorMessage(Data.Response), Data, ex);
-			}
+                    default:
+                        throw new TwitterizerException(wex.Message, Data, wex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TwitterizerException(ex.Message, Data, ex);
+            }
+
+            // Get the stream associated with the response.
+            Stream receiveStream = Response.GetResponseStream();
+
+            // Pipes the stream to a higher level stream reader with the required encoding format. 
+            readStream = new StreamReader(receiveStream, Encoding.UTF8);
+
+            Data.Response = readStream.ReadToEnd();
+            Data = ParseResponseData(Data);
+
+            readStream.Close();
+
+            if (Response != null)
+                Response.Close();
 
 			return Data;
 		}
@@ -318,9 +356,9 @@ namespace Twitterizer.Framework
             User.ProfileImageUri = Element["profile_image_url"].InnerText;
             User.ProfileUri = Element["url"].InnerText;
 			if (Element["friends_count"] != null)
-				User.Friends_count = int.Parse(Element["friends_count"].InnerText);
+				User.NumberOfFriends = int.Parse(Element["friends_count"].InnerText);
 			else
-				User.Friends_count = -1;        // flag that we don't know, which is different than having zero friends
+				User.NumberOfFriends = -1;        // flag that we don't know, which is different than having zero friends
 
 			if (Element["status"] != null)
 				User.Status = ParseStatusNode(Element["status"]);
