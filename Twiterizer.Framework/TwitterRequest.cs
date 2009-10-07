@@ -112,39 +112,11 @@ namespace Twitterizer.Framework
             }
             catch (WebException wex)
             {
-                // If this was a 'real' exception (connection error, etc) throw the exception.
-                if (wex.Status != WebExceptionStatus.ProtocolError || wex.Response.ContentLength == 0)
-                    throw new TwitterizerException(wex.Message, Data, wex);
+                HandleWebException(Data, wex);
 
-                Response = (HttpWebResponse)wex.Response;
-                
-                // Determine what the protocol error was and throw the exception accordingly.
-                switch (Response.StatusCode)
-                {
-                    case HttpStatusCode.NotModified:
-                    case HttpStatusCode.NotFound:
-                        // There was no data to return
-                        return Data;
-                    
-                    case HttpStatusCode.BadRequest:
-                    case HttpStatusCode.Forbidden:
-                        // There is an error message returned as the response. We should get it and return it in the exception.
-                        readStream = new StreamReader(wex.Response.GetResponseStream(), Encoding.UTF8);
-                        throw new TwitterizerException(TwitterizerException.ParseErrorMessage(readStream.ReadToEnd()), Data, wex);
-                    
-                    case HttpStatusCode.Unauthorized:
-                        throw new TwitterizerException("Authorization Failed", Data);
-
-                    case HttpStatusCode.BadGateway:
-                    case HttpStatusCode.InternalServerError:
-                        throw new TwitterizerException("Twitter is currently unavailable.", Data);
-
-                    case HttpStatusCode.ServiceUnavailable:
-                        throw new TwitterizerException("Twitter is overloaded or you are being rate limited.", Data);
-
-                    default:
-                        throw new TwitterizerException(wex.Message, Data, wex);
-                }
+                // If it gets this far without throwing an exception, 
+                // we should return the Data object as it is.
+                return Data;
             }
             catch (Exception ex)
             {
@@ -167,6 +139,49 @@ namespace Twitterizer.Framework
 
 			return Data;
 		}
+
+        /// <summary>
+        /// Handles a web exception.
+        /// </summary>
+        /// <param name="Data">The RequestData object.</param>
+        /// <param name="wex">The WebException.</param>
+        /// <returns></returns>
+        private static void HandleWebException(TwitterRequestData Data, WebException wex)
+        {
+            // If this was a 'real' exception (connection error, etc) throw the exception.
+            if (wex.Status != WebExceptionStatus.ProtocolError || wex.Response.ContentLength == 0)
+                throw new TwitterizerException(wex.Message, Data, wex);
+
+            HttpWebResponse ErrorResponse = (HttpWebResponse)wex.Response;
+
+            // Determine what the protocol error was and throw the exception accordingly.
+            switch (ErrorResponse.StatusCode)
+            {
+                case HttpStatusCode.NotModified:
+                case HttpStatusCode.NotFound:
+                    // There was no data to return
+                    break;
+
+                case HttpStatusCode.BadRequest:
+                case HttpStatusCode.Forbidden:
+                    // There is an error message returned as the response. We should get it and return it in the exception.
+                    StreamReader readStream = new StreamReader(ErrorResponse.GetResponseStream(), Encoding.UTF8);
+                    throw new TwitterizerException(TwitterizerException.ParseErrorMessage(readStream.ReadToEnd()), Data, wex);
+
+                case HttpStatusCode.Unauthorized:
+                    throw new TwitterizerException("Authorization Failed", Data);
+
+                case HttpStatusCode.BadGateway:
+                case HttpStatusCode.InternalServerError:
+                    throw new TwitterizerException("Twitter is currently unavailable.", Data);
+
+                case HttpStatusCode.ServiceUnavailable:
+                    throw new TwitterizerException("Twitter is overloaded or you are being rate limited.", Data);
+
+                default:
+                    throw new TwitterizerException(wex.Message, Data, wex);
+            }
+        }
 
         /// <summary>
         /// Parses the response data.
