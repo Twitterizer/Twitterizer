@@ -161,7 +161,7 @@ namespace Twitterizer.Framework
                 Data.Response = readStream.ReadToEnd();
             }
 
-            Data.ResponseException = ErrorResponse;
+            Data.ResponseException = wex;
 
             // Determine what the protocol error was and throw the exception accordingly.
             switch (ErrorResponse.StatusCode)
