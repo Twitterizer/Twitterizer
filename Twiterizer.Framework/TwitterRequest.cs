@@ -153,6 +153,15 @@ namespace Twitterizer.Framework
                 throw new TwitterizerException(wex.Message, Data, wex);
 
             HttpWebResponse ErrorResponse = (HttpWebResponse)wex.Response;
+            
+            // If we have any content in the response, read it into the request data object.
+            if (ErrorResponse.ContentLength > 0)
+            {
+                StreamReader readStream = new StreamReader(ErrorResponse.GetResponseStream(), Encoding.UTF8);
+                Data.Response = readStream.ReadToEnd();
+            }
+
+            Data.ResponseException = ErrorResponse;
 
             // Determine what the protocol error was and throw the exception accordingly.
             switch (ErrorResponse.StatusCode)
@@ -165,9 +174,7 @@ namespace Twitterizer.Framework
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Forbidden:
                     // There is an error message returned as the response. We should get it and return it in the exception.
-                    StreamReader readStream = new StreamReader(ErrorResponse.GetResponseStream(), Encoding.UTF8);
-                    throw new TwitterizerException(TwitterizerException.ParseErrorMessage(readStream.ReadToEnd()), Data, wex);
-
+                    throw new TwitterizerException(TwitterizerException.ParseErrorMessage(Data.Response), Data, wex);
                 case HttpStatusCode.Unauthorized:
                     throw new TwitterizerException("Authorization Failed", Data);
 
