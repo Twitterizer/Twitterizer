@@ -61,6 +61,38 @@ namespace Twitterizer.Framework
         }
 
         /// <summary>
+        /// Returns a single status, specified by the parameters
+        /// </summary>
+        /// <param name="Parameters">The parameters.</param>
+        /// <returns></returns>
+        public TwitterUser Show(TwitterParameters Parameters)
+        {
+            TwitterRequest Request = new TwitterRequest(proxyUri);
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            Data.ActionUri = new Uri(Parameters.BuildActionUri("http://twitter.com/users/show.xml"));
+
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.ID:
+                        case TwitterParameterNames.ScreenName:
+                        case TwitterParameterNames.UserID:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
+                    }
+
+            Data = Request.PerformWebRequest(Data, "GET");
+
+            return Data.Users[0];
+        }
+
+        /// <summary>
         /// Returns a single status, specified by the id parameter
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>

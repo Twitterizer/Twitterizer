@@ -46,6 +46,10 @@ namespace Twitterizer.Framework
         public int NumberOfFollowers { get; set; }
         public int NumberOfFriends { get; set; }
         public TwitterStatus Status { get; set; }
+
+        public int? RateLimit { get; set; }
+        public int? RateLimitRemaining { get; set; }
+        public DateTime? RateLimitReset { get; set; }
         
         public override string ToString()
         {

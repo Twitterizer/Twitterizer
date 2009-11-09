@@ -123,6 +123,17 @@ namespace Twitterizer.Framework
                 throw new TwitterizerException(ex.Message, Data, ex);
             }
 
+            // Get information about out usage rate
+            if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Limit")))
+                Data.RateLimit = int.Parse(Response.Headers.Get("X-RateLimit-Limit"));
+
+            if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Remaining")))
+                Data.RateLimitRemaining = int.Parse(Response.Headers.Get("X-RateLimit-Remaining"));
+
+            // The date string is in Unix (aka epoch) time, which is the number of seconds since January 1st 1970 00:00
+            if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Reset")))
+                Data.RateLimitReset = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(double.Parse(Response.Headers.Get("X-RateLimit-Reset")));
+
             // Get the stream associated with the response.
             Stream receiveStream = Response.GetResponseStream();
 
@@ -236,6 +247,36 @@ namespace Twitterizer.Framework
                     default:
                         throw new Exception("Invalid response from Twitter");
                 }
+
+            // Copy our rate limit values to the properties that are actually returned
+            if (Data.Statuses != null)
+            {
+                Data.Statuses.RateLimit = Data.RateLimit;
+                Data.Statuses.RateLimitRemaining = Data.RateLimitRemaining;
+                Data.Statuses.RateLimitReset = Data.RateLimitReset;
+
+                foreach (TwitterStatus item in Data.Statuses)
+                {
+                    item.RateLimit = Data.RateLimit;
+                    item.RateLimitRemaining = Data.RateLimitRemaining;
+                    item.RateLimitReset = Data.RateLimitReset;
+                }
+            }
+
+            if (Data.Users != null)
+            {
+                Data.Users.RateLimit = Data.RateLimit;
+                Data.Users.RateLimitRemaining = Data.RateLimitRemaining;
+                Data.Users.RateLimitReset = Data.RateLimitReset;
+
+                foreach (TwitterUser item in Data.Users)
+                {
+                    item.RateLimit = Data.RateLimit;
+                    item.RateLimitRemaining = Data.RateLimitRemaining;
+                    item.RateLimitReset = Data.RateLimitReset;
+                }
+            }
+
             return Data;
         }
 

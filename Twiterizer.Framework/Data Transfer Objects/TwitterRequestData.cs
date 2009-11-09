@@ -47,6 +47,10 @@ namespace Twitterizer.Framework
         public WebException ResponseException { get; set; }
         public TwitterStatusCollection Statuses { get; set; }
         public TwitterUserCollection Users { get; set; }
+
+        public int? RateLimit { get; set; }
+        public int? RateLimitRemaining { get; set; }
+        public DateTime? RateLimitReset { get; set; }
         #endregion
     }
 }

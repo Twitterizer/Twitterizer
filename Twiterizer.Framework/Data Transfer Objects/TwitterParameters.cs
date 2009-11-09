@@ -48,6 +48,11 @@ namespace Twitterizer.Framework
     [Serializable]
     public class TwitterParameters : Dictionary<TwitterParameterNames, object>
     {
+        /// <summary>
+        /// Builds the action URI.
+        /// </summary>
+        /// <param name="Uri">The URI.</param>
+        /// <returns></returns>
         public string BuildActionUri(string Uri)
         {
             if (Count == 0)

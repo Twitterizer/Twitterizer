@@ -364,6 +364,25 @@ namespace Twitterizer.TestApp
             }
         }
 
+        private void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitter t = new Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.Status.FavoritesTimeline(null);
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+            MainFormTabControl.SelectedIndex = 2;
+        }
+
         
     }
 }

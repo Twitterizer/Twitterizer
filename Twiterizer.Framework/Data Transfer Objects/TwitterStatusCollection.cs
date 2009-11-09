@@ -35,6 +35,10 @@ namespace Twitterizer.Framework
     [Serializable]
     public class TwitterStatusCollection : CollectionBase
     {
+        public int? RateLimit { get; set; }
+        public int? RateLimitRemaining { get; set; }
+        public DateTime? RateLimitReset { get; set; }
+
         public TwitterStatus this[int index]
         {
             get

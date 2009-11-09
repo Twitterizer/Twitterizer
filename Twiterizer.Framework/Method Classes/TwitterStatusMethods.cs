@@ -347,5 +347,80 @@ namespace Twitterizer.Framework
 
             return Data.Statuses;
         }
+
+        #region Favorites Methods
+        /// <summary>
+        /// Returns the 20 most recent favorite statuses for the authenticating user or user specified by the ID parameter in the requested format.
+        /// </summary>
+        /// <param name="Parameters">An optional collection of parameters used to query Twitter.</param>
+        /// <returns></returns>
+        public TwitterStatusCollection FavoritesTimeline(TwitterParameters Parameters)
+        {
+            TwitterRequest Request = new TwitterRequest(proxyUri);
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            // Validate the parameters that are given.
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.ID:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
+                    }
+
+            string actionUri = (Parameters == null ? "http://twitter.com/favorites.xml" : Parameters.BuildActionUri("http://twitter.com/favorites.xml"));
+            Data.ActionUri = new Uri(actionUri);
+
+            Data = Request.PerformWebRequest(Data, "GET");
+
+            return Data.Statuses;
+        }
+
+        /// <summary>
+        /// Favorites the status specified in the ID parameter as the authenticating user. Returns the favorite status when successful.
+        /// </summary>
+        /// <param name="StatusID">The ID of the status to favorite. </param>
+        /// <returns></returns>
+        public TwitterStatus CreateFavorite(int StatusID)
+        {
+            TwitterRequest Request = new TwitterRequest(proxyUri);
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            string actionUri = string.Format("http://twitter.com/favorites/create/{0}.xml", StatusID);
+            Data.ActionUri = new Uri(actionUri);
+
+            Data = Request.PerformWebRequest(Data, "POST");
+
+            return Data.Statuses[0];
+        }
+
+        /// <summary>
+        /// Un-favorites the status specified in the ID parameter as the authenticating user. Returns the un-favorited status in the requested format when successful.
+        /// </summary>
+        /// <param name="StatusID">The ID of the status to un-favorite. </param>
+        /// <returns></returns>
+        public TwitterStatus DestroyFavorite(int StatusID)
+        {
+            TwitterRequest Request = new TwitterRequest(proxyUri);
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            string actionUri = string.Format("http://twitter.com/favorites/destroy/{0}.xml", StatusID);
+            Data.ActionUri = new Uri(actionUri);
+
+            Data = Request.PerformWebRequest(Data, "POST");
+
+            return Data.Statuses[0];
+        }
+
+        #endregion
     }
 }

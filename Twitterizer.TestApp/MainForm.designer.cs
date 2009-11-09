@@ -73,6 +73,7 @@ namespace Twitterizer.TestApp
             this.friendsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.publicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterizerTimelineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directMessagesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.directMessagesSentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mentionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,7 +84,7 @@ namespace Twitterizer.TestApp
             this.friendsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.followersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.twitterizerTimelineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.favoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl.SuspendLayout();
             this.UpdateTabPage.SuspendLayout();
             this.FriendsTabPage.SuspendLayout();
@@ -490,7 +491,8 @@ namespace Twitterizer.TestApp
             this.directMessagesToolStripMenuItem1,
             this.directMessagesSentToolStripMenuItem,
             this.mentionsToolStripMenuItem,
-            this.repliesToolStripMenuItem});
+            this.repliesToolStripMenuItem,
+            this.favoritesToolStripMenuItem});
             this.TimelinesToolStripMenuItem.Name = "TimelinesToolStripMenuItem";
             this.TimelinesToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.TimelinesToolStripMenuItem.Text = "Timelines";
@@ -515,6 +517,13 @@ namespace Twitterizer.TestApp
             this.userToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.userToolStripMenuItem.Text = "User";
             this.userToolStripMenuItem.Click += new System.EventHandler(this.userToolStripMenuItem_Click);
+            // 
+            // twitterizerTimelineToolStripMenuItem
+            // 
+            this.twitterizerTimelineToolStripMenuItem.Name = "twitterizerTimelineToolStripMenuItem";
+            this.twitterizerTimelineToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.twitterizerTimelineToolStripMenuItem.Text = "Twitterizer Timeline";
+            this.twitterizerTimelineToolStripMenuItem.Click += new System.EventHandler(this.twitterizerTimelineToolStripMenuItem_Click);
             // 
             // directMessagesToolStripMenuItem1
             // 
@@ -592,12 +601,12 @@ namespace Twitterizer.TestApp
             this.directMessagesToolStripMenuItem.Name = "directMessagesToolStripMenuItem";
             this.directMessagesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             // 
-            // twitterizerTimelineToolStripMenuItem
+            // favoritesToolStripMenuItem
             // 
-            this.twitterizerTimelineToolStripMenuItem.Name = "twitterizerTimelineToolStripMenuItem";
-            this.twitterizerTimelineToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.twitterizerTimelineToolStripMenuItem.Text = "Twitterizer Timeline";
-            this.twitterizerTimelineToolStripMenuItem.Click += new System.EventHandler(this.twitterizerTimelineToolStripMenuItem_Click);
+            this.favoritesToolStripMenuItem.Name = "favoritesToolStripMenuItem";
+            this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.favoritesToolStripMenuItem.Text = "Favorites";
+            this.favoritesToolStripMenuItem.Click += new System.EventHandler(this.favoritesToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -685,5 +694,6 @@ namespace Twitterizer.TestApp
         private System.Windows.Forms.DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.ToolStripMenuItem twitterizerTimelineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem favoritesToolStripMenuItem;
     }
 }
