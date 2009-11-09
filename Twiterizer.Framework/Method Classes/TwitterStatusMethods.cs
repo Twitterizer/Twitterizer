@@ -386,7 +386,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="StatusID">The ID of the status to favorite. </param>
         /// <returns></returns>
-        public TwitterStatus CreateFavorite(int StatusID)
+        public TwitterStatus CreateFavorite(long StatusID)
         {
             TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
@@ -406,7 +406,7 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="StatusID">The ID of the status to un-favorite. </param>
         /// <returns></returns>
-        public TwitterStatus DestroyFavorite(int StatusID)
+        public TwitterStatus DestroyFavorite(long StatusID)
         {
             TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
