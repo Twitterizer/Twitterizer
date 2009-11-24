@@ -73,8 +73,7 @@ namespace Twitterizer.TestApp
             {
                 Twitter t = new Twitter(userName, password);
                 TwitterParameters Parameters = new TwitterParameters();
-                Parameters.Add(TwitterParameterNames.Since, new DateTime(2008, 8, 1));
-                TimelineDataGridView.DataSource = t.Status.FriendsTimeline(Parameters);
+                TimelineDataGridView.DataSource = t.Status.FriendsTimeline();
             }
             catch (TwitterizerException ex)
             {

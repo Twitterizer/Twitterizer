@@ -114,12 +114,16 @@ namespace Twitterizer.Framework
             {
                 HandleWebException(Data, wex);
 
+                TwitterRequestHistory.History.Enqueue(Data);
+
                 // If it gets this far without throwing an exception, 
                 // we should return the Data object as it is.
                 return Data;
             }
             catch (Exception ex)
             {
+                TwitterRequestHistory.History.Enqueue(Data);
+
                 throw new TwitterizerException(ex.Message, Data, ex);
             }
 
@@ -147,6 +151,8 @@ namespace Twitterizer.Framework
 
             if (Response != null)
                 Response.Close();
+
+            TwitterRequestHistory.History.Enqueue(Data);
 
 			return Data;
 		}

@@ -58,6 +58,7 @@
     <Compile Include="Data Transfer Objects\TwitterUser.cs" />
     <Compile Include="Data Transfer Objects\TwitterUserCollection.cs" />
     <Compile Include="Method Classes\TwitterUserMethods.cs" />
+    <Compile Include="TwitterRequestHistory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Twitterizer.Framework.snk" />
