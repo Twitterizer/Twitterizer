@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Twitter_2._0_Structure_Idea.Commands
+namespace Twitterizer.Commands
 {
-    public class UserShowCommand : BaseCommand<User>
+    public class UserShowCommand : Core.BaseCommand<User>
     {
         public Int64 UserID { get; set; }
         public string UserName { get; set; }
@@ -13,6 +13,12 @@ namespace Twitter_2._0_Structure_Idea.Commands
 
         public UserShowCommand()
             : base("GET", "http://twitter.com/users/show.json")
+        {
+
+        }
+
+        public UserShowCommand(string OAuthToken)
+            : base("GET", "http://twitter.com/users/show.json", OAuthToken)
         {
 
         }
