@@ -27,15 +27,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Net;
-using System.Xml;
-using System.IO;
-
 namespace Twitterizer.Framework
-{    
+{
+    using System;
+    using System.Drawing;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Net;
+    using System.Xml;
+    using System.IO;
+
 	internal class TwitterRequest
 	{
         private string proxyUri = string.Empty;
@@ -129,34 +130,41 @@ namespace Twitterizer.Framework
                 throw new TwitterizerException(ex.Message, Data, ex);
             }
 
-            // Get information about out usage rate
-            if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Limit")))
-                Data.RateLimit = int.Parse(Response.Headers.Get("X-RateLimit-Limit"));
+            try
+            {
+                // Get information about out usage rate
+                if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Limit")))
+                    Data.RateLimit = int.Parse(Response.Headers.Get("X-RateLimit-Limit"));
 
-            if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Remaining")))
-                Data.RateLimitRemaining = int.Parse(Response.Headers.Get("X-RateLimit-Remaining"));
+                if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Remaining")))
+                    Data.RateLimitRemaining = int.Parse(Response.Headers.Get("X-RateLimit-Remaining"));
 
-            // The date string is in Unix (aka epoch) time, which is the number of seconds since January 1st 1970 00:00
-            if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Reset")))
-                Data.RateLimitReset = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(double.Parse(Response.Headers.Get("X-RateLimit-Reset")));
+                // The date string is in Unix (aka epoch) time, which is the number of seconds since January 1st 1970 00:00
+                if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Reset")))
+                    Data.RateLimitReset = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(double.Parse(Response.Headers.Get("X-RateLimit-Reset")));
 
-            // Get the stream associated with the response.
-            Stream receiveStream = Response.GetResponseStream();
+                // Get the stream associated with the response.
+                using (Stream receiveStream = Response.GetResponseStream())
+                {
+                    // Pipes the stream to a higher level stream reader with the required encoding format. 
+                    readStream = new StreamReader(receiveStream, Encoding.UTF8);
 
-            // Pipes the stream to a higher level stream reader with the required encoding format. 
-            readStream = new StreamReader(receiveStream, Encoding.UTF8);
+                    Data.Response = readStream.ReadToEnd();
 
-            Data.Response = readStream.ReadToEnd();
-            Data = ParseResponseData(Data);
+                    readStream.Close();
+                }
+                
+                Data = ParseResponseData(Data);
+            }
+            finally
+            {
+                if (Response != null)
+                    Response.Close();
 
-            readStream.Close();
-
-            if (Response != null)
-                Response.Close();
-
-            if (System.Configuration.ConfigurationManager.AppSettings["Twitterizer.EnableRequestHistory"] == "true")
-                TwitterRequestHistory.History.Enqueue(Data);
-
+                if (System.Configuration.ConfigurationManager.AppSettings["Twitterizer.EnableRequestHistory"] == "true")
+                    TwitterRequestHistory.History.Enqueue(Data);
+            }
+            
 			return Data;
 		}
 
@@ -258,6 +266,20 @@ namespace Twitterizer.Framework
                 }
 
             // Copy our rate limit values to the properties that are actually returned
+            PropigateRateLimitDetails(Data);
+
+            return Data;
+        }
+
+        /// <summary>
+        /// Propigates the rate limit details into all data objects.
+        /// </summary>
+        /// <param name="Data">The data.</param>
+        private static void PropigateRateLimitDetails(TwitterRequestData Data)
+        {
+            if (Data.RateLimit == null && Data.RateLimitRemaining == null && Data.RateLimitReset == null)
+                return;
+
             if (Data.Statuses != null)
             {
                 Data.Statuses.RateLimit = Data.RateLimit;
@@ -286,7 +308,6 @@ namespace Twitterizer.Framework
                 }
             }
 
-            return Data;
         }
 
 		#region Parse Statuses
@@ -422,16 +443,55 @@ namespace Twitterizer.Framework
 			User.UserName = Element["name"].InnerText;
 			User.ScreenName = Element["screen_name"].InnerText;
 			User.Location = Element["location"].InnerText;
-			User.Description = Element["description"].InnerText;
-			User.IsProtected = bool.Parse(Element["protected"].InnerText);
-			User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
+            User.Uri = Element["url"].InnerText;
+            User.Description = Element["description"].InnerText;
+            User.CreatedAt = ParseDateString(Element["created_at"].InnerText);
+            User.IsVerified = bool.Parse(Element["verified"].InnerText);
+			
+            // Profile information
             User.ProfileImageUri = Element["profile_image_url"].InnerText;
             User.ProfileUri = Element["url"].InnerText;
-			if (Element["friends_count"] != null)
+            User.ProfileBackgroundColor = ColorTranslator.FromHtml(
+                String.Concat("#", Element["profile_background_color"].InnerText));
+            User.ProfileTextColor = ColorTranslator.FromHtml(
+                String.Concat("#", Element["profile_text_color"].InnerText));
+            User.ProfileLinkColor = ColorTranslator.FromHtml(
+                String.Concat("#", Element["profile_link_color"].InnerText));
+            User.ProfileSidebarFillColor = ColorTranslator.FromHtml(
+                String.Concat("#", Element["profile_sidebar_fill_color"].InnerText));
+            User.ProfileSidebarBorderColor = ColorTranslator.FromHtml(
+                String.Concat("#", Element["profile_sidebar_border_color"].InnerText));
+            User.ProfileBackgroundImageUri = Element["profile_background_image_url"].InnerText;
+            User.ProfileBackgroundTile = bool.Parse(Element["profile_background_tile"].InnerText);
+
+			User.IsProtected = bool.Parse(Element["protected"].InnerText);
+            User.UTCOffset = int.Parse(Element["utc_offset"].InnerText);
+            User.TimeZone = Element["time_zone"].InnerText;
+
+            if (!string.IsNullOrEmpty(Element["notifications"].InnerText))
+                User.Notifications = bool.Parse(Element["notifications"].InnerText);
+            if (!string.IsNullOrEmpty(Element["following"].InnerText))
+                User.Following = bool.Parse(Element["following"].InnerText);
+
+			// Get the number of followers
+            if (Element["friends_count"] != null)
+                User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
+            else
+                User.NumberOfFollowers = -1;
+
+			// Get the number of friends
+            if (Element["friends_count"] != null)
 				User.NumberOfFriends = int.Parse(Element["friends_count"].InnerText);
 			else
-				User.NumberOfFriends = -1;        // flag that we don't know, which is different than having zero friends
+				User.NumberOfFriends = -1;
+            
+            // Get the number of statuses
+            if (Element["statuses_count"] != null)
+                User.NumberOfStatuses = int.Parse(Element["statuses_count"].InnerText);
+            else
+                User.NumberOfStatuses = -1;
 
+            // If there is a status, parse it
 			if (Element["status"] != null)
 				User.Status = ParseStatusNode(Element["status"]);
 
@@ -461,5 +521,19 @@ namespace Twitterizer.Framework
 
 			return parsedDate;
 		}
+
+        /// <summary>
+        /// Returns the value of the element within the provided XmlNode, if the element exists. Returns String.Empty if not.
+        /// </summary>
+        /// <param name="Element">The element.</param>
+        /// <param name="ElementName">Name of the element.</param>
+        /// <returns></returns>
+        private static string ElementValueIfExists(XmlNode Node, string ElementName)
+        {
+            if (!Node.HasChildNodes || Node[ElementName] == null)
+                return string.Empty;
+
+            return Node[ElementName].Value;
+        }
 	}
 }

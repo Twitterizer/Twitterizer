@@ -27,26 +27,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-
 namespace Twitterizer.Framework
 {
+    using System;
+    using System.Drawing;
+
     [Serializable]
     public class TwitterUser
     {
+        // Information about the user
         public int ID { get; set; }
         public string UserName { get; set; }
         public string ScreenName { get; set; }
         public string Location { get; set; }
-        public string TimeZone { get; set; }
+        public string Uri { get; set; }
         public string Description { get; set; }
-        public string ProfileImageUri { get; set; }
-        public string ProfileUri { get; set; }
-        public bool IsProtected { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public int NumberOfFollowers { get; set; }
         public int NumberOfFriends { get; set; }
+        public int NumberOfStatuses { get; set; }
         public TwitterStatus Status { get; set; }
+        public bool IsVerified { get; set; }
 
+        // Profile Links and Colors
+        public string ProfileImageUri { get; set; }
+        public string ProfileUri { get; set; }
+        public Color ProfileBackgroundColor { get; set; }
+        public Color ProfileTextColor { get; set; }
+        public Color ProfileLinkColor { get; set; }
+        public Color ProfileSidebarFillColor { get; set; }
+        public Color ProfileSidebarBorderColor { get; set; }
+        public string ProfileBackgroundImageUri { get; set; }
+        public bool ProfileBackgroundTile { get; set; }
+        
+        // User settings
+        public bool IsProtected { get; set; }
+        public int UTCOffset { get; set; }
+        public string TimeZone { get; set; }
+
+        // Information about the relationship beteen this user and the authenticated user
+        public bool Notifications { get; set; }
+        public bool Following { get; set; }
+        
         public int? RateLimit { get; set; }
         public int? RateLimitRemaining { get; set; }
         public DateTime? RateLimitReset { get; set; }
