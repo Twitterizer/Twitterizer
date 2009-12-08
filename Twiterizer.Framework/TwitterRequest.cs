@@ -465,7 +465,13 @@ namespace Twitterizer.Framework
             User.ProfileBackgroundTile = bool.Parse(Element["profile_background_tile"].InnerText);
 
 			User.IsProtected = bool.Parse(Element["protected"].InnerText);
-            User.UTCOffset = int.Parse(Element["utc_offset"].InnerText);
+
+            int utcOffset;
+            if (int.TryParse(Element["utc_offset"].InnerText, out utcOffset))
+                User.UTCOffset = utcOffset;
+
+            
+            
             User.TimeZone = Element["time_zone"].InnerText;
 
             if (!string.IsNullOrEmpty(Element["notifications"].InnerText))
@@ -474,7 +480,7 @@ namespace Twitterizer.Framework
                 User.Following = bool.Parse(Element["following"].InnerText);
 
 			// Get the number of followers
-            if (Element["friends_count"] != null)
+            if (Element["followers_count"] != null)
                 User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
             else
                 User.NumberOfFollowers = -1;

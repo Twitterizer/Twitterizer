@@ -62,7 +62,7 @@ namespace Twitterizer.Framework
         
         // User settings
         public bool IsProtected { get; set; }
-        public int UTCOffset { get; set; }
+        public int? UTCOffset { get; set; }
         public string TimeZone { get; set; }
 
         // Information about the relationship beteen this user and the authenticated user
