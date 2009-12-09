@@ -93,6 +93,7 @@ namespace Twitterizer.TestApp
             try
             {
                 Twitter t = new Twitter(userName, password);
+
                 TimelineDataGridView.DataSource = t.Status.PublicTimeline();
             }
             catch (TwitterizerException ex)
@@ -143,8 +144,11 @@ namespace Twitterizer.TestApp
                     t = new Twitter(userName, password);
                 else
                     t = new Twitter();
-                
-                TimelineDataGridView.DataSource = t.Status.UserTimeline();
+
+                TwitterParameters param = new TwitterParameters();
+                param.Add(TwitterParameterNames.Cursor, -1);
+
+                TimelineDataGridView.DataSource = t.Status.UserTimeline(param);
                 MainFormTabControl.SelectedIndex = 2;
             }
             catch (TwitterizerException ex)
