@@ -73,8 +73,7 @@ namespace Twitterizer.TestApp
             {
                 Twitter t = new Twitter(userName, password);
                 TwitterParameters Parameters = new TwitterParameters();
-                Parameters.Add(TwitterParameterNames.Since, new DateTime(2008, 8, 1));
-                TimelineDataGridView.DataSource = t.Status.FriendsTimeline(Parameters);
+                TimelineDataGridView.DataSource = t.Status.FriendsTimeline();
             }
             catch (TwitterizerException ex)
             {
@@ -362,6 +361,25 @@ namespace Twitterizer.TestApp
                 MessageBox.Show("The message has been deleted! Please re-query the timeline.");
                 
             }
+        }
+
+        private void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                Twitter t = new Twitter(userName, password);
+                TimelineDataGridView.DataSource = t.Status.FavoritesTimeline(null);
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+            MainFormTabControl.SelectedIndex = 2;
         }
 
         

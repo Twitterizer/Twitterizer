@@ -52,12 +52,23 @@ namespace Twitterizer.Framework
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="Message">The message.</param>
+        /// <param name="RequestData">The request data.</param>
         public TwitterizerException(string Message, TwitterRequestData RequestData)
             : base(Message)
         {
             this.RequestData = RequestData;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="Message">The message.</param>
+        /// <param name="RequestData">The request data.</param>
+        /// <param name="InnerException">The inner exception.</param>
         public TwitterizerException(string Message, TwitterRequestData RequestData, Exception InnerException)
             : base(Message, InnerException)
         {
