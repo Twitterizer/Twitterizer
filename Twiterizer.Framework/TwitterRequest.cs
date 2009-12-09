@@ -244,6 +244,11 @@ namespace Twitterizer.Framework
                     case "users":
                         Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
                         break;
+                    case "users_list":
+                        Data.Users = ParseUsers(ResultXmlDocument.DocumentElement["users"]);
+                        Data.Users.NextCursor = long.Parse(ResultXmlDocument.DocumentElement["next_cursor"].InnerText);
+                        Data.Users.PreviousCursor = long.Parse(ResultXmlDocument.DocumentElement["previous_cursor"].InnerText);
+                        break;
                     case "user":
                         Data.Users = new TwitterUserCollection();
                         Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
@@ -465,13 +470,10 @@ namespace Twitterizer.Framework
             User.ProfileBackgroundTile = bool.Parse(Element["profile_background_tile"].InnerText);
 
 			User.IsProtected = bool.Parse(Element["protected"].InnerText);
-
             int utcOffset;
             if (int.TryParse(Element["utc_offset"].InnerText, out utcOffset))
                 User.UTCOffset = utcOffset;
 
-            
-            
             User.TimeZone = Element["time_zone"].InnerText;
 
             if (!string.IsNullOrEmpty(Element["notifications"].InnerText))

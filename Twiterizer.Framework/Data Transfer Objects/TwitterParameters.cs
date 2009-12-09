@@ -42,7 +42,8 @@ namespace Twitterizer.Framework
         Count,
         Page,
         UserID,
-        ScreenName
+        ScreenName,
+        Cursor
     }
 
     [Serializable]
@@ -87,6 +88,9 @@ namespace Twitterizer.Framework
                         break;
                     case TwitterParameterNames.ScreenName:
                         parameterString = string.Format("{0}&screen_name={1}", parameterString, this[key]);
+                        break;
+                    case TwitterParameterNames.Cursor:
+                        parameterString = string.Format("{0}&cursor={1}", parameterString, this[key]);
                         break;
                 }
             }
