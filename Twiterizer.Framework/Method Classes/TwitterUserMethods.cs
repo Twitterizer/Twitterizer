@@ -142,7 +142,7 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.ID:
                         case TwitterParameterNames.UserID:
                         case TwitterParameterNames.ScreenName:
-                        case TwitterParameterNames.Page:
+                        case TwitterParameterNames.Cursor:
                             break;
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
@@ -187,7 +187,6 @@ namespace Twitterizer.Framework
                         case TwitterParameterNames.ID:
                         case TwitterParameterNames.UserID:
                         case TwitterParameterNames.ScreenName:
-                        case TwitterParameterNames.Page:
                         case TwitterParameterNames.Cursor:
                             break;
                         default:
