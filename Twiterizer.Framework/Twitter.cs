@@ -27,9 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
 namespace Twitterizer.Framework
 {
+    using System;
+    using System.Configuration;
+
 	public class Twitter
 	{
 		public TwitterDirectMessageMethods DirectMessages;
@@ -37,6 +39,20 @@ namespace Twitterizer.Framework
 		public TwitterUserMethods User;
 
         public string ProxyUri { get; set; }
+        public static string Domain
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Twitterizer.Domain"]))
+                {
+                    return ConfigurationManager.AppSettings["Twitterizer.Domain"];
+                }
+                else
+                {
+                    return "http://api.twitter.com/1/";
+                }
+            }
+        }
 
         public const string DefaultSource = "Twitterizer";
 
@@ -107,7 +123,7 @@ namespace Twitterizer.Framework
 				data = request.PerformWebRequest(data, "GET");
                 return (data != null && data.Users != null && data.Users.Count > 0 && data.Users[0].ScreenName.ToLower() == username.ToLower());
 			}
-			catch(Exception ex) { } // ignore exeptions - authentication failed
+			catch(Exception) { } // ignore exeptions - authentication failed
 
 			return false;
 		}

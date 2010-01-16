@@ -39,6 +39,10 @@ namespace Twitterizer.Framework
         public int? RateLimitRemaining { get; set; }
         public DateTime? RateLimitReset { get; set; }
 
+        // Cursor properties
+        public long? NextCursor { get; set; }
+        public long? PreviousCursor { get; set; }
+
         public TwitterStatus this[int index]
         {
             get

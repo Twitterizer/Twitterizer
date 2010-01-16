@@ -32,7 +32,7 @@ using System.Web;
 
 namespace Twitterizer.Framework
 {
-	public class TwitterDirectMessageMethods
+	public class TwitterDirectMessageMethods : TwitterMethodBase
 	{
 		private readonly string userName;
 		private readonly string password;
@@ -84,13 +84,14 @@ namespace Twitterizer.Framework
 			Data.UserName = userName;
 			Data.Password = password;
 
-			string actionUri = (Parameters == null ? "http://twitter.com/direct_messages.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages.xml"));
-			Data.ActionUri = new Uri(actionUri);
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "direct_messages.xml");
 
 			Data = Request.PerformWebRequest(Data, "GET");
 
 			return Data.Statuses;
 		}
+
+
 
 		/// <summary>
 		/// Returns a list of the 20 most recent direct messages sent by the authenticating user.
@@ -113,8 +114,7 @@ namespace Twitterizer.Framework
 			Data.UserName = userName;
 			Data.Password = password;
 
-			string actionUri = (Parameters == null ? "http://twitter.com/direct_messages/sent.xml" : Parameters.BuildActionUri("http://twitter.com/direct_messages/sent.xml"));
-			Data.ActionUri = new Uri(actionUri);
+			Data.ActionUri = this.BuildConditionalUrl(Parameters, "direct_messages/sent.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -135,7 +135,7 @@ namespace Twitterizer.Framework
 			data.Password = password;
 
 			data.ActionUri = new Uri(
-				string.Format("http://twitter.com/direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message)));
+				string.Format("{2}direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message), Twitter.Domain));
 
 			data = request.PerformWebRequest(data);
 			return data.Statuses[0];
@@ -154,7 +154,7 @@ namespace Twitterizer.Framework
             data.Password = password;
 
             data.ActionUri = new Uri(
-                string.Format("http://twitter.com/direct_messages/destroy/{0}.xml", ID));
+                string.Format("{1}direct_messages/destroy/{0}.xml", ID, Twitter.Domain));
 
             data = request.PerformWebRequest(data, "POST");
             return data.Statuses[0];

@@ -49,6 +49,16 @@ namespace Twitterizer.Framework
     [Serializable]
     public class TwitterParameters : Dictionary<TwitterParameterNames, object>
     {
+        public TwitterParameters()
+        {
+            
+        }
+
+        public TwitterParameters(TwitterParameterNames Name, object Value)
+        {
+            this.Add(Name, Value);
+        }
+
         /// <summary>
         /// Builds the action URI.
         /// </summary>
@@ -99,7 +109,7 @@ namespace Twitterizer.Framework
                 return Uri;
 
             // First char of parameterString is a leading & that should be removed
-            return string.Format("{0}?{1}", Uri, parameterString.Remove(0, 1));
+            return string.Format("{2}{0}?{1}", Uri, parameterString.Remove(0, 1), Twitter.Domain);
         }
 
         public new void Add(TwitterParameterNames Key, object Value)

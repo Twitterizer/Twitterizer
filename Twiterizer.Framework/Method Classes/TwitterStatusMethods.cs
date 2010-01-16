@@ -32,7 +32,7 @@ using System.Web;
 
 namespace Twitterizer.Framework
 {
-    public class TwitterStatusMethods
+    public class TwitterStatusMethods : TwitterMethodBase
     {
         private readonly string userName;
         private readonly string password;
@@ -98,9 +98,8 @@ namespace Twitterizer.Framework
                 Data.UserName = userName;
                 Data.Password = password;
             }
-
-            string actionUri = (Parameters == null ? "http://twitter.com/statuses/user_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/user_timeline.xml"));
-            Data.ActionUri = new Uri(actionUri);
+            
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/user_timeline.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -116,7 +115,39 @@ namespace Twitterizer.Framework
             TwitterRequest Request = new TwitterRequest(proxyUri);
             TwitterRequestData Data = new TwitterRequestData();
 
-            Data.ActionUri = new Uri("http://twitter.com/statuses/public_timeline.xml");
+            Data.ActionUri = this.BuildConditionalUrl(null, "statuses/public_timeline.xml");
+
+            Data = Request.PerformWebRequest(Data, "GET");
+
+            return Data.Statuses;
+        }
+
+        public TwitterStatusCollection HomeTimeline()
+        {
+            return this.HomeTimeline(null);
+        }
+
+        public TwitterStatusCollection HomeTimeline(TwitterParameters Parameters)
+        {
+            TwitterRequest Request = new TwitterRequest(proxyUri);
+            TwitterRequestData Data = new TwitterRequestData();
+            Data.UserName = userName;
+            Data.Password = password;
+
+            if (Parameters != null)
+                foreach (TwitterParameterNames param in Parameters.Keys)
+                    switch (param)
+                    {
+                        case TwitterParameterNames.SinceID:
+                        case TwitterParameterNames.MaxID:
+                        case TwitterParameterNames.Count:
+                        case TwitterParameterNames.Page:
+                            break;
+                        default:
+                            throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
+                    }
+
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/home_timeline.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -160,8 +191,7 @@ namespace Twitterizer.Framework
                     }
 
 
-            string actionUri = (Parameters == null ? "http://twitter.com/statuses/friends_timeline.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/friends_timeline.xml"));
-            Data.ActionUri = new Uri(actionUri);
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/friends_timeline.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -195,12 +225,12 @@ namespace Twitterizer.Framework
             if (InReplyToStatusID.HasValue)
             {
                 Data.ActionUri = new Uri(
-                    string.Format("http://twitter.com/statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID.Value, source));
+                    string.Format("{3}statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID.Value, source, Twitter.Domain));
             }
             else
             {
                 Data.ActionUri = new Uri(
-                    string.Format("http://twitter.com/statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(Status), source));
+                    string.Format("{2}statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(Status), source, Twitter.Domain));
             }
 
             Data = Request.PerformWebRequest(Data);
@@ -222,7 +252,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format("http://twitter.com/statuses/destroy/{0}.xml", ID));
+                string.Format("{1}statuses/destroy/{0}.xml", ID, Twitter.Domain));
 
             Data = Request.PerformWebRequest(Data, "POST");
             return Data.Statuses[0];
@@ -252,7 +282,7 @@ namespace Twitterizer.Framework
             Data.Password = password;
 
             Data.ActionUri = new Uri(
-                string.Format("http://twitter.com/statuses/show/{0}.xml", ID));
+                string.Format("{1}statuses/show/{0}.xml", ID, Twitter.Domain));
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -294,8 +324,7 @@ namespace Twitterizer.Framework
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
-            string actionUri = (Parameters == null ? "http://twitter.com/statuses/replies.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
-            Data.ActionUri = new Uri(actionUri);
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/replies.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -340,8 +369,7 @@ namespace Twitterizer.Framework
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
-            string actionUri = (Parameters == null ? "http://twitter.com/statuses/mentions.xml" : Parameters.BuildActionUri("http://twitter.com/statuses/replies.xml"));
-            Data.ActionUri = new Uri(actionUri);
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/mentions.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -373,8 +401,7 @@ namespace Twitterizer.Framework
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
 
-            string actionUri = (Parameters == null ? "http://twitter.com/favorites.xml" : Parameters.BuildActionUri("http://twitter.com/favorites.xml"));
-            Data.ActionUri = new Uri(actionUri);
+            Data.ActionUri = this.BuildConditionalUrl(Parameters, "favorites.xml");
 
             Data = Request.PerformWebRequest(Data, "GET");
 
@@ -393,7 +420,7 @@ namespace Twitterizer.Framework
             Data.UserName = userName;
             Data.Password = password;
 
-            string actionUri = string.Format("http://twitter.com/favorites/create/{0}.xml", StatusID);
+            string actionUri = string.Format("{1}favorites/create/{0}.xml", StatusID, Twitter.Domain);
             Data.ActionUri = new Uri(actionUri);
 
             Data = Request.PerformWebRequest(Data, "POST");
@@ -413,7 +440,7 @@ namespace Twitterizer.Framework
             Data.UserName = userName;
             Data.Password = password;
 
-            string actionUri = string.Format("http://twitter.com/favorites/destroy/{0}.xml", StatusID);
+            string actionUri = string.Format("{1}favorites/destroy/{0}.xml", StatusID, Twitter.Domain);
             Data.ActionUri = new Uri(actionUri);
 
             Data = Request.PerformWebRequest(Data, "POST");

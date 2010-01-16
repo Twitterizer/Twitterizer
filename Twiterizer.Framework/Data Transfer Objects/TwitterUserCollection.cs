@@ -35,6 +35,7 @@ namespace Twitterizer.Framework
     [Serializable]
     public class TwitterUserCollection : CollectionBase
     {
+        // Rate limit properties
         public int? RateLimit { get; set; }
         public int? RateLimitRemaining { get; set; }
         public DateTime? RateLimitReset { get; set; }

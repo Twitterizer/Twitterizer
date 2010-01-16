@@ -94,7 +94,7 @@ namespace Twitterizer.Framework
             
 			Request.Method = HTTPMethod;
 
-			StreamReader readStream;
+			
 
 			// Some limitations
 			Request.MaximumAutomaticRedirections = 4;
@@ -146,12 +146,13 @@ namespace Twitterizer.Framework
                 // Get the stream associated with the response.
                 using (Stream receiveStream = Response.GetResponseStream())
                 {
-                    // Pipes the stream to a higher level stream reader with the required encoding format. 
-                    readStream = new StreamReader(receiveStream, Encoding.UTF8);
+                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                    {
+                        // Pipes the stream to a higher level stream reader with the required encoding format. 
+                        Data.Response = readStream.ReadToEnd();
 
-                    Data.Response = readStream.ReadToEnd();
-
-                    readStream.Close();
+                        readStream.Close();
+                    }
                 }
                 
                 Data = ParseResponseData(Data);
@@ -329,6 +330,15 @@ namespace Twitterizer.Framework
 				Collection.Add(ParseStatusNode(Child));
 			}
 
+            // Get the cursor values
+            int nextCursor;
+            if (Element["next_cursor"] != null && int.TryParse(Element["next_cursor"].InnerText, out nextCursor))
+                Collection.NextCursor = nextCursor;
+
+            int prevCursor;
+            if (Element["prev_cursor"] != null && int.TryParse(Element["prev_cursor"].InnerText, out prevCursor))
+                Collection.PreviousCursor = prevCursor;
+
 			return Collection;
 		}
 
@@ -430,6 +440,15 @@ namespace Twitterizer.Framework
 				Collection.Add(ParseUserNode(Child));
 			}
 
+            // Get the cursor values
+            int nextCursor;
+            if (Element["next_cursor"] != null && int.TryParse(Element["next_cursor"].InnerText, out nextCursor))
+                Collection.NextCursor = nextCursor;
+
+            int prevCursor;
+            if (Element["prev_cursor"] != null && int.TryParse(Element["prev_cursor"].InnerText, out prevCursor))
+                Collection.PreviousCursor = prevCursor;
+
 			return Collection;
 		}
 
@@ -443,33 +462,36 @@ namespace Twitterizer.Framework
 			if (Element == null)
 				return null;
 
-			TwitterUser User = new TwitterUser();
-			User.ID = int.Parse(Element["id"].InnerText);
-			User.UserName = Element["name"].InnerText;
-			User.ScreenName = Element["screen_name"].InnerText;
-			User.Location = Element["location"].InnerText;
-            User.Uri = Element["url"].InnerText;
-            User.Description = Element["description"].InnerText;
-            User.CreatedAt = ParseDateString(Element["created_at"].InnerText);
-            User.IsVerified = bool.Parse(Element["verified"].InnerText);
-			
-            // Profile information
-            User.ProfileImageUri = Element["profile_image_url"].InnerText;
-            User.ProfileUri = Element["url"].InnerText;
-            User.ProfileBackgroundColor = ColorTranslator.FromHtml(
-                String.Concat("#", Element["profile_background_color"].InnerText));
-            User.ProfileTextColor = ColorTranslator.FromHtml(
-                String.Concat("#", Element["profile_text_color"].InnerText));
-            User.ProfileLinkColor = ColorTranslator.FromHtml(
-                String.Concat("#", Element["profile_link_color"].InnerText));
-            User.ProfileSidebarFillColor = ColorTranslator.FromHtml(
-                String.Concat("#", Element["profile_sidebar_fill_color"].InnerText));
-            User.ProfileSidebarBorderColor = ColorTranslator.FromHtml(
-                String.Concat("#", Element["profile_sidebar_border_color"].InnerText));
-            User.ProfileBackgroundImageUri = Element["profile_background_image_url"].InnerText;
-            User.ProfileBackgroundTile = bool.Parse(Element["profile_background_tile"].InnerText);
+            TwitterUser User = new TwitterUser()
+            {
+                ID = int.Parse(Element["id"].InnerText),
+                UserName = Element["name"].InnerText,
+                ScreenName = Element["screen_name"].InnerText,
+                Location = Element["location"].InnerText,
+                Uri = Element["url"].InnerText,
+                Description = Element["description"].InnerText,
+                CreatedAt = ParseDateString(Element["created_at"].InnerText),
+                IsVerified = bool.Parse(Element["verified"].InnerText),
+                IsProtected = bool.Parse(Element["protected"].InnerText),
 
-			User.IsProtected = bool.Parse(Element["protected"].InnerText);
+                // Profile information
+                ProfileImageUri = Element["profile_image_url"].InnerText,
+                ProfileUri = Element["url"].InnerText,
+                ProfileBackgroundColor = ColorTranslator.FromHtml(
+                    String.Concat("#", Element["profile_background_color"].InnerText)),
+                ProfileTextColor = ColorTranslator.FromHtml(
+                            String.Concat("#", Element["profile_text_color"].InnerText)),
+                ProfileLinkColor = ColorTranslator.FromHtml(
+                            String.Concat("#", Element["profile_link_color"].InnerText)),
+                ProfileSidebarFillColor = ColorTranslator.FromHtml(
+                            String.Concat("#", Element["profile_sidebar_fill_color"].InnerText)),
+                ProfileSidebarBorderColor = ColorTranslator.FromHtml(
+                            String.Concat("#", Element["profile_sidebar_border_color"].InnerText)),
+                ProfileBackgroundImageUri = Element["profile_background_image_url"].InnerText,
+                ProfileBackgroundTile = bool.Parse(Element["profile_background_tile"].InnerText)
+            };
+
+			
             int utcOffset;
             if (int.TryParse(Element["utc_offset"].InnerText, out utcOffset))
                 User.UTCOffset = utcOffset;

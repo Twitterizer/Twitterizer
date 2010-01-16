@@ -33,7 +33,7 @@ namespace Twitterizer.Framework
     using System.Drawing;
 
     [Serializable]
-    public class TwitterUser
+    public class TwitterUser : TwitterObject
     {
         // Information about the user
         public int ID { get; set; }
@@ -68,10 +68,6 @@ namespace Twitterizer.Framework
         // Information about the relationship beteen this user and the authenticated user
         public bool Notifications { get; set; }
         public bool Following { get; set; }
-        
-        public int? RateLimit { get; set; }
-        public int? RateLimitRemaining { get; set; }
-        public DateTime? RateLimitReset { get; set; }
         
         public override string ToString()
         {
