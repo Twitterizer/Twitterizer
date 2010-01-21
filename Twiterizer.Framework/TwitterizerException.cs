@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,13 +27,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-using System.Text.RegularExpressions;
-
 namespace Twitterizer.Framework
 {
+    using System;
+    using System.Text.RegularExpressions;
+
     public class TwitterizerException : Exception
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="requestData">The request data.</param>
+        public TwitterizerException(string message, TwitterRequestData requestData)
+            : base(message)
+        {
+            this.RequestData = requestData;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="requestData">The request data.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public TwitterizerException(string message, TwitterRequestData requestData, Exception innerException)
+            : base(message, innerException)
+        {
+            this.RequestData = requestData;
+        }
+
         /// <summary>
         /// Contains the Request Data that is used in the Twitter API request.
         /// </summary>
@@ -48,45 +71,26 @@ namespace Twitterizer.Framework
         {
             get
             {
-                return (RequestData == null ? string.Empty : RequestData.Response);
+                return this.RequestData == null ? string.Empty : this.RequestData.Response;
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        /// <param name="Message">The message.</param>
-        /// <param name="RequestData">The request data.</param>
-        public TwitterizerException(string Message, TwitterRequestData RequestData)
-            : base(Message)
-        {
-            this.RequestData = RequestData;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        /// <param name="Message">The message.</param>
-        /// <param name="RequestData">The request data.</param>
-        /// <param name="InnerException">The inner exception.</param>
-        public TwitterizerException(string Message, TwitterRequestData RequestData, Exception InnerException)
-            : base(Message, InnerException)
-        {
-            this.RequestData = RequestData;
         }
 
         /// <summary>
         /// Parses the error message.
         /// </summary>
-        public static string ParseErrorMessage(string XML)
+        public static string ParseErrorMessage(string xml)
         {
-            if (string.IsNullOrEmpty(XML))
+            if (string.IsNullOrEmpty(xml))
+            {
                 return string.Empty;
+            }
 
-            if (!Regex.IsMatch(XML, "<error>.+</error>", RegexOptions.IgnoreCase))
+            if (!Regex.IsMatch(xml, "<error>.+</error>", RegexOptions.IgnoreCase))
+            {
                 return string.Empty;
+            }
 
-            return Regex.Match(XML, "(?:<error>).+(?:</error>)", RegexOptions.IgnoreCase).Value;
+            return Regex.Match(xml, "(?:<error>).+(?:</error>)", RegexOptions.IgnoreCase).Value;
         }
     }
 }

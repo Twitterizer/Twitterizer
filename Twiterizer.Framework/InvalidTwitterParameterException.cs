@@ -1,7 +1,7 @@
 ﻿/*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -28,10 +28,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System;
-
 namespace Twitterizer.Framework
 {
+    using System;
+
+    /// <summary>
+    /// Describes the reason a TwitterParameter cannot be used.
+    /// </summary>
     public enum InvalidTwitterParameterReason
     {
         /// <summary>
@@ -50,15 +53,32 @@ namespace Twitterizer.Framework
         ParameterNotSupported = 2
     }
 
+    /// <summary>
+    /// The InvalidTwitterParameterException class.
+    /// </summary>
     public class InvalidTwitterParameterException : ArgumentException
     {
-        public TwitterParameterNames Parameter { get; set; }
-        public InvalidTwitterParameterReason Reason { get; set; }
-
-        public InvalidTwitterParameterException(TwitterParameterNames Parameter, InvalidTwitterParameterReason Reason)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvalidTwitterParameterException"/> class.
+        /// </summary>
+        /// <param name="Parameter">The parameter.</param>
+        /// <param name="Reason">The reason.</param>
+        public InvalidTwitterParameterException(TwitterParameterNames parameter, InvalidTwitterParameterReason reason)
         {
-            this.Parameter = Parameter;
-            this.Reason = Reason;
+            this.Parameter = parameter;
+            this.Reason = reason;
         }
+
+        /// <summary>
+        /// Gets or sets the parameter.
+        /// </summary>
+        /// <value>The parameter.</value>
+        public TwitterParameterNames Parameter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reason.
+        /// </summary>
+        /// <value>The reason.</value>
+        public InvalidTwitterParameterReason Reason { get; set; }
     }
 }

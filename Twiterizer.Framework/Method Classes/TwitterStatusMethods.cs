@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,11 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-using System.Web;
-
 namespace Twitterizer.Framework
 {
+    using System;
+    using System.Web;
+
     public class TwitterStatusMethods : TwitterMethodBase
     {
         private readonly string userName;
@@ -42,29 +42,29 @@ namespace Twitterizer.Framework
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStatusMethods"/> class.
         /// </summary>
-        /// <param name="UserName">Name of the user.</param>
-        /// <param name="Password">The password.</param>
-        /// <param name="Source">The source.</param>
-        /// <param name="uri_proxy">The uri_proxy.</param>
-        public TwitterStatusMethods(string UserName, string Password, string Source, string ProxyUri)
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="proxyUri">The proxy URI.</param>
+        public TwitterStatusMethods(string userName, string password, string source, string proxyUri)
         {
-            userName = UserName;
-            password = Password;
-            source = Source;
-            proxyUri = ProxyUri;
+            this.userName = userName;
+            this.password = password;
+            this.source = source;
+            this.proxyUri = proxyUri;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStatusMethods"/> class.
         /// </summary>
-        /// <param name="UserName">Name of the user.</param>
-        /// <param name="Password">The password.</param>
-        /// <param name="Source">The source.</param>
-        public TwitterStatusMethods(string UserName, string Password, string Source)
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="source">The source.</param>
+        public TwitterStatusMethods(string userName, string password, string source)
         {
-            userName = UserName;
-            password = Password;
-            source = Source;
+            this.userName = userName;
+            this.password = password;
+            this.source = source;
         }
 
         /// <summary>
@@ -73,37 +73,37 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection UserTimeline()
         {
-            return UserTimeline(null);
+            return this.UserTimeline(null);
         }
 
         /// <summary>
         /// Returns the 20 most recent statuses posted from the authenticating user.
         /// </summary>
-        /// <param name="Parameters">Accepts Count, Since, SinceID, and Page parameters.</param>
+        /// <param name="parameters">Accepts Count, Since, SinceID, and Page parameters.</param>
         /// <returns></returns>
-        public TwitterStatusCollection UserTimeline(TwitterParameters Parameters)
+        public TwitterStatusCollection UserTimeline(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
 
             // If not login information is supplied, the ID parameter is required.
-            if (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password) && 
-                (Parameters == null || Parameters.Count == 0 || !Parameters.ContainsKey(TwitterParameterNames.ID)))
+            if (string.IsNullOrEmpty(this.userName) && string.IsNullOrEmpty(this.password) && 
+                (parameters == null || parameters.Count == 0 || !parameters.ContainsKey(TwitterParameterNames.ID)))
             {
                 throw new InvalidTwitterParameterException(TwitterParameterNames.ID, InvalidTwitterParameterReason.MissingRequiredParameter);
             }
 
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(this.userName) && !string.IsNullOrEmpty(this.password))
             {
-                Data.UserName = userName;
-                Data.Password = password;
+                data.UserName = this.userName;
+                data.Password = this.password;
             }
             
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/user_timeline.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/user_timeline.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses;
+            return data.Statuses;
         }
 
         /// <summary>
@@ -112,14 +112,14 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection PublicTimeline()
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
 
-            Data.ActionUri = this.BuildConditionalUrl(null, "statuses/public_timeline.xml");
+            data.ActionUri = this.BuildConditionalUrl(null, "statuses/public_timeline.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses;
+            return data.Statuses;
         }
 
         public TwitterStatusCollection HomeTimeline()
@@ -127,15 +127,17 @@ namespace Twitterizer.Framework
             return this.HomeTimeline(null);
         }
 
-        public TwitterStatusCollection HomeTimeline(TwitterParameters Parameters)
+        public TwitterStatusCollection HomeTimeline(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.SinceID:
@@ -146,12 +148,14 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/home_timeline.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/home_timeline.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses;
+            return data.Statuses;
         }
 
         /// <summary>
@@ -160,7 +164,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection FriendsTimeline()
         {
-            return FriendsTimeline(null);
+            return this.FriendsTimeline(null);
         }
 
         /// <summary>
@@ -169,16 +173,18 @@ namespace Twitterizer.Framework
         /// <param name="Parameters">Accepts Since, SinceID, Count, and Page parameters.</param>
         /// <returns></returns>
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-friends_timeline </remarks>
-        public TwitterStatusCollection FriendsTimeline(TwitterParameters Parameters)
+        public TwitterStatusCollection FriendsTimeline(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.SinceID:
@@ -189,13 +195,14 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/friends_timeline.xml");
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/friends_timeline.xml");
+            data = request.PerformWebRequest(data, "GET");
 
-            Data = Request.PerformWebRequest(Data, "GET");
-
-            return Data.Statuses;
+            return data.Statuses;
         }
 
         /// <summary>
@@ -203,9 +210,9 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Status">Required.  The text of your status update.</param>
         /// <returns></returns>
-        public TwitterStatus Update(string Status)
+        public TwitterStatus Update(string status)
         {
-            return Update(Status, null);
+            return this.Update(status, null);
         }
 
         /// <summary>
@@ -214,28 +221,28 @@ namespace Twitterizer.Framework
         /// <param name="Status">Required.  The text of your status update.</param>
         /// <param name="InReplyToStatusID">Optional.  The ID of an existing status that the status to be posted is in reply to.</param>
         /// <returns></returns>
-        public TwitterStatus Update(string Status, Int64? InReplyToStatusID)
+        public TwitterStatus Update(string status, long? inReplyToStatusID)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
-            Data.Source = source;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
+            data.Source = this.source;
 
-            if (InReplyToStatusID.HasValue)
+            if (inReplyToStatusID.HasValue)
             {
-                Data.ActionUri = new Uri(
-                    string.Format("{3}statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(Status), InReplyToStatusID.Value, source, Twitter.Domain));
+                data.ActionUri = new Uri(
+                    string.Format("{3}statuses/update.xml?status={0}&in_reply_to_status_id={1}&source={2}", HttpUtility.UrlEncode(status), inReplyToStatusID.Value, this.source, Twitter.Domain));
             }
             else
             {
-                Data.ActionUri = new Uri(
-                    string.Format("{2}statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(Status), source, Twitter.Domain));
+                data.ActionUri = new Uri(
+                    string.Format("{2}statuses/update.xml?status={0}&source={1}", HttpUtility.UrlEncode(status), this.source, Twitter.Domain));
             }
 
-            Data = Request.PerformWebRequest(Data);
+            data = request.PerformWebRequest(data);
 
-            return Data.Statuses[0];
+            return data.Statuses[0];
         }
 
         /// <summary>
@@ -244,18 +251,18 @@ namespace Twitterizer.Framework
         /// <param name="ID">Required.  The ID of the status to destroy.</param>
         /// <returns></returns>
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0destroy </remarks>
-        public TwitterStatus Destroy(Int64 ID)
+        public TwitterStatus Destroy(long id)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            Data.ActionUri = new Uri(
-                string.Format("{1}statuses/destroy/{0}.xml", ID, Twitter.Domain));
+            data.ActionUri = new Uri(
+                string.Format("{1}statuses/destroy/{0}.xml", id, Twitter.Domain));
 
-            Data = Request.PerformWebRequest(Data, "POST");
-            return Data.Statuses[0];
+            data = request.PerformWebRequest(data, "POST");
+            return data.Statuses[0];
         }
 
         /// <summary>
@@ -264,9 +271,9 @@ namespace Twitterizer.Framework
         /// <param name="Status">The status.</param>
         /// <returns></returns>
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0destroy </remarks>
-        public TwitterStatus Destroy(TwitterStatus Status)
+        public TwitterStatus Destroy(TwitterStatus status)
         {
-            return Destroy(Status.ID);
+            return this.Destroy(status.ID);
         }
 
         /// <summary>
@@ -274,19 +281,19 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
         /// <returns></returns>
-        public TwitterStatus Show(Int64 ID)
+        public TwitterStatus Show(long id)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            Data.ActionUri = new Uri(
-                string.Format("{1}statuses/show/{0}.xml", ID, Twitter.Domain));
+            data.ActionUri = new Uri(
+                string.Format("{1}statuses/show/{0}.xml", id, Twitter.Domain));
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses[0];
+            return data.Statuses[0];
         }
 
         /// <summary>
@@ -295,7 +302,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterStatusCollection Replies()
         {
-            return Replies(null);
+            return this.Replies(null);
         }
 
         /// <summary>
@@ -303,16 +310,18 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Parameters">Optional. Accepts Page, Since, and SinceID parameters.</param>
         /// <returns></returns>
-        public TwitterStatusCollection Replies(TwitterParameters Parameters)
+        public TwitterStatusCollection Replies(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.SinceID:
@@ -323,14 +332,15 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/replies.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/replies.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses;
+            return data.Statuses;
         }
-
 
         /// <summary>
         /// Returns a timeline of statuses where the authenticated user is mentioned.
@@ -339,7 +349,7 @@ namespace Twitterizer.Framework
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-mentions </remarks>
         public TwitterStatusCollection Mentions()
         {
-            return Mentions(null);
+            return this.Mentions(null);
         }
 
         /// <summary>
@@ -348,16 +358,18 @@ namespace Twitterizer.Framework
         /// <param name="Parameters">The parameters.</param>
         /// <returns></returns>
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-mentions </remarks>
-        public TwitterStatusCollection Mentions(TwitterParameters Parameters)
+        public TwitterStatusCollection Mentions(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.SinceID:
@@ -368,12 +380,14 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/mentions.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/mentions.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses;
+            return data.Statuses;
         }
 
         #region Favorites Methods
@@ -382,16 +396,18 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Parameters">An optional collection of parameters used to query Twitter.</param>
         /// <returns></returns>
-        public TwitterStatusCollection FavoritesTimeline(TwitterParameters Parameters)
+        public TwitterStatusCollection FavoritesTimeline(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.ID:
@@ -400,12 +416,14 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "favorites.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "favorites.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Statuses;
+            return data.Statuses;
         }
 
         /// <summary>
@@ -413,19 +431,19 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="StatusID">The ID of the status to favorite. </param>
         /// <returns></returns>
-        public TwitterStatus CreateFavorite(long StatusID)
+        public TwitterStatus CreateFavorite(long statusID)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            string actionUri = string.Format("{1}favorites/create/{0}.xml", StatusID, Twitter.Domain);
-            Data.ActionUri = new Uri(actionUri);
+            string actionUri = string.Format("{1}favorites/create/{0}.xml", statusID, Twitter.Domain);
+            data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data, "POST");
+            data = request.PerformWebRequest(data, "POST");
 
-            return Data.Statuses[0];
+            return data.Statuses[0];
         }
 
         /// <summary>
@@ -433,19 +451,19 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="StatusID">The ID of the status to un-favorite. </param>
         /// <returns></returns>
-        public TwitterStatus DestroyFavorite(long StatusID)
+        public TwitterStatus DestroyFavorite(long statusID)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            string actionUri = string.Format("{1}favorites/destroy/{0}.xml", StatusID, Twitter.Domain);
-            Data.ActionUri = new Uri(actionUri);
+            string actionUri = string.Format("{1}favorites/destroy/{0}.xml", statusID, Twitter.Domain);
+            data.ActionUri = new Uri(actionUri);
 
-            Data = Request.PerformWebRequest(Data, "POST");
+            data = request.PerformWebRequest(data, "POST");
 
-            return Data.Statuses[0];
+            return data.Statuses[0];
         }
 
         #endregion

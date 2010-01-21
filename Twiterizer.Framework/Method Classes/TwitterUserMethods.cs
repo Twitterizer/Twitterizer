@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,9 +27,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
 namespace Twitterizer.Framework
 {
+    using System;
+
     public class TwitterUserMethods : TwitterMethodBase
     {
         private readonly string userName;
@@ -41,10 +42,10 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="UserName">Name of the user.</param>
         /// <param name="Password">The password.</param>
-        public TwitterUserMethods(string UserName, string Password)
+        public TwitterUserMethods(string userName, string password)
         {
-            userName = UserName;
-            password = Password;
+            this.userName = userName;
+            this.password = password;
         }
 
         /// <summary>
@@ -53,11 +54,11 @@ namespace Twitterizer.Framework
         /// <param name="UserName">Name of the user.</param>
         /// <param name="Password">The password.</param>
         /// <param name="ProxyUri">The proxy URI.</param>
-        public TwitterUserMethods(string UserName, string Password, string ProxyUri)
+        public TwitterUserMethods(string userName, string password, string proxyUri)
         {
-            userName = UserName;
-            password = Password;
-            proxyUri = ProxyUri;
+            this.userName = userName;
+            this.password = password;
+            this.proxyUri = proxyUri;
         }
 
         /// <summary>
@@ -65,18 +66,20 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Parameters">The parameters.</param>
         /// <returns></returns>
-        public TwitterUser Show(TwitterParameters Parameters)
+        public TwitterUser Show(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = this.userName;
-            Data.Password = this.password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "users/show.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "users/show.xml");
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.ID:
@@ -86,10 +89,12 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Users[0];
+            return data.Users[0];
         }
 
         /// <summary>
@@ -97,18 +102,18 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ID">id.  Required.  The numerical ID of the status you're trying to retrieve.</param>
         /// <returns></returns>
-        public TwitterUser Show(string ID)
+        public TwitterUser Show(string id)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            Data.ActionUri = new Uri(string.Format("{1}users/show/{0}.xml", ID, Twitter.Domain));
+            data.ActionUri = new Uri(string.Format("{1}users/show/{0}.xml", id, Twitter.Domain));
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Users[0];
+            return data.Users[0];
         }
 
         /// <summary>
@@ -117,7 +122,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterUserCollection Followers()
         {
-            return (Followers(null));
+            return this.Followers(null);
         }
 
         /// <summary>
@@ -126,16 +131,18 @@ namespace Twitterizer.Framework
         /// <param name="Parameters">Optional. Accepts ID and Page parameters.</param>
         /// <returns></returns>
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0followers </remarks>
-        public TwitterUserCollection Followers(TwitterParameters Parameters)
+        public TwitterUserCollection Followers(TwitterParameters parameters)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.ID:
@@ -146,12 +153,14 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/followers.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/followers.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Users;
+            return data.Users;
         }
 
         /// <summary>
@@ -160,7 +169,7 @@ namespace Twitterizer.Framework
         /// <returns></returns>
         public TwitterUserCollection Friends()
         {
-            return (Friends(null));
+            return this.Friends(null);
         }
 
         /// <summary>
@@ -169,17 +178,19 @@ namespace Twitterizer.Framework
         /// <param name="Parameters">Optional. Accepts ID, Page, and Since parameters.</param>
         /// <returns></returns>
         /// <remarks>See: http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0friends </remarks>
-        public TwitterUserCollection Friends(TwitterParameters Parameters)
+        public TwitterUserCollection Friends(TwitterParameters parameters)
         {
             // page 0 == page 1 is the start
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             // Validate the parameters that are given.
-            if (Parameters != null)
-                foreach (TwitterParameterNames param in Parameters.Keys)
+            if (parameters != null)
+            {
+                foreach (TwitterParameterNames param in parameters.Keys)
+                {
                     switch (param)
                     {
                         case TwitterParameterNames.ID:
@@ -190,50 +201,52 @@ namespace Twitterizer.Framework
                         default:
                             throw new InvalidTwitterParameterException(param, InvalidTwitterParameterReason.ParameterNotSupported);
                     }
+                }
+            }
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "statuses/friends.xml");
+            data.ActionUri = this.BuildConditionalUrl(parameters, "statuses/friends.xml");
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data = request.PerformWebRequest(data, "GET");
 
-            return Data.Users;
+            return data.Users;
         }
 
-		/// <summary>
-		/// Creates a new friendship with a user. Returns the user that was followed.
-		/// </summary>
-		/// <param name="User">The User to follow.</param>
-		/// <returns></returns>
-		public TwitterUserCollection FollowUser(TwitterUser User)
-		{
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-			TwitterRequestData Data = new TwitterRequestData();
-			Data.UserName = userName;
-			Data.Password = password;
+        /// <summary>
+        /// Creates a new friendship with a user. Returns the user that was followed.
+        /// </summary>
+        /// <param name="User">The User to follow.</param>
+        /// <returns></returns>
+        public TwitterUserCollection FollowUser(TwitterUser user)
+        {
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-			string actionUri = string.Format("friendships/create/{0}.xml", User.ScreenName);
-			Data.ActionUri = new Uri(actionUri);
-			Data = Request.PerformWebRequest(Data);
+            string actionUri = string.Format("friendships/create/{0}.xml", user.ScreenName);
+            data.ActionUri = new Uri(actionUri);
+            data = request.PerformWebRequest(data);
 
-			return Data.Users;
-		}
+            return data.Users;
+        }
 
         /// <summary>
         /// Destroys an existing friendship with a user.
         /// </summary>
         /// <param name="User">The user with which a friendship exists and should been destroyed.</param>
         /// <returns>The user with which a friendship has been destroyed.</returns>
-        public TwitterUserCollection UnFollowUser(TwitterUser User)
+        public TwitterUserCollection UnFollowUser(TwitterUser user)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            string actionUri = string.Format("friendships/destroy/{0}.xml", User.ScreenName);
-            Data.ActionUri = new Uri(actionUri);
-            Data = Request.PerformWebRequest(Data);
+            string actionUri = string.Format("friendships/destroy/{0}.xml", user.ScreenName);
+            data.ActionUri = new Uri(actionUri);
+            data = request.PerformWebRequest(data);
 
-            return Data.Users;
+            return data.Users;
         }
 
         /// <summary>
@@ -241,19 +254,19 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="ScreenName">The user with which a friendship exists and should been destroyed.</param>
         /// <returns>The user with which a friendship has been destroyed.</returns>
-        public TwitterUserCollection UnFollowUser(String ScreenName)
+        public TwitterUserCollection UnFollowUser(string screenName)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            TwitterParameters parameters = new TwitterParameters(TwitterParameterNames.ScreenName, ScreenName);
-            
-            Data.ActionUri = this.BuildConditionalUrl(parameters, "friendships/destroy.xml");;
-            Data = Request.PerformWebRequest(Data);
+            TwitterParameters parameters = new TwitterParameters(TwitterParameterNames.ScreenName, screenName);
 
-            return Data.Users;
+            data.ActionUri = this.BuildConditionalUrl(parameters, "friendships/destroy.xml");
+            data = request.PerformWebRequest(data);
+
+            return data.Users;
         }
 
         /// <summary>
@@ -261,20 +274,19 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="UserID">The user with which a friendship exists and should been destroyed.</param>
         /// <returns>The user with which a friendship has been destroyed.</returns>
-        public TwitterUserCollection UnFollowUser(Int64 UserID)
+        public TwitterUserCollection UnFollowUser(long userID)
         {
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-            TwitterRequestData Data = new TwitterRequestData();
-            Data.UserName = userName;
-            Data.Password = password;
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            TwitterParameters parameters = new TwitterParameters(TwitterParameterNames.UserID, UserID);
+            TwitterParameters parameters = new TwitterParameters(TwitterParameterNames.UserID, userID);
 
-            Data.ActionUri = this.BuildConditionalUrl(parameters, "friendships/destroy.xml");
-            Data = Request.PerformWebRequest(Data);
+            data.ActionUri = this.BuildConditionalUrl(parameters, "friendships/destroy.xml");
+            data = request.PerformWebRequest(data);
 
-            return Data.Users;
+            return data.Users;
         }
-    
     }
 }

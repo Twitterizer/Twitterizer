@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml;
-
 namespace Twitterizer.TestApp
 {
+    using System;
+    using System.Windows.Forms;
+
     public partial class ConfigureForm : Form
     {
         public ConfigureForm()
@@ -56,7 +50,6 @@ namespace Twitterizer.TestApp
 
         private void ConfigureForm_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

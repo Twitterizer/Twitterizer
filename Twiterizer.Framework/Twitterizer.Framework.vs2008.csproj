@@ -64,6 +64,7 @@
     <Compile Include="TwitterRequestHistory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Settings.StyleCop" />
     <None Include="Twitterizer.Framework.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

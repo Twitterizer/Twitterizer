@@ -1,7 +1,6 @@
-/*
- * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
+/* This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,47 +26,97 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Twitterizer.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    /// <summary>
+    /// The list of all query parameters that are acceptible by the twitter api.
+    /// </summary>
     public enum TwitterParameterNames
     {
+        /// <summary>
+        /// The numerical ID of the item to retrieve. 
+        /// </summary>
         ID,
+        
+        /// <summary>
+        /// A datetime to be used as the beginning of a date range.
+        /// </summary>
         Since,
+        
+        /// <summary>
+        /// A numerical ID of the least recent item to be returned.
+        /// </summary>
         SinceID,
+        
+        /// <summary>
+        /// A numerical ID of the most recent item to be returned.
+        /// </summary>
         MaxID,
+        
+        /// <summary>
+        /// A numerical value indicating how many items to return.
+        /// </summary>
         Count,
+        
+        /// <summary>
+        /// A numerical value indicating a page number to be returned.
+        /// </summary>
         Page,
+        
+        /// <summary>
+        /// A numerical, or string, value indicating the screenname or ID number of a user.
+        /// </summary>
         UserID,
+        
+        /// <summary>
+        /// A string value indicating the screen name of the user to match.
+        /// </summary>
         ScreenName,
+        
+        /// <summary>
+        /// A numerical value indicating the cursor index to be retrieved.
+        /// </summary>
         Cursor
     }
 
+    /// <summary>
+    /// The TwitterParameters dictionary class.
+    /// </summary>
     [Serializable]
     public class TwitterParameters : Dictionary<TwitterParameterNames, object>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterParameters"/> class.
+        /// </summary>
         public TwitterParameters()
         {
-            
         }
 
-        public TwitterParameters(TwitterParameterNames Name, object Value)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterParameters"/> class.
+        /// </summary>
+        /// <param name="Name">The name.</param>
+        /// <param name="Value">The value.</param>
+        public TwitterParameters(TwitterParameterNames parameterName, object value)
         {
-            this.Add(Name, Value);
+            this.Add(parameterName, value);
         }
 
         /// <summary>
         /// Builds the action URI.
         /// </summary>
-        /// <param name="Uri">The URI.</param>
-        /// <returns></returns>
-        public string BuildActionUri(string Uri)
+        /// <param name="Uri">The base URI.</param>
+        /// <returns>The uri for the specified action, including parameters.</returns>
+        public string BuildActionUri(string uri)
         {
             if (Count == 0)
-                return Uri;
+            {
+                return uri;
+            }
 
             string parameterString = string.Empty;
 
@@ -106,28 +155,37 @@ namespace Twitterizer.Framework
             }
 
             if (string.IsNullOrEmpty(parameterString))
-                return Uri;
+            {
+                return uri;
+            }
 
             // First char of parameterString is a leading & that should be removed
-            return string.Format("{2}{0}?{1}", Uri, parameterString.Remove(0, 1), Twitter.Domain);
+            return string.Format("{2}{0}?{1}", uri, parameterString.Remove(0, 1), Twitter.Domain);
         }
 
-        public new void Add(TwitterParameterNames Key, object Value)
+        /// <summary>
+        /// Adds a key/value pair to the collection
+        /// </summary>
+        /// <param name="Key">The key.</param>
+        /// <param name="Value">The value.</param>
+        public new void Add(TwitterParameterNames key, object value)
         {
-            switch (Key)
+            switch (key)
             {
                 case TwitterParameterNames.Since:
-                    if (!(Value is DateTime))
+                    if (!(value is DateTime))
+                    {
                         throw new ApplicationException("Value given for since was not a Date.");
+                    }
 
-                    DateTime DateValue = (DateTime)Value;
+                    DateTime dateValue = (DateTime)value;
 
                     // RFC1123 date string
-                    base.Add(Key, DateValue.ToString("r"));
+                    base.Add(key, dateValue.ToString("r"));
 
                     break;
                 default:
-                    base.Add(Key, Value.ToString());
+                    base.Add(key, value.ToString());
                     break;
             }
         }

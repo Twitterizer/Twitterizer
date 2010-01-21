@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -31,23 +31,23 @@ namespace Twitterizer.Framework
 {
     using System;
     using System.Drawing;
+    using System.IO;
+    using System.Net;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Net;
     using System.Xml;
-    using System.IO;
 
-	internal class TwitterRequest
-	{
+    internal class TwitterRequest
+    {
         private string proxyUri = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterRequest"/> class.
         /// </summary>
         /// <param name="ProxyUri">The proxy URI.</param>
-        public TwitterRequest(string ProxyUri)
+        public TwitterRequest(string proxyUri)
         {
-            proxyUri = ProxyUri;
+            this.proxyUri = proxyUri;
         }
 
         /// <summary>
@@ -55,145 +55,158 @@ namespace Twitterizer.Framework
         /// </summary>
         public TwitterRequest()
         {
-            
         }
 
         /// <summary>
         /// Performs the web request.
         /// </summary>
-        /// <param name="Data">The data.</param>
+        /// <param name="data">The data.</param>
         /// <returns></returns>
-		public TwitterRequestData PerformWebRequest(TwitterRequestData Data)
-		{
-			PerformWebRequest(Data, "POST");
+        public TwitterRequestData PerformWebRequest(TwitterRequestData data)
+        {
+            this.PerformWebRequest(data, "POST");
 
-			return Data;
-
-		}
+            return data;
+        }
 
         /// <summary>
         /// Performs the web request.
         /// </summary>
-        /// <param name="Data">The data.</param>
-        /// <param name="HTTPMethod">The HTTP method.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="method">The method.</param>
         /// <returns></returns>
-		public TwitterRequestData PerformWebRequest(TwitterRequestData Data, string HTTPMethod)
-		{
-			HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(Data.ActionUri);
+        public TwitterRequestData PerformWebRequest(TwitterRequestData data, string method)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(data.ActionUri);
 
             // Check if a proxy address was given, if so, we need to parse it and give it to the HttpWebRequest object.
-            if (!string.IsNullOrEmpty(proxyUri))
+            if (!string.IsNullOrEmpty(this.proxyUri))
             {
-                UriBuilder proxyUriBuilder = new UriBuilder(proxyUri);
-                Request.Proxy = new WebProxy(proxyUriBuilder.Host, proxyUriBuilder.Port);
+                UriBuilder proxyUriBuilder = new UriBuilder(this.proxyUri);
+                request.Proxy = new WebProxy(proxyUriBuilder.Host, proxyUriBuilder.Port);
 
                 // Add the proxy credentials if they are supplied.
                 if (!string.IsNullOrEmpty(proxyUriBuilder.UserName))
-                    Request.Proxy.Credentials = new NetworkCredential(proxyUriBuilder.UserName, proxyUriBuilder.Password);
+                {
+                    request.Proxy.Credentials = new NetworkCredential(proxyUriBuilder.UserName, proxyUriBuilder.Password);
+                }
             }
-            
-			Request.Method = HTTPMethod;
 
-			
+            request.Method = method;
 
-			// Some limitations
-			Request.MaximumAutomaticRedirections = 4;
-			Request.MaximumResponseHeadersLength = 4;
-			Request.ContentLength = 0;
+            // Some limitations
+            request.MaximumAutomaticRedirections = 4;
+            request.MaximumResponseHeadersLength = 4;
+            request.ContentLength = 0;
 
-			// Set our credentials
-			Request.Credentials = new NetworkCredential(Data.UserName, Data.Password);
+            // Set our credentials
+            request.Credentials = new NetworkCredential(data.UserName, data.Password);
 
-			HttpWebResponse Response = null;
+            HttpWebResponse response = null;
 
-			// Get the response
+            // Get the response
             try
             {
-                Response = (HttpWebResponse)Request.GetResponse();
+                response = (HttpWebResponse)request.GetResponse();
             }
             catch (WebException wex)
             {
-                HandleWebException(Data, wex);
+                HandleWebException(data, wex);
 
                 if (System.Configuration.ConfigurationManager.AppSettings["Twitterizer.EnableRequestHistory"] == "true")
-                    TwitterRequestHistory.History.Enqueue(Data);
+                {
+                    TwitterRequestHistory.History.Enqueue(data);
+                }
 
                 // If it gets this far without throwing an exception, 
                 // we should return the Data object as it is.
-                return Data;
+                return data;
             }
             catch (Exception ex)
             {
                 if (System.Configuration.ConfigurationManager.AppSettings["Twitterizer.EnableRequestHistory"] == "true")
-                    TwitterRequestHistory.History.Enqueue(Data);
+                {
+                    TwitterRequestHistory.History.Enqueue(data);
+                }
 
-                throw new TwitterizerException(ex.Message, Data, ex);
+                throw new TwitterizerException(ex.Message, data, ex);
             }
 
             try
             {
                 // Get information about out usage rate
-                if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Limit")))
-                    Data.RateLimit = int.Parse(Response.Headers.Get("X-RateLimit-Limit"));
+                if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Limit")))
+                {
+                    data.RateLimit = int.Parse(response.Headers.Get("X-RateLimit-Limit"));
+                }
 
-                if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Remaining")))
-                    Data.RateLimitRemaining = int.Parse(Response.Headers.Get("X-RateLimit-Remaining"));
+                if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Remaining")))
+                {
+                    data.RateLimitRemaining = int.Parse(response.Headers.Get("X-RateLimit-Remaining"));
+                }
 
                 // The date string is in Unix (aka epoch) time, which is the number of seconds since January 1st 1970 00:00
-                if (!string.IsNullOrEmpty(Response.Headers.Get("X-RateLimit-Reset")))
-                    Data.RateLimitReset = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(double.Parse(Response.Headers.Get("X-RateLimit-Reset")));
+                if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Reset")))
+                {
+                    data.RateLimitReset = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(double.Parse(response.Headers.Get("X-RateLimit-Reset")));
+                }
 
                 // Get the stream associated with the response.
-                using (Stream receiveStream = Response.GetResponseStream())
+                using (Stream receiveStream = response.GetResponseStream())
                 {
                     using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
                     {
                         // Pipes the stream to a higher level stream reader with the required encoding format. 
-                        Data.Response = readStream.ReadToEnd();
+                        data.Response = readStream.ReadToEnd();
 
                         readStream.Close();
                     }
                 }
-                
-                Data = ParseResponseData(Data);
+
+                data = ParseResponseData(data);
             }
             finally
             {
-                if (Response != null)
-                    Response.Close();
+                if (response != null)
+                {
+                    response.Close();
+                }
 
                 if (System.Configuration.ConfigurationManager.AppSettings["Twitterizer.EnableRequestHistory"] == "true")
-                    TwitterRequestHistory.History.Enqueue(Data);
+                {
+                    TwitterRequestHistory.History.Enqueue(data);
+                }
             }
-            
-			return Data;
-		}
+
+            return data;
+        }
 
         /// <summary>
         /// Handles a web exception.
         /// </summary>
-        /// <param name="Data">The RequestData object.</param>
+        /// <param name="data">The data.</param>
         /// <param name="wex">The WebException.</param>
-        /// <returns></returns>
-        private static void HandleWebException(TwitterRequestData Data, WebException wex)
+        private static void HandleWebException(TwitterRequestData data, WebException wex)
         {
             // If this was a 'real' exception (connection error, etc) throw the exception.
             if (wex.Status != WebExceptionStatus.ProtocolError || wex.Response.ContentLength == 0)
-                throw new TwitterizerException(wex.Message, Data, wex);
-
-            HttpWebResponse ErrorResponse = (HttpWebResponse)wex.Response;
-            
-            // If we have any content in the response, read it into the request data object.
-            if (ErrorResponse.ContentLength > 0)
             {
-                StreamReader readStream = new StreamReader(ErrorResponse.GetResponseStream(), Encoding.UTF8);
-                Data.Response = readStream.ReadToEnd();
+                throw new TwitterizerException(wex.Message, data, wex);
             }
 
-            Data.ResponseException = wex;
+            HttpWebResponse errorResponse = (HttpWebResponse)wex.Response;
+
+            // If we have any content in the response, read it into the request data object.
+            if (errorResponse.ContentLength > 0)
+            {
+                StreamReader readStream = new StreamReader(errorResponse.GetResponseStream(), Encoding.UTF8);
+                data.Response = readStream.ReadToEnd();
+            }
+
+            data.ResponseException = wex;
 
             // Determine what the protocol error was and throw the exception accordingly.
-            switch (ErrorResponse.StatusCode)
+            switch (errorResponse.StatusCode)
             {
                 case HttpStatusCode.NotModified:
                 case HttpStatusCode.NotFound:
@@ -203,331 +216,403 @@ namespace Twitterizer.Framework
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Forbidden:
                     // There is an error message returned as the response. We should get it and return it in the exception.
-                    throw new TwitterizerException(TwitterizerException.ParseErrorMessage(Data.Response), Data, wex);
+                    throw new TwitterizerException(TwitterizerException.ParseErrorMessage(data.Response), data, wex);
                 case HttpStatusCode.Unauthorized:
-                    throw new TwitterizerException("Authorization Failed", Data);
+                    throw new TwitterizerException("Authorization Failed", data);
 
                 case HttpStatusCode.BadGateway:
                 case HttpStatusCode.InternalServerError:
-                    throw new TwitterizerException("Twitter is currently unavailable.", Data);
+                    throw new TwitterizerException("Twitter is currently unavailable.", data);
 
                 case HttpStatusCode.ServiceUnavailable:
-                    throw new TwitterizerException("Twitter is overloaded or you are being rate limited.", Data);
+                    throw new TwitterizerException("Twitter is overloaded or you are being rate limited.", data);
 
                 default:
-                    throw new TwitterizerException(wex.Message, Data, wex);
+                    throw new TwitterizerException(wex.Message, data, wex);
+            }
+        }
+
+        /// <summary>
+        /// Propigates the rate limit details into all data objects.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        private static void PropigateRateLimitDetails(TwitterRequestData data)
+        {
+            if (data.RateLimit == null && data.RateLimitRemaining == null && data.RateLimitReset == null)
+            {
+                return;
+            }
+
+            if (data.Statuses != null)
+            {
+                data.Statuses.RateLimit = data.RateLimit;
+                data.Statuses.RateLimitRemaining = data.RateLimitRemaining;
+                data.Statuses.RateLimitReset = data.RateLimitReset;
+
+                foreach (TwitterStatus item in data.Statuses)
+                {
+                    item.RateLimit = data.RateLimit;
+                    item.RateLimitRemaining = data.RateLimitRemaining;
+                    item.RateLimitReset = data.RateLimitReset;
+                }
+            }
+
+            if (data.Users != null)
+            {
+                data.Users.RateLimit = data.RateLimit;
+                data.Users.RateLimitRemaining = data.RateLimitRemaining;
+                data.Users.RateLimitReset = data.RateLimitReset;
+
+                foreach (TwitterUser item in data.Users)
+                {
+                    item.RateLimit = data.RateLimit;
+                    item.RateLimitRemaining = data.RateLimitRemaining;
+                    item.RateLimitReset = data.RateLimitReset;
+                }
             }
         }
 
         /// <summary>
         /// Parses the response data.
         /// </summary>
-        /// <param name="Data">The data.</param>
+        /// <param name="data">The data.</param>
         /// <returns></returns>
-        private TwitterRequestData ParseResponseData(TwitterRequestData Data)
+        private static TwitterRequestData ParseResponseData(TwitterRequestData data)
         {
-            if (Data == null || Data.Response == string.Empty)
+            if (data == null || data.Response == string.Empty)
+            {
                 return null;
+            }
 
-            XmlDocument ResultXmlDocument = new XmlDocument();
-            ResultXmlDocument.LoadXml(Data.Response);
+            XmlDocument resultXmlDocument = new XmlDocument();
+            resultXmlDocument.LoadXml(data.Response);
 
-            if (ResultXmlDocument.DocumentElement != null)
-                switch (ResultXmlDocument.DocumentElement.Name.ToLower())
+            if (resultXmlDocument.DocumentElement != null)
+            {
+                switch (resultXmlDocument.DocumentElement.Name.ToLower())
                 {
                     case "status":
-                        Data.Statuses = new TwitterStatusCollection();
-                        Data.Statuses.Add(ParseStatusNode(ResultXmlDocument.DocumentElement));
+                        data.Statuses = new TwitterStatusCollection();
+                        data.Statuses.Add(ParseStatusNode(resultXmlDocument.DocumentElement));
                         break;
                     case "statuses":
-                        Data.Statuses = ParseStatuses(ResultXmlDocument.DocumentElement);
+                        data.Statuses = ParseStatuses(resultXmlDocument.DocumentElement);
                         break;
                     case "users":
-                        Data.Users = ParseUsers(ResultXmlDocument.DocumentElement);
+                        data.Users = ParseUsers(resultXmlDocument.DocumentElement);
                         break;
                     case "users_list":
-                        Data.Users = ParseUsers(ResultXmlDocument.DocumentElement["users"]);
-                        Data.Users.NextCursor = long.Parse(ResultXmlDocument.DocumentElement["next_cursor"].InnerText);
-                        Data.Users.PreviousCursor = long.Parse(ResultXmlDocument.DocumentElement["previous_cursor"].InnerText);
+                        data.Users = ParseUsers(resultXmlDocument.DocumentElement["users"]);
+                        data.Users.NextCursor = long.Parse(resultXmlDocument.DocumentElement["next_cursor"].InnerText);
+                        data.Users.PreviousCursor = long.Parse(resultXmlDocument.DocumentElement["previous_cursor"].InnerText);
                         break;
                     case "user":
-                        Data.Users = new TwitterUserCollection();
-                        Data.Users.Add(ParseUserNode(ResultXmlDocument.DocumentElement));
+                        data.Users = new TwitterUserCollection();
+                        data.Users.Add(ParseUserNode(resultXmlDocument.DocumentElement));
                         break;
                     case "direct_message":
-                        Data.Statuses = new TwitterStatusCollection();
-                        Data.Statuses.Add(ParseDirectMessageNode(ResultXmlDocument.DocumentElement));
+                        data.Statuses = new TwitterStatusCollection();
+                        data.Statuses.Add(ParseDirectMessageNode(resultXmlDocument.DocumentElement));
                         break;
                     case "direct-messages":
-                        Data.Statuses = ParseDirectMessages(ResultXmlDocument.DocumentElement);
+                        data.Statuses = ParseDirectMessages(resultXmlDocument.DocumentElement);
                         break;
                     case "nilclasses":
                     case "nil-classes":
                         // do nothing, this seems to be a null response i.e. no messages since
                         break;
                     case "error":
-                        throw new Exception("Error response from Twitter: " + ResultXmlDocument.DocumentElement.InnerText);
+                        throw new Exception("Error response from Twitter: " + resultXmlDocument.DocumentElement.InnerText);
                     default:
                         throw new Exception("Invalid response from Twitter");
                 }
+            }
 
             // Copy our rate limit values to the properties that are actually returned
-            PropigateRateLimitDetails(Data);
+            PropigateRateLimitDetails(data);
 
-            return Data;
+            return data;
         }
 
-        /// <summary>
-        /// Propigates the rate limit details into all data objects.
-        /// </summary>
-        /// <param name="Data">The data.</param>
-        private static void PropigateRateLimitDetails(TwitterRequestData Data)
-        {
-            if (Data.RateLimit == null && Data.RateLimitRemaining == null && Data.RateLimitReset == null)
-                return;
-
-            if (Data.Statuses != null)
-            {
-                Data.Statuses.RateLimit = Data.RateLimit;
-                Data.Statuses.RateLimitRemaining = Data.RateLimitRemaining;
-                Data.Statuses.RateLimitReset = Data.RateLimitReset;
-
-                foreach (TwitterStatus item in Data.Statuses)
-                {
-                    item.RateLimit = Data.RateLimit;
-                    item.RateLimitRemaining = Data.RateLimitRemaining;
-                    item.RateLimitReset = Data.RateLimitReset;
-                }
-            }
-
-            if (Data.Users != null)
-            {
-                Data.Users.RateLimit = Data.RateLimit;
-                Data.Users.RateLimitRemaining = Data.RateLimitRemaining;
-                Data.Users.RateLimitReset = Data.RateLimitReset;
-
-                foreach (TwitterUser item in Data.Users)
-                {
-                    item.RateLimit = Data.RateLimit;
-                    item.RateLimitRemaining = Data.RateLimitRemaining;
-                    item.RateLimitReset = Data.RateLimitReset;
-                }
-            }
-
-        }
-
-		#region Parse Statuses
+        #region Parse Statuses
         /// <summary>
         /// Parses multiple status nodes and returns a collection of status objects.
         /// </summary>
-        /// <param name="Element">The element.</param>
+        /// <param name="element">The element.</param>
         /// <returns></returns>
-		private static TwitterStatusCollection ParseStatuses(XmlElement Element)
-		{
-			TwitterStatusCollection Collection = new TwitterStatusCollection();
-			foreach (XmlElement Child in Element.GetElementsByTagName("status"))
-			{
-				Collection.Add(ParseStatusNode(Child));
-			}
+        private static TwitterStatusCollection ParseStatuses(XmlElement element)
+        {
+            TwitterStatusCollection collection = new TwitterStatusCollection();
+            foreach (XmlElement child in element.GetElementsByTagName("status"))
+            {
+                collection.Add(ParseStatusNode(child));
+            }
 
             // Get the cursor values
             int nextCursor;
-            if (Element["next_cursor"] != null && int.TryParse(Element["next_cursor"].InnerText, out nextCursor))
-                Collection.NextCursor = nextCursor;
+            if (element["next_cursor"] != null && int.TryParse(element["next_cursor"].InnerText, out nextCursor))
+            {
+                collection.NextCursor = nextCursor;
+            }
 
             int prevCursor;
-            if (Element["prev_cursor"] != null && int.TryParse(Element["prev_cursor"].InnerText, out prevCursor))
-                Collection.PreviousCursor = prevCursor;
+            if (element["prev_cursor"] != null && int.TryParse(element["prev_cursor"].InnerText, out prevCursor))
+            {
+                collection.PreviousCursor = prevCursor;
+            }
 
-			return Collection;
-		}
+            return collection;
+        }
 
         /// <summary>
         /// Parses a single status node and returns a status object.
         /// </summary>
         /// <param name="Element">The element.</param>
         /// <returns></returns>
-		private static TwitterStatus ParseStatusNode(XmlNode Element)
-		{
-			TwitterStatus Status = new TwitterStatus();
-            Status.IsDirectMessage = false;
+        private static TwitterStatus ParseStatusNode(XmlNode element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
 
-			if (Element == null) return null;
+            TwitterStatus status = new TwitterStatus()
+            {
+                IsDirectMessage = false,
+                ID = Int64.Parse(element["id"].InnerText),
+                Created = ParseDateString(element["created_at"].InnerText),
+                Text = element["text"].InnerText,
+                Source = element["source"].InnerText,
+                IsTruncated = bool.Parse(element["truncated"].InnerText),
+                TwitterUser = ParseUserNode(element["user"])
+            };
 
-			//Mon May 12 15:56:07 +0000 2008
-			Status.ID = Int64.Parse(Element["id"].InnerText);
-			Status.Created = ParseDateString(Element["created_at"].InnerText);
-			Status.Text = Element["text"].InnerText;
-			Status.Source = Element["source"].InnerText;
-			Status.IsTruncated = bool.Parse(Element["truncated"].InnerText);
-			if (Element["in_reply_to_status_id"].InnerText != string.Empty)
-				Status.InReplyToStatusID = Int64.Parse(Element["in_reply_to_status_id"].InnerText);
-			if (Element["in_reply_to_user_id"].InnerText != string.Empty)
-				Status.InReplyToUserID = int.Parse(Element["in_reply_to_user_id"].InnerText);
+            if (element["in_reply_to_status_id"].InnerText != string.Empty)
+            {
+                status.InReplyToStatusID = Int64.Parse(element["in_reply_to_status_id"].InnerText);
+            }
 
-			// Fix for Issued #4
-			bool isFavorited;
-			bool.TryParse(Element["favorited"].InnerText, out isFavorited);
-			Status.IsFavorited = isFavorited;
+            if (element["in_reply_to_user_id"].InnerText != string.Empty)
+            {
+                status.InReplyToUserID = int.Parse(element["in_reply_to_user_id"].InnerText);
+            }
 
-			Status.TwitterUser = ParseUserNode(Element["user"]);
-            if (Element["sender"] != null)
-                Status.TwitterUser = ParseUserNode(Element["sender"]);
-            if (Element["recipient"] != null)
-                Status.Recipient = ParseUserNode(Element["recipient"]);
+            bool isFavorited;
+            bool.TryParse(element["favorited"].InnerText, out isFavorited);
+            status.IsFavorited = isFavorited;
 
-			return Status;
-		}
-		#endregion
+            if (element["sender"] != null)
+            {
+                status.TwitterUser = ParseUserNode(element["sender"]);
+            }
 
-		#region Parse DirectMessages
+            if (element["recipient"] != null)
+            {
+                status.Recipient = ParseUserNode(element["recipient"]);
+            }
+
+            return status;
+        }
+        #endregion
+
+        #region Parse DirectMessages
         /// <summary>
         /// Parses multiple direct messages and returns a collection of statuses.
         /// </summary>
-        /// <param name="Element">The element.</param>
+        /// <param name="element">The element.</param>
         /// <returns></returns>
-		private static TwitterStatusCollection ParseDirectMessages(XmlElement Element)
-		{
-			TwitterStatusCollection Collection = new TwitterStatusCollection();
-			foreach (XmlElement Child in Element.GetElementsByTagName("direct_message"))
-			{
-				Collection.Add(ParseDirectMessageNode(Child));
-			}
+        private static TwitterStatusCollection ParseDirectMessages(XmlElement element)
+        {
+            TwitterStatusCollection collection = new TwitterStatusCollection();
+            foreach (XmlElement child in element.GetElementsByTagName("direct_message"))
+            {
+                collection.Add(ParseDirectMessageNode(child));
+            }
 
-			return Collection;
-		}
+            return collection;
+        }
 
         /// <summary>
         /// Parses a single direct message node and returns a status object.
         /// </summary>
-        /// <param name="Element">The element.</param>
+        /// <param name="element">The element.</param>
         /// <returns></returns>
-		private static TwitterStatus ParseDirectMessageNode(XmlNode Element)
-		{
-			if (Element == null) return null;
+        private static TwitterStatus ParseDirectMessageNode(XmlNode element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
 
-			TwitterStatus Status = new TwitterStatus();
+            TwitterStatus status = new TwitterStatus()
+            {
+                IsDirectMessage = true,
+                ID = Int64.Parse(element["id"].InnerText),
+                Created = ParseDateString(element["created_at"].InnerText),
+                Text = element["text"].InnerText,
+                TwitterUser = ParseUserNode(element["sender"]),
+                RecipientID = int.Parse(element["recipient_id"].InnerText),
+                Recipient = ParseUserNode(element["recipient"])
+            };
 
-            Status.IsDirectMessage = true;
-			Status.ID = Int64.Parse(Element["id"].InnerText);
-			Status.Created = ParseDateString(Element["created_at"].InnerText);
-			Status.Text = Element["text"].InnerText;
+            if (element["favorited"] != null && (element["in_reply_to_status_id"].InnerText != string.Empty))
+            {
+                status.IsFavorited = bool.Parse(element["favorited"].InnerText);
+            }
 
-			if (Element["favorited"] != null && (Element["in_reply_to_status_id"].InnerText != string.Empty))
-				Status.IsFavorited = bool.Parse(Element["favorited"].InnerText);
+            return status;
+        }
+        #endregion
 
-            Status.TwitterUser = ParseUserNode(Element["sender"]);
-			Status.RecipientID = int.Parse(Element["recipient_id"].InnerText);
-            Status.Recipient = ParseUserNode(Element["recipient"]);
-            
-			return Status;
-		}
-		#endregion
-
-		#region Parse Users
+        #region Parse Users
         /// <summary>
         /// Parses multiple users nodes and returns a collection of user objects.
         /// </summary>
-        /// <param name="Element">The element.</param>
+        /// <param name="element">The element.</param>
         /// <returns></returns>
-		private static TwitterUserCollection ParseUsers(XmlElement Element)
-		{
-			if (Element == null) return null;
+        private static TwitterUserCollection ParseUsers(XmlElement element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
 
-			TwitterUserCollection Collection = new TwitterUserCollection();
-			foreach (XmlElement Child in Element.GetElementsByTagName("user"))
-			{
-				Collection.Add(ParseUserNode(Child));
-			}
+            TwitterUserCollection collection = new TwitterUserCollection();
+            foreach (XmlElement child in element.GetElementsByTagName("user"))
+            {
+                collection.Add(ParseUserNode(child));
+            }
 
             // Get the cursor values
             int nextCursor;
-            if (Element["next_cursor"] != null && int.TryParse(Element["next_cursor"].InnerText, out nextCursor))
-                Collection.NextCursor = nextCursor;
+            if (element["next_cursor"] != null && int.TryParse(element["next_cursor"].InnerText, out nextCursor))
+            {
+                collection.NextCursor = nextCursor;
+            }
 
             int prevCursor;
-            if (Element["prev_cursor"] != null && int.TryParse(Element["prev_cursor"].InnerText, out prevCursor))
-                Collection.PreviousCursor = prevCursor;
+            if (element["prev_cursor"] != null && int.TryParse(element["prev_cursor"].InnerText, out prevCursor))
+            {
+                collection.PreviousCursor = prevCursor;
+            }
 
-			return Collection;
-		}
+            return collection;
+        }
 
         /// <summary>
         /// Parses a single user node and returns a user object.
         /// </summary>
         /// <param name="Element">The element.</param>
         /// <returns></returns>
-		private static TwitterUser ParseUserNode(XmlNode Element)
-		{
-			if (Element == null)
-				return null;
-
-            TwitterUser User = new TwitterUser()
+        private static TwitterUser ParseUserNode(XmlNode element)
+        {
+            if (element == null)
             {
-                ID = int.Parse(Element["id"].InnerText),
-                UserName = Element["name"].InnerText,
-                ScreenName = Element["screen_name"].InnerText,
-                Location = Element["location"].InnerText,
-                Uri = Element["url"].InnerText,
-                Description = Element["description"].InnerText,
-                CreatedAt = ParseDateString(Element["created_at"].InnerText),
-                IsVerified = bool.Parse(Element["verified"].InnerText),
-                IsProtected = bool.Parse(Element["protected"].InnerText),
+                return null;
+            }
+
+            TwitterUser user = new TwitterUser()
+            {
+                ID = int.Parse(element["id"].InnerText),
+                UserName = element["name"].InnerText,
+                ScreenName = element["screen_name"].InnerText,
+                Location = element["location"].InnerText,
+                Uri = element["url"].InnerText,
+                Description = element["description"].InnerText,
+                CreatedAt = ParseDateString(element["created_at"].InnerText),
+                IsVerified = bool.Parse(element["verified"].InnerText),
+                IsProtected = bool.Parse(element["protected"].InnerText),
 
                 // Profile information
-                ProfileImageUri = Element["profile_image_url"].InnerText,
-                ProfileUri = Element["url"].InnerText,
+                ProfileImageUri = element["profile_image_url"].InnerText,
+                ProfileUri = element["url"].InnerText,
                 ProfileBackgroundColor = ColorTranslator.FromHtml(
-                    String.Concat("#", Element["profile_background_color"].InnerText)),
+                    String.Concat("#", element["profile_background_color"].InnerText)),
                 ProfileTextColor = ColorTranslator.FromHtml(
-                            String.Concat("#", Element["profile_text_color"].InnerText)),
+                            String.Concat("#", element["profile_text_color"].InnerText)),
                 ProfileLinkColor = ColorTranslator.FromHtml(
-                            String.Concat("#", Element["profile_link_color"].InnerText)),
+                            String.Concat("#", element["profile_link_color"].InnerText)),
                 ProfileSidebarFillColor = ColorTranslator.FromHtml(
-                            String.Concat("#", Element["profile_sidebar_fill_color"].InnerText)),
+                            String.Concat("#", element["profile_sidebar_fill_color"].InnerText)),
                 ProfileSidebarBorderColor = ColorTranslator.FromHtml(
-                            String.Concat("#", Element["profile_sidebar_border_color"].InnerText)),
-                ProfileBackgroundImageUri = Element["profile_background_image_url"].InnerText,
-                ProfileBackgroundTile = bool.Parse(Element["profile_background_tile"].InnerText)
+                            String.Concat("#", element["profile_sidebar_border_color"].InnerText)),
+                ProfileBackgroundImageUri = element["profile_background_image_url"].InnerText,
+                ProfileBackgroundTile = bool.Parse(element["profile_background_tile"].InnerText)
             };
 
-			
             int utcOffset;
-            if (int.TryParse(Element["utc_offset"].InnerText, out utcOffset))
-                User.UTCOffset = utcOffset;
+            if (int.TryParse(element["utc_offset"].InnerText, out utcOffset))
+            {
+                user.UTCOffset = utcOffset;
+            }
 
-            User.TimeZone = Element["time_zone"].InnerText;
+            user.TimeZone = element["time_zone"].InnerText;
 
-            if (!string.IsNullOrEmpty(Element["notifications"].InnerText))
-                User.Notifications = bool.Parse(Element["notifications"].InnerText);
-            if (!string.IsNullOrEmpty(Element["following"].InnerText))
-                User.Following = bool.Parse(Element["following"].InnerText);
+            if (!string.IsNullOrEmpty(element["notifications"].InnerText))
+            {
+                user.Notifications = bool.Parse(element["notifications"].InnerText);
+            }
 
-			// Get the number of followers
-            if (Element["followers_count"] != null)
-                User.NumberOfFollowers = int.Parse(Element["followers_count"].InnerText);
+            if (!string.IsNullOrEmpty(element["following"].InnerText))
+            {
+                user.Following = bool.Parse(element["following"].InnerText);
+            }
+
+            // Get the number of followers
+            if (element["followers_count"] != null)
+            {
+                user.NumberOfFollowers = int.Parse(element["followers_count"].InnerText);
+            }
             else
-                User.NumberOfFollowers = -1;
+            {
+                user.NumberOfFollowers = -1;
+            }
 
-			// Get the number of friends
-            if (Element["friends_count"] != null)
-				User.NumberOfFriends = int.Parse(Element["friends_count"].InnerText);
-			else
-				User.NumberOfFriends = -1;
-            
+            // Get the number of friends
+            if (element["friends_count"] != null)
+            {
+                user.NumberOfFriends = int.Parse(element["friends_count"].InnerText);
+            }
+            else
+            {
+                user.NumberOfFriends = -1;
+            }
+
             // Get the number of statuses
-            if (Element["statuses_count"] != null)
-                User.NumberOfStatuses = int.Parse(Element["statuses_count"].InnerText);
+            if (element["statuses_count"] != null)
+            {
+                user.NumberOfStatuses = int.Parse(element["statuses_count"].InnerText);
+            }
             else
-                User.NumberOfStatuses = -1;
+            {
+                user.NumberOfStatuses = -1;
+            }
 
             // If there is a status, parse it
-			if (Element["status"] != null)
-				User.Status = ParseStatusNode(Element["status"]);
+            if (element["status"] != null)
+            {
+                user.Status = ParseStatusNode(element["status"]);
+            }
 
-			return User;
-		}
-		#endregion
+            return user;
+        }
+        #endregion
+
+        /// <summary>
+        /// Returns the value of the element within the provided XmlNode, if the element exists. Returns String.Empty if not.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="elementName">Name of the element.</param>
+        /// <returns></returns>
+        private static string ElementValueIfExists(XmlNode node, string elementName)
+        {
+            if (!node.HasChildNodes || node[elementName] == null)
+            {
+                return string.Empty;
+            }
+
+            return node[elementName].Value;
+        }
 
         /// <summary>
         /// Parses a date string into a strongly typed DateTime object.
@@ -535,35 +620,21 @@ namespace Twitterizer.Framework
         /// <param name="DateString">The date string.</param>
         /// <returns></returns>
         /// <remarks>Format example: Wed Apr 08 20:30:04 +0000 2009</remarks>
-		private static DateTime ParseDateString(string DateString)
-		{
-			Regex re = new Regex(@"(?<DayName>[^ ]+) (?<MonthName>[^ ]+) (?<Day>[^ ]{1,2}) (?<Hour>[0-9]{1,2}):(?<Minute>[0-9]{1,2}):(?<Second>[0-9]{1,2}) (?<TimeZone>[+-][0-9]{4}) (?<Year>[0-9]{4})");
-			Match CreatedAt = re.Match(DateString);
-			DateTime parsedDate = DateTime.Parse(
-				string.Format(
-					"{0} {1} {2} {3}:{4}:{5}",
-					CreatedAt.Groups["MonthName"].Value,
-					CreatedAt.Groups["Day"].Value,
-					CreatedAt.Groups["Year"].Value,
-					CreatedAt.Groups["Hour"].Value,
-					CreatedAt.Groups["Minute"].Value,
-					CreatedAt.Groups["Second"].Value));
-
-			return parsedDate;
-		}
-
-        /// <summary>
-        /// Returns the value of the element within the provided XmlNode, if the element exists. Returns String.Empty if not.
-        /// </summary>
-        /// <param name="Element">The element.</param>
-        /// <param name="ElementName">Name of the element.</param>
-        /// <returns></returns>
-        private static string ElementValueIfExists(XmlNode Node, string ElementName)
+        private static DateTime ParseDateString(string dateString)
         {
-            if (!Node.HasChildNodes || Node[ElementName] == null)
-                return string.Empty;
+            Regex re = new Regex(@"(?<DayName>[^ ]+) (?<MonthName>[^ ]+) (?<Day>[^ ]{1,2}) (?<Hour>[0-9]{1,2}):(?<Minute>[0-9]{1,2}):(?<Second>[0-9]{1,2}) (?<TimeZone>[+-][0-9]{4}) (?<Year>[0-9]{4})");
+            Match createdAtMatch = re.Match(dateString);
+            DateTime parsedDate = DateTime.Parse(
+            string.Format(
+            "{0} {1} {2} {3}:{4}:{5}",
+            createdAtMatch.Groups["MonthName"].Value,
+            createdAtMatch.Groups["Day"].Value,
+            createdAtMatch.Groups["Year"].Value,
+            createdAtMatch.Groups["Hour"].Value,
+            createdAtMatch.Groups["Minute"].Value,
+            createdAtMatch.Groups["Second"].Value));
 
-            return Node[ElementName].Value;
+            return parsedDate;
         }
-	}
+    }
 }

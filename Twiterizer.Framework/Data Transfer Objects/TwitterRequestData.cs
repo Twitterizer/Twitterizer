@@ -1,7 +1,6 @@
-/*
- * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
+/* This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,29 +26,84 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-using System.Net;
-
 namespace Twitterizer.Framework
 {
+    using System;
+    using System.Net;
+
+    /// <summary>
+    /// Represents an HTTP request
+    /// </summary>
     [Serializable]
     public class TwitterRequestData
     {
         #region Request Properties
+        /// <summary>
+        /// Gets or sets the name of the user.
+        /// </summary>
+        /// <value>The name of the user.</value>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        /// <value>The password.</value>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source.
+        /// </summary>
+        /// <value>The source.</value>
         public string Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the action URI.
+        /// </summary>
+        /// <value>The action URI.</value>
         public Uri ActionUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the response.
+        /// </summary>
+        /// <value>The response.</value>
         public string Response { get; set; }
         #endregion
 
         #region Response Properties
+        /// <summary>
+        /// Gets or sets the response exception.
+        /// </summary>
+        /// <value>The response exception.</value>
         public WebException ResponseException { get; set; }
+
+        /// <summary>
+        /// Gets or sets the statuses.
+        /// </summary>
+        /// <value>The statuses.</value>
         public TwitterStatusCollection Statuses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the users.
+        /// </summary>
+        /// <value>The users.</value>
         public TwitterUserCollection Users { get; set; }
 
+        /// <summary>
+        /// Gets or sets the rate limit.
+        /// </summary>
+        /// <value>The rate limit.</value>
         public int? RateLimit { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rate limit remaining.
+        /// </summary>
+        /// <value>The rate limit remaining.</value>
         public int? RateLimitRemaining { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rate limit reset.
+        /// </summary>
+        /// <value>The rate limit reset.</value>
         public DateTime? RateLimitReset { get; set; }
         #endregion
     }

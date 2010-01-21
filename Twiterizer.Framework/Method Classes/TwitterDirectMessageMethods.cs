@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,15 +27,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-using System.Web;
-
 namespace Twitterizer.Framework
 {
-	public class TwitterDirectMessageMethods : TwitterMethodBase
-	{
-		private readonly string userName;
-		private readonly string password;
+    using System;
+    using System.Web;
+
+    public class TwitterDirectMessageMethods : TwitterMethodBase
+    {
+        private readonly string userName;
+        private readonly string password;
         private readonly string proxyUri = string.Empty;
 
         /// <summary>
@@ -44,117 +44,114 @@ namespace Twitterizer.Framework
         /// <param name="UserName">Name of the user.</param>
         /// <param name="Password">The password.</param>
         /// <param name="uri_proxy">The uri_proxy.</param>
-        public TwitterDirectMessageMethods(string UserName, string Password, string ProxyUri) 
-		{
-			userName = UserName;
-			password = Password;
-            proxyUri = ProxyUri;
-		}
+        public TwitterDirectMessageMethods(string userName, string password, string proxyUri)
+        {
+            this.userName = userName;
+            this.password = password;
+            this.proxyUri = proxyUri;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterDirectMessageMethods"/> class.
         /// </summary>
         /// <param name="UserName">Name of the user.</param>
         /// <param name="Password">The password.</param>
-        public TwitterDirectMessageMethods(string UserName, string Password)
+        public TwitterDirectMessageMethods(string userName, string password)
         {
-            userName = UserName;
-            password = Password;
+            this.userName = userName;
+            this.password = password;
         }
 
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
+        /// </summary>
+        /// <returns>A collection of <typeparamref name="TwitterStatus"/>TwitterStatus</returns> objects
+        public TwitterStatusCollection DirectMessages()
+        {
+            return this.DirectMessages(null);
+        }
 
-		/// <summary>
-		/// Returns a list of the 20 most recent direct messages sent to the authenticating user.
-		/// </summary>
-		/// <returns>A collection of <typeparamref name="TwitterStatus"/>TwitterStatus</returns> objects
-		public TwitterStatusCollection DirectMessages()
-		{
-			return DirectMessages(null);
-		}
+        /// <summary>
+        /// Returns a list of the most recent direct messages sent to the authenticating user.
+        /// </summary>
+        /// <param name="parameters">Accepts Since, SinceID, and Page parameters</param>
+        /// <returns></returns>
+        public TwitterStatusCollection DirectMessages(TwitterParameters parameters)
+        {
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-		/// <summary>
-		/// Returns a list of the most recent direct messages sent to the authenticating user.
-		/// </summary>
-		/// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
-		/// <returns></returns>
-		public TwitterStatusCollection DirectMessages(TwitterParameters Parameters)
-		{
-			TwitterRequest Request = new TwitterRequest(proxyUri);
-			TwitterRequestData Data = new TwitterRequestData();
-			Data.UserName = userName;
-			Data.Password = password;
+            data.ActionUri = this.BuildConditionalUrl(parameters, "direct_messages.xml");
 
-            Data.ActionUri = this.BuildConditionalUrl(Parameters, "direct_messages.xml");
+            data = request.PerformWebRequest(data, "GET");
 
-			Data = Request.PerformWebRequest(Data, "GET");
+            return data.Statuses;
+        }
 
-			return Data.Statuses;
-		}
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <returns></returns>
+        public TwitterStatusCollection DirectMessagesSent()
+        {
+            return this.DirectMessagesSent(null);
+        }
 
+        /// <summary>
+        /// Returns a list of the most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <param name="parameters">Accepts Since, SinceID, and Page parameters</param>
+        /// <returns></returns>
+        public TwitterStatusCollection DirectMessagesSent(TwitterParameters parameters)
+        {
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
+            data.ActionUri = this.BuildConditionalUrl(parameters, "direct_messages/sent.xml");
 
-		/// <summary>
-		/// Returns a list of the 20 most recent direct messages sent by the authenticating user.
-		/// </summary>
-		/// <returns></returns>
-		public TwitterStatusCollection DirectMessagesSent()
-		{
-			return DirectMessagesSent(null);
-		}
+            data = request.PerformWebRequest(data, "GET");
 
-		/// <summary>
-		/// Returns a list of the most recent direct messages sent by the authenticating user.
-		/// </summary>
-		/// <param name="Parameters">Accepts Since, SinceID, and Page parameters</param>
-		/// <returns></returns>
-		public TwitterStatusCollection DirectMessagesSent(TwitterParameters Parameters)
-		{
-            TwitterRequest Request = new TwitterRequest(proxyUri);
-			TwitterRequestData Data = new TwitterRequestData();
-			Data.UserName = userName;
-			Data.Password = password;
+            return data.Statuses;
+        }
 
-			Data.ActionUri = this.BuildConditionalUrl(Parameters, "direct_messages/sent.xml");
+        /// <summary>
+        /// Sends a new direct message to a user.
+        /// </summary>
+        /// <param name="user">The user to send the direct message to.</param>
+        /// <param name="message">The message to send.</param>
+        /// <returns></returns>
+        public TwitterStatus New(string user, string message)
+        {
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = this.userName;
+            data.Password = this.password;
 
-            Data = Request.PerformWebRequest(Data, "GET");
+            data.ActionUri = new Uri(
+            string.Format("{2}direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message), Twitter.Domain));
 
-			return Data.Statuses;
-		}
-
-		/// <summary>
-		/// Sends a new direct message to a user.
-		/// </summary>
-		/// <param name="user">The user to send the direct message to.</param>
-		/// <param name="message">The message to send.</param>
-		/// <returns></returns>
-		public TwitterStatus New(string user, string message)
-		{
-            TwitterRequest request = new TwitterRequest(proxyUri);
-			TwitterRequestData data = new TwitterRequestData();
-			data.UserName = userName;
-			data.Password = password;
-
-			data.ActionUri = new Uri(
-				string.Format("{2}direct_messages/new.xml?user={0}&text={1}", user, HttpUtility.UrlEncode(message), Twitter.Domain));
-
-			data = request.PerformWebRequest(data);
-			return data.Statuses[0];
-		}
+            data = request.PerformWebRequest(data);
+            return data.Statuses[0];
+        }
 
         /// <summary>
         /// Destroys the specified direct message.
         /// </summary>
         /// <param name="ID">The ID of the direct message.</param>
         /// <returns></returns>
-        public TwitterStatus Destroy(Int64 ID)
+        public TwitterStatus Destroy(long id)
         {
-            TwitterRequest request = new TwitterRequest(proxyUri);
+            TwitterRequest request = new TwitterRequest(this.proxyUri);
             TwitterRequestData data = new TwitterRequestData();
-            data.UserName = userName;
-            data.Password = password;
+            data.UserName = this.userName;
+            data.Password = this.password;
 
             data.ActionUri = new Uri(
-                string.Format("{1}direct_messages/destroy/{0}.xml", ID, Twitter.Domain));
+                string.Format("{1}direct_messages/destroy/{0}.xml", id, Twitter.Domain));
 
             data = request.PerformWebRequest(data, "POST");
             return data.Statuses[0];
@@ -165,9 +162,9 @@ namespace Twitterizer.Framework
         /// </summary>
         /// <param name="Status">The status to destroy.</param>
         /// <returns></returns>
-        public TwitterStatus Destroy(TwitterStatus Status)
+        public TwitterStatus Destroy(TwitterStatus status)
         {
-            return Destroy(Status.ID);
+            return this.Destroy(status.ID);
         }
-	}
+    }
 }

@@ -60,7 +60,7 @@ namespace Twitterizer.TestApp
             this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.twitterStatusCollectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.RowContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteRowMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.VerifyCredentialsTabPAge = new System.Windows.Forms.TabPage();
             this.btnVCSubmit = new System.Windows.Forms.Button();
@@ -79,13 +79,13 @@ namespace Twitterizer.TestApp
             this.mentionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repliesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.favoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.userHomeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.friendsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.friendsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.followersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.userHomeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainFormTabControl.SuspendLayout();
             this.UpdateTabPage.SuspendLayout();
             this.FriendsTabPage.SuspendLayout();
@@ -94,7 +94,7 @@ namespace Twitterizer.TestApp
             this.TimelineTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TimelineDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).BeginInit();
-            this.ContextMenuStrip.SuspendLayout();
+            this.RowContextMenuStrip.SuspendLayout();
             this.VerifyCredentialsTabPAge.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -344,7 +344,7 @@ namespace Twitterizer.TestApp
             this.TimelineDataGridView.Name = "TimelineDataGridView";
             this.TimelineDataGridView.RowHeadersVisible = false;
             this.TimelineDataGridView.RowHeadersWidth = 16;
-            this.TimelineDataGridView.RowTemplate.ContextMenuStrip = this.ContextMenuStrip;
+            this.TimelineDataGridView.RowTemplate.ContextMenuStrip = this.RowContextMenuStrip;
             this.TimelineDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.TimelineDataGridView.Size = new System.Drawing.Size(802, 500);
             this.TimelineDataGridView.TabIndex = 0;
@@ -402,17 +402,17 @@ namespace Twitterizer.TestApp
             // 
             this.twitterStatusCollectionBindingSource.DataSource = typeof(Twitterizer.Framework.TwitterStatusCollection);
             // 
-            // ContextMenuStrip
+            // RowContextMenuStrip
             // 
-            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RowContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DeleteRowMenuItem});
-            this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(149, 26);
+            this.RowContextMenuStrip.Name = "ContextMenuStrip";
+            this.RowContextMenuStrip.Size = new System.Drawing.Size(153, 48);
             // 
             // DeleteRowMenuItem
             // 
             this.DeleteRowMenuItem.Name = "DeleteRowMenuItem";
-            this.DeleteRowMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.DeleteRowMenuItem.Size = new System.Drawing.Size(152, 22);
             this.DeleteRowMenuItem.Text = "Delete Update";
             this.DeleteRowMenuItem.Click += new System.EventHandler(this.DeleteRowMenuItem_Click);
             // 
@@ -562,6 +562,13 @@ namespace Twitterizer.TestApp
             this.favoritesToolStripMenuItem.Text = "Favorites";
             this.favoritesToolStripMenuItem.Click += new System.EventHandler(this.favoritesToolStripMenuItem_Click);
             // 
+            // userHomeToolStripMenuItem
+            // 
+            this.userHomeToolStripMenuItem.Name = "userHomeToolStripMenuItem";
+            this.userHomeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.userHomeToolStripMenuItem.Text = "User Home";
+            this.userHomeToolStripMenuItem.Click += new System.EventHandler(this.userHomeToolStripMenuItem_Click);
+            // 
             // configureToolStripMenuItem
             // 
             this.configureToolStripMenuItem.Name = "configureToolStripMenuItem";
@@ -610,13 +617,6 @@ namespace Twitterizer.TestApp
             this.directMessagesToolStripMenuItem.Name = "directMessagesToolStripMenuItem";
             this.directMessagesToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             // 
-            // userHomeToolStripMenuItem
-            // 
-            this.userHomeToolStripMenuItem.Name = "userHomeToolStripMenuItem";
-            this.userHomeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.userHomeToolStripMenuItem.Text = "User Home";
-            this.userHomeToolStripMenuItem.Click += new System.EventHandler(this.userHomeToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -636,7 +636,7 @@ namespace Twitterizer.TestApp
             this.TimelineTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TimelineDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.twitterStatusCollectionBindingSource)).EndInit();
-            this.ContextMenuStrip.ResumeLayout(false);
+            this.RowContextMenuStrip.ResumeLayout(false);
             this.VerifyCredentialsTabPAge.ResumeLayout(false);
             this.VerifyCredentialsTabPAge.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -691,7 +691,7 @@ namespace Twitterizer.TestApp
 		private System.Windows.Forms.TextBox tbVCUsername;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip RowContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem DeleteRowMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mentionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem repliesToolStripMenuItem;

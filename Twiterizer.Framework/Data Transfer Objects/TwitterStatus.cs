@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -27,28 +27,92 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-using System;
-
 namespace Twitterizer.Framework
 {
-    [Serializable]
-    public class TwitterStatus
-    {
-        public DateTime Created { get; set; }
-        public Int64 ID { get; set; }
-        public string Text { get; set; }
-        public string Source { get; set; }
-        public int RecipientID { get; set; }
-        public bool IsTruncated { get; set; }
-        public bool IsFavorited { get; set; }
-        public Int64 InReplyToStatusID { get; set; }
-        public int InReplyToUserID { get; set; }
-        public TwitterUser TwitterUser { get; set; }
-        public TwitterUser Recipient { get; set; }
-        public Boolean IsDirectMessage { get; set; }
+    using System;
 
-        public int? RateLimit { get; set; }
-        public int? RateLimitRemaining { get; set; }
-        public DateTime? RateLimitReset { get; set; }
+    /// <summary>
+    /// Represents a single status (aka tweet)
+    /// </summary>
+    [Serializable]
+    public class TwitterStatus : TwitterObject
+    {
+        /// <summary>
+        /// Gets or sets the created.
+        /// </summary>
+        /// <value>The created.</value>
+        public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID.
+        /// </summary>
+        /// <value>The ID.</value>
+        public long ID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        /// <value>The text.</value>
+        public string Text { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source.
+        /// </summary>
+        /// <value>The source.</value>
+        public string Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recipient ID.
+        /// </summary>
+        /// <value>The recipient ID.</value>
+        public int RecipientID { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is truncated.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is truncated; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsTruncated { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is favorited.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is favorited; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFavorited { get; set; }
+
+        /// <summary>
+        /// Gets or sets the in reply to status ID.
+        /// </summary>
+        /// <value>The in reply to status ID.</value>
+        public long InReplyToStatusID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the in reply to user ID.
+        /// </summary>
+        /// <value>The in reply to user ID.</value>
+        public int InReplyToUserID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the twitter user.
+        /// </summary>
+        /// <value>The twitter user.</value>
+        public TwitterUser TwitterUser { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recipient.
+        /// </summary>
+        /// <value>The recipient.</value>
+        public TwitterUser Recipient { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is direct message.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is direct message; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDirectMessage { get; set; }
     }
 }

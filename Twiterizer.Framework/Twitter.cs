@@ -1,7 +1,7 @@
 /*
  * This file is part of the Twitterizer library <http://code.google.com/p/twitterizer/>
  *
- * Copyright (c) 2008, Patrick "Ricky" Smith <ricky@digitally-born.com>
+ * Copyright (c) 2010, Patrick "Ricky" Smith <ricky@digitally-born.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -32,13 +32,64 @@ namespace Twitterizer.Framework
     using System;
     using System.Configuration;
 
-	public class Twitter
-	{
-		public TwitterDirectMessageMethods DirectMessages;
-		public TwitterStatusMethods Status;
-		public TwitterUserMethods User;
+    public class Twitter
+    {
+        /// <summary>
+        /// The default source sent to twitter for all status updates.
+        /// </summary>
+        public const string DefaultSource = "Twitterizer";
 
-        public string ProxyUri { get; set; }
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        public Twitter()
+            : this(string.Empty, string.Empty, DefaultSource)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        public Twitter(string userName, string password) :
+            this(userName, password, DefaultSource)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="source">The source.</param>
+        public Twitter(string userName, string password, string source)
+        {
+            this.DirectMessages = new TwitterDirectMessageMethods(userName, password);
+            this.User = new TwitterUserMethods(userName, password);
+            this.Status = new TwitterStatusMethods(userName, password, source);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="proxyURI">The proxy URI.</param>
+        public Twitter(string userName, string password, string source, string proxyURI)
+        {
+            this.DirectMessages = new TwitterDirectMessageMethods(userName, password, proxyURI);
+            this.Status = new TwitterStatusMethods(userName, password, source, proxyURI);
+            this.User = new TwitterUserMethods(userName, password, proxyURI);
+        }
+        #endregion
+
+        /// <summary>
+        /// Gets the domain.
+        /// </summary>
+        /// <value>The domain.</value>
         public static string Domain
         {
             get
@@ -54,54 +105,29 @@ namespace Twitterizer.Framework
             }
         }
 
-        public const string DefaultSource = "Twitterizer";
+        /// <summary>
+        /// Gets or sets the direct messages.
+        /// </summary>
+        /// <value>The direct messages.</value>
+        public TwitterDirectMessageMethods DirectMessages { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// Gets or sets the status.
         /// </summary>
-        public Twitter()
-            : this(string.Empty, string.Empty, DefaultSource)
-        {
-
-        }
+        /// <value>The status.</value>
+        public TwitterStatusMethods Status { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// Gets or sets the user.
         /// </summary>
-        /// <param name="UserName">Name of the user.</param>
-        /// <param name="Password">The password.</param>
-		public Twitter(string UserName, string Password) :
-            this(UserName, Password, DefaultSource)
-		{
-			
-		}        
+        /// <value>The user.</value>
+        public TwitterUserMethods User { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Twitter"/> class.
+        /// Gets or sets the proxy URI.
         /// </summary>
-        /// <param name="UserName">Name of the user.</param>
-        /// <param name="Password">The password.</param>
-        /// <param name="Source">The source.</param>
-		public Twitter(string UserName, string Password, string Source)
-		{
-			DirectMessages = new TwitterDirectMessageMethods(UserName, Password);
-            User = new TwitterUserMethods(UserName, Password);
-            Status = new TwitterStatusMethods(UserName, Password, Source);
-		}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Twitter"/> class.
-        /// </summary>
-        /// <param name="UserName">Name of the user.</param>
-        /// <param name="Password">The password.</param>
-        /// <param name="Source">The source.</param>
-        /// <param name="ProxyURI">If you have proxy set this variable URI</param>
-        public Twitter(string UserName, string Password, string Source, string ProxyURI)
-        {
-            DirectMessages = new TwitterDirectMessageMethods(UserName, Password, ProxyURI);
-            Status = new TwitterStatusMethods(UserName, Password, Source, ProxyURI);
-            User = new TwitterUserMethods(UserName, Password, ProxyURI);
-        }
+        /// <value>The proxy URI.</value>
+        public string ProxyUri { get; set; }
 
         /// <summary>
         /// Verifies the given credentials.
@@ -110,23 +136,26 @@ namespace Twitterizer.Framework
         /// <param name="password">The password.</param>
         /// <param name="ProxyUri">The proxy URI.</param>
         /// <returns></returns>
-		public static bool VerifyCredentials(string username, string password, string ProxyUri)
-		{
-            TwitterRequest request = new TwitterRequest(ProxyUri);
-			TwitterRequestData data = new TwitterRequestData();            
-			data.UserName = username;
-			data.Password = password;
-			data.ActionUri = new Uri("https://twitter.com/account/verify_credentials.xml");
+        public static bool VerifyCredentials(string username, string password, string proxyUri)
+        {
+            TwitterRequest request = new TwitterRequest(proxyUri);
+            TwitterRequestData data = new TwitterRequestData();
+            data.UserName = username;
+            data.Password = password;
+            data.ActionUri = new Uri("https://twitter.com/account/verify_credentials.xml");
 
-			try
-			{
-				data = request.PerformWebRequest(data, "GET");
-                return (data != null && data.Users != null && data.Users.Count > 0 && data.Users[0].ScreenName.ToLower() == username.ToLower());
-			}
-			catch(Exception) { } // ignore exeptions - authentication failed
+            try
+            {
+                data = request.PerformWebRequest(data, "GET");
+                return data != null && data.Users != null && data.Users.Count > 0 && data.Users[0].ScreenName.ToLower() == username.ToLower();
+            }
+            catch (Exception) 
+            {
+                // ignore exeptions - authentication failed
+            } 
 
-			return false;
-		}
+            return false;
+        }
 
         /// <summary>
         /// Verifies the given credentials.
@@ -138,5 +167,5 @@ namespace Twitterizer.Framework
         {
             return VerifyCredentials(username, password, string.Empty);
         }
-	}
+    }
 }
