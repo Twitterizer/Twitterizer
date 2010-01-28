@@ -50,7 +50,7 @@ namespace Twitterizer.Framework
                 return new Uri(string.Concat(Twitter.Domain, path));
             }
 
-            return new Uri(parameters.BuildActionUri("direct_messages.xml"));
+            return new Uri(parameters.BuildActionUri(path));
         }
     }
 }

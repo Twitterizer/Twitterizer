@@ -22,6 +22,9 @@ namespace Twitterizer.TestApp
             set { password = value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainForm"/> class.
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -30,6 +33,11 @@ namespace Twitterizer.TestApp
             Height = 209;
         }
 
+        /// <summary>
+        /// Handles the TextChanged event of the UpdateTextBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void UpdateTextBox_TextChanged(object sender, EventArgs e)
         {
             CharCountLabel.Text =
@@ -39,11 +47,21 @@ namespace Twitterizer.TestApp
             UpdateButton.Enabled = (UpdateTextBox.Text.Length <= 140);
         }
 
+        /// <summary>
+        /// Handles the Click event of the configureToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void configureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConfigFormSingleton.Show();
         }
 
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the MainFormTabControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void MainFormTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (MainFormTabControl.SelectedTab.Name)
@@ -201,6 +219,11 @@ namespace Twitterizer.TestApp
         }
         #endregion
 
+        /// <summary>
+        /// Handles the Click event of the UpdateButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void UpdateButton_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -367,6 +390,11 @@ namespace Twitterizer.TestApp
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the favoritesToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -386,6 +414,11 @@ namespace Twitterizer.TestApp
             MainFormTabControl.SelectedIndex = 2;
         }
 
+        /// <summary>
+        /// Handles the Click event of the userHomeToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void userHomeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -403,6 +436,73 @@ namespace Twitterizer.TestApp
                 Cursor = Cursors.Default;
             }
             MainFormTabControl.SelectedIndex = 2;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the removeFriendshipToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void removeFriendshipToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                DataGridViewRow selectedRow = FriendsDataGridView.SelectedRows[0];
+                TwitterUser user = selectedRow.DataBoundItem as TwitterUser;
+
+                if (user == null)
+                {
+                    return;
+                }
+
+                Twitter t = new Twitter(userName, password);
+                t.User.UnFollowUser(user.ID);
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+
+            MainFormTabControl.SelectedIndex = 2;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the viewUserTimelineToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void viewUserTimelineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                DataGridViewRow selectedRow = FriendsDataGridView.SelectedRows[0];
+                TwitterUser user = selectedRow.DataBoundItem as TwitterUser;
+
+                if (user == null)
+                {
+                    return;
+                }
+
+                Twitter t = new Twitter(userName, password);
+                TwitterParameters args = new TwitterParameters(TwitterParameterNames.UserID, user.ID);
+                t.Status.UserTimeline(args);
+            }
+            catch (TwitterizerException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+
+            MainFormTabControl.SelectedIndex = 3;
         }
     }
 }
