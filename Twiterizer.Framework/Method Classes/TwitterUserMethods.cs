@@ -224,7 +224,7 @@ namespace Twitterizer.Framework
             data.Password = this.password;
 
             string actionUri = string.Format("friendships/create/{0}.xml", user.ScreenName);
-            data.ActionUri = new Uri(actionUri);
+            data.ActionUri = this.BuildConditionalUrl(null, actionUri);
             data = request.PerformWebRequest(data);
 
             return data.Users;
@@ -243,7 +243,7 @@ namespace Twitterizer.Framework
             data.Password = this.password;
 
             string actionUri = string.Format("friendships/destroy/{0}.xml", user.ScreenName);
-            data.ActionUri = new Uri(actionUri);
+            data.ActionUri = this.BuildConditionalUrl(null, actionUri);
             data = request.PerformWebRequest(data);
 
             return data.Users;
