@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,43 +28,26 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <date>2010-02-25</date>
+// <summary>The default page for the sample web site.</summary>
 //-----------------------------------------------------------------------
 
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Twitterizer;
+using Twitterizer.Commands;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("Twitterizer")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Twitterizer Group")]
-[assembly: AssemblyProduct("Twitterizer")]
-[assembly: AssemblyCopyright("Copyright © Patrick 'Ricky' Smith 2010")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("US-en")]
-
-[assembly: CLSCompliant(true)]
-
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
-
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+public partial class _Default : System.Web.UI.Page 
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        Twitterizer.User.GetUser("oauthToken", 1);
+        Twitterizer.User.GetUser("oauthToken", "DigitallyBorn");
+    }
+}

@@ -1,0 +1,16 @@
+<stylecopresultscache>
+  <version>10</version>
+  <project key="-386010598">
+    <configuration>
+    </configuration>
+  </project>
+  <sourcecode name="Default.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>02/25/2010 15:20:20</timestamp>
+      <milliseconds>163</milliseconds>
+    </settings>
+    <timestamp>02/25/2010 15:20:26</timestamp>
+    <milliseconds>305</milliseconds>
+    <violations />
+  </sourcecode>
+</stylecopresultscache>

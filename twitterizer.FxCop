@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="Twitterizer">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\program files (x86)\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+  <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/Twitterizer2/bin/Debug/Twitterizer.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="Twitterizer">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-02-25 20:22:20Z">
+      <Issue>
+       <Item>Twitterizer</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Twitterizer.Commands">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-02-25 20:22:20Z">
+      <Issue>
+       <Item>Twitterizer.Commands</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Twitterizer.Core">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-02-25 20:22:20Z">
+      <Issue>
+       <Item>Twitterizer.Core</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/Twitterizer2/bin/Debug/Twitterizer.dll">
+    <Modules>
+     <Module Name="twitterizer.dll">
+      <Messages>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2010-02-25 20:22:20Z">
+        <Issue>
+         <Item>'Twitterizer.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Twitterizer">
+        <Types>
+         <Type Name="OAuth">
+          <Members>
+           <Member Name="#Authenticate(System.String,System.String)">
+            <Messages>
+             <Message Id="consumerKey" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'consumerKey'</Item>
+               <Item>'OAuth.Authenticate(string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="consumerSecret" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'consumerSecret'</Item>
+               <Item>'OAuth.Authenticate(string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ObtainAccessToken(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="consumerKey" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'consumerKey'</Item>
+               <Item>'OAuth.ObtainAccessToken(string, string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="consumerSecret" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'consumerSecret'</Item>
+               <Item>'OAuth.ObtainAccessToken(string, string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="requestToken" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'requestToken'</Item>
+               <Item>'OAuth.ObtainAccessToken(string, string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ObtainRequestToken(System.String,System.String)">
+            <Messages>
+             <Message Id="consumerKey" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'consumerKey'</Item>
+               <Item>'OAuth.ObtainRequestToken(string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="consumerSecret" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'consumerSecret'</Item>
+               <Item>'OAuth.ObtainRequestToken(string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TwitterizerException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2010-02-25 20:22:20Z">
+            <Issue Name="MissingConstructor">
+             <Item>'TwitterizerException'</Item>
+             <Item>protected TwitterizerException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue Name="MissingConstructor">
+             <Item>'TwitterizerException'</Item>
+             <Item>public TwitterizerException(String)</Item>
+            </Issue>
+            <Issue Name="MissingConstructor">
+             <Item>'TwitterizerException'</Item>
+             <Item>public TwitterizerException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2010-02-25 20:22:20Z">
+            <Issue Certainty="95" Level="Error">
+             <Item>'TwitterizerException'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Net.WebException)">
+            <Messages>
+             <Message Id="wex" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberParameter">
+               <Item>'TwitterizerException.TwitterizerException(WebException)'</Item>
+               <Item>wex</Item>
+               <Item>'wex'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="User">
+          <Members>
+           <Member Name="#GetUser(System.String,System.Int64)">
+            <Messages>
+             <Message Id="oauth" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:32:17Z">
+              <Issue Name="MemberParameter">
+               <Item>'User.GetUser(string, long)'</Item>
+               <Item>oauth</Item>
+               <Item>'oauthAccessToken'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'User.ID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="WebExceptionExtensions">
+          <Members>
+           <Member Name="#ToTwitterizerException(System.Net.WebException)">
+            <Messages>
+             <Message Id="wex" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberParameter">
+               <Item>'WebExceptionExtensions.ToTwitterizerException(this WebException)'</Item>
+               <Item>wex</Item>
+               <Item>'wex'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Twitterizer.Commands">
+        <Types>
+         <Type Name="UserShowCommand">
+          <Members>
+           <Member Name="#.ctor(System.String)">
+            <Messages>
+             <Message Id="oauth" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:32:17Z">
+              <Issue Name="MemberParameter">
+               <Item>'UserShowCommand.UserShowCommand(string)'</Item>
+               <Item>oauth</Item>
+               <Item>'oauthToken'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Init()">
+            <Messages>
+             <Message Id="System.Int64.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-02-25 20:22:20Z">
+              <Issue>
+               <Item>'long.ToString()'</Item>
+               <Item>'UserShowCommand.Init()'</Item>
+               <Item>'long.ToString(IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UserID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'UserShowCommand.UserID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UserIDOrName">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'UserShowCommand.UserIDOrName'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UserName">
+            <Messages>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>UserName</Item>
+               <Item>'UserShowCommand.UserName'</Item>
+               <Item>Username</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Twitterizer.Core">
+        <Types>
+         <Type Name="BaseCommand`1">
+          <Messages>
+           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2010-02-25 20:22:20Z">
+            <Issue>
+             <Item>'BaseCommand&lt;T&gt;'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.String,System.String)">
+            <Messages>
+             <Message Id="1#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2010-02-25 20:22:20Z">
+              <Issue>
+               <Item>'uri'</Item>
+               <Item>'BaseCommand&lt;T&gt;.BaseCommand(string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#.ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="oauth" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:22:20Z">
+              <Issue Name="MemberParameter">
+               <Item>'BaseCommand&lt;T&gt;.BaseCommand(string, string, string)'</Item>
+               <Item>oauth</Item>
+               <Item>'oauthAccessToken'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2010-02-25 20:22:20Z">
+              <Issue>
+               <Item>'uri'</Item>
+               <Item>'BaseCommand&lt;T&gt;.BaseCommand(string, string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Uri">
+            <Messages>
+             <Message TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056" Created="2010-02-25 20:22:20Z">
+              <Issue>
+               <Item>'BaseCommand&lt;T&gt;.Uri'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012">
+    <Resolution Name="Default">Change the accessibility of all public constructors in {0} to protected.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="MemberAbbreviation">Correct the casing of '{0}' in member name {1} by changing it to '{2}'. '{2}' is an abbreviation and therefore is not subject to acronym casing guidelines.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032">
+    <Resolution Name="MissingConstructor">Add the following constructor to {0}: {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237">
+    <Resolution Name="Default">Add [Serializable] to {0} as this type implements ISerializable.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
+   </Rule>
+   <Rule TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054">
+    <Resolution Name="Default">Change the type of parameter {0} of method {1} from string to System.Uri, or provide an overload of {1}, that allows {0} to be passed as a System.Uri object.</Resolution>
+   </Rule>
+   <Rule TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056">
+    <Resolution Name="Default">Change the type of property {0} from string to System.Uri.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>
