@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="User.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="OAuthRequestParameters.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,72 +28,47 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <date>2010-02-26</date>
+// <summary>Contains assembly information.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
-{
-    using System;
-    using System.Runtime.Serialization;
 
+namespace Twitterizer.OAuth
+{
     /// <summary>
-    /// The class that represents a twitter user account
+    /// Request Parameters needed by requests authenticated with OAuth
     /// </summary>
-    [Serializable, DataContract(Name = "user")]
-    public class User : Core.BaseObject
+    public class OAuthRequestParameters
     {
         /// <summary>
-        /// Gets or sets the User ID.
+        /// Gets or sets the access token.
         /// </summary>
-        /// <value>The User ID.</value>
-        [DataMember(Name = "id")]
-        public long ID { get; set; }
+        /// <value>The access token.</value>
+        public string AccessToken { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the user.
+        /// Gets or sets the access token secret.
         /// </summary>
-        /// <value>The name of the user.</value>
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
+        /// <value>The access token secret.</value>
+        public string AccessTokenSecret { get; set; }
 
         /// <summary>
-        /// Gets or sets the location.
+        /// Gets or sets the call back URL. (Optional.)
         /// </summary>
-        /// <value>The location.</value>
-        [DataMember(Name = "location")]
-        public string Location { get; set; }
+        /// <value>The call back URL.</value>
+        public string CallBackUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        /// Gets or sets the consumer key.
         /// </summary>
-        /// <value>The description.</value>
-        [DataMember(Name = "description")]
-        public string Description { get; set; }
+        /// <value>The consumer key.</value>
+        public string ConsumerKey { get; set; }
 
         /// <summary>
-        /// Gets the user.
+        /// Gets or sets the consumer secret.
         /// </summary>
-        /// <param name="oauthAccessToken">The oauth access token.</param>
-        /// <param name="id">The id.</param>
-        /// <returns></returns>
-        public static User GetUser(string oauthAccessToken, long id)
-        {
-            Commands.UserShowCommand command = new Commands.UserShowCommand(oauthAccessToken);
-            command.UserId = id;
-
-            return Core.Performer<User>.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets the user.
-        /// </summary>
-        /// <param name="oauthAccessToken">The oauth access token.</param>
-        /// <param name="username">The username.</param>
-        /// <returns></returns>
-        public static User GetUser(string oauthAccessToken, string username)
-        {
-            Commands.UserShowCommand command = new Twitterizer.Commands.UserShowCommand(oauthAccessToken);
-            command.Username = username;
-
-            return Core.Performer<User>.PerformAction(command);
-        }
+        /// <value>The consumer secret.</value>
+        public string ConsumerSecret { get; set; }
     }
 }

@@ -37,28 +37,25 @@ namespace Twitterizer.Commands
     using System.Linq;
     using System.Text;
     using System.Globalization;
+    using Twitterizer.OAuth;
 
     /// <summary>
     /// The User Show Command
     /// </summary>
     /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
-    public class UserShowCommand : Core.BaseCommand<User>
+    public class UserShowCommand : Core.BaseCommand<TwitterUser>
     {
+        private const string path = "http://api.twitter.com/1/users/show.json";
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UserShowCommand"/> class.
         /// </summary>
-        public UserShowCommand()
-            : base("GET", "http://twitter.com/users/show.json")
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserShowCommand"/> class.
-        /// </summary>
         /// <param name="oauthToken">The oauth token.</param>
-        public UserShowCommand(string oauthToken)
-            : base("GET", "http://twitter.com/users/show.json", oauthToken)
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecretKey">The consumer secret key.</param>
+        public UserShowCommand(OAuthRequestParameters requestTokens)
+            : base("GET", new Uri(path), requestTokens)
         {
         }
         #endregion

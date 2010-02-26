@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="OAuth.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="User.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -32,54 +32,75 @@
 namespace Twitterizer
 {
     using System;
+    using System.Runtime.Serialization;
+    using Twitterizer.OAuth;
 
     /// <summary>
-    /// Provides easy implementation for OAuth interactions with the Twitter API.
+    /// The class that represents a twitter user account
     /// </summary>
-    /// <remarks>You must have registered your application with Twitter and have a consumer key and secret available for use.</remarks>
-    public static class OAuth
+    [Serializable, DataContract(Name = "user")]
+    public class TwitterUser : Core.BaseObject
     {
         /// <summary>
-        /// Authenticates the specified consumer key.
+        /// Gets or sets the User ID.
         /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <value>The User ID.</value>
+        [DataMember(Name = "id")]
+        public long ID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the user.
+        /// </summary>
+        /// <value>The name of the user.</value>
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location.
+        /// </summary>
+        /// <value>The location.</value>
+        [DataMember(Name = "location")]
+        public string Location { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="id">The id.</param>
         /// <returns></returns>
-        public static string Authenticate(string consumerKey, string consumerSecret)
+        public static TwitterUser GetUser(OAuthRequestParameters requestTokens, long id)
         {
-            throw new NotImplementedException();
+            Commands.UserShowCommand command = new Commands.UserShowCommand(requestTokens);
+            command.UserId = id;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException(typeof(TwitterUser), "GetUser");
+            }
+
+            return Core.Performer<TwitterUser>.PerformAction(command);
         }
 
         /// <summary>
-        /// Authorizes this instance.
+        /// Gets the user.
         /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="username">The username.</param>
         /// <returns></returns>
-        public static string Authorize()
+        public static TwitterUser GetUser(OAuthRequestParameters requestTokens, string username)
         {
-            throw new NotImplementedException();
-        }
+            Commands.UserShowCommand command = new Twitterizer.Commands.UserShowCommand(requestTokens);
+            command.Username = username;
 
-        /// <summary>
-        /// Obtains the access token.
-        /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="requestToken">The request token.</param>
-        /// <returns></returns>
-        public static string ObtainAccessToken(string consumerKey, string consumerSecret, string requestToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obtains the request token.
-        /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <returns></returns>
-        public static string ObtainRequestToken(string consumerKey, string consumerSecret)
-        {
-            throw new NotImplementedException();
+            return Core.Performer<TwitterUser>.PerformAction(command);
         }
     }
 }

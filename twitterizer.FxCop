@@ -41,15 +41,6 @@
  </Rules>
  <FxCopReport Version="1.36">
   <Namespaces>
-   <Namespace Name="Twitterizer">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-02-25 20:22:20Z">
-      <Issue>
-       <Item>Twitterizer</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
    <Namespace Name="Twitterizer.Commands">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-02-25 20:22:20Z">
@@ -73,17 +64,19 @@
    <Target Name="$(ProjectDir)/Twitterizer2/bin/Debug/Twitterizer.dll">
     <Modules>
      <Module Name="twitterizer.dll">
-      <Messages>
-       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2010-02-25 20:22:20Z">
-        <Issue>
-         <Item>'Twitterizer.dll'</Item>
-        </Issue>
-       </Message>
-      </Messages>
       <Namespaces>
        <Namespace Name="Twitterizer">
         <Types>
          <Type Name="OAuth">
+          <Messages>
+           <Message Id="OAuth" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-25 21:21:23Z">
+            <Issue Name="TypeShouldBeDiscreteTerm">
+             <Item>OAuth</Item>
+             <Item>'OAuth'</Item>
+             <Item>Oauth</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
            <Member Name="#Authenticate(System.String,System.String)">
             <Messages>
@@ -97,6 +90,31 @@
               <Issue>
                <Item>'consumerSecret'</Item>
                <Item>'OAuth.Authenticate(string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GenerateNonce()">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-02-25 22:57:22Z">
+              <Issue>
+               <Item>'OAuth.GenerateNonce()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GenerateTimeStamp()">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-02-25 22:57:22Z">
+              <Issue>
+               <Item>'OAuth.GenerateTimeStamp()'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Double.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-02-25 22:57:22Z">
+              <Issue>
+               <Item>'double.ToString()'</Item>
+               <Item>'OAuth.GenerateTimeStamp()'</Item>
+               <Item>'double.ToString(IFormatProvider)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -123,18 +141,12 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#ObtainRequestToken(System.String,System.String)">
+           <Member Name="#ObtainRequestToken(System.String)">
             <Messages>
-             <Message Id="consumerKey" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
+             <Message Id="consumerKey" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 23:17:58Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'consumerKey'</Item>
-               <Item>'OAuth.ObtainRequestToken(string, string)'</Item>
-              </Issue>
-             </Message>
-             <Message Id="consumerSecret" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-02-25 20:32:17Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'consumerSecret'</Item>
-               <Item>'OAuth.ObtainRequestToken(string, string)'</Item>
+               <Item>'OAuth.ObtainRequestToken(string)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -179,17 +191,6 @@
          </Type>
          <Type Name="User">
           <Members>
-           <Member Name="#GetUser(System.String,System.Int64)">
-            <Messages>
-             <Message Id="oauth" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:32:17Z">
-              <Issue Name="MemberParameter">
-               <Item>'User.GetUser(string, long)'</Item>
-               <Item>oauth</Item>
-               <Item>'oauthAccessToken'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#ID">
             <Messages>
              <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-25 20:22:20Z">
@@ -220,79 +221,9 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="Twitterizer.Commands">
-        <Types>
-         <Type Name="UserShowCommand">
-          <Members>
-           <Member Name="#.ctor(System.String)">
-            <Messages>
-             <Message Id="oauth" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:32:17Z">
-              <Issue Name="MemberParameter">
-               <Item>'UserShowCommand.UserShowCommand(string)'</Item>
-               <Item>oauth</Item>
-               <Item>'oauthToken'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Init()">
-            <Messages>
-             <Message Id="System.Int64.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-02-25 20:22:20Z">
-              <Issue>
-               <Item>'long.ToString()'</Item>
-               <Item>'UserShowCommand.Init()'</Item>
-               <Item>'long.ToString(IFormatProvider)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#UserID">
-            <Messages>
-             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-25 20:22:20Z">
-              <Issue Name="MemberAbbreviation">
-               <Item>ID</Item>
-               <Item>'UserShowCommand.UserID'</Item>
-               <Item>Id</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#UserIDOrName">
-            <Messages>
-             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-02-25 20:22:20Z">
-              <Issue Name="MemberAbbreviation">
-               <Item>ID</Item>
-               <Item>'UserShowCommand.UserIDOrName'</Item>
-               <Item>Id</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#UserName">
-            <Messages>
-             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-25 20:22:20Z">
-              <Issue Name="MemberShouldBeDiscreteTerm">
-               <Item>UserName</Item>
-               <Item>'UserShowCommand.UserName'</Item>
-               <Item>Username</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
        <Namespace Name="Twitterizer.Core">
         <Types>
          <Type Name="BaseCommand`1">
-          <Messages>
-           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2010-02-25 20:22:20Z">
-            <Issue>
-             <Item>'BaseCommand&lt;T&gt;'</Item>
-            </Issue>
-           </Message>
-          </Messages>
           <Members>
            <Member Name="#.ctor(System.String,System.String)">
             <Messages>
@@ -306,13 +237,6 @@
            </Member>
            <Member Name="#.ctor(System.String,System.String,System.String)">
             <Messages>
-             <Message Id="oauth" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-25 20:22:20Z">
-              <Issue Name="MemberParameter">
-               <Item>'BaseCommand&lt;T&gt;.BaseCommand(string, string, string)'</Item>
-               <Item>oauth</Item>
-               <Item>'oauthAccessToken'</Item>
-              </Issue>
-             </Message>
              <Message Id="1#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2010-02-25 20:22:20Z">
               <Issue>
                <Item>'uri'</Item>
@@ -321,14 +245,81 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Uri">
+           <Member Name="#OAuthAccessToken">
             <Messages>
-             <Message TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056" Created="2010-02-25 20:22:20Z">
-              <Issue>
-               <Item>'BaseCommand&lt;T&gt;.Uri'</Item>
+             <Message Id="OAuth" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-25 21:21:23Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>OAuth</Item>
+               <Item>'BaseCommand&lt;T&gt;.OAuthAccessToken'</Item>
+               <Item>Oauth</Item>
               </Issue>
              </Message>
             </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="BaseObject">
+          <Members>
+           <Member Name="#OAuthToken">
+            <Messages>
+             <Message Id="OAuth" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-02-25 21:21:23Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>OAuth</Item>
+               <Item>'BaseObject.OAuthToken'</Item>
+               <Item>Oauth</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="BaseObject+RateLimiting">
+          <Messages>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2010-02-25 21:21:23Z">
+            <Issue>
+             <Item>'BaseObject.RateLimiting'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#Remaining">
+            <Accessors>
+             <Accessor Name="#set_Remaining(System.Int32)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-02-25 21:21:23Z">
+                <Issue>
+                 <Item>'BaseObject.RateLimiting.Remaining.set(int)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#ResetDate">
+            <Accessors>
+             <Accessor Name="#set_ResetDate(System.DateTime)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-02-25 21:21:23Z">
+                <Issue>
+                 <Item>'BaseObject.RateLimiting.ResetDate.set(DateTime)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Total">
+            <Accessors>
+             <Accessor Name="#set_Total(System.Int32)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-02-25 21:21:23Z">
+                <Issue>
+                 <Item>'BaseObject.RateLimiting.Total.set(int)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
            </Member>
           </Members>
          </Type>
@@ -340,14 +331,15 @@
    </Target>
   </Targets>
   <Rules>
-   <Rule TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012">
-    <Resolution Name="Default">Change the accessibility of all public constructors in {0} to protected.</Resolution>
-   </Rule>
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
    </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
     <Resolution Name="MemberAbbreviation">Correct the casing of '{0}' in member name {1} by changing it to '{2}'. '{2}' is an abbreviation and therefore is not subject to acronym casing guidelines.</Resolution>
@@ -358,11 +350,11 @@
    <Rule TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032">
     <Resolution Name="MissingConstructor">Add the following constructor to {0}: {1}.</Resolution>
    </Rule>
-   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
-    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
-   </Rule>
    <Rule TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237">
     <Resolution Name="Default">Add [Serializable] to {0} as this type implements ISerializable.</Resolution>
+   </Rule>
+   <Rule TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034">
+    <Resolution Name="Default">Do not nest type {0}. Alternatively, change its accessibility so that it is not externally visible.</Resolution>
    </Rule>
    <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
     <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
@@ -372,9 +364,6 @@
    </Rule>
    <Rule TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054">
     <Resolution Name="Default">Change the type of parameter {0} of method {1} from string to System.Uri, or provide an overload of {1}, that allows {0} to be passed as a System.Uri object.</Resolution>
-   </Rule>
-   <Rule TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056">
-    <Resolution Name="Default">Change the type of property {0} from string to System.Uri.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

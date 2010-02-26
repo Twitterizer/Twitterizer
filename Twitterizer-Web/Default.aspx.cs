@@ -47,7 +47,6 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Twitterizer.User.GetUser("oauthToken", 1);
-        Twitterizer.User.GetUser("oauthToken", "DigitallyBorn");
+        OAuthUtility.GetRequestToken("GoNLHcoS2tkG0rJNBgwMfg", "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g");
     }
 }

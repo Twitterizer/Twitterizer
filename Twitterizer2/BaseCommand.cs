@@ -32,12 +32,16 @@
 
 namespace Twitterizer.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Runtime.Serialization.Json;
     using System.Text;
+    using System.Web;
+    using System.Collections.Specialized;
+    using Twitterizer.OAuth;
 
     /// <summary>
     /// The base command class.
@@ -52,22 +56,14 @@ namespace Twitterizer.Core
         /// </summary>
         /// <param name="method">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
-        public BaseCommand(string method, string uri)
-            : this(method, uri, string.Empty)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
         /// <param name="oauthAccessToken">The OAuth access token.</param>
-        public BaseCommand(string method, string uri, string oauthAccessToken)
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecretKey">The consumer secret key.</param>
+        protected BaseCommand(string method, Uri uri, Twitterizer.OAuth.OAuthRequestParameters requestTokens)
         {
             this.Uri = uri;
-            this.Method = method;
-            this.OAuthAccessToken = oauthAccessToken;
+            this.HttpMethod = method;
+            this.RequestTokens = requestTokens;
         }
         #endregion
 
@@ -81,19 +77,19 @@ namespace Twitterizer.Core
         /// Gets or sets the API method URI.
         /// </summary>
         /// <value>The URI for the API method.</value>
-        public string Uri { get; set; }
+        public Uri Uri { get; set; }
 
         /// <summary>
         /// Gets or sets the method.
         /// </summary>
         /// <value>The method.</value>
-        public string Method { get; set; }
+        public string HttpMethod { get; set; }
 
         /// <summary>
-        /// Gets or sets the OAuth access token.
+        /// Gets or sets the request tokens.
         /// </summary>
-        /// <value>The OAuth access token.</value>
-        public string OAuthAccessToken { get; set; }
+        /// <value>The request tokens.</value>
+        public OAuthRequestParameters RequestTokens { get; set; }
 
         /// <summary>
         /// Gets the request parameters.
@@ -140,35 +136,21 @@ namespace Twitterizer.Core
         /// <returns>A <see cref="System.Net.HttpWebRequest"/> class.</returns>
         private HttpWebRequest BuildRequest()
         {
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(this.BuildRequestUri());
-            request.Method = this.Method;
-            request.MaximumAutomaticRedirections = 4;
-            request.MaximumResponseHeadersLength = 4;
-            request.ContentLength = 0;
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            foreach (string item in this.Uri.Query.Split('&'))
+            {
+                queryParameters.Add(item.Split('=')[0], item.Split('=')[1]);
+            }
 
+            HttpWebRequest request = OAuthUtility.CreateOAuthRequest(
+                this.Uri.AbsolutePath,
+                queryParameters,
+                this.HttpMethod,
+                this.RequestTokens.ConsumerKey,
+                this.RequestTokens.ConsumerSecret,
+                this.RequestTokens.AccessTokenSecret);
+            
             return request;
-        }
-
-        /// <summary>
-        /// Builds the request URI.
-        /// </summary>
-        /// <returns>The full uri to execute the API method call.</returns>
-        private string BuildRequestUri()
-        {
-            StringBuilder newRequestAddress = new StringBuilder(this.Uri);
-
-            if (!this.Uri.Contains('?'))
-                newRequestAddress.Append("?");
-            else
-                newRequestAddress.Append("&");
-
-            foreach (KeyValuePair<string, string> pair in this.RequestParameters)
-                newRequestAddress.AppendFormat("{0}={1}&", pair.Key, pair.Value);
-
-            // Trim off the last ampersand
-            newRequestAddress.Remove(newRequestAddress.Length - 1, 1);
-
-            return newRequestAddress.ToString();
         }
     }
 }

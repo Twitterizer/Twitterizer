@@ -36,6 +36,7 @@ namespace Twitterizer.Core
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// The base object class
@@ -46,6 +47,31 @@ namespace Twitterizer.Core
         /// Gets or sets the OAuth token.
         /// </summary>
         /// <value>The OAuth token.</value>
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "OAuth")]
         public string OAuthToken { get; set; }
+
+        /// <summary>
+        /// Provides data about the user's current rate limiting.
+        /// </summary>
+        public class RateLimiting
+        {
+            /// <summary>
+            /// Gets the remaining number of requests until requests are denied.
+            /// </summary>
+            /// <value>The remaining requests.</value>
+            public int Remaining { get; internal set; }
+
+            /// <summary>
+            /// Gets the total number of requests allowed before requests are denied.
+            /// </summary>
+            /// <value>The total number of requests.</value>
+            public int Total { get; internal set; }
+
+            /// <summary>
+            /// Gets the date the remaining number of requests will be reset.
+            /// </summary>
+            /// <value>The reset date.</value>
+            public DateTime ResetDate { get; internal set; }
+        }
     }
 }
