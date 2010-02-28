@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandValidationException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="BaseObject.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -31,40 +31,30 @@
 // <author>Ricky Smith</author>
 // <email>ricky@digitally-born.com</email>
 // <date>2010-02-25</date>
-// <summary>An exception class indicating that required parameters were missing from a command.</summary>
+// <summary>The base class for all data objects.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+
+namespace Twitterizer.Core
 {
     using System;
-    using Twitterizer.Core;
+    using System.Diagnostics.CodeAnalysis;
+    using Twitterizer.OAuth;
 
     /// <summary>
-    /// An exception class indicating that required parameters were missing from a command.
+    /// The base object class
     /// </summary>
-    public class CommandValidationException : ApplicationException
+    public class BaseObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandValidationException"/> class.
+        /// Gets or sets information about the user's rate usage.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="methodName">Name of the method.</param>
-        public CommandValidationException(Type sender, string methodName)
-            : base("The command failed validation.")
-        {
-            this.Sender = sender;
-            this.MethodName = methodName;
-        }
+        /// <value>The rate limiting object.</value>
+        public RateLimiting RateLimiting { get; set; }
 
         /// <summary>
-        /// Gets or sets the command.
+        /// Gets or sets the request parameters.
         /// </summary>
-        /// <value>The command.</value>
-        public Type Sender { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the method.
-        /// </summary>
-        /// <value>The name of the method.</value>
-        public string MethodName { get; set; }
+        /// <value>The request parameters.</value>
+        internal OAuthTokens Tokens { get; set; }
     }
 }

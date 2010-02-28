@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandValidationException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="IPagedCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -30,41 +30,28 @@
 // </copyright>
 // <author>Ricky Smith</author>
 // <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
-// <summary>An exception class indicating that required parameters were missing from a command.</summary>
+// <date>2010-02-27</date>
+// <summary>The interface that indicates that the command results can be paged through.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+namespace Twitterizer.Core
 {
-    using System;
-    using Twitterizer.Core;
-
     /// <summary>
-    /// An exception class indicating that required parameters were missing from a command.
+    /// The IPagedCommand interface.
     /// </summary>
-    public class CommandValidationException : ApplicationException
+    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
+    internal interface IPagedCommand<T> : ICommand<T>
+        where T : BaseObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandValidationException"/> class.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="methodName">Name of the method.</param>
-        public CommandValidationException(Type sender, string methodName)
-            : base("The command failed validation.")
-        {
-            this.Sender = sender;
-            this.MethodName = methodName;
-        }
+        /// <value>The cursor.</value>
+        long Cursor { get; set; }
 
         /// <summary>
-        /// Gets or sets the command.
+        /// Clones this instance.
         /// </summary>
-        /// <value>The command.</value>
-        public Type Sender { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the method.
-        /// </summary>
-        /// <value>The name of the method.</value>
-        public string MethodName { get; set; }
+        /// <returns>A new instance of the <see cref="Twitterizer.Core.IPagedCommand"/> interface.</returns>
+        IPagedCommand<T> Clone();
     }
 }

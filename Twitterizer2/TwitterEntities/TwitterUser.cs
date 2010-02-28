@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="User.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterUser.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,6 +28,10 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <date>2010-02-26</date>
+// <summary>The TwitterUser class.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
@@ -73,9 +77,9 @@ namespace Twitterizer
         /// Gets the user.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The id.</param>
-        /// <returns></returns>
-        public static TwitterUser GetUser(OAuthRequestParameters requestTokens, long id)
+        /// <param name="id">The user id.</param>
+        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
+        public static TwitterUser GetUser(OAuthTokens requestTokens, long id)
         {
             Commands.UserShowCommand command = new Commands.UserShowCommand(requestTokens);
             command.UserId = id;
@@ -92,15 +96,30 @@ namespace Twitterizer
         /// <summary>
         /// Gets the user.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <returns></returns>
-        public static TwitterUser GetUser(OAuthRequestParameters requestTokens, string username)
+        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
+        public static TwitterUser GetUser(OAuthTokens tokens, string username)
         {
-            Commands.UserShowCommand command = new Twitterizer.Commands.UserShowCommand(requestTokens);
+            Commands.UserShowCommand command = new Twitterizer.Commands.UserShowCommand(tokens);
             command.Username = username;
 
             return Core.Performer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the user's followers.
+        /// </summary>
+        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUserCollection"/> class.</returns>
+        public TwitterUserCollection GetFollowers()
+        {
+            Commands.UserFollowersCommand command = new Commands.UserFollowersCommand(this.Tokens);
+            command.UserId = this.ID;
+
+            TwitterUserCollection result = Core.Performer<TwitterUserCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
         }
     }
 }

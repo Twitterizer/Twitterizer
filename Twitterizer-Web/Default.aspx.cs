@@ -42,11 +42,22 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Twitterizer;
 using Twitterizer.Commands;
+using Twitterizer.OAuth;
 
 public partial class _Default : System.Web.UI.Page 
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        OAuthUtility.GetRequestToken("GoNLHcoS2tkG0rJNBgwMfg", "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g");
+        string consumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
+        string consumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
+
+        // First, get the request token
+        OAuthUtility.TokenResponse authorizationTokens = OAuthUtility.GetRequestToken(consumerKey, consumerSecret, "http://localhost:59813/Twitterizer-Web/callback.aspx");
+
+        Response.Redirect(
+            string.Format(
+            "http://twitter.com/oauth/authorize?oauth_token={0}&oauth_callback={1}", 
+            authorizationTokens.Token, 
+            OAuthUtility.UrlEncode("http://localhost:59813/Twitterizer-Web/callback.aspx")));
     }
 }

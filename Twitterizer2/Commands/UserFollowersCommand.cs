@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserShowCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="UserFollowersCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -30,10 +30,9 @@
 // </copyright>
 // <author>Ricky Smith</author>
 // <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
-// <summary>The 'Show User' command class.</summary>
+// <date>2010-02-27</date>
+// <summary>The command to obtain followers of a user.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
@@ -41,53 +40,65 @@ namespace Twitterizer.Commands
     using Twitterizer.OAuth;
 
     /// <summary>
-    /// The User Show Command
+    /// The command to obtain followers of a user.
     /// </summary>
-    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
-    public class UserShowCommand : Core.BaseCommand<TwitterUser>
+    internal class UserFollowersCommand : 
+        Core.BaseCommand<TwitterUserCollection>, 
+        Core.IPagedCommand<TwitterUserCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/users/show.json";
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserShowCommand"/> class.
+        /// Initializes a new instance of the <see cref="UserFollowersCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public UserShowCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public UserFollowersCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/followers.json"), tokens)
         {
         }
         #endregion
 
+        #region API Parameters
+
         /// <summary>
-        /// Gets or sets the user ID.
+        /// Gets or sets the ID or screen name of the user for whom to request a list of followers. 
         /// </summary>
-        /// <value>The user ID.</value>
+        /// <value>The name of the id or screen.</value>
+        public string IdOrScreenName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the user for whom to request a list of followers. 
+        /// </summary>
+        /// <value>The user id.</value>
         public long UserId { get; set; }
-
+        
         /// <summary>
-        /// Gets or sets the name of the user.
+        /// Gets or sets the screen name of the user for whom to request a list of followers. 
         /// </summary>
-        /// <value>The name of the user.</value>
-        public string Username { get; set; }
-
+        /// <value>The name of the screen.</value>
+        public string ScreenName { get; set; }
+        
         /// <summary>
-        /// Gets or sets the name of the user ID or.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <value>The name of the user ID or.</value>
-        public string UserIdOrName { get; set; }
+        /// <value>The cursor.</value>
+        /// <remarks>
+        /// Optional. 
+        /// Breaks the results into pages. 
+        /// A single page contains 100 users.
+        /// </remarks>
+        public long Cursor { get; set; }
+
+        #endregion
 
         /// <summary>
-        /// Inits this instance.
+        /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("id", this.UserIdOrName);
+            this.RequestParameters.Add("id", this.IdOrScreenName);
             this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            this.RequestParameters.Add("screen_name", this.Username);
+            this.RequestParameters.Add("screen_name", this.ScreenName);
+            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -95,7 +106,24 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.UserIdOrName) || !string.IsNullOrEmpty(this.Username);
+            this.IsValid = this.UserId > 0 ||
+                !string.IsNullOrEmpty(this.IdOrScreenName) ||
+                !string.IsNullOrEmpty(this.ScreenName);
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>A cloned command object.</returns>
+        public Twitterizer.Core.IPagedCommand<TwitterUserCollection> Clone()
+        {
+            UserFollowersCommand newCommand = new UserFollowersCommand(this.Tokens);
+
+            newCommand.IdOrScreenName = this.IdOrScreenName;
+            newCommand.ScreenName = this.ScreenName;
+            newCommand.UserId = this.UserId;
+
+            return newCommand;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandValidationException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RateLimit.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -30,41 +30,34 @@
 // </copyright>
 // <author>Ricky Smith</author>
 // <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
-// <summary>An exception class indicating that required parameters were missing from a command.</summary>
+// <date>2010-02-27</date>
+// <summary>Contains information about the state of the user's available service usage.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+namespace Twitterizer.Core
 {
     using System;
-    using Twitterizer.Core;
 
     /// <summary>
-    /// An exception class indicating that required parameters were missing from a command.
+    /// Provides data about the user's current rate limiting.
     /// </summary>
-    public class CommandValidationException : ApplicationException
+    public class RateLimiting
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandValidationException"/> class.
+        /// Gets the remaining number of requests until requests are denied.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="methodName">Name of the method.</param>
-        public CommandValidationException(Type sender, string methodName)
-            : base("The command failed validation.")
-        {
-            this.Sender = sender;
-            this.MethodName = methodName;
-        }
+        /// <value>The remaining requests.</value>
+        public int Remaining { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the command.
+        /// Gets the total number of requests allowed before requests are denied.
         /// </summary>
-        /// <value>The command.</value>
-        public Type Sender { get; set; }
+        /// <value>The total number of requests.</value>
+        public int Total { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the name of the method.
+        /// Gets the date the remaining number of requests will be reset.
         /// </summary>
-        /// <value>The name of the method.</value>
-        public string MethodName { get; set; }
+        /// <value>The reset date.</value>
+        public DateTime ResetDate { get; internal set; }
     }
 }

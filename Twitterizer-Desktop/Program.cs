@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-
-namespace Twitterizer_Desktop
+﻿namespace Twitterizer_Desktop
 {
+    using System;
+    using System.Windows.Forms;
+
     /// <summary>
     /// The main program class
     /// </summary>

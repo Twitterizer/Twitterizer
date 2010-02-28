@@ -28,6 +28,10 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <date>2010-02-25</date>
+// <summary>The base class for all command classes.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Core
@@ -35,37 +39,29 @@ namespace Twitterizer.Core
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Runtime.Serialization.Json;
-    using System.Text;
-    using System.Web;
-    using System.Collections.Specialized;
     using Twitterizer.OAuth;
 
     /// <summary>
     /// The base command class.
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
-    public abstract class BaseCommand<T>
+    public abstract class BaseCommand<T> : ICommand<T>
         where T : BaseObject
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseCommand&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="method">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
-        /// <param name="oauthAccessToken">The OAuth access token.</param>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecretKey">The consumer secret key.</param>
-        protected BaseCommand(string method, Uri uri, Twitterizer.OAuth.OAuthRequestParameters requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        protected BaseCommand(string method, Uri uri, Twitterizer.OAuth.OAuthTokens tokens)
         {
             this.Uri = uri;
             this.HttpMethod = method;
-            this.RequestTokens = requestTokens;
+            this.Tokens = tokens;
         }
-        #endregion
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.
@@ -86,19 +82,19 @@ namespace Twitterizer.Core
         public string HttpMethod { get; set; }
 
         /// <summary>
+        /// Gets or sets the request parameters.
+        /// </summary>
+        /// <value>The request parameters.</value>
+        public Dictionary<string, string> RequestParameters { get; set; }
+
+        /// <summary>
         /// Gets or sets the request tokens.
         /// </summary>
         /// <value>The request tokens.</value>
-        public OAuthRequestParameters RequestTokens { get; set; }
+        internal OAuthTokens Tokens { get; set; }
 
         /// <summary>
-        /// Gets the request parameters.
-        /// </summary>
-        /// <value>The request parameters.</value>
-        public Dictionary<string, string> RequestParameters { get; private set; }
-
-        /// <summary>
-        /// Inits this instance.
+        /// Initializes the command.
         /// </summary>
         public abstract void Init();
 
@@ -118,7 +114,9 @@ namespace Twitterizer.Core
             T resultObject = default(T);
             try
             {
-                Stream responseStream = this.BuildRequest().GetResponse().GetResponseStream();
+                WebResponse webResponse = this.BuildRequest().GetResponse();
+
+                Stream responseStream = webResponse.GetResponseStream();
                 resultObject = (T)ds.ReadObject(responseStream);
                 responseStream.Close();
             }
@@ -126,7 +124,9 @@ namespace Twitterizer.Core
             {
                 throw wex.ToTwitterizerException();
             }
-            
+
+            resultObject.Tokens = this.Tokens;
+
             return resultObject;
         }
 
@@ -146,9 +146,11 @@ namespace Twitterizer.Core
                 this.Uri.AbsolutePath,
                 queryParameters,
                 this.HttpMethod,
-                this.RequestTokens.ConsumerKey,
-                this.RequestTokens.ConsumerSecret,
-                this.RequestTokens.AccessTokenSecret);
+                this.Tokens.ConsumerKey,
+                this.Tokens.ConsumerSecret,
+                this.Tokens.AccessToken,
+                this.Tokens.AccessTokenSecret,
+                this.Tokens.CallBackUrl);
             
             return request;
         }

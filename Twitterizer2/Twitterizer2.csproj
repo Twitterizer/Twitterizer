@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Twitterizer</RootNamespace>
-    <AssemblyName>Twitterizer</AssemblyName>
+    <AssemblyName>Twitterizer2</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -54,17 +54,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UserFollowersCommand.cs" />
+    <Compile Include="Core\ICommand.cs" />
+    <Compile Include="Core\IPagedCommand.cs" />
     <Compile Include="Commands\UserShowCommand.cs" />
-    <Compile Include="BaseObject.cs" />
+    <Compile Include="Core\BaseObject.cs" />
     <Compile Include="CommandValidationException.cs" />
-    <Compile Include="OAuth\OAuth.cs" />
-    <Compile Include="OAuth\OAuthBase.cs" />
-    <Compile Include="OAuth\OAuthRequestParameters.cs" />
+    <Compile Include="OAuth\OAuthUtility.cs" />
+    <Compile Include="OAuth\OAuthTokens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BaseCommand.cs" />
+    <Compile Include="Core\BaseCommand.cs" />
     <Compile Include="Performer.cs" />
+    <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
     <Compile Include="TwitterizerException.cs" />
-    <Compile Include="TwitterUser.cs" />
+    <Compile Include="TwitterEntities\TwitterUser.cs" />
     <Compile Include="WebExceptionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseObject.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="OAuthTokens.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,50 +28,47 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <date>2010-02-26</date>
+// <summary>Contains assembly information.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer.OAuth
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    /// The base object class
+    /// Request Parameters needed by requests authenticated with OAuth
     /// </summary>
-    public abstract class BaseObject
+    public class OAuthTokens
     {
         /// <summary>
-        /// Gets or sets the OAuth token.
+        /// Gets or sets the access token.
         /// </summary>
-        /// <value>The OAuth token.</value>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "OAuth")]
-        public string OAuthToken { get; set; }
+        /// <value>The access token.</value>
+        public string AccessToken { get; set; }
 
         /// <summary>
-        /// Provides data about the user's current rate limiting.
+        /// Gets or sets the access token secret.
         /// </summary>
-        public class RateLimiting
-        {
-            /// <summary>
-            /// Gets the remaining number of requests until requests are denied.
-            /// </summary>
-            /// <value>The remaining requests.</value>
-            public int Remaining { get; internal set; }
+        /// <value>The access token secret.</value>
+        public string AccessTokenSecret { get; set; }
 
-            /// <summary>
-            /// Gets the total number of requests allowed before requests are denied.
-            /// </summary>
-            /// <value>The total number of requests.</value>
-            public int Total { get; internal set; }
+        /// <summary>
+        /// Gets or sets the call back URL. (Optional.)
+        /// </summary>
+        /// <value>The call back URL.</value>
+        public string CallBackUrl { get; set; }
 
-            /// <summary>
-            /// Gets the date the remaining number of requests will be reset.
-            /// </summary>
-            /// <value>The reset date.</value>
-            public DateTime ResetDate { get; internal set; }
-        }
+        /// <summary>
+        /// Gets or sets the consumer key.
+        /// </summary>
+        /// <value>The consumer key.</value>
+        public string ConsumerKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the consumer secret.
+        /// </summary>
+        /// <value>The consumer secret.</value>
+        public string ConsumerSecret { get; set; }
     }
 }

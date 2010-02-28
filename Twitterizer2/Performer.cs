@@ -46,7 +46,7 @@ namespace Twitterizer.Core
         /// <returns>The parsed result of the action.</returns>
         /// <seealso cref="Twitterizer.Core.BaseCommand"/>
         /// <seealso cref="Twitterizer.Core.BaseObject"/>
-        public static T PerformAction(BaseCommand<T> command)
+        public static T PerformAction(ICommand<T> command)
         {
             command.Init();
             command.Validate();

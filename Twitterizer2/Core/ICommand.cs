@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="OAuthRequestParameters.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ICommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -30,45 +30,33 @@
 // </copyright>
 // <author>Ricky Smith</author>
 // <email>ricky@digitally-born.com</email>
-// <date>2010-02-26</date>
-// <summary>Contains assembly information.</summary>
+// <date>2010-02-27</date>
+// <summary>The interface that all valid commands must implement.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.OAuth
+namespace Twitterizer.Core
 {
     /// <summary>
-    /// Request Parameters needed by requests authenticated with OAuth
+    /// The ICommand interface.
     /// </summary>
-    public class OAuthRequestParameters
+    /// <typeparam name="T">The Type of the BaseObject that the command returns</typeparam>
+    internal interface ICommand<T>
+        where T : BaseObject
     {
         /// <summary>
-        /// Gets or sets the access token.
+        /// Initializes the command.
         /// </summary>
-        /// <value>The access token.</value>
-        public string AccessToken { get; set; }
+        void Init();
 
         /// <summary>
-        /// Gets or sets the access token secret.
+        /// Validates this instance.
         /// </summary>
-        /// <value>The access token secret.</value>
-        public string AccessTokenSecret { get; set; }
+        void Validate();
 
         /// <summary>
-        /// Gets or sets the call back URL. (Optional.)
+        /// Executes the command.
         /// </summary>
-        /// <value>The call back URL.</value>
-        public string CallBackUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the consumer key.
-        /// </summary>
-        /// <value>The consumer key.</value>
-        public string ConsumerKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the consumer secret.
-        /// </summary>
-        /// <value>The consumer secret.</value>
-        public string ConsumerSecret { get; set; }
+        /// <returns>The results of the command.</returns>
+        /// <see cref="Twitterizer.Core.BaseObject"/>
+        T ExecuteCommand();
     }
 }
