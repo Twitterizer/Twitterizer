@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-27</date>
 // <summary>The interface that indicates that the command results can be paged through.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core

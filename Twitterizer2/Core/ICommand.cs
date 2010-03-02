@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-27</date>
 // <summary>The interface that all valid commands must implement.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core
@@ -51,6 +49,12 @@ namespace Twitterizer.Core
         /// Validates this instance.
         /// </summary>
         void Validate();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is valid.
+        /// </summary>
+        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
+        bool IsValid { get; set; }
 
         /// <summary>
         /// Executes the command.

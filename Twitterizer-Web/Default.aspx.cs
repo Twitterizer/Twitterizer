@@ -29,9 +29,7 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
-// <summary>The default page for the sample web site.</summary>
+// <summary>The default example page.</summary>
 //-----------------------------------------------------------------------
 
 using System;
@@ -41,23 +39,25 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Twitterizer;
-using Twitterizer.Commands;
-using Twitterizer.OAuth;
 
-public partial class _Default : System.Web.UI.Page 
+public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string consumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
-        string consumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
+        string accessToken = "16144513-T2kniNvDyotQIPsDjYtNhI2ZUE6rN3kb7xqiJmMJl";
+        string accessTokenSecret = "tiv62s49tSEguq4X98gIN2NHk3kC5hUMxEGqcC4";
 
-        // First, get the request token
-        OAuthUtility.TokenResponse authorizationTokens = OAuthUtility.GetRequestToken(consumerKey, consumerSecret, "http://localhost:59813/Twitterizer-Web/callback.aspx");
+        OAuthTokens tokens = new OAuthTokens();
+        tokens.AccessToken = accessToken;
+        tokens.AccessTokenSecret = accessTokenSecret;
+        tokens.ConsumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
+        tokens.ConsumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
 
-        Response.Redirect(
-            string.Format(
-            "http://twitter.com/oauth/authorize?oauth_token={0}&oauth_callback={1}", 
-            authorizationTokens.Token, 
-            OAuthUtility.UrlEncode("http://localhost:59813/Twitterizer-Web/callback.aspx")));
+        //TwitterUser.GetUser(tokens, "DigitallyBorn");
+
+        //TwitterStatus status = new TwitterStatus(tokens);
+        //TwitterStatus newStatus = status.Update("My first post from #twitterizer version 2!");
+        
+        TwitterStatus newStatus = TwitterStatus.Update(tokens, "test");
     }
 }

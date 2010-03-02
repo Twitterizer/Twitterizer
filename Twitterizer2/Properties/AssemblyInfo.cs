@@ -44,7 +44,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Twitterizer")]
 [assembly: AssemblyCopyright("Copyright © Patrick 'Ricky' Smith 2010")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("US-en")]
 
 [assembly: CLSCompliant(true)]
 

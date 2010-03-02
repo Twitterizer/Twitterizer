@@ -29,12 +29,10 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-26</date>
 // <summary>Contains assembly information.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.OAuth
+namespace Twitterizer
 {
     /// <summary>
     /// Request Parameters needed by requests authenticated with OAuth

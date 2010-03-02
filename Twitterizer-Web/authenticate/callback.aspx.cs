@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Performer.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="callback.aspx.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,31 +28,34 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <summary>An example OAuth callback handler.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
-{
-    /// <summary>
-    /// The Performer Class
-    /// </summary>
-    /// <typeparam name="T">The business object the performer should return.</typeparam>
-    internal static class Performer<T>
-        where T : BaseObject
-    {
-        /// <summary>
-        /// Performs the action.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The parsed result of the action.</returns>
-        /// <seealso cref="Twitterizer.Core.BaseCommand"/>
-        /// <seealso cref="Twitterizer.Core.BaseObject"/>
-        public static T PerformAction(ICommand<T> command)
-        {
-            command.Init();
-            command.Validate();
-            T result = command.ExecuteCommand();
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Twitterizer;
 
-            return result;
-        }
+public partial class callback : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        string consumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
+        string consumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
+
+        OAuthUtility.TokenResponse tokens = OAuthUtility.GetAccessToken(
+            consumerKey, 
+            consumerSecret,
+            Request.QueryString["oauth_token"]);
+
+        this.AccessTokenLabel.Text = tokens.Token;
+        this.AccessTokenSecretLabel.Text = tokens.TokenSecret;
+        this.UserIdLabel.Text = tokens.UserID.ToString();
+        this.ScreenNameLabel.Text = tokens.Screenname;
     }
 }

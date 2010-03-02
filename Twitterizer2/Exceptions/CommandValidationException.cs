@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WebExceptionExtensions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CommandValidationException.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,24 +28,51 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <summary>Provides a means of reporting command validation failures.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
-    using System.Net;
+    using System;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The web exception extensions class
+    /// An exception class indicating that required parameters were missing from a command.
     /// </summary>
-    public static class WebExceptionExtensions
+    public class CommandValidationException : ApplicationException
     {
         /// <summary>
-        /// Converts the <see cref="System.Net.WebException"/> to a new <see cref="Twitterizer.TwitterizerException"/>
+        /// Initializes a new instance of the <see cref="CommandValidationException"/> class.
         /// </summary>
-        /// <param name="wex">The <see cref="System.Net.WebException"/> to be converted.</param>
-        /// <returns>A new <see cref="Twitterizer.TwitterizerException"/></returns>
-        public static TwitterizerException ToTwitterizerException(this WebException wex)
+        /// <param name="sender">The sender.</param>
+        public CommandValidationException(Type sender)
+            : base(string.Format("The command ({0}) failed validation.", sender.Name))
         {
-            return new TwitterizerException(wex);
+            this.Sender = sender;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandValidationException"/> class.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="methodName">Name of the method.</param>
+        public CommandValidationException(Type sender, string methodName)
+            : base(string.Format("The command ({0}) failed validation.", sender.Name))
+        {
+            this.Sender = sender;
+            this.MethodName = methodName;
+        }
+
+        /// <summary>
+        /// Gets or sets the command.
+        /// </summary>
+        /// <value>The command.</value>
+        public Type Sender { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the method.
+        /// </summary>
+        /// <value>The name of the method.</value>
+        public string MethodName { get; set; }
     }
 }

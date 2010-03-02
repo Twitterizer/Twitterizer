@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-27</date>
 // <summary>The collection class containing zero or more TwitterUser objects.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
@@ -40,7 +38,6 @@ namespace Twitterizer
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Twitterizer.Core;
-    using Twitterizer.OAuth;
 
     /// <summary>
     /// The TwitterUserCollection class.
@@ -51,6 +48,18 @@ namespace Twitterizer
         /// The collection of <see cref="Twitterizer.TwitterUser"/> objects this instance represents.
         /// </summary>
         private Collection<TwitterUser> baseCollection = new Collection<TwitterUser>();
+
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <value>The next page.</value>
+        public TwitterUserCollection NextPage
+        {
+            get
+            {
+                return this.GetNextPage();
+            }
+        }
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
@@ -132,7 +141,7 @@ namespace Twitterizer
             IPagedCommand<TwitterUserCollection> newCommand = this.Command.Clone(); 
             newCommand.Cursor = this.NextCursor;
 
-            TwitterUserCollection result = Core.Performer<TwitterUserCollection>.PerformAction(newCommand);
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
             result.Command = newCommand;
             return result;
         }
@@ -146,7 +155,7 @@ namespace Twitterizer
             IPagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
             newCommand.Cursor = this.PreviousCursor;
 
-            TwitterUserCollection result = Core.Performer<TwitterUserCollection>.PerformAction(newCommand);
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
             result.Command = newCommand;
             return result;
         }

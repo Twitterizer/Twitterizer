@@ -9,6 +9,10 @@
 <body>
     <form id="form1" runat="server">
     <div>
+    Access has been granted by: <asp:Label ID="ScreenNameLabel" runat="server" /> (User ID: <asp:Label ID="UserIdLabel" runat="server" /><br />
+    
+    Your access token is: <asp:Label ID="AccessTokenLabel" runat="server" /><br />
+    Your access token secret is: <asp:Label ID="AccessTokenSecretLabel" runat="server" /><br />
     
     </div>
     </form>

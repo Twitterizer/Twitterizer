@@ -29,22 +29,44 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-26</date>
 // <summary>The TwitterUser class.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
     using System;
     using System.Runtime.Serialization;
-    using Twitterizer.OAuth;
-
+    
     /// <summary>
     /// The class that represents a twitter user account
     /// </summary>
-    [Serializable, DataContract(Name = "user")]
+    [DataContract]
     public class TwitterUser : Core.BaseObject
     {
+        /// <summary>
+        /// OAuth access tokens
+        /// </summary>
+        private OAuthTokens Tokens;
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterUser"/> class.
+        /// </summary>
+        public TwitterUser() : base() 
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterUser"/> class.
+        /// </summary>
+        /// <param name="tokens">OAuth access tokens.</param>
+        public TwitterUser(OAuthTokens tokens) 
+            : base()
+        {
+            this.Tokens = tokens;
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Gets or sets the User ID.
         /// </summary>
@@ -74,6 +96,231 @@ namespace Twitterizer
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        /// <value>The status.</value>
+        [DataMember(Name = "status")]
+        public TwitterStatus Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created date.
+        /// </summary>
+        /// <value>The created date.</value>
+        [DataMember(Name = "created_at")]
+        public string CreatedDateString { get; set; }
+
+        /// <summary>
+        /// Gets the created date.
+        /// </summary>
+        /// <value>The created date.</value>
+        [IgnoreDataMember]
+        public DateTime CreatedDate
+        {
+            get
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, 0)
+                    .AddSeconds(double.Parse(this.CreatedDateString));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the time zone.
+        /// </summary>
+        /// <value>The time zone.</value>
+        [DataMember(Name = "time_zone")]
+        public string TimeZone { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the profile sidebar border.
+        /// </summary>
+        /// <value>The color of the profile sidebar border.</value>
+        [DataMember(Name = "profile_sidebar_border_color")]
+        public string ProfileSidebarBorderColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of followers.
+        /// </summary>
+        /// <value>The number of followers.</value>
+        [DataMember(Name = "followers_count")]
+        public int NumberOfFollowers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of statuses.
+        /// </summary>
+        /// <value>The number of statuses.</value>
+        [DataMember(Name = "statuses_count")]
+        public int NumberOfStatuses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the profile image URL.
+        /// </summary>
+        /// <value>The profile image URL.</value>
+        [DataMember(Name = "profile_image_url")]
+        public string ProfileImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of friends.
+        /// </summary>
+        /// <value>The number of friends.</value>
+        [DataMember(Name = "friends_count")]
+        public int NumberOfFriends { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is contributors enabled.
+        /// </summary>
+        /// <value>The is contributors enabled.</value>
+        [DataMember(Name = "contributors_enabled")]
+        public bool IsContributorsEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the language.
+        /// </summary>
+        /// <value>The language.</value>
+        [DataMember(Name = "lang")]
+        public string Language { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user receives notifications.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the user receives notifications; otherwise, <c>false</c>.
+        /// </value>
+        [DataMember(Name = "notifications", IsRequired = false)]
+        public bool? DoesReceiveNotifications { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the profile text.
+        /// </summary>
+        /// <value>The color of the profile text.</value>
+        [DataMember(Name = "profile_text_color")]
+        public string ProfileTextColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screenname.
+        /// </summary>
+        /// <value>The screenname.</value>
+        [DataMember(Name = "screen_name")]
+        public string Screenname { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the authenticated user is following this user.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the authenticated user is following this user; otherwise, <c>false</c>.
+        /// </value>
+        [DataMember(Name = "following", IsRequired = false)]
+        public bool? IsFollowing { get; set; }
+
+        /// <summary>
+        /// Gets or sets the profile background image URL.
+        /// </summary>
+        /// <value>The profile background image URL.</value>
+        [DataMember(Name = "profile_background_image_url")]
+        public string ProfileBackgroundImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of favorites.
+        /// </summary>
+        /// <value>The number of favorites.</value>
+        [DataMember(Name = "favourites_count")]
+        public int NumberOfFavorites { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this user is protected.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this user is protected; otherwise, <c>false</c>.
+        /// </value>
+        [DataMember(Name = "protected")]
+        public bool IsProtected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the profile link.
+        /// </summary>
+        /// <value>The color of the profile link.</value>
+        [DataMember(Name = "profile_link_color")]
+        public string ProfileLinkColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this user is geo enabled.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this user is geo enabled; otherwise, <c>false</c>.
+        /// </value>
+        [DataMember(Name = "geo_enabled", IsRequired = false)]
+        public bool? IsGeoEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this user's profile background image is tiled.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this user's profile background image is tiled; otherwise, <c>false</c>.
+        /// </value>
+        [DataMember(Name = "profile_background_tile", IsRequired = false)]
+        public bool? IsProfileBackgroundTiled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UTC offset.
+        /// </summary>
+        /// <value>The UTC offset.</value>
+        [DataMember(Name = "utc_offset")]
+        public double UtcOffset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the profile background.
+        /// </summary>
+        /// <value>The color of the profile background.</value>
+        [DataMember(Name = "profile_background_color")]
+        public string ProfileBackgroundColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's website URL.
+        /// </summary>
+        /// <value>The user's website URL.</value>
+        [DataMember(Name = "url")]
+        public string Url { get; set; }
+        #endregion
+
+        #region ShowUser Methods
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
+        public static TwitterUser GetUser(long id)
+        {
+            Commands.UserShowCommand command = new Commands.UserShowCommand(null);
+            command.UserId = id;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException(typeof(TwitterUser), "GetUser");
+            }
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
+        public static TwitterUser GetUser(string username)
+        {
+            Commands.UserShowCommand command = new Commands.UserShowCommand(null);
+            command.Username = username;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException(typeof(TwitterUser), "GetUser");
+            }
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
         /// Gets the user.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
@@ -90,7 +337,7 @@ namespace Twitterizer
                 throw new CommandValidationException(typeof(TwitterUser), "GetUser");
             }
 
-            return Core.Performer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
         /// <summary>
@@ -104,8 +351,9 @@ namespace Twitterizer
             Commands.UserShowCommand command = new Twitterizer.Commands.UserShowCommand(tokens);
             command.Username = username;
 
-            return Core.Performer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
+        #endregion
 
         /// <summary>
         /// Gets the user's followers.
@@ -116,7 +364,7 @@ namespace Twitterizer
             Commands.UserFollowersCommand command = new Commands.UserFollowersCommand(this.Tokens);
             command.UserId = this.ID;
 
-            TwitterUserCollection result = Core.Performer<TwitterUserCollection>.PerformAction(command);
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
             result.Command = command;
 
             return result;

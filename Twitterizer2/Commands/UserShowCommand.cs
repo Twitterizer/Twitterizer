@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
 // <summary>The 'Show User' command class.</summary>
 //-----------------------------------------------------------------------
 
@@ -38,7 +36,7 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
-    using Twitterizer.OAuth;
+    using Twitterizer;
 
     /// <summary>
     /// The User Show Command
@@ -62,6 +60,7 @@ namespace Twitterizer.Commands
         }
         #endregion
 
+        #region Properties
         /// <summary>
         /// Gets or sets the user ID.
         /// </summary>
@@ -79,15 +78,21 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The name of the user ID or.</value>
         public string UserIdOrName { get; set; }
+        #endregion
 
         /// <summary>
         /// Inits this instance.
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("id", this.UserIdOrName);
-            this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            this.RequestParameters.Add("screen_name", this.Username);
+            if (!string.IsNullOrEmpty(this.UserIdOrName))
+                this.RequestParameters.Add("id", this.UserIdOrName);
+            
+            if (this.UserId > 0)
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+            
+            if (!string.IsNullOrEmpty(this.Username))
+                this.RequestParameters.Add("screen_name", this.Username);
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandValidationException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="Performer.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,43 +28,37 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
-// <summary>An exception class indicating that required parameters were missing from a command.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
-{
-    using System;
-    using Twitterizer.Core;
 
+namespace Twitterizer.Core
+{
     /// <summary>
-    /// An exception class indicating that required parameters were missing from a command.
+    /// The Performer Class
     /// </summary>
-    public class CommandValidationException : ApplicationException
+    /// <typeparam name="T">The business object the performer should return.</typeparam>
+    internal static class CommandPerformer<T>
+        where T : BaseObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandValidationException"/> class.
+        /// Performs the action.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="methodName">Name of the method.</param>
-        public CommandValidationException(Type sender, string methodName)
-            : base("The command failed validation.")
+        /// <param name="command">The command.</param>
+        /// <returns>The parsed result of the action.</returns>
+        /// <seealso cref="Twitterizer.Core.BaseCommand"/>
+        /// <seealso cref="Twitterizer.Core.BaseObject"/>
+        public static T PerformAction(ICommand<T> command)
         {
-            this.Sender = sender;
-            this.MethodName = methodName;
+            command.Init();
+            command.Validate();
+
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException(command.GetType());
+            }
+
+            T result = command.ExecuteCommand();
+
+            return result;
         }
-
-        /// <summary>
-        /// Gets or sets the command.
-        /// </summary>
-        /// <value>The command.</value>
-        public Type Sender { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the method.
-        /// </summary>
-        /// <value>The name of the method.</value>
-        public string MethodName { get; set; }
     }
 }

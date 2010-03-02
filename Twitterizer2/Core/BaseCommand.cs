@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
 // <summary>The base class for all command classes.</summary>
 //-----------------------------------------------------------------------
 
@@ -38,10 +36,12 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Runtime.Serialization.Json;
-    using Twitterizer.OAuth;
+    using System.Text;
+    using Twitterizer;
 
     /// <summary>
     /// The base command class.
@@ -56,8 +56,9 @@ namespace Twitterizer.Core
         /// <param name="method">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        protected BaseCommand(string method, Uri uri, Twitterizer.OAuth.OAuthTokens tokens)
+        protected BaseCommand(string method, Uri uri, OAuthTokens tokens)
         {
+            this.RequestParameters = new Dictionary<string, string>();
             this.Uri = uri;
             this.HttpMethod = method;
             this.Tokens = tokens;
@@ -110,19 +111,45 @@ namespace Twitterizer.Core
         /// <see cref="Twitterizer.Core.BaseObject"/>
         public T ExecuteCommand()
         {
+            if (!this.IsValid)
+            {
+                throw new CommandValidationException(this.GetType());
+            }
+
             DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
+            
             T resultObject = default(T);
             try
             {
+                System.Net.ServicePointManager.Expect100Continue = false;
                 WebResponse webResponse = this.BuildRequest().GetResponse();
+                System.Net.ServicePointManager.Expect100Continue = true;
 
                 Stream responseStream = webResponse.GetResponseStream();
                 resultObject = (T)ds.ReadObject(responseStream);
+
+                ParseRateLimitHeaders(resultObject, webResponse);
+
                 responseStream.Close();
             }
             catch (WebException wex)
             {
-                throw wex.ToTwitterizerException();
+                HttpWebResponse response = wex.Response as HttpWebResponse;
+                if (response == null)
+                {
+                    throw;
+                }
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.BadRequest:
+                        throw new TwitterizerException("The request was invalid. It is possible you are being rate limited.", wex);
+                    case HttpStatusCode.Unauthorized:
+                        throw new AuthenticationFailedException(wex);
+                }
+
+                // We don't know what the issue is
+                throw new TwitterizerException(wex);
             }
 
             resultObject.Tokens = this.Tokens;
@@ -137,22 +164,91 @@ namespace Twitterizer.Core
         private HttpWebRequest BuildRequest()
         {
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            foreach (string item in this.Uri.Query.Split('&'))
+            
+            // Add all of the request parameters
+            foreach (KeyValuePair<string, string> item in this.RequestParameters)
             {
-                queryParameters.Add(item.Split('=')[0], item.Split('=')[1]);
+                queryParameters.Add(item.Key, item.Value);
             }
 
-            HttpWebRequest request = OAuthUtility.CreateOAuthRequest(
-                this.Uri.AbsolutePath,
-                queryParameters,
-                this.HttpMethod,
-                this.Tokens.ConsumerKey,
-                this.Tokens.ConsumerSecret,
-                this.Tokens.AccessToken,
-                this.Tokens.AccessTokenSecret,
-                this.Tokens.CallBackUrl);
-            
+            // If we have OAuth tokens, return a new OAuth request
+            if (this.Tokens != null)
+            {
+                return OAuthUtility.CreateOAuthRequest(
+                    this.Uri.AbsoluteUri,
+                    queryParameters,
+                    this.HttpMethod,
+                    this.Tokens.ConsumerKey,
+                    this.Tokens.ConsumerSecret,
+                    this.Tokens.AccessToken,
+                    this.Tokens.AccessTokenSecret,
+                    this.Tokens.CallBackUrl);
+            }
+
+            HttpWebRequest request;
+
+            StringBuilder queryStringBuilder = new StringBuilder();
+            foreach (KeyValuePair<string, string> item in queryParameters)
+            {
+                if (queryStringBuilder.Length > 0)
+                    queryStringBuilder.Append("&");
+
+                queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
+            }
+
+            if (this.HttpMethod.ToUpper() == "GET")
+            {
+                string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("ANON GET: {0}", fullPathAndQuery));
+#endif
+                request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
+                request.Method = "GET";
+            }
+            else
+            {
+                request = (HttpWebRequest)WebRequest.Create(this.Uri);
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    postDataWriter.Write(queryStringBuilder.ToString());
+                    postDataWriter.Close();
+                }
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("ANON POST: {1}\n{0}", this.Uri, queryStringBuilder.ToString()));
+#endif
+            }
+
             return request;
+        }
+
+        /// <summary>
+        /// Parses the rate limit headers.
+        /// </summary>
+        /// <param name="resultObject">The result object.</param>
+        /// <param name="webResponse">The web response.</param>
+        private static void ParseRateLimitHeaders(T resultObject, WebResponse webResponse)
+        {
+            resultObject.RateLimiting = new RateLimiting();
+
+            if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Limit")))
+            {
+                resultObject.RateLimiting.Total = int.Parse(webResponse.Headers.Get("X-RateLimit-Limit"));
+            }
+
+            if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Remaining")))
+            {
+                resultObject.RateLimiting.Remaining = int.Parse(webResponse.Headers.Get("X-RateLimit-Remaining"));
+            }
+
+            if (!string.IsNullOrEmpty(webResponse.Headers["X-RateLimit-Reset"]))
+            {
+                resultObject.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
+                    .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"))); ;
+            }
         }
     }
 }

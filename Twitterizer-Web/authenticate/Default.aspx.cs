@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterizerException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,50 +28,35 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <email>ricky@digitally-born.com</email>
+// <date>2010-02-25</date>
+// <summary>The default page for the sample web site.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Twitterizer;
+using Twitterizer.Commands;
+
+public partial class _Default : System.Web.UI.Page 
 {
-    using System.Net;
-
-    /// <summary>
-    /// The Twitterizer Exception
-    /// </summary>
-    /// <seealso cref="System.Net.WebException"/>
-    public class TwitterizerException : WebException
+    protected void Page_Load(object sender, EventArgs e)
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        public TwitterizerException()
-        {
-        }
+        string consumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
+        string consumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public TwitterizerException(WebException wex)
-            : base(wex.Message, wex)
-        {
-        }
-        #endregion
+        // First, get the request token
+        OAuthUtility.TokenResponse authorizationTokens = OAuthUtility.GetRequestToken(
+            consumerKey, 
+            consumerSecret);
 
-        /// <summary>
-        /// Gets the response that the remote host returned.
-        /// </summary>
-        /// <value></value>
-        /// <returns>If a response is available from the Internet resource, a <see cref="T:System.Net.WebResponse"/> instance that contains the error response from an Internet resource; otherwise, null.</returns>
-        public new WebResponse Response
-        {
-            get
-            {
-                if (this.InnerException == null)
-                    return null;
-
-                return ((WebException)this.InnerException).Response;
-            }
-        }
+        this.RequestTokenLabel.Text = authorizationTokens.Token;
+        this.GetAccessHyperLink.NavigateUrl = 
+            string.Format("http://twitter.com/oauth/authorize?oauth_token={0}", authorizationTokens.Token);
     }
 }

@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-27</date>
 // <summary>Contains information about the state of the user's available service usage.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core

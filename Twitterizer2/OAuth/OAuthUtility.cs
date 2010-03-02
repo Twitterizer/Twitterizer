@@ -29,8 +29,6 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-26</date>
 // <summary>Provides simple methods to simplify OAuth interaction.</summary>
 //-----------------------------------------------------------------------
 
@@ -55,6 +53,7 @@ namespace Twitterizer
         /// </summary>
         private const string SignatureType = "HMAC-SHA1";
 
+        #region Public Methods
         /// <summary>
         /// Gets a new OAuth request token from the twitter api.
         /// </summary>
@@ -77,12 +76,10 @@ namespace Twitterizer
         {
             TokenResponse response = new TokenResponse();
 
-            string path = "http://twitter.com/oauth/request_token";
-
             try
             {
                 HttpWebRequest request = CreateOAuthRequest(
-                    path,
+                    "http://twitter.com/oauth/request_token",
                     null,
                     "GET",
                     consumerKey,
@@ -121,13 +118,90 @@ namespace Twitterizer
         /// Gets an access token.
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="requestToken">The request token.</param>
-        /// <returns>A <see cref="Twitterizer.OAuthUtility.TokenResponse"/> containing the requested tokens.</returns>
-        public static TokenResponse GetAccessToken(string consumerKey, string requestToken)
+        /// <returns>
+        /// A <see cref="Twitterizer.OAuthUtility.TokenResponse"/> containing the requested tokens.
+        /// </returns>
+        public static TokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
         {
             TokenResponse response = new TokenResponse();
+
+            try
+            {
+                HttpWebRequest request = CreateOAuthRequest(
+                    "http://twitter.com/oauth/access_token",
+                    null,
+                    "GET",
+                    consumerKey,
+                    consumerSecret,
+                    requestToken,
+                    string.Empty,
+                    string.Empty);
+
+                request.Method = "GET";
+
+                WebResponse webResponse = request.GetResponse();
+
+                string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
+
+                response.Token = Regex.Match(responseBody, @"oauth_token=([^&]+)").Groups[1].Value;
+                response.TokenSecret = Regex.Match(responseBody, @"oauth_token_secret=([^&]+)").Groups[1].Value;
+                response.UserID = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value);
+                response.Screenname = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
+            }
+            catch (WebException wex)
+            {
+                string httpResponse = new StreamReader(wex.Response.GetResponseStream()).ReadToEnd();
+
+                if (string.IsNullOrEmpty(httpResponse))
+                {
+                    throw;
+                }
+
+                throw new ApplicationException(httpResponse, wex);
+            }
+
             return response;
         }
+
+        /// <summary>
+        /// This is a different Url Encode implementation since the default .NET one outputs the percent encoding in lower case.
+        /// While this is not a problem with the percent encoding spec, it is used in upper case throughout OAuth
+        /// </summary>
+        /// <param name="value">The value to Url encode</param>
+        /// <returns>Returns a Url encoded string</returns>
+        public static string UrlEncode(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+            }
+
+            char[] unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~".ToCharArray();
+
+            StringBuilder result = new StringBuilder();
+
+            foreach (char symbol in value)
+            {
+                if (unreservedChars.Contains(symbol))
+                {
+                    result.Append(symbol);
+                    continue;
+                }
+
+                if (symbol == ' ')
+                {
+                    result.Append("%2520");
+                    continue;
+                }
+
+                result.AppendFormat("%{0:X2}", (int)symbol);
+            }
+
+            return result.ToString();
+        }
+        #endregion
 
         /// <summary>
         /// Creates the OAuth request.
@@ -188,47 +262,90 @@ namespace Twitterizer
                 consumerSecret,
                 tokenSecret);
 
-            StringBuilder uriBuilder = new StringBuilder();
+            StringBuilder authHeaderBuilder = new StringBuilder("Authorization: OAuth");
 
-            var queryStringParameters = from p in newParameters
-                                        where !(p.Key.Contains("oauth_") && p.Key.EndsWith("_secret"))
-                                        orderby p.Key, p.Value
-                                        select p;
-
-            foreach (KeyValuePair<string, string> item in queryStringParameters)
+            foreach (var item in newParameters
+                .Where(p => p.Key.Contains("oauth_") && !p.Key.EndsWith("_secret"))
+                .OrderBy(p=> p.Key)
+                .ThenBy(p=>UrlEncode(p.Value)))
             {
-                uriBuilder.AppendFormat(
-                    "{0}={1}&",
-                    item.Key,
+                authHeaderBuilder.AppendFormat(
+                    ",{0}=\"{1}\"",
+                    UrlEncode(item.Key),
                     UrlEncode(item.Value));
             }
 
-            // Strip off the trailing ampersand
-            uriBuilder.Remove(uriBuilder.Length - 1, 1);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(string.Format("OAUTH HEADER: {0}", authHeaderBuilder.ToString()));
+#endif
 
             HttpWebRequest request = null;
 
             if (httpMethod == "GET")
             {
+                StringBuilder uriBuilder = new StringBuilder();
+
+                var queryStringParameters = from p in newParameters
+                                            where !p.Key.Contains("oauth_")
+                                            orderby p.Key, p.Value
+                                            select p;
+
+                foreach (KeyValuePair<string, string> item in queryStringParameters)
+                {
+                    if (uriBuilder.Length > 0)
+                    {
+                        uriBuilder.Append("&");
+                    }
+
+                    uriBuilder.AppendFormat(
+                        "{0}={1}&",
+                        item.Key,
+                        UrlEncode(item.Value));
+                }
+
                 uriBuilder.Insert(0, string.Format("{0}?", baseUrl));
 
                 request = (HttpWebRequest)WebRequest.Create(uriBuilder.ToString());
-
                 request.Method = httpMethod;
+                request.Headers.Add(authHeaderBuilder.ToString());
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("OAUTH GET: {0}", uriBuilder.ToString()));
+#endif
             }
             else if (httpMethod == "POST")
             {
-                request = (HttpWebRequest)WebRequest.Create(uriBuilder.ToString());
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (KeyValuePair<string, string> item in newParameters.Where(p => !p.Key.Contains("oauth_")))
+                {
+                    if (stringBuilder.Length > 0)
+                    {
+                        stringBuilder.Append("&");
+                    }
+
+                    stringBuilder.AppendFormat(
+                        "{0}={1}",
+                        item.Key,
+                        UrlEncode(item.Value));
+                }
+
+                string postData = stringBuilder.ToString();
+
+                request = (HttpWebRequest)WebRequest.Create(baseUrl);
 
                 request.Method = httpMethod;
                 request.ContentType = "application/x-www-form-urlencoded";
+                request.Headers.Add(authHeaderBuilder.ToString());
 
-                using (Stream requestStream = request.GetRequestStream())
+                using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    byte[] data = Encoding.UTF8.GetBytes(uriBuilder.ToString());
-                    requestStream.Write(data, 0, data.Length);
-                    requestStream.Close();
+                    postDataWriter.Write(Encoding.UTF8.GetBytes(postData));
+                    postDataWriter.Close();
                 }
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("OAUTH POST: {0}\nPOST DATA: {1}", baseUrl, postData));
+#endif
             }
             else
             {
@@ -236,6 +353,31 @@ namespace Twitterizer
             }
 
             return request;
+        }
+
+        /// <summary>
+        /// Flattens the and encode parameters.
+        /// </summary>
+        /// <param name="queryStringParameters">The query string parameters.</param>
+        /// <returns></returns>
+        private static string FlattenAndEncodeParameters(IEnumerable<KeyValuePair<string, string>> queryStringParameters)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (KeyValuePair<string, string> item in queryStringParameters)
+            {
+                if (stringBuilder.Length > 0)
+                {
+                    stringBuilder.Append("&");
+                }
+
+                stringBuilder.AppendFormat(
+                    "{0}={1}",
+                    item.Key,
+                    UrlEncode(item.Value));
+            }
+
+            return stringBuilder.ToString();
         }
 
         /// <summary>
@@ -303,18 +445,19 @@ namespace Twitterizer
 
             // Add the signature to the oauth parameters
             parameters.Add("oauth_signature", result);
-        }
 
-        /// <summary>
-        /// Sorts the parameters.
-        /// </summary>
-        /// <param name="parameters">The parameters.</param>
-        private static void SortParameters(Dictionary<string, string> parameters)
-        {
-            parameters
-                .OrderBy(p => p.Key)
-                .ThenBy(p => p.Value)
-                .ToDictionary(p => p.Key, p => p.Value);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("----------- OAUTH SIGNATURE GENERATION -----------");
+            System.Diagnostics.Debug.WriteLine(string.Format("url.PathAndQuery = \"{0}\"", url.PathAndQuery));
+            System.Diagnostics.Debug.WriteLine(string.Format("httpMethod = \"{0}\"", httpMethod));
+            System.Diagnostics.Debug.WriteLine(string.Format("consumerSecret = \"{0}\"", consumerSecret));
+            System.Diagnostics.Debug.WriteLine(string.Format("tokenSecret = \"{0}\"", tokenSecret));
+            System.Diagnostics.Debug.WriteLine(string.Format("normalizedUrl = \"{0}\"", normalizedUrl));
+            System.Diagnostics.Debug.WriteLine(string.Format("signatureBase = \"{0}\"", signatureBase));
+            System.Diagnostics.Debug.WriteLine(string.Format("key = \"{0}\"", key));
+            System.Diagnostics.Debug.WriteLine(string.Format("signature = \"{0}\"", result));
+            System.Diagnostics.Debug.WriteLine("--------- END OAUTH SIGNATURE GENERATION ----------");
+#endif
         }
 
         /// <summary>
@@ -332,37 +475,6 @@ namespace Twitterizer
 
             normalizedUrl += url.AbsolutePath;
             return normalizedUrl;
-        }
-
-        /// <summary>
-        /// This is a different Url Encode implementation since the default .NET one outputs the percent encoding in lower case.
-        /// While this is not a problem with the percent encoding spec, it is used in upper case throughout OAuth
-        /// </summary>
-        /// <param name="value">The value to Url encode</param>
-        /// <returns>Returns a Url encoded string</returns>
-        public static string UrlEncode(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return string.Empty;
-            }
-
-            char[] unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~".ToCharArray();
-
-            StringBuilder result = new StringBuilder();
-
-            foreach (char symbol in value)
-            {
-                if (unreservedChars.Contains(symbol))
-                {
-                    result.Append(symbol);
-                    continue;
-                }
-
-                result.Append('%' + String.Format("{0:X2}", (int)symbol));
-            }
-
-            return result.ToString();
         }
 
         /// <summary>
@@ -408,6 +520,18 @@ namespace Twitterizer
             /// </summary>
             /// <value>The token secret.</value>
             public string TokenSecret { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user ID.
+            /// </summary>
+            /// <value>The user ID.</value>
+            public long UserID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the screenname.
+            /// </summary>
+            /// <value>The screenname.</value>
+            public string Screenname { get; set; }
         }
     }
 }

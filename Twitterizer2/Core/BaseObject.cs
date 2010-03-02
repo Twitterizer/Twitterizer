@@ -29,32 +29,31 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
 // <summary>The base class for all data objects.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Core
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using Twitterizer.OAuth;
+    using System.Runtime.Serialization;
+    using Twitterizer;
 
     /// <summary>
     /// The base object class
     /// </summary>
+    [DataContract]
     public class BaseObject
     {
         /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
+        [IgnoreDataMember]
         public RateLimiting RateLimiting { get; set; }
 
         /// <summary>
         /// Gets or sets the request parameters.
         /// </summary>
         /// <value>The request parameters.</value>
+        [IgnoreDataMember]
         internal OAuthTokens Tokens { get; set; }
     }
 }
