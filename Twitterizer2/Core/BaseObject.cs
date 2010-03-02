@@ -40,7 +40,7 @@ namespace Twitterizer.Core
     /// The base object class
     /// </summary>
     [DataContract]
-    public class BaseObject
+    public class BaseObject : ITwitterObject
     {
         /// <summary>
         /// Gets or sets information about the user's rate usage.
@@ -54,6 +54,6 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The oauth tokens.</value>
         [IgnoreDataMember]
-        internal OAuthTokens Tokens { get; set; }
+        public OAuthTokens Tokens { get; set; }
     }
 }

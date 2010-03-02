@@ -38,7 +38,7 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The Type of the BaseObject that the command returns</typeparam>
     internal interface ICommand<T>
-        where T : BaseObject
+        where T : ITwitterObject
     {
         /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.

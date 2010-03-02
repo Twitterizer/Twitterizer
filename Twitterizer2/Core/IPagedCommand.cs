@@ -38,13 +38,24 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
     internal interface IPagedCommand<T> : ICommand<T>
-        where T : BaseObject
+        where T : ITwitterObject
     {
         /// <summary>
         /// Gets or sets the cursor.
         /// </summary>
         /// <value>The cursor.</value>
+        /// <remarks>
+        /// Optional. 
+        /// Breaks the results into pages. 
+        /// A single page contains 100 users.
+        /// </remarks>
         long Cursor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the page number to obtain.
+        /// </summary>
+        /// <value>The page number.</value>
+        int Page { get; set; }
 
         /// <summary>
         /// Clones this instance.

@@ -48,7 +48,7 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
     public abstract class BaseCommand<T> : ICommand<T>
-        where T : BaseObject
+        where T : ITwitterObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseCommand&lt;T&gt;"/> class.
@@ -58,6 +58,16 @@ namespace Twitterizer.Core
         /// <param name="tokens">The request tokens.</param>
         protected BaseCommand(string method, Uri uri, OAuthTokens tokens)
         {
+            if (string.IsNullOrEmpty(method))
+            {
+                throw new ArgumentNullException("method");
+            }
+
+            if (uri == null)
+            {
+                throw new ArgumentNullException("uri");
+            }
+
             this.RequestParameters = new Dictionary<string, string>();
             this.Uri = uri;
             this.HttpMethod = method;
@@ -98,13 +108,13 @@ namespace Twitterizer.Core
         /// Gets or sets the request parameters.
         /// </summary>
         /// <value>The request parameters.</value>
-        public Dictionary<string, string> RequestParameters { get; set; }
+        public Dictionary<string, string> RequestParameters { get; private set; }
 
         /// <summary>
         /// Gets or sets the request tokens.
         /// </summary>
         /// <value>The request tokens.</value>
-        internal OAuthTokens Tokens { get; set; }
+        internal OAuthTokens Tokens { get; private set; }
 
         /// <summary>
         /// Initializes the command.
@@ -125,7 +135,10 @@ namespace Twitterizer.Core
         {
             if (!this.IsValid)
             {
-                throw new CommandValidationException(this.GetType());
+                throw new CommandValidationException<T>()
+                {
+                    Command = this
+                };
             }
 
             // Prepare the query parameters
@@ -198,7 +211,7 @@ namespace Twitterizer.Core
                 }
 
                 // We don't know what the issue is, throw a generic exception
-                throw new TwitterizerException(wex);
+                throw new TwitterizerException(wex.Message, wex);
             }
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
@@ -218,18 +231,18 @@ namespace Twitterizer.Core
 
             if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Limit")))
             {
-                resultObject.RateLimiting.Total = int.Parse(webResponse.Headers.Get("X-RateLimit-Limit"));
+                resultObject.RateLimiting.Total = int.Parse(webResponse.Headers.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Remaining")))
             {
-                resultObject.RateLimiting.Remaining = int.Parse(webResponse.Headers.Get("X-RateLimit-Remaining"));
+                resultObject.RateLimiting.Remaining = int.Parse(webResponse.Headers.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(webResponse.Headers["X-RateLimit-Reset"]))
             {
                 resultObject.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset")));
+                    .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
 
@@ -254,22 +267,32 @@ namespace Twitterizer.Core
                 queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
             }
 
-            if (this.HttpMethod.ToUpper() == "GET")
+            if (this.HttpMethod.ToUpper(CultureInfo.InvariantCulture) == "GET")
             {
                 string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("ANON GET: {0}", fullPathAndQuery));
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        "ANON GET: {0}", 
+                        fullPathAndQuery));
 #endif
                 request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
                 request.Method = "GET";
-                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+                request.UserAgent = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Twitterizer/{0}", 
+                    Information.AssemblyVersion()); 
             }
             else
             {
                 request = (HttpWebRequest)WebRequest.Create(this.Uri);
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
-                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+                request.UserAgent = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Twitterizer/{0}", 
+                    Information.AssemblyVersion()); 
 
                 using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
                 {
@@ -278,7 +301,12 @@ namespace Twitterizer.Core
                 }
 
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("ANON POST: {1}\n{0}", this.Uri, queryStringBuilder.ToString()));
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        CultureInfo.CurrentCulture, 
+                        "ANON POST: {1}\n{0}", 
+                        this.Uri, 
+                        queryStringBuilder.ToString()));
 #endif
             }
 

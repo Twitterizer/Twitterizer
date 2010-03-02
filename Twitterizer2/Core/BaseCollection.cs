@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AuthenticationFailedException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="BaseCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,52 +29,32 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The exception that indicates an API called failed due to authentication failure.</summary>
+// <summary>The base class for object collections.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer
+namespace Twitterizer.Core
 {
-    using System;
-    using System.IO;
-    using System.Net;
+    using System.Collections.ObjectModel;
+    using System.Runtime.Serialization;
 
     /// <summary>
-    /// The exception that indicates an API called failed due to authentication failure.
+    /// The base class for object collections.
     /// </summary>
-    [Serializable]
-    public class AuthenticationFailedException : TwitterizerException
+    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
+    public abstract class BaseCollection<T> : Collection<T>, ITwitterObject
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
+        /// Gets or sets information about the user's rate usage.
         /// </summary>
-        public AuthenticationFailedException() 
-            : base()
-        {
-        }
+        /// <value>The rate limiting object.</value>
+        [IgnoreDataMember]
+        public RateLimiting RateLimiting { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
+        /// Gets or sets the oauth tokens.
         /// </summary>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public AuthenticationFailedException(WebException wex)
-            : this("Authentication failed.", wex)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public AuthenticationFailedException(string message, WebException wex)
-            : base(message, wex)
-        {
-            HttpWebResponse response = (HttpWebResponse)wex.Response;
-            this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-            this.ParseRateLimitHeaders(response);
-        }
-        #endregion
+        /// <value>The oauth tokens.</value>
+        [IgnoreDataMember]
+        public OAuthTokens Tokens { get; set; }
     }
 }

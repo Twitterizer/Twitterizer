@@ -33,13 +33,8 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Twitterizer;
 using System.Configuration;
+using Twitterizer;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -47,15 +42,11 @@ public partial class _Default : System.Web.UI.Page
     {
         OAuthTokens tokens = new OAuthTokens();
         tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"]; ;
+        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
         tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
         tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
 
-        //TwitterUser.GetUser(tokens, "DigitallyBorn");
-
-        TwitterStatus status = new TwitterStatus(tokens);
-        TwitterStatus newStatus = status.Update("Another awesome test from #twitterizer version 2!");
-
-        newStatus.Delete();
+        myGridView.DataSource = TwitterUser.GetTimeline(tokens);
+        myGridView.DataBind();
     }
 }

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandValidationException.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterStatusCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,56 +29,83 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>Provides a means of reporting command validation failures.</summary>
+// <summary>The collection of TwitterStatus objects.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer
 {
     using System;
-using System.Globalization;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Runtime.Serialization;
     using Twitterizer.Core;
 
     /// <summary>
-    /// An exception class indicating that required parameters were missing from a command.
+    /// The TwitterStatusCollection class.
     /// </summary>
-    [Serializable]
-    public class CommandValidationException<T> : Exception
-        where T : ITwitterObject
+    public class TwitterStatusCollection : BaseCollection<TwitterStatus>
     {
-        #region Constructors
-        public CommandValidationException()
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <value>The next page.</value>
+        [IgnoreDataMember]
+        public TwitterStatusCollection NextPage
         {
-            // Add any type-specific logic, and supply the default message.
+            get
+            {
+                return this.GetNextPage();
+            }
         }
-
-        public CommandValidationException(string message)
-            : base(message)
-        {
-            // Add any type-specific logic.
-        }
-        public CommandValidationException(string message, Exception innerException) :
-            base(message, innerException)
-        {
-            // Add any type-specific logic for inner exceptions.
-        }
-        protected CommandValidationException(SerializationInfo info,
-           StreamingContext context)
-            : base(info, context)
-        {
-            // Implement type-specific serialization constructor logic.
-        }
-        #endregion
 
         /// <summary>
-        /// Gets or sets the name of the method.
+        /// Gets or sets the next cursor.
         /// </summary>
-        /// <value>The name of the method.</value>
-        public string MethodName { get; set; }
+        /// <value>The next cursor.</value>
+        [IgnoreDataMember]
+        public int NextCursor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the previous cursor.
+        /// </summary>
+        /// <value>The previous cursor.</value>
+        [IgnoreDataMember]
+        public int PreviousCursor { get; set; }
 
         /// <summary>
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        public BaseCommand<T> Command { get; set; }
+        [IgnoreDataMember]
+        internal IPagedCommand<TwitterStatusCollection> Command { get; set; }
+
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public TwitterStatusCollection GetNextPage()
+        {
+            IPagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
+            newCommand.Page += 1;
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
+            result.Command = newCommand;
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the previous page.
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public TwitterStatusCollection GetPreviousPage()
+        {
+            IPagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
+            newCommand.Page -= 1;
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
+            result.Command = newCommand;
+            return result;
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The business object the performer should return.</typeparam>
     internal static class CommandPerformer<T>
-        where T : BaseObject
+        where T : ITwitterObject
     {
         /// <summary>
         /// Performs the action.
@@ -55,7 +55,10 @@ namespace Twitterizer.Core
 
             if (!command.IsValid)
             {
-                throw new CommandValidationException(command.GetType());
+                throw new CommandValidationException<T>()
+                {
+                    Command = command as BaseCommand<T>
+                };
             }
 
             T result = command.ExecuteCommand();

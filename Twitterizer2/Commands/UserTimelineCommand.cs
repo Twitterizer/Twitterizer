@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserFollowersCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="UserTimelineCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,34 +29,33 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain followers of a user.</summary>
+// <summary>The user timeline command.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
-    using Twitterizer;
 
     /// <summary>
-    /// The command to obtain followers of a user.
+    /// The user timeline command.
     /// </summary>
-    internal class UserFollowersCommand : 
-        Core.BaseCommand<TwitterUserCollection>, 
-        Core.IPagedCommand<TwitterUserCollection>
+    internal class UserTimelineCommand : 
+        Core.BaseCommand<TwitterStatusCollection>, 
+        Core.IPagedCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserFollowersCommand"/> class.
+        /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public UserFollowersCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/followers.json"), tokens)
+        public UserTimelineCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/user_timeline.json"), tokens)
         {
         }
         #endregion
 
         #region API Parameters
-
         /// <summary>
         /// Gets or sets the ID or screen name of the user for whom to request a list of followers. 
         /// </summary>
@@ -68,13 +67,31 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The user id.</value>
         public long UserId { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the screen name of the user for whom to request a list of followers. 
         /// </summary>
         /// <value>The name of the screen.</value>
         public string ScreenName { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the id of the status to obtain all statuses posted thereafter.
+        /// </summary>
+        /// <value>The status id.</value>
+        public long SinceId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max status id to obtain.
+        /// </summary>
+        /// <value>The max status id.</value>
+        public long MaxId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the count of statuses to obtain.
+        /// </summary>
+        /// <value>The count of statuses to obtain.</value>
+        public int Count { get; set; }
+
         /// <summary>
         /// Gets or sets the cursor.
         /// </summary>
@@ -91,7 +108,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The page number.</value>
         public int Page { get; set; }
-
         #endregion
 
         /// <summary>
@@ -99,10 +115,20 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("id", this.IdOrScreenName);
-            this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            this.RequestParameters.Add("screen_name", this.ScreenName);
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+            if (!string.IsNullOrEmpty(this.IdOrScreenName))
+                this.RequestParameters.Add("id", this.IdOrScreenName);
+            if (this.UserId > 0)
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
+            if (!string.IsNullOrEmpty(this.ScreenName))
+                this.RequestParameters.Add("screen_name", this.ScreenName);
+            if (this.Count > 0)
+                this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
+            if (this.SinceId > 0)
+                this.RequestParameters.Add("since_id", this.SinceId.ToString(CultureInfo.InvariantCulture));
+            if (this.MaxId > 0)
+                this.RequestParameters.Add("max_id", this.MaxId.ToString(CultureInfo.InvariantCulture));
+            if (this.Page > 0)
+                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -112,22 +138,27 @@ namespace Twitterizer.Commands
         {
             this.IsValid = this.UserId > 0 ||
                 !string.IsNullOrEmpty(this.IdOrScreenName) ||
-                !string.IsNullOrEmpty(this.ScreenName);
+                !string.IsNullOrEmpty(this.ScreenName) ||
+                this.Tokens != null;
         }
 
         /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        public Twitterizer.Core.IPagedCommand<TwitterUserCollection> Clone()
+        public Core.IPagedCommand<TwitterStatusCollection> Clone()
         {
-            UserFollowersCommand newCommand = new UserFollowersCommand(this.Tokens);
-
-            newCommand.IdOrScreenName = this.IdOrScreenName;
-            newCommand.ScreenName = this.ScreenName;
-            newCommand.UserId = this.UserId;
-
-            return newCommand;
+            return new UserTimelineCommand(this.Tokens)
+            {
+                IdOrScreenName = this.IdOrScreenName,
+                ScreenName = this.ScreenName,
+                UserId = this.UserId,
+                Page = this.Page,
+                Cursor = this.Cursor,
+                Count = this.Count,
+                MaxId = this.MaxId,
+                SinceId = this.SinceId
+            };
         }
     }
 }

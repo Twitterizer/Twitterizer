@@ -36,6 +36,7 @@ namespace Twitterizer
     using System;
     using System.Runtime.Serialization;
     using Twitterizer.Core;
+    using System.Globalization;
 
     /// <summary>
     /// The TwitterStatus class.
@@ -95,8 +96,7 @@ namespace Twitterizer
         {
             get
             {
-                return new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(this.CreatedDateString));
+                return DateTime.Parse(this.CreatedDateString, CultureInfo.InvariantCulture);
             }
         }
 
@@ -108,11 +108,11 @@ namespace Twitterizer
         public string Source { get; set; }
 
         /// <summary>
-        /// Gets or sets the screenname the status is in reply to.
+        /// Gets or sets the screenName the status is in reply to.
         /// </summary>
-        /// <value>The screenname.</value>
+        /// <value>The screenName.</value>
         [DataMember(Name = "in_reply_to_screen_name")]
-        public string InReplyToScreenname { get; set; }
+        public string InReplyToScreenName { get; set; }
 
         /// <summary>
         /// Gets or sets the user id the status is in reply to.
@@ -199,7 +199,11 @@ namespace Twitterizer
             command.Validate();
             if (!command.IsValid)
             {
-                throw new CommandValidationException(typeof(TwitterStatus), "Update");
+                throw new CommandValidationException<TwitterStatus>()
+                {
+                    Command = command,
+                    MethodName = "Update"
+                };
             }
 
             return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
@@ -213,12 +217,15 @@ namespace Twitterizer
         {
             Commands.DeleteStatusCommand command = new Commands.DeleteStatusCommand(this.Tokens);
             command.Id = this.Id;
-            command.Tokens = this.Tokens;
 
             command.Validate();
             if (!command.IsValid)
             {
-                throw new CommandValidationException(typeof(TwitterStatus), "Delete");
+                throw new CommandValidationException<TwitterStatus>()
+                {
+                    Command = command,
+                    MethodName = "Delete"
+                };
             }
 
             return Core.CommandPerformer<TwitterStatus>.PerformAction(command);

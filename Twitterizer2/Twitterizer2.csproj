@@ -57,10 +57,13 @@
     <Compile Include="Commands\DeleteStatusCommand.cs" />
     <Compile Include="Commands\UpdateStatusCommand.cs" />
     <Compile Include="Commands\UserFollowersCommand.cs" />
+    <Compile Include="Commands\UserTimelineCommand.cs" />
+    <Compile Include="Core\BaseCollection.cs" />
     <Compile Include="Core\ICommand.cs" />
     <Compile Include="Core\IPagedCommand.cs" />
     <Compile Include="Commands\UserShowCommand.cs" />
     <Compile Include="Core\BaseObject.cs" />
+    <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
     <Compile Include="Information.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
+    <Compile Include="TwitterEntities\TwitterStatusCollection.cs" />
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="TwitterEntities\TwitterUser.cs" />

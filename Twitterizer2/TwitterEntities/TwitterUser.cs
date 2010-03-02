@@ -35,6 +35,7 @@ namespace Twitterizer
 {
     using System;
     using System.Runtime.Serialization;
+    using System.Globalization;
     
     /// <summary>
     /// The class that represents a twitter user account
@@ -114,7 +115,7 @@ namespace Twitterizer
             get
             {
                 return new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(this.CreatedDateString));
+                    .AddSeconds(double.Parse(this.CreatedDateString, CultureInfo.InvariantCulture));
             }
         }
 
@@ -147,11 +148,11 @@ namespace Twitterizer
         public int NumberOfStatuses { get; set; }
 
         /// <summary>
-        /// Gets or sets the profile image URL.
+        /// Gets or sets the profile image location.
         /// </summary>
-        /// <value>The profile image URL.</value>
+        /// <value>The profile image location.</value>
         [DataMember(Name = "profile_image_url")]
-        public string ProfileImageUrl { get; set; }
+        public string ProfileImageLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the number of friends.
@@ -207,11 +208,11 @@ namespace Twitterizer
         public bool? IsFollowing { get; set; }
 
         /// <summary>
-        /// Gets or sets the profile background image URL.
+        /// Gets or sets the profile background image location.
         /// </summary>
-        /// <value>The profile background image URL.</value>
+        /// <value>The profile background image location.</value>
         [DataMember(Name = "profile_background_image_url")]
-        public string ProfileBackgroundImageUrl { get; set; }
+        public string ProfileBackgroundImageLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the number of favorites.
@@ -255,11 +256,12 @@ namespace Twitterizer
         public bool? IsProfileBackgroundTiled { get; set; }
 
         /// <summary>
-        /// Gets or sets the UTC offset.
+        /// Gets or sets the time zone offset.
         /// </summary>
-        /// <value>The UTC offset.</value>
+        /// <value>The time zone offset.</value>
+        /// <remarks>Also called the Coordinated Universal Time (UTC) offset.</remarks>
         [DataMember(Name = "utc_offset")]
-        public double UtcOffset { get; set; }
+        public double TimeZoneOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the profile background.
@@ -269,14 +271,15 @@ namespace Twitterizer
         public string ProfileBackgroundColor { get; set; }
 
         /// <summary>
-        /// Gets or sets the user's website URL.
+        /// Gets or sets the user's website.
         /// </summary>
-        /// <value>The user's website URL.</value>
+        /// <value>The website address.</value>
         [DataMember(Name = "url")]
-        public string Url { get; set; }
+        public string Website { get; set; }
         #endregion
 
-        #region ShowUser Methods
+        #region Static Methods
+        #region GetUser
         /// <summary>
         /// Gets the user.
         /// </summary>
@@ -290,7 +293,11 @@ namespace Twitterizer
             command.Validate();
             if (!command.IsValid)
             {
-                throw new CommandValidationException(typeof(TwitterUser), "GetUser");
+                throw new CommandValidationException<TwitterUser>()
+                {
+                    Command = command,
+                    MethodName = "GetUser"
+                };
             }
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
@@ -309,7 +316,11 @@ namespace Twitterizer
             command.Validate();
             if (!command.IsValid)
             {
-                throw new CommandValidationException(typeof(TwitterUser), "GetUser");
+                throw new CommandValidationException<TwitterUser>()
+                {
+                    Command = command,
+                    MethodName = "GetUser"
+                };
             }
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
@@ -329,7 +340,11 @@ namespace Twitterizer
             command.Validate();
             if (!command.IsValid)
             {
-                throw new CommandValidationException(typeof(TwitterUser), "GetUser");
+                throw new CommandValidationException<TwitterUser>()
+                {
+                    Command = command,
+                    MethodName = "GetUser"
+                };
             }
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
@@ -350,6 +365,88 @@ namespace Twitterizer
         }
         #endregion
 
+        #region GetTimeLine
+        /// <summary>
+        /// Gets the user time line.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userIdOrScreenName">Name of the user id or screen.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection GetTimeline(OAuthTokens tokens, string userIdOrScreenName)
+        {
+            Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens);
+            command.IdOrScreenName = userIdOrScreenName;
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the user time line.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection GetTimeline(OAuthTokens tokens)
+        {
+            return GetTimeline(tokens, string.Empty, -1, -1, -1, -1);
+        }
+
+        /// <summary>
+        /// Gets the user time line.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <param name="userIdOrScreenName">Name of the user id or screen.</param>
+        /// <param name="sinceId">The min status id.</param>
+        /// <param name="maxId">The max status id.</param>
+        /// <param name="count">The number of statuses to return.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection GetTimeline(OAuthTokens tokens, string userIdOrScreenName, long sinceId, long maxId, int count, int page)
+        {
+            Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens);
+            command.IdOrScreenName = userIdOrScreenName;
+            command.Count = count;
+            command.MaxId = maxId;
+            command.Page = page;
+            command.SinceId = sinceId;
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+        #endregion
+
+        /// <summary>
+        /// Gets the followers.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterUserCollection GetFollowers(OAuthTokens tokens, long userId)
+        {
+            TwitterUser user = new TwitterUser()
+            {
+                Tokens = tokens,
+                ID = userId
+            };
+
+            return user.GetFollowers();
+        }
+        #endregion
+
+        #region Non-Static Members
+        #region GetFollowers
         /// <summary>
         /// Gets the user's followers.
         /// </summary>
@@ -364,5 +461,18 @@ namespace Twitterizer
 
             return result;
         }
+        #endregion
+
+        #region GetTimeLine
+        /// <summary>
+        /// Gets the user time line.
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public TwitterStatusCollection GetTimeline()
+        {
+            return GetTimeline(this.Tokens);
+        }
+        #endregion
+        #endregion
     }
 }

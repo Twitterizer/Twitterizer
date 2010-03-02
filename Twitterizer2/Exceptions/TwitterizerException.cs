@@ -39,48 +39,51 @@ namespace Twitterizer
     using System.Runtime.Serialization.Json;
     using System.Text;
     using Twitterizer.Core;
+    using System.Globalization;
 
     /// <summary>
     /// The Twitterizer Exception
     /// </summary>
     /// <seealso cref="System.Net.WebException"/>
+    [Serializable]
     public class TwitterizerException : WebException
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
         /// </summary>
-        public TwitterizerException() 
-            : base()
+        public TwitterizerException()
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public TwitterizerException(WebException wex)
-            : this(wex.Message, wex)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public TwitterizerException(string message, WebException wex)
+        public TwitterizerException(string message)
             : base(message)
         {
-            HttpWebResponse response = (HttpWebResponse)wex.Response;
+        }
 
-            this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
+        public TwitterizerException(string message, Exception innerException) :
+            base(message, innerException)
+        {
+            if (innerException.GetType() == typeof(WebException))
+            {
+                WebException webException = (WebException)innerException;
 
-            this.ParseRateLimitHeaders(response);
+                HttpWebResponse response = (HttpWebResponse)webException.Response;
 
-            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
-            wex.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
-            this.ErrorDetails = ds.ReadObject(wex.Response.GetResponseStream()) as TwitterErrorDetails;
+                this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                this.ParseRateLimitHeaders(response);
+
+                DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
+                webException.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
+                this.ErrorDetails = ds.ReadObject(webException.Response.GetResponseStream()) as TwitterErrorDetails;
+            }
+        }
+
+        protected TwitterizerException(SerializationInfo info,
+           StreamingContext context)
+            : base(info, context)
+        {
         }
         #endregion
 
@@ -159,47 +162,47 @@ namespace Twitterizer
         /// Parses the rate limit headers.
         /// </summary>
         /// <param name="response">The response.</param>
-        protected void ParseRateLimitHeaders(HttpWebResponse response)
+        protected void ParseRateLimitHeaders(WebResponse response)
         {
             this.RateLimiting = new RateLimiting();
 
             if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Limit")))
             {
-                this.RateLimiting.Total = int.Parse(response.Headers.Get("X-RateLimit-Limit"));
+                this.RateLimiting.Total = int.Parse(response.Headers.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Remaining")))
             {
-                this.RateLimiting.Remaining = int.Parse(response.Headers.Get("X-RateLimit-Remaining"));
+                this.RateLimiting.Remaining = int.Parse(response.Headers.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
             {
                 this.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(response.Headers.Get("X-RateLimit-Reset")));
+                    .AddSeconds(double.Parse(response.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
+    }
+
+    /// <summary>
+    /// Twitter Error Details class
+    /// </summary>
+    /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
+    [DataContract]
+    public class TwitterErrorDetails
+    {
+        /// <summary>
+        /// Gets or sets the request path.
+        /// </summary>
+        /// <value>The request path.</value>
+        [DataMember(Name = "request")]
+        public string RequestPath { get; set; }
 
         /// <summary>
-        /// Twitter Error Details class
+        /// Gets or sets the error message.
         /// </summary>
-        /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
-        [DataContract]
-        public class TwitterErrorDetails
-        {
-            /// <summary>
-            /// Gets or sets the request path.
-            /// </summary>
-            /// <value>The request path.</value>
-            [DataMember(Name = "request")]
-            public string RequestPath { get; set; }
-
-            /// <summary>
-            /// Gets or sets the error message.
-            /// </summary>
-            /// <value>The error message.</value>
-            [DataMember(Name = "error")]
-            public string ErrorMessage { get; set; }
-        }
+        /// <value>The error message.</value>
+        [DataMember(Name = "error")]
+        public string ErrorMessage { get; set; }
     }
 }
