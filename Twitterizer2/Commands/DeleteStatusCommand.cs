@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UpdateStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,7 +29,7 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to update the user's status. (a.k.a. post a new tweet)</summary>
+// <summary>The command class to delete a status update.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
@@ -38,67 +38,38 @@ namespace Twitterizer.Commands
     using System.Globalization;
 
     /// <summary>
-    /// The command to update the user's status. (a.k.a. post a new tweet)
+    /// The command class to delete a status update.
     /// </summary>
-    public class UpdateStatusCommand : Core.BaseCommand<TwitterStatus>
+    public class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/update.json";
+        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        public UpdateStatusCommand(OAuthTokens requestTokens)
-            : base("POST", new Uri(Path), requestTokens)
+        public DeleteStatusCommand(OAuthTokens requestTokens)
+            : base("POST", requestTokens)
         {
         }
         #endregion
 
-        #region Properties
         /// <summary>
-        /// Gets or sets the status text.
-        /// </summary>
-        /// <value>The status text.</value>
-        public string Text { get; set; }
-
-        /// <summary>
-        /// Gets or sets the status id the new status is in reply to.
+        /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public long InReplyToStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the latitude.
-        /// </summary>
-        /// <value>The latitude.</value>
-        public string Latitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the longitude.
-        /// </summary>
-        /// <value>The longitude.</value>
-        public string Longitude { get; set; }
-        #endregion
+        public long Id { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("status", this.Text);
-
-            if (this.InReplyToStatusId > 0)
-                this.RequestParameters.Add("in_reply_to_status_id", this.InReplyToStatusId.ToString(CultureInfo.CurrentCulture));
-
-            if (!string.IsNullOrEmpty(this.Latitude))
-                this.RequestParameters.Add("lat", this.Latitude);
-
-            if (!string.IsNullOrEmpty(this.Longitude))
-                this.RequestParameters.Add("long", this.Longitude);
+            this.Uri = new Uri(string.Format(CultureInfo.InvariantCulture, Path, this.Id));
         }
 
         /// <summary>
@@ -106,8 +77,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            // TODO: Ricky - Add Latitude and Longitude value validation
-            this.IsValid = !string.IsNullOrEmpty(this.Text);
+            this.IsValid = this.Id > 0;
         }
     }
 }

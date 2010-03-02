@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Performer.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CommandPerformer.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,12 +28,14 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <summary>The command performer.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Core
 {
     /// <summary>
-    /// The Performer Class
+    /// The Command Performer Class
     /// </summary>
     /// <typeparam name="T">The business object the performer should return.</typeparam>
     internal static class CommandPerformer<T>

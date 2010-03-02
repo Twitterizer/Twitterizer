@@ -40,17 +40,15 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Twitterizer;
+using System.Configuration;
 
 public partial class callback : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string consumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
-        string consumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
-
         OAuthUtility.TokenResponse tokens = OAuthUtility.GetAccessToken(
-            consumerKey, 
-            consumerSecret,
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
             Request.QueryString["oauth_token"]);
 
         this.AccessTokenLabel.Text = tokens.Token;

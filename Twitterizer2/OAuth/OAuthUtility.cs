@@ -78,7 +78,7 @@ namespace Twitterizer
 
             try
             {
-                HttpWebRequest request = CreateOAuthRequest(
+                HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
                     "http://twitter.com/oauth/request_token",
                     null,
                     "GET",
@@ -87,10 +87,6 @@ namespace Twitterizer
                     null,
                     null,
                     callBackUrl);
-
-                request.Method = "GET";
-
-                WebResponse webResponse = request.GetResponse();
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
@@ -129,7 +125,7 @@ namespace Twitterizer
 
             try
             {
-                HttpWebRequest request = CreateOAuthRequest(
+                HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
                     "http://twitter.com/oauth/access_token",
                     null,
                     "GET",
@@ -138,10 +134,6 @@ namespace Twitterizer
                     requestToken,
                     string.Empty,
                     string.Empty);
-
-                request.Method = "GET";
-
-                WebResponse webResponse = request.GetResponse();
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
@@ -190,12 +182,6 @@ namespace Twitterizer
                     continue;
                 }
 
-                if (symbol == ' ')
-                {
-                    result.Append("%2520");
-                    continue;
-                }
-
                 result.AppendFormat("%{0:X2}", (int)symbol);
             }
 
@@ -215,7 +201,7 @@ namespace Twitterizer
         /// <param name="tokenSecret">The token secret.</param>
         /// <param name="callBackUri">The call back URI.</param>
         /// <returns>A new instance of the <see cref="System.Net.HttpWebRequest"/> class.</returns>
-        internal static HttpWebRequest CreateOAuthRequest(
+        internal static HttpWebResponse BuildOAuthRequestAndGetResponse(
             string baseUrl,
             Dictionary<string, string> parameters,
             string httpMethod,
@@ -225,49 +211,141 @@ namespace Twitterizer
             string tokenSecret,
             string callBackUri)
         {
-            Dictionary<string, string> newParameters = new Dictionary<string, string>();
+            Dictionary<string, string> combinedParameters = new Dictionary<string, string>();
 
             if (parameters != null)
             {
                 // Copy the given parameters into a new collection, as to not modify the source collection
                 foreach (KeyValuePair<string, string> item in parameters)
                 {
-                    newParameters.Add(item.Key, item.Value);
+                    combinedParameters.Add(item.Key, item.Value);
                 }
             }
 
             // Add the OAuth parameters
-            newParameters.Add("oauth_version", "1.0");
-            newParameters.Add("oauth_nonce", GenerateNonce());
-            newParameters.Add("oauth_timestamp", GenerateTimeStamp());
-            newParameters.Add("oauth_signature_method", "HMAC-SHA1");
-            newParameters.Add("oauth_consumer_key", consumerKey);
-            newParameters.Add("oauth_consumer_secret", consumerSecret);
-            newParameters.Add("oauth_token", token);
+            combinedParameters.Add("oauth_version", "1.0");
+            combinedParameters.Add("oauth_nonce", GenerateNonce());
+            combinedParameters.Add("oauth_timestamp", GenerateTimeStamp());
+            combinedParameters.Add("oauth_signature_method", "HMAC-SHA1");
+            combinedParameters.Add("oauth_consumer_key", consumerKey);
+            combinedParameters.Add("oauth_consumer_secret", consumerSecret);
+            combinedParameters.Add("oauth_token", token);
 
             if (!string.IsNullOrEmpty(tokenSecret))
             {
-                newParameters.Add("oauth_token_secret", tokenSecret);
+                combinedParameters.Add("oauth_token_secret", tokenSecret);
             }
 
             if (!string.IsNullOrEmpty(callBackUri))
             {
-                newParameters.Add("oauth_callback", callBackUri);
+                combinedParameters.Add("oauth_callback", callBackUri);
             }
 
             AddSignatureToParameters(
                 new Uri(baseUrl),
-                newParameters,
+                combinedParameters,
                 httpMethod,
                 consumerSecret,
                 tokenSecret);
 
-            StringBuilder authHeaderBuilder = new StringBuilder("Authorization: OAuth");
+            HttpWebResponse response;
+
+            if (httpMethod == "GET")
+            {
+                string querystring = GenerateGetQueryString(combinedParameters);
+
+                if (!string.IsNullOrEmpty(querystring))
+                {
+                    baseUrl = string.Concat(baseUrl, "?", querystring);
+                }
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
+                request.Method = httpMethod;
+                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("OAUTH GET: {0}", baseUrl));
+#endif
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            else if (httpMethod == "POST")
+            {
+                StringBuilder requestParametersBuilder = new StringBuilder();
+
+                foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_")))
+                {
+                    if (requestParametersBuilder.Length > 0)
+                    {
+                        requestParametersBuilder.Append("&");
+                    }
+
+                    requestParametersBuilder.AppendFormat(
+                        "{0}={1}",
+                        item.Key,
+                        UrlEncode(item.Value));
+                }
+
+                baseUrl = string.Concat(baseUrl, "?", requestParametersBuilder.ToString());
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
+                request.Method = httpMethod;
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
+                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            else
+            {
+                throw new ArgumentException("The HTTP method supplied is not supported.", "httpMethod");
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Generates the query string for HTTP GET requests.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>
+        /// A string of all parameters prepared for use in a querystring.
+        /// </returns>
+        private static string GenerateGetQueryString(Dictionary<string, string> parameters)
+        {
+            StringBuilder queryStringBuilder = new StringBuilder();
+            foreach (var item in from p in parameters
+                                 where !(p.Key.Contains("oauth_") && p.Key.EndsWith("_secret"))
+                                 orderby p.Key, p.Value
+                                 select p)
+            {
+                if (queryStringBuilder.Length > 0)
+                {
+                    queryStringBuilder.Append("&");
+                }
+
+                queryStringBuilder.AppendFormat(
+                    "{0}={1}",
+                    item.Key,
+                    UrlEncode(item.Value));
+            }
+
+            return queryStringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Generates the authorization header.
+        /// </summary>
+        /// <param name="newParameters">The new parameters.</param>
+        /// <returns>A string value of all OAuth parameters formatted for use in the Authorization HTTP header.</returns>
+        private static string GenerateAuthorizationHeader(Dictionary<string, string> newParameters)
+        {
+            StringBuilder authHeaderBuilder = new StringBuilder("OAuth realm=\"Twitter API\"");
 
             foreach (var item in newParameters
-                .Where(p => p.Key.Contains("oauth_") && !p.Key.EndsWith("_secret"))
-                .OrderBy(p=> p.Key)
-                .ThenBy(p=>UrlEncode(p.Value)))
+                .Where(p => p.Key.Contains("oauth_") &&
+                    !p.Key.EndsWith("_secret") &&
+                    p.Key != "oauth_signature" &&
+                    !string.IsNullOrEmpty(p.Value))
+                .OrderBy(p => p.Key)
+                .ThenBy(p => UrlEncode(p.Value)))
             {
                 authHeaderBuilder.AppendFormat(
                     ",{0}=\"{1}\"",
@@ -275,91 +353,20 @@ namespace Twitterizer
                     UrlEncode(item.Value));
             }
 
+            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", UrlEncode(newParameters["oauth_signature"]));
+
 #if DEBUG
             System.Diagnostics.Debug.WriteLine(string.Format("OAUTH HEADER: {0}", authHeaderBuilder.ToString()));
 #endif
-
-            HttpWebRequest request = null;
-
-            if (httpMethod == "GET")
-            {
-                StringBuilder uriBuilder = new StringBuilder();
-
-                var queryStringParameters = from p in newParameters
-                                            where !p.Key.Contains("oauth_")
-                                            orderby p.Key, p.Value
-                                            select p;
-
-                foreach (KeyValuePair<string, string> item in queryStringParameters)
-                {
-                    if (uriBuilder.Length > 0)
-                    {
-                        uriBuilder.Append("&");
-                    }
-
-                    uriBuilder.AppendFormat(
-                        "{0}={1}&",
-                        item.Key,
-                        UrlEncode(item.Value));
-                }
-
-                uriBuilder.Insert(0, string.Format("{0}?", baseUrl));
-
-                request = (HttpWebRequest)WebRequest.Create(uriBuilder.ToString());
-                request.Method = httpMethod;
-                request.Headers.Add(authHeaderBuilder.ToString());
-
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("OAUTH GET: {0}", uriBuilder.ToString()));
-#endif
-            }
-            else if (httpMethod == "POST")
-            {
-                StringBuilder stringBuilder = new StringBuilder();
-
-                foreach (KeyValuePair<string, string> item in newParameters.Where(p => !p.Key.Contains("oauth_")))
-                {
-                    if (stringBuilder.Length > 0)
-                    {
-                        stringBuilder.Append("&");
-                    }
-
-                    stringBuilder.AppendFormat(
-                        "{0}={1}",
-                        item.Key,
-                        UrlEncode(item.Value));
-                }
-
-                string postData = stringBuilder.ToString();
-
-                request = (HttpWebRequest)WebRequest.Create(baseUrl);
-
-                request.Method = httpMethod;
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Headers.Add(authHeaderBuilder.ToString());
-
-                using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    postDataWriter.Write(Encoding.UTF8.GetBytes(postData));
-                    postDataWriter.Close();
-                }
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("OAUTH POST: {0}\nPOST DATA: {1}", baseUrl, postData));
-#endif
-            }
-            else
-            {
-                throw new ArgumentException("The HTTP method supplied is not supported.", "httpMethod");
-            }
-
-            return request;
+            string authorizationHeader = authHeaderBuilder.ToString();
+            return authorizationHeader;
         }
 
         /// <summary>
         /// Flattens the and encode parameters.
         /// </summary>
         /// <param name="queryStringParameters">The query string parameters.</param>
-        /// <returns></returns>
+        /// <returns>A string of all parameters prepared for using in a query string.</returns>
         private static string FlattenAndEncodeParameters(IEnumerable<KeyValuePair<string, string>> queryStringParameters)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -492,14 +499,17 @@ namespace Twitterizer
 
             foreach (var item in paramsSorted)
             {
+                if (parameterString.Length > 0)
+                {
+                    parameterString.Append("&");
+                }
+
                 parameterString.Append(
                     string.Format(
-                        "{0}={1}&", 
-                        item.Key, 
-                        item.Value));
+                        "{0}={1}", 
+                        UrlEncode(item.Key), 
+                        UrlEncode(item.Value)));
             }
-
-            parameterString.Remove(parameterString.Length - 1, 1);
 
             return UrlEncode(parameterString.ToString());
         }

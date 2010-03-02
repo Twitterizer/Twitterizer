@@ -39,25 +39,23 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Twitterizer;
+using System.Configuration;
 
 public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string accessToken = "16144513-T2kniNvDyotQIPsDjYtNhI2ZUE6rN3kb7xqiJmMJl";
-        string accessTokenSecret = "tiv62s49tSEguq4X98gIN2NHk3kC5hUMxEGqcC4";
-
         OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = accessToken;
-        tokens.AccessTokenSecret = accessTokenSecret;
-        tokens.ConsumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
-        tokens.ConsumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
+        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
+        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"]; ;
+        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
+        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
 
         //TwitterUser.GetUser(tokens, "DigitallyBorn");
 
-        //TwitterStatus status = new TwitterStatus(tokens);
-        //TwitterStatus newStatus = status.Update("My first post from #twitterizer version 2!");
-        
-        TwitterStatus newStatus = TwitterStatus.Update(tokens, "test");
+        TwitterStatus status = new TwitterStatus(tokens);
+        TwitterStatus newStatus = status.Update("Another awesome test from #twitterizer version 2!");
+
+        newStatus.Delete();
     }
 }

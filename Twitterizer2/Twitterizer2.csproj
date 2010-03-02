@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DeleteStatusCommand.cs" />
     <Compile Include="Commands\UpdateStatusCommand.cs" />
     <Compile Include="Commands\UserFollowersCommand.cs" />
     <Compile Include="Core\ICommand.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
+    <Compile Include="Information.cs" />
     <Compile Include="OAuth\OAuthUtility.cs" />
     <Compile Include="OAuth\OAuthTokens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

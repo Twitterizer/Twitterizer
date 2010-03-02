@@ -42,18 +42,16 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Twitterizer;
 using Twitterizer.Commands;
+using System.Configuration;
 
 public partial class _Default : System.Web.UI.Page 
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string consumerKey = "GoNLHcoS2tkG0rJNBgwMfg";
-        string consumerSecret = "9j4hqpKxntK6IbrrsG1RX69XzU3RssJE5rDKtWq9g";
-
         // First, get the request token
         OAuthUtility.TokenResponse authorizationTokens = OAuthUtility.GetRequestToken(
-            consumerKey, 
-            consumerSecret);
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
 
         this.RequestTokenLabel.Text = authorizationTokens.Token;
         this.GetAccessHyperLink.NavigateUrl = 

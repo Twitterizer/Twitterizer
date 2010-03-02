@@ -42,11 +42,6 @@ namespace Twitterizer
     [DataContract]
     public class TwitterUser : Core.BaseObject
     {
-        /// <summary>
-        /// OAuth access tokens
-        /// </summary>
-        private OAuthTokens Tokens;
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterUser"/> class.
@@ -166,9 +161,9 @@ namespace Twitterizer
         public int NumberOfFriends { get; set; }
 
         /// <summary>
-        /// Gets or sets the is contributors enabled.
+        /// Gets or sets a value indicating whether the user has enabled contributors access to his or her account.
         /// </summary>
-        /// <value>The is contributors enabled.</value>
+        /// <value>The is contributors enabled value.</value>
         [DataMember(Name = "contributors_enabled")]
         public bool IsContributorsEnabled { get; set; }
 

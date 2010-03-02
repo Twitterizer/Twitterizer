@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseObject.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="Information.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,31 +29,23 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for all data objects.</summary>
+// <summary>The information class which gives general information about the assembly.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
-{
-    using System.Runtime.Serialization;
-    using Twitterizer;
 
+namespace Twitterizer
+{
     /// <summary>
-    /// The base object class
+    /// The information class which gives general information about the assembly.
     /// </summary>
-    [DataContract]
-    public class BaseObject
+    public static class Information
     {
         /// <summary>
-        /// Gets or sets information about the user's rate usage.
+        /// Obtains the current assembly version.
         /// </summary>
-        /// <value>The rate limiting object.</value>
-        [IgnoreDataMember]
-        public RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        [IgnoreDataMember]
-        internal OAuthTokens Tokens { get; set; }
+        /// <returns>The assembly version string in the format (#.#.#.#)</returns>
+        public static string AssemblyVersion()
+        {
+            return System.Reflection.Assembly.GetAssembly(typeof(Information)).GetName().Version.ToString();
+        }
     }
 }

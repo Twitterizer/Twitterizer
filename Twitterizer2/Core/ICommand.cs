@@ -41,6 +41,12 @@ namespace Twitterizer.Core
         where T : BaseObject
     {
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is valid.
+        /// </summary>
+        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
+        bool IsValid { get; set; }
+
+        /// <summary>
         /// Initializes the command.
         /// </summary>
         void Init();
@@ -49,12 +55,6 @@ namespace Twitterizer.Core
         /// Validates this instance.
         /// </summary>
         void Validate();
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is valid.
-        /// </summary>
-        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
-        bool IsValid { get; set; }
 
         /// <summary>
         /// Executes the command.

@@ -32,12 +32,13 @@
 
 namespace Twitterizer
 {
-    using System.Net;
-    using System.IO;
-    using Twitterizer.Core;
     using System;
-using System.Runtime.Serialization;
+    using System.IO;
+    using System.Net;
+    using System.Runtime.Serialization;
     using System.Runtime.Serialization.Json;
+    using System.Text;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Twitterizer Exception
@@ -67,29 +68,15 @@ using System.Runtime.Serialization;
         /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="wex">The wex.</param>
+        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
         public TwitterizerException(string message, WebException wex)
             : base(message)
         {
-            this.ResponseBody = new StreamReader(wex.Response.GetResponseStream()).ReadToEnd();
+            HttpWebResponse response = (HttpWebResponse)wex.Response;
 
-            this.RateLimiting = new RateLimiting();
+            this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
-            if (!string.IsNullOrEmpty(wex.Response.Headers.Get("X-RateLimit-Limit")))
-            {
-                this.RateLimiting.Total = int.Parse(wex.Response.Headers.Get("X-RateLimit-Limit"));
-            }
-
-            if (!string.IsNullOrEmpty(wex.Response.Headers.Get("X-RateLimit-Remaining")))
-            {
-                this.RateLimiting.Remaining = int.Parse(wex.Response.Headers.Get("X-RateLimit-Remaining"));
-            }
-
-            if (!string.IsNullOrEmpty(wex.Response.Headers["X-RateLimit-Reset"]))
-            {
-                this.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(wex.Response.Headers.Get("X-RateLimit-Reset"))); ;
-            }
+            this.ParseRateLimitHeaders(response);
 
             DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
             wex.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
@@ -131,12 +118,86 @@ using System.Runtime.Serialization;
             }
         }
 
+        /// <summary>
+        /// Gets the bug report.
+        /// </summary>
+        /// <value>The bug report.</value>
+        public string BugReport
+        {
+            get
+            {
+                StringBuilder reportBuilder = new StringBuilder();
+                reportBuilder.AppendFormat(
+@"
+--------------- ERROR MESSAGE ---------------
+{0}
+
+--------------- STACK TRACE -----------------
+{1}
+
+--------------- RESPONSE BODY ---------------
+{2}
+",
+                    this.Message,
+                    this.StackTrace,
+                    this.ResponseBody);
+
+                reportBuilder.Append("--------------- HTTP HEADERS ----------------");
+                for (int i = 0; i < this.Response.Headers.Count; i++)
+                {
+                    reportBuilder.AppendFormat(
+                        "{0} = \"{1}\"",
+                        this.Response.Headers.AllKeys[i],
+                        this.Response.Headers[i]);
+                }
+
+                return reportBuilder.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Parses the rate limit headers.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        protected void ParseRateLimitHeaders(HttpWebResponse response)
+        {
+            this.RateLimiting = new RateLimiting();
+
+            if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Limit")))
+            {
+                this.RateLimiting.Total = int.Parse(response.Headers.Get("X-RateLimit-Limit"));
+            }
+
+            if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Remaining")))
+            {
+                this.RateLimiting.Remaining = int.Parse(response.Headers.Get("X-RateLimit-Remaining"));
+            }
+
+            if (!string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
+            {
+                this.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
+                    .AddSeconds(double.Parse(response.Headers.Get("X-RateLimit-Reset")));
+            }
+        }
+
+        /// <summary>
+        /// Twitter Error Details class
+        /// </summary>
+        /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
         [DataContract]
         public class TwitterErrorDetails
         {
+            /// <summary>
+            /// Gets or sets the request path.
+            /// </summary>
+            /// <value>The request path.</value>
             [DataMember(Name = "request")]
             public string RequestPath { get; set; }
 
+            /// <summary>
+            /// Gets or sets the error message.
+            /// </summary>
+            /// <value>The error message.</value>
             [DataMember(Name = "error")]
             public string ErrorMessage { get; set; }
         }

@@ -65,6 +65,18 @@ namespace Twitterizer.Core
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BaseCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="tokens">The tokens.</param>
+        protected BaseCommand(string method, OAuthTokens tokens)
+        {
+            this.RequestParameters = new Dictionary<string, string>();
+            this.HttpMethod = method;
+            this.Tokens = tokens;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.
         /// </summary>
         /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
@@ -116,30 +128,67 @@ namespace Twitterizer.Core
                 throw new CommandValidationException(this.GetType());
             }
 
-            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
-            
+            // Prepare the query parameters
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> item in this.RequestParameters)
+            {
+                queryParameters.Add(item.Key, item.Value);
+            }
+
+            // Declare the variable to be returned
             T resultObject = default(T);
+
             try
             {
+                // This must be set for all twitter request.
                 System.Net.ServicePointManager.Expect100Continue = false;
-                WebResponse webResponse = this.BuildRequest().GetResponse();
+
+                WebResponse webResponse;
+
+                // If we have OAuth tokens, then build and execute an OAuth request.
+                if (this.Tokens != null)
+                {
+                    webResponse = OAuthUtility.BuildOAuthRequestAndGetResponse(
+                        this.Uri.AbsoluteUri,
+                        queryParameters,
+                        this.HttpMethod,
+                        this.Tokens.ConsumerKey,
+                        this.Tokens.ConsumerSecret,
+                        this.Tokens.AccessToken,
+                        this.Tokens.AccessTokenSecret,
+                        this.Tokens.CallBackUrl);
+                }
+                else
+                {
+                    // Otherwise, build and execute a regular request
+                    webResponse = this.BuildRequestAndGetResponse(queryParameters);
+                }
+
+                // Set this back to the default so it doesn't affect other .net code.
                 System.Net.ServicePointManager.Expect100Continue = true;
 
-                Stream responseStream = webResponse.GetResponseStream();
-                resultObject = (T)ds.ReadObject(responseStream);
+                // Get the response
+                using (Stream responseStream = webResponse.GetResponseStream())
+                {
+                    // Deserialize the results.
+                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
+                    resultObject = (T)ds.ReadObject(responseStream);
+                    responseStream.Close();
+                }
 
+                // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
-
-                responseStream.Close();
             }
             catch (WebException wex)
             {
+                // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
                 if (response == null)
                 {
                     throw;
                 }
 
+                // Determine what the problem was based on the HTTP Status Code
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.BadRequest:
@@ -148,81 +197,14 @@ namespace Twitterizer.Core
                         throw new AuthenticationFailedException(wex);
                 }
 
-                // We don't know what the issue is
+                // We don't know what the issue is, throw a generic exception
                 throw new TwitterizerException(wex);
             }
 
+            // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             resultObject.Tokens = this.Tokens;
 
             return resultObject;
-        }
-
-        /// <summary>
-        /// Builds the request.
-        /// </summary>
-        /// <returns>A <see cref="System.Net.HttpWebRequest"/> class.</returns>
-        private HttpWebRequest BuildRequest()
-        {
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            
-            // Add all of the request parameters
-            foreach (KeyValuePair<string, string> item in this.RequestParameters)
-            {
-                queryParameters.Add(item.Key, item.Value);
-            }
-
-            // If we have OAuth tokens, return a new OAuth request
-            if (this.Tokens != null)
-            {
-                return OAuthUtility.CreateOAuthRequest(
-                    this.Uri.AbsoluteUri,
-                    queryParameters,
-                    this.HttpMethod,
-                    this.Tokens.ConsumerKey,
-                    this.Tokens.ConsumerSecret,
-                    this.Tokens.AccessToken,
-                    this.Tokens.AccessTokenSecret,
-                    this.Tokens.CallBackUrl);
-            }
-
-            HttpWebRequest request;
-
-            StringBuilder queryStringBuilder = new StringBuilder();
-            foreach (KeyValuePair<string, string> item in queryParameters)
-            {
-                if (queryStringBuilder.Length > 0)
-                    queryStringBuilder.Append("&");
-
-                queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
-            }
-
-            if (this.HttpMethod.ToUpper() == "GET")
-            {
-                string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("ANON GET: {0}", fullPathAndQuery));
-#endif
-                request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
-                request.Method = "GET";
-            }
-            else
-            {
-                request = (HttpWebRequest)WebRequest.Create(this.Uri);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    postDataWriter.Write(queryStringBuilder.ToString());
-                    postDataWriter.Close();
-                }
-
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("ANON POST: {1}\n{0}", this.Uri, queryStringBuilder.ToString()));
-#endif
-            }
-
-            return request;
         }
 
         /// <summary>
@@ -247,8 +229,60 @@ namespace Twitterizer.Core
             if (!string.IsNullOrEmpty(webResponse.Headers["X-RateLimit-Reset"]))
             {
                 resultObject.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"))); ;
+                    .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset")));
             }
+        }
+
+        /// <summary>
+        /// Builds the request.
+        /// </summary>
+        /// <param name="queryParameters">The query parameters.</param>
+        /// <returns>
+        /// A <see cref="System.Net.HttpWebRequest"/> class.
+        /// </returns>
+        private HttpWebResponse BuildRequestAndGetResponse(Dictionary<string, string> queryParameters)
+        {
+            // Prepare and execute un-authorized query
+            HttpWebRequest request;
+
+            StringBuilder queryStringBuilder = new StringBuilder();
+            foreach (KeyValuePair<string, string> item in queryParameters)
+            {
+                if (queryStringBuilder.Length > 0)
+                    queryStringBuilder.Append("&");
+
+                queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
+            }
+
+            if (this.HttpMethod.ToUpper() == "GET")
+            {
+                string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("ANON GET: {0}", fullPathAndQuery));
+#endif
+                request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
+                request.Method = "GET";
+                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+            }
+            else
+            {
+                request = (HttpWebRequest)WebRequest.Create(this.Uri);
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+
+                using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    postDataWriter.Write(queryStringBuilder.ToString());
+                    postDataWriter.Close();
+                }
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("ANON POST: {1}\n{0}", this.Uri, queryStringBuilder.ToString()));
+#endif
+            }
+
+            return (HttpWebResponse)request.GetResponse();
         }
     }
 }
