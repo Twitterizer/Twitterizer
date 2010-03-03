@@ -62,7 +62,7 @@ namespace Twitterizer
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <returns>
-        /// A new <see cref="Twitterizer.OAuthUtility.TokenResponse"/> instance.
+        /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
         /// </returns>
         public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret)
         {
@@ -101,7 +101,7 @@ namespace Twitterizer
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="requestToken">The request token.</param>
         /// <returns>
-        /// A <see cref="Twitterizer.OAuthUtility.TokenResponse"/> containing the requested tokens.
+        /// A <see cref="Twitterizer.OAuthTokenResponse"/> containing the requested tokens.
         /// </returns>
         public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
         {

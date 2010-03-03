@@ -60,7 +60,7 @@ namespace Twitterizer.Core
         /// <summary>
         /// Clones this instance.
         /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.IPagedCommand"/> interface.</returns>
+        /// <returns>A new instance of the <see cref="Twitterizer.Core.IPagedCommand{T}"/> interface.</returns>
         IPagedCommand<T> Clone();
     }
 }

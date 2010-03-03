@@ -195,6 +195,101 @@ namespace Twitterizer
 
             return status.Delete();
         }
+
+        #region GetPublicTimeline
+        /// <summary>
+        /// Gets the public timeline.
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        public static TwitterStatusCollection GetPublicTimeline()
+        {
+            Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(null);
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetPublicTimeline"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the public timeline.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/>.
+        /// </returns>
+        public static TwitterStatusCollection GetPublicTimeline(OAuthTokens tokens)
+        {
+            Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens);
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetPublicTimeline"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        } 
+        #endregion
+
+        #region GetHomeTimeline
+        /// <summary>
+        /// Gets the home timeline.
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        public static TwitterStatusCollection GetHomeTimeline()
+        {
+            Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(null);
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetHomeTimeline"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the home timeline.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/>.
+        /// </returns>
+        public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens)
+        {
+            Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens);
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetHomeTimeline"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+        #endregion
+
         #endregion
         #endregion
 

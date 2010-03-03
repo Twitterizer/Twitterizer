@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,47 +29,90 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The command to obtain the public timeline</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// The Public Timeline Command class
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class PublicTimelineCommand :
+        Core.BaseCommand<TwitterStatusCollection>,
+        Core.IPagedCommand<TwitterStatusCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens)
-            : base("POST", requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public PublicTimelineCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/public_timeline.json"), tokens)
         {
         }
         #endregion
 
+        #region IPagedCommand<TwitterStatusCollection> Members
+
         /// <summary>
-        /// Gets or sets the status id.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <value>The status id.</value>
-        public long Id { get; set; }
+        /// <value>The cursor.</value>
+        /// <remarks>
+        /// Optional.
+        /// Breaks the results into pages.
+        /// A single page contains 100 users.
+        /// </remarks>
+        long IPagedCommand<TwitterStatusCollection>.Cursor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the page number to obtain.
+        /// </summary>
+        /// <value>The page number.</value>
+        int IPagedCommand<TwitterStatusCollection>.Page
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.IPagedCommand{T}"/> interface.
+        /// </returns>
+        IPagedCommand<TwitterStatusCollection> IPagedCommand<TwitterStatusCollection>.Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            this.Uri = new Uri(string.Format(CultureInfo.InvariantCulture, Path, this.Id));
         }
 
         /// <summary>
@@ -77,7 +120,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Id > 0;
+            this.IsValid = true;
         }
     }
 }

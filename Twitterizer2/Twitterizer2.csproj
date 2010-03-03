@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Twitterizer2.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\DeleteStatusCommand.cs" />
+    <Compile Include="Commands\HomeTimelineCommand.cs" />
+    <Compile Include="Commands\PublicTimelineCommand.cs" />
     <Compile Include="Commands\UpdateStatusCommand.cs" />
     <Compile Include="Commands\UserFollowersCommand.cs" />
     <Compile Include="Commands\UserTimelineCommand.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Commands\UserShowCommand.cs" />
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Core\ITwitterObject.cs" />
+    <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />

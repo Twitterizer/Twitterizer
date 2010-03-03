@@ -40,7 +40,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The command to obtain followers of a user.
     /// </summary>
-    internal class UserFollowersCommand : 
+    internal sealed class UserFollowersCommand : 
         Core.BaseCommand<TwitterUserCollection>, 
         Core.IPagedCommand<TwitterUserCollection>
     {

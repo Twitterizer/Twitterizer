@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="HomeTimelineCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,50 +29,37 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The user timeline command.</summary>
+// <summary>The Home Timeline Command class</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
 
     /// <summary>
-    /// The user timeline command.
+    /// The Home Timeline Command
     /// </summary>
-    internal sealed class UserTimelineCommand : 
-        Core.BaseCommand<TwitterStatusCollection>, 
+    internal sealed class HomeTimelineCommand :
+        Core.BaseCommand<TwitterStatusCollection>,
         Core.IPagedCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public UserTimelineCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/user_timeline.json"), tokens)
+        public HomeTimelineCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/home_timeline.json"), tokens)
         {
         }
         #endregion
 
-        #region API Parameters
+        #region Properties
         /// <summary>
-        /// Gets or sets the ID or screen name of the user for whom to request a list of followers. 
+        /// Gets or sets the count of statuses to obtain.
         /// </summary>
-        /// <value>The name of the id or screen.</value>
-        public string IdOrScreenName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The user id.</value>
-        public long UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
+        /// <value>The count of statuses to obtain.</value>
+        public int Count { get; set; }
 
         /// <summary>
         /// Gets or sets the id of the status to obtain all statuses posted thereafter.
@@ -87,27 +74,21 @@ namespace Twitterizer.Commands
         public long MaxId { get; set; }
 
         /// <summary>
-        /// Gets or sets the count of statuses to obtain.
+        /// Gets or sets the page number to obtain.
         /// </summary>
-        /// <value>The count of statuses to obtain.</value>
-        public int Count { get; set; }
+        /// <value>The page number.</value>
+        public int Page { get; set; }
 
         /// <summary>
         /// Gets or sets the cursor.
         /// </summary>
         /// <value>The cursor.</value>
         /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
+        /// Optional.
+        /// Breaks the results into pages.
         /// A single page contains 100 users.
         /// </remarks>
-        public long Cursor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number to obtain.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
+        long Core.IPagedCommand<TwitterStatusCollection>.Cursor { get; set; }
         #endregion
 
         /// <summary>
@@ -115,12 +96,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (!string.IsNullOrEmpty(this.IdOrScreenName))
-                this.RequestParameters.Add("id", this.IdOrScreenName);
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
-            if (!string.IsNullOrEmpty(this.ScreenName))
-                this.RequestParameters.Add("screen_name", this.ScreenName);
             if (this.Count > 0)
                 this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
             if (this.SinceId > 0)
@@ -136,10 +111,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.UserId > 0 ||
-                !string.IsNullOrEmpty(this.IdOrScreenName) ||
-                !string.IsNullOrEmpty(this.ScreenName) ||
-                this.Tokens != null;
+            this.IsValid = true;
         }
 
         /// <summary>
@@ -150,11 +122,7 @@ namespace Twitterizer.Commands
         {
             return new UserTimelineCommand(this.Tokens)
             {
-                IdOrScreenName = this.IdOrScreenName,
-                ScreenName = this.ScreenName,
-                UserId = this.UserId,
                 Page = this.Page,
-                Cursor = this.Cursor,
                 Count = this.Count,
                 MaxId = this.MaxId,
                 SinceId = this.SinceId
