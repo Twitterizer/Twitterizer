@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2", "Twitterizer2\Twitterizer2.csproj", "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer-Desktop", "Twitterizer-Desktop\Twitterizer-Desktop.csproj", "{83EB84AC-89B8-449F-9060-C197A60DB764}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web", "{A202C98F-EFD6-422A-8C03-BCD069377FA9}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
+		ProjectReferences = "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}|Twitterizer.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/Twitterizer-Web"
+		Debug.AspNetCompiler.PhysicalPath = "Twitterizer-Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Twitterizer-Web\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Twitterizer-Web"
+		Release.AspNetCompiler.PhysicalPath = "Twitterizer-Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Twitterizer-Web\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "59813"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Applications", "Sample Applications", "{F5BB7A18-FFC7-4777-81D4-42482C8370C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{09A4B653-29C4-467A-A1FE-BA74C0D70978}"
+	ProjectSection(SolutionItems) = preProject
+		CustomDictionary.xml = CustomDictionary.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FDC3492-6B9E-4771-9755-7892C9CB1E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FDC3492-6B9E-4771-9755-7892C9CB1E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FDC3492-6B9E-4771-9755-7892C9CB1E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FDC3492-6B9E-4771-9755-7892C9CB1E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83EB84AC-89B8-449F-9060-C197A60DB764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83EB84AC-89B8-449F-9060-C197A60DB764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83EB84AC-89B8-449F-9060-C197A60DB764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83EB84AC-89B8-449F-9060-C197A60DB764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A202C98F-EFD6-422A-8C03-BCD069377FA9} = {F5BB7A18-FFC7-4777-81D4-42482C8370C2}
+		{83EB84AC-89B8-449F-9060-C197A60DB764} = {F5BB7A18-FFC7-4777-81D4-42482C8370C2}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+<stylecopresultscache>
+  <version>10</version>
+  <sourcecode name="callback.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>03/01/2010 13:45:20</timestamp>
+      <milliseconds>848</milliseconds>
+    </settings>
+    <timestamp>03/03/2010 13:11:44</timestamp>
+    <milliseconds>30</milliseconds>
+    <violations />
+  </sourcecode>
+  <project key="-386010598">
+    <configuration>
+    </configuration>
+  </project>
+  <sourcecode name="Default.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>03/01/2010 13:45:20</timestamp>
+      <milliseconds>848</milliseconds>
+    </settings>
+    <timestamp>03/03/2010 13:10:03</timestamp>
+    <milliseconds>566</milliseconds>
+    <violations />
+  </sourcecode>
+</stylecopresultscache>
