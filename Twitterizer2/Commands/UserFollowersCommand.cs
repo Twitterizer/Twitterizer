@@ -99,10 +99,14 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("id", this.IdOrScreenName);
-            this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            this.RequestParameters.Add("screen_name", this.ScreenName);
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+            if (!string.IsNullOrEmpty(this.IdOrScreenName))
+                this.RequestParameters.Add("id", this.IdOrScreenName);
+            if (this.UserId > 0)
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+            if (!string.IsNullOrEmpty(this.ScreenName))
+                this.RequestParameters.Add("screen_name", this.ScreenName);
+            if (this.Cursor > 0)
+                this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <summary>

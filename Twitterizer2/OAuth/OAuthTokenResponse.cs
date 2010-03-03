@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="OAuthTokenResponse.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,24 +29,38 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The default example page.</summary>
+// <summary>The OAuth token response class. Represents tokens returned by the service.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class _Default : System.Web.UI.Page
+namespace Twitterizer
 {
-    protected void Page_Load(object sender, EventArgs e)
+    /// <summary>
+    /// Values returned by Twitter when getting a request token or an access token.
+    /// </summary>
+    public class OAuthTokenResponse
     {
-        OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
-        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
-        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
+        /// <summary>
+        /// Gets or sets the token.
+        /// </summary>
+        /// <value>The token.</value>
+        public string Token { get; set; }
 
-        myGridView.DataSource = TwitterUser.GetUser(tokens, "DigitallyBorn").GetFollowers();
-        myGridView.DataBind();
+        /// <summary>
+        /// Gets or sets the token secret.
+        /// </summary>
+        /// <value>The token secret.</value>
+        public string TokenSecret { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user ID.
+        /// </summary>
+        /// <value>The user ID.</value>
+        public long UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screenname.
+        /// </summary>
+        /// <value>The screenname.</value>
+        public string ScreenName { get; set; }
     }
 }

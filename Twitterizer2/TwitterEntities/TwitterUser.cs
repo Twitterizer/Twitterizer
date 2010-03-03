@@ -34,8 +34,8 @@
 namespace Twitterizer
 {
     using System;
-    using System.Runtime.Serialization;
     using System.Globalization;
+    using System.Runtime.Serialization;
     
     /// <summary>
     /// The class that represents a twitter user account
@@ -68,7 +68,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The User ID.</value>
         [DataMember(Name = "id")]
-        public long ID { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.
@@ -114,8 +114,21 @@ namespace Twitterizer
         {
             get
             {
-                return new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(this.CreatedDateString, CultureInfo.InvariantCulture));
+                DateTime parsedDate;
+
+                if (DateTime.TryParseExact(
+                       this.CreatedDateString,
+                       DateFormat,
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None,
+                       out parsedDate))
+                {
+                    return parsedDate;
+                }
+                else
+                {
+                    return new DateTime();
+                }
             }
         }
 
@@ -196,7 +209,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The screenname.</value>
         [DataMember(Name = "screen_name")]
-        public string Screenname { get; set; }
+        public string ScreenName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the authenticated user is following this user.
@@ -261,7 +274,7 @@ namespace Twitterizer
         /// <value>The time zone offset.</value>
         /// <remarks>Also called the Coordinated Universal Time (UTC) offset.</remarks>
         [DataMember(Name = "utc_offset")]
-        public double TimeZoneOffset { get; set; }
+        public double? TimeZoneOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the profile background.
@@ -438,7 +451,7 @@ namespace Twitterizer
             TwitterUser user = new TwitterUser()
             {
                 Tokens = tokens,
-                ID = userId
+                Id = userId
             };
 
             return user.GetFollowers();
@@ -454,7 +467,7 @@ namespace Twitterizer
         public TwitterUserCollection GetFollowers()
         {
             Commands.UserFollowersCommand command = new Commands.UserFollowersCommand(this.Tokens);
-            command.UserId = this.ID;
+            command.UserId = this.Id;
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
             result.Command = command;

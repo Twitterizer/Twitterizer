@@ -100,7 +100,10 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.UserIdOrName) || !string.IsNullOrEmpty(this.Username);
+            this.IsValid = this.Tokens != null || 
+                this.UserId > 0 || 
+                !string.IsNullOrEmpty(this.UserIdOrName) || 
+                !string.IsNullOrEmpty(this.Username);
         }
     }
 }

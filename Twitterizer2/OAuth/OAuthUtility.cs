@@ -36,6 +36,8 @@ namespace Twitterizer
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -46,7 +48,7 @@ namespace Twitterizer
     /// <summary>
     /// A utility for handling the oauth protocol.
     /// </summary>
-    public class OAuthUtility
+    public static class OAuthUtility
     {
         /// <summary>
         /// The name of the signature type twiter uses.
@@ -59,22 +61,12 @@ namespace Twitterizer
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
-        /// <returns>A new <see cref="Twitterizer.OAuthUtility.TokenResponse"/> instance.</returns>
-        public static TokenResponse GetRequestToken(string consumerKey, string consumerSecret)
+        /// <returns>
+        /// A new <see cref="Twitterizer.OAuthUtility.TokenResponse"/> instance.
+        /// </returns>
+        public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret)
         {
-            return GetRequestToken(consumerKey, consumerSecret, string.Empty);
-        }
-
-        /// <summary>
-        /// Gets a new OAuth request token from the twitter api.
-        /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="callBackUrl">The call back URL.</param>
-        /// <returns>A new <see cref="Twitterizer.OAuthUtility.TokenResponse"/> instance.</returns>
-        public static TokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callBackUrl)
-        {
-            TokenResponse response = new TokenResponse();
+            OAuthTokenResponse response = new OAuthTokenResponse();
 
             try
             {
@@ -85,8 +77,7 @@ namespace Twitterizer
                     consumerKey,
                     consumerSecret,
                     null,
-                    null,
-                    callBackUrl);
+                    null);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
@@ -97,14 +88,7 @@ namespace Twitterizer
             }
             catch (WebException wex)
             {
-                string httpResponse = new StreamReader(wex.Response.GetResponseStream()).ReadToEnd();
-
-                if (string.IsNullOrEmpty(httpResponse))
-                {
-                    throw;
-                }
-
-                throw new ApplicationException(httpResponse, wex);
+                throw new TwitterizerException(wex.Message, wex);
             }
 
             return response;
@@ -119,9 +103,9 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="Twitterizer.OAuthUtility.TokenResponse"/> containing the requested tokens.
         /// </returns>
-        public static TokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
+        public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
         {
-            TokenResponse response = new TokenResponse();
+            OAuthTokenResponse response = new OAuthTokenResponse();
 
             try
             {
@@ -132,26 +116,18 @@ namespace Twitterizer
                     consumerKey,
                     consumerSecret,
                     requestToken,
-                    string.Empty,
                     string.Empty);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
                 response.Token = Regex.Match(responseBody, @"oauth_token=([^&]+)").Groups[1].Value;
                 response.TokenSecret = Regex.Match(responseBody, @"oauth_token_secret=([^&]+)").Groups[1].Value;
-                response.UserID = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value);
-                response.Screenname = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
+                response.UserId = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value, CultureInfo.CurrentCulture);
+                response.ScreenName = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
             }
             catch (WebException wex)
             {
-                string httpResponse = new StreamReader(wex.Response.GetResponseStream()).ReadToEnd();
-
-                if (string.IsNullOrEmpty(httpResponse))
-                {
-                    throw;
-                }
-
-                throw new ApplicationException(httpResponse, wex);
+                throw new TwitterizerException(wex.Message, wex);
             }
 
             return response;
@@ -163,7 +139,8 @@ namespace Twitterizer
         /// </summary>
         /// <param name="value">The value to Url encode</param>
         /// <returns>Returns a Url encoded string</returns>
-        public static string UrlEncode(string value)
+        [SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "Return type is not a URL.")]
+        public static string EncodeForUrl(string value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -199,8 +176,9 @@ namespace Twitterizer
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="token">The access or request token.</param>
         /// <param name="tokenSecret">The token secret.</param>
-        /// <param name="callBackUri">The call back URI.</param>
-        /// <returns>A new instance of the <see cref="System.Net.HttpWebRequest"/> class.</returns>
+        /// <returns>
+        /// A new instance of the <see cref="System.Net.HttpWebRequest"/> class.
+        /// </returns>
         internal static HttpWebResponse BuildOAuthRequestAndGetResponse(
             string baseUrl,
             Dictionary<string, string> parameters,
@@ -208,8 +186,7 @@ namespace Twitterizer
             string consumerKey,
             string consumerSecret,
             string token,
-            string tokenSecret,
-            string callBackUri)
+            string tokenSecret)
         {
             Dictionary<string, string> combinedParameters = new Dictionary<string, string>();
 
@@ -236,11 +213,6 @@ namespace Twitterizer
                 combinedParameters.Add("oauth_token_secret", tokenSecret);
             }
 
-            if (!string.IsNullOrEmpty(callBackUri))
-            {
-                combinedParameters.Add("oauth_callback", callBackUri);
-            }
-
             AddSignatureToParameters(
                 new Uri(baseUrl),
                 combinedParameters,
@@ -261,9 +233,9 @@ namespace Twitterizer
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
                 request.Method = httpMethod;
-                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+                request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion()); 
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("OAUTH GET: {0}", baseUrl));
+                System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OAUTH GET: {0}", baseUrl));
 #endif
                 response = (HttpWebResponse)request.GetResponse();
             }
@@ -281,7 +253,7 @@ namespace Twitterizer
                     requestParametersBuilder.AppendFormat(
                         "{0}={1}",
                         item.Key,
-                        UrlEncode(item.Value));
+                        EncodeForUrl(item.Value));
                 }
 
                 baseUrl = string.Concat(baseUrl, "?", requestParametersBuilder.ToString());
@@ -290,7 +262,7 @@ namespace Twitterizer
                 request.Method = httpMethod;
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
-                request.UserAgent = string.Format("Twitterizer/{0}", Information.AssemblyVersion()); 
+                request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion()); 
                 response = (HttpWebResponse)request.GetResponse();
             }
             else
@@ -312,7 +284,7 @@ namespace Twitterizer
         {
             StringBuilder queryStringBuilder = new StringBuilder();
             foreach (var item in from p in parameters
-                                 where !(p.Key.Contains("oauth_") && p.Key.EndsWith("_secret"))
+                                 where !(p.Key.Contains("oauth_") && p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase))
                                  orderby p.Key, p.Value
                                  select p)
             {
@@ -324,7 +296,7 @@ namespace Twitterizer
                 queryStringBuilder.AppendFormat(
                     "{0}={1}",
                     item.Key,
-                    UrlEncode(item.Value));
+                    EncodeForUrl(item.Value));
             }
 
             return queryStringBuilder.ToString();
@@ -341,50 +313,25 @@ namespace Twitterizer
 
             foreach (var item in newParameters
                 .Where(p => p.Key.Contains("oauth_") &&
-                    !p.Key.EndsWith("_secret") &&
+                    !p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
                     p.Key != "oauth_signature" &&
                     !string.IsNullOrEmpty(p.Value))
                 .OrderBy(p => p.Key)
-                .ThenBy(p => UrlEncode(p.Value)))
+                .ThenBy(p => EncodeForUrl(p.Value)))
             {
                 authHeaderBuilder.AppendFormat(
                     ",{0}=\"{1}\"",
-                    UrlEncode(item.Key),
-                    UrlEncode(item.Value));
+                    EncodeForUrl(item.Key),
+                    EncodeForUrl(item.Value));
             }
 
-            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", UrlEncode(newParameters["oauth_signature"]));
+            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", EncodeForUrl(newParameters["oauth_signature"]));
 
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(string.Format("OAUTH HEADER: {0}", authHeaderBuilder.ToString()));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OAUTH HEADER: {0}", authHeaderBuilder.ToString()));
 #endif
             string authorizationHeader = authHeaderBuilder.ToString();
             return authorizationHeader;
-        }
-
-        /// <summary>
-        /// Flattens the and encode parameters.
-        /// </summary>
-        /// <param name="queryStringParameters">The query string parameters.</param>
-        /// <returns>A string of all parameters prepared for using in a query string.</returns>
-        private static string FlattenAndEncodeParameters(IEnumerable<KeyValuePair<string, string>> queryStringParameters)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            foreach (KeyValuePair<string, string> item in queryStringParameters)
-            {
-                if (stringBuilder.Length > 0)
-                {
-                    stringBuilder.Append("&");
-                }
-
-                stringBuilder.AppendFormat(
-                    "{0}={1}",
-                    item.Key,
-                    UrlEncode(item.Value));
-            }
-
-            return stringBuilder.ToString();
         }
 
         /// <summary>
@@ -395,7 +342,7 @@ namespace Twitterizer
         {
             // Default implementation of UNIX time of the current UTC time
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalSeconds).ToString();
+            return Convert.ToInt64(ts.TotalSeconds, CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
         }
 
         /// <summary>
@@ -405,7 +352,7 @@ namespace Twitterizer
         private static string GenerateNonce()
         {
             // Just a simple implementation of a random number between 123400 and 9999999
-            return new Random().Next(123400, int.MaxValue).ToString();
+            return new Random().Next(123400, int.MaxValue).ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -428,21 +375,24 @@ namespace Twitterizer
             // Get the oauth parameters from the parameters
             Dictionary<string, string> baseStringParameters =
                 (from p in parameters
-                 where !(p.Key.EndsWith("_secret") && p.Key.StartsWith("oauth_"))
+                 where !(p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
+                    p.Key.StartsWith("oauth_", StringComparison.OrdinalIgnoreCase))
                  select p).ToDictionary(p => p.Key, p => p.Value);
 
             string signatureBase = string.Format(
+                CultureInfo.InvariantCulture,
                 "{0}&{1}&{2}",
-                httpMethod.ToUpper(),
-                UrlEncode(normalizedUrl),
+                httpMethod.ToUpper(CultureInfo.InvariantCulture),
+                EncodeForUrl(normalizedUrl),
                 UrlEncode(baseStringParameters));
 
             HMACSHA1 hmacsha1 = new HMACSHA1();
 
             string key = string.Format(
+                    CultureInfo.InvariantCulture,
                     "{0}&{1}",
-                    UrlEncode(consumerSecret),
-                    UrlEncode(tokenSecret));
+                    EncodeForUrl(consumerSecret),
+                    EncodeForUrl(tokenSecret));
 
             hmacsha1.Key = Encoding.ASCII.GetBytes(key);
 
@@ -455,14 +405,14 @@ namespace Twitterizer
 
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("----------- OAUTH SIGNATURE GENERATION -----------");
-            System.Diagnostics.Debug.WriteLine(string.Format("url.PathAndQuery = \"{0}\"", url.PathAndQuery));
-            System.Diagnostics.Debug.WriteLine(string.Format("httpMethod = \"{0}\"", httpMethod));
-            System.Diagnostics.Debug.WriteLine(string.Format("consumerSecret = \"{0}\"", consumerSecret));
-            System.Diagnostics.Debug.WriteLine(string.Format("tokenSecret = \"{0}\"", tokenSecret));
-            System.Diagnostics.Debug.WriteLine(string.Format("normalizedUrl = \"{0}\"", normalizedUrl));
-            System.Diagnostics.Debug.WriteLine(string.Format("signatureBase = \"{0}\"", signatureBase));
-            System.Diagnostics.Debug.WriteLine(string.Format("key = \"{0}\"", key));
-            System.Diagnostics.Debug.WriteLine(string.Format("signature = \"{0}\"", result));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "url.PathAndQuery = \"{0}\"", url.PathAndQuery));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "httpMethod = \"{0}\"", httpMethod));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "consumerSecret = \"{0}\"", consumerSecret));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "tokenSecret = \"{0}\"", tokenSecret));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "normalizedUrl = \"{0}\"", normalizedUrl));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "signatureBase = \"{0}\"", signatureBase));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "key = \"{0}\"", key));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "signature = \"{0}\"", result));
             System.Diagnostics.Debug.WriteLine("--------- END OAUTH SIGNATURE GENERATION ----------");
 #endif
         }
@@ -474,7 +424,7 @@ namespace Twitterizer
         /// <returns>The normalized url string.</returns>
         private static string NormalizeUrl(Uri url)
         {
-            string normalizedUrl = string.Format("{0}://{1}", url.Scheme, url.Host);
+            string normalizedUrl = string.Format(CultureInfo.InvariantCulture, "{0}://{1}", url.Scheme, url.Host);
             if (!((url.Scheme == "http" && url.Port == 80) || (url.Scheme == "https" && url.Port == 443)))
             {
                 normalizedUrl += ":" + url.Port;
@@ -506,42 +456,13 @@ namespace Twitterizer
 
                 parameterString.Append(
                     string.Format(
+                        CultureInfo.InvariantCulture, 
                         "{0}={1}", 
-                        UrlEncode(item.Key), 
-                        UrlEncode(item.Value)));
+                        EncodeForUrl(item.Key), 
+                        EncodeForUrl(item.Value)));
             }
 
-            return UrlEncode(parameterString.ToString());
-        }
-
-        /// <summary>
-        /// Values returned by Twitter when getting a request token or an access token.
-        /// </summary>
-        public class TokenResponse
-        {
-            /// <summary>
-            /// Gets or sets the token.
-            /// </summary>
-            /// <value>The token.</value>
-            public string Token { get; set; }
-
-            /// <summary>
-            /// Gets or sets the token secret.
-            /// </summary>
-            /// <value>The token secret.</value>
-            public string TokenSecret { get; set; }
-
-            /// <summary>
-            /// Gets or sets the user ID.
-            /// </summary>
-            /// <value>The user ID.</value>
-            public long UserID { get; set; }
-
-            /// <summary>
-            /// Gets or sets the screenname.
-            /// </summary>
-            /// <value>The screenname.</value>
-            public string Screenname { get; set; }
+            return EncodeForUrl(parameterString.ToString());
         }
     }
 }

@@ -37,6 +37,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Net">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -66,7 +69,9 @@
     <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
+    <Compile Include="Exceptions\TwitterErrorDetails.cs" />
     <Compile Include="Information.cs" />
+    <Compile Include="OAuth\OAuthTokenResponse.cs" />
     <Compile Include="OAuth\OAuthUtility.cs" />
     <Compile Include="OAuth\OAuthTokens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

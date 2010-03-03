@@ -52,12 +52,6 @@ namespace Twitterizer
         public string AccessTokenSecret { get; set; }
 
         /// <summary>
-        /// Gets or sets the call back URL. (Optional.)
-        /// </summary>
-        /// <value>The call back URL.</value>
-        public string CallBackUrl { get; set; }
-
-        /// <summary>
         /// Gets or sets the consumer key.
         /// </summary>
         /// <value>The consumer key.</value>

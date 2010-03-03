@@ -33,20 +33,21 @@
 namespace Twitterizer
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Json;
+    using System.Security.Permissions;
     using System.Text;
     using Twitterizer.Core;
-    using System.Globalization;
 
     /// <summary>
     /// The Twitterizer Exception
     /// </summary>
     /// <seealso cref="System.Net.WebException"/>
     [Serializable]
-    public class TwitterizerException : WebException
+    public class TwitterizerException : WebException, ISerializable
     {
         #region Constructors
         /// <summary>
@@ -56,11 +57,20 @@ namespace Twitterizer
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public TwitterizerException(string message)
             : base(message)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
         public TwitterizerException(string message, Exception innerException) :
             base(message, innerException)
         {
@@ -80,8 +90,14 @@ namespace Twitterizer
             }
         }
 
-        protected TwitterizerException(SerializationInfo info,
-           StreamingContext context)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="info">The object that holds the serialized object data.</param>
+        /// <param name="context">The contextual information about the source or destination.</param>
+        protected TwitterizerException(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }
@@ -158,6 +174,29 @@ namespace Twitterizer
             }
         }
 
+        #region ISerializable Members
+        /// <summary>
+        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// The <paramref name="info"/> parameter is a null reference (Nothing in Visual Basic).
+        /// </exception>
+        /// <PermissionSet>
+        /// <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/>
+        /// <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
+        /// </PermissionSet>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
+            base.GetObjectData(info, context);
+        }
+        #endregion
+
         /// <summary>
         /// Parses the rate limit headers.
         /// </summary>
@@ -182,27 +221,5 @@ namespace Twitterizer
                     .AddSeconds(double.Parse(response.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
-    }
-
-    /// <summary>
-    /// Twitter Error Details class
-    /// </summary>
-    /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
-    [DataContract]
-    public class TwitterErrorDetails
-    {
-        /// <summary>
-        /// Gets or sets the request path.
-        /// </summary>
-        /// <value>The request path.</value>
-        [DataMember(Name = "request")]
-        public string RequestPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets the error message.
-        /// </summary>
-        /// <value>The error message.</value>
-        [DataMember(Name = "error")]
-        public string ErrorMessage { get; set; }
     }
 }

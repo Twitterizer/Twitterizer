@@ -33,12 +33,7 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using Twitterizer.Core;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// The TwitterUserCollection class.

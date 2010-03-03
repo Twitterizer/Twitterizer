@@ -37,6 +37,7 @@ namespace Twitterizer
     using System;
     using System.IO;
     using System.Net;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// The exception that indicates an API called failed due to authentication failure.
@@ -48,17 +49,34 @@ namespace Twitterizer
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
         /// </summary>
-        public AuthenticationFailedException() 
-            : base()
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public AuthenticationFailedException(string message, WebException innerException)
+            : base(message, innerException)
         {
+            HttpWebResponse response = (HttpWebResponse)innerException.Response;
+            this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+            this.ParseRateLimitHeaders(response);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
         /// </summary>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public AuthenticationFailedException(WebException wex)
-            : this("Authentication failed.", wex)
+        /// <param name="innerException">The inner exception.</param>
+        public AuthenticationFailedException(WebException innerException)
+            : base("Authentication failed", innerException)
+        {
+            HttpWebResponse response = (HttpWebResponse)innerException.Response;
+            this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+            this.ParseRateLimitHeaders(response);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
+        /// </summary>
+        public AuthenticationFailedException()
         {
         }
 
@@ -66,14 +84,31 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="wex">The <see cref="System.Net.WebException"/>.</param>
-        public AuthenticationFailedException(string message, WebException wex)
-            : base(message, wex)
+        public AuthenticationFailedException(string message)
+            : base(message)
         {
-            HttpWebResponse response = (HttpWebResponse)wex.Response;
-            this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
+        }
 
-            this.ParseRateLimitHeaders(response);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public AuthenticationFailedException(string message, Exception innerException) :
+            base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationFailedException"/> class.
+        /// </summary>
+        /// <param name="info">The serialization info.</param>
+        /// <param name="context">The context.</param>
+        protected AuthenticationFailedException(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context)
+        {
         }
         #endregion
     }

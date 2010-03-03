@@ -34,35 +34,62 @@
 namespace Twitterizer
 {
     using System;
-using System.Globalization;
     using System.Runtime.Serialization;
+    using System.Security.Permissions;
     using Twitterizer.Core;
 
     /// <summary>
     /// An exception class indicating that required parameters were missing from a command.
     /// </summary>
+    /// <typeparam name="T">The command type, derived from ITwitterObject.</typeparam>
     [Serializable]
-    public class CommandValidationException<T> : Exception
+    public class CommandValidationException<T> : Exception, ISerializable
         where T : ITwitterObject
     {
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandValidationException&lt;T&gt;"/> class.
+        /// </summary>
         public CommandValidationException()
         {
             // Add any type-specific logic, and supply the default message.
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandValidationException&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public CommandValidationException(string message)
             : base(message)
         {
             // Add any type-specific logic.
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandValidationException&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
         public CommandValidationException(string message, Exception innerException) :
             base(message, innerException)
         {
             // Add any type-specific logic for inner exceptions.
         }
-        protected CommandValidationException(SerializationInfo info,
-           StreamingContext context)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandValidationException&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// The <paramref name="info"/> parameter is null.
+        /// </exception>
+        /// <exception cref="T:System.Runtime.Serialization.SerializationException">
+        /// The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0).
+        /// </exception>
+        protected CommandValidationException(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
             // Implement type-specific serialization constructor logic.
@@ -80,5 +107,29 @@ using System.Globalization;
         /// </summary>
         /// <value>The command.</value>
         public BaseCommand<T> Command { get; set; }
+
+        #region ISerializable Members
+
+        /// <summary>
+        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// The <paramref name="info"/> parameter is a null reference (Nothing in Visual Basic).
+        /// </exception>
+        /// <PermissionSet>
+        /// <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/>
+        /// <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
+        /// </PermissionSet>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
+            base.GetObjectData(info, context);
+        }
+        #endregion
     }
 }

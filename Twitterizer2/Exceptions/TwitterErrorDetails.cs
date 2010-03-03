@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterErrorDetails.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,24 +29,32 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The default example page.</summary>
+// <summary>The twitter error details class. Contains parsed details returned by twitter in an http response body.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class _Default : System.Web.UI.Page
+namespace Twitterizer
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
-        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
-        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
+    using System.Runtime.Serialization;
 
-        myGridView.DataSource = TwitterUser.GetUser(tokens, "DigitallyBorn").GetFollowers();
-        myGridView.DataBind();
+    /// <summary>
+    /// Twitter Error Details class
+    /// </summary>
+    /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
+    [DataContract]
+    public class TwitterErrorDetails
+    {
+        /// <summary>
+        /// Gets or sets the request path.
+        /// </summary>
+        /// <value>The request path.</value>
+        [DataMember(Name = "request")]
+        public string RequestPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        /// <value>The error message.</value>
+        [DataMember(Name = "error")]
+        public string ErrorMessage { get; set; }
     }
 }

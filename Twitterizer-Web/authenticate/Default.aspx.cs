@@ -43,7 +43,7 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         // First, get the request token
-        OAuthUtility.TokenResponse authorizationTokens = OAuthUtility.GetRequestToken(
+        OAuthTokenResponse authorizationTokens = OAuthUtility.GetRequestToken(
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
 

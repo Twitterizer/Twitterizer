@@ -41,14 +41,14 @@ public partial class callback : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        OAuthUtility.TokenResponse tokens = OAuthUtility.GetAccessToken(
+        OAuthTokenResponse tokens = OAuthUtility.GetAccessToken(
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
             Request.QueryString["oauth_token"]);
 
         this.AccessTokenLabel.Text = tokens.Token;
         this.AccessTokenSecretLabel.Text = tokens.TokenSecret;
-        this.UserIdLabel.Text = tokens.UserID.ToString();
-        this.ScreenNameLabel.Text = tokens.Screenname;
+        this.UserIdLabel.Text = tokens.UserId.ToString();
+        this.ScreenNameLabel.Text = tokens.ScreenName;
     }
 }

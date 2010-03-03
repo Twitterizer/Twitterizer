@@ -105,13 +105,13 @@ namespace Twitterizer.Core
         public string HttpMethod { get; set; }
 
         /// <summary>
-        /// Gets or sets the request parameters.
+        /// Gets the request parameters.
         /// </summary>
         /// <value>The request parameters.</value>
         public Dictionary<string, string> RequestParameters { get; private set; }
 
         /// <summary>
-        /// Gets or sets the request tokens.
+        /// Gets the request tokens.
         /// </summary>
         /// <value>The request tokens.</value>
         internal OAuthTokens Tokens { get; private set; }
@@ -168,8 +168,7 @@ namespace Twitterizer.Core
                         this.Tokens.ConsumerKey,
                         this.Tokens.ConsumerSecret,
                         this.Tokens.AccessToken,
-                        this.Tokens.AccessTokenSecret,
-                        this.Tokens.CallBackUrl);
+                        this.Tokens.AccessTokenSecret);
                 }
                 else
                 {
@@ -183,10 +182,23 @@ namespace Twitterizer.Core
                 // Get the response
                 using (Stream responseStream = webResponse.GetResponseStream())
                 {
+#if DEBUG
+                    byte[] data = ReadStream(responseStream);
+
+                    System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
+                    System.Diagnostics.Debug.Write(Encoding.UTF8.GetString(data));
+                    System.Diagnostics.Debug.WriteLine("----------- END -----------");
+
+                    // Deserialize the results.
+                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
+                    resultObject = (T)ds.ReadObject(new MemoryStream(data));
+                    responseStream.Close();
+#else
                     // Deserialize the results.
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
                     resultObject = (T)ds.ReadObject(responseStream);
                     responseStream.Close();
+#endif
                 }
 
                 // Parse the rate limiting HTTP Headers
@@ -220,6 +232,24 @@ namespace Twitterizer.Core
             return resultObject;
         }
 
+        #region ICommand<T> Members
+
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
+        void ICommand<T>.Init()
+        {
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        void ICommand<T>.Validate()
+        {
+        }
+
+        #endregion
+
         /// <summary>
         /// Parses the rate limit headers.
         /// </summary>
@@ -245,6 +275,39 @@ namespace Twitterizer.Core
                     .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
+
+#if DEBUG
+        /// <summary>
+        /// Reads the stream into a byte array.
+        /// </summary>
+        /// <param name="responseStream">The response stream.</param>
+        /// <returns>A byte array.</returns>
+        private static byte[] ReadStream(Stream responseStream)
+        {
+            byte[] data = new byte[32768];
+
+            byte[] buffer = new byte[32768];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bool exit = false;
+                while (!exit)
+                {
+                    int read = responseStream.Read(buffer, 0, buffer.Length);
+                    if (read <= 0)
+                    {
+                        data = ms.ToArray();
+                        exit = true;
+                    }
+                    else
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                }
+            }
+
+            return data;
+        }
+#endif
 
         /// <summary>
         /// Builds the request.

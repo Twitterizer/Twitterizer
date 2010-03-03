@@ -34,9 +34,9 @@
 namespace Twitterizer
 {
     using System;
+    using System.Globalization;
     using System.Runtime.Serialization;
     using Twitterizer.Core;
-    using System.Globalization;
 
     /// <summary>
     /// The TwitterStatus class.
@@ -96,7 +96,21 @@ namespace Twitterizer
         {
             get
             {
-                return DateTime.Parse(this.CreatedDateString, CultureInfo.InvariantCulture);
+                DateTime parsedDate;
+
+                if (DateTime.TryParseExact(
+                        this.CreatedDateString,
+                        DateFormat, 
+                        CultureInfo.InvariantCulture, 
+                        DateTimeStyles.None, 
+                        out parsedDate))
+                {
+                    return parsedDate;
+                }
+                else
+                {
+                    return new DateTime();
+                }
             }
         }
 

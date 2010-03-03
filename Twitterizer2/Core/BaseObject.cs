@@ -43,6 +43,11 @@ namespace Twitterizer.Core
     public class BaseObject : ITwitterObject
     {
         /// <summary>
+        /// The format that all twitter dates are in.
+        /// </summary>
+        protected const string DateFormat = "ddd MMM dd HH:mm:ss zz00 yyyy";
+
+        /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
