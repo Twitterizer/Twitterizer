@@ -138,9 +138,12 @@ namespace Twitterizer
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="requestToken">The request token.</param>
         /// <param name="pinNumber">The pin number.</param>
-        /// <returns>An <see cref="OAuthTokenResponse"/> class containing access token information.</returns>
-        public static OAuthTokenResponse GetAccessTokenFromPin(string consumerKey, string consumerSecret, string pinNumber)
+        /// <returns>
+        /// An <see cref="OAuthTokenResponse"/> class containing access token information.
+        /// </returns>
+        public static OAuthTokenResponse GetAccessTokenFromPin(string consumerKey, string consumerSecret, string requestToken, string pinNumber)
         {
             OAuthTokenResponse response = new OAuthTokenResponse();
 
@@ -155,7 +158,7 @@ namespace Twitterizer
                     "POST",
                     consumerKey,
                     consumerSecret,
-                    string.Empty,
+                    requestToken,
                     string.Empty);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
