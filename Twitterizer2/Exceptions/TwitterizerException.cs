@@ -82,6 +82,11 @@ namespace Twitterizer
 
                 this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
+                System.Diagnostics.Debug.Write(this.ResponseBody);
+                System.Diagnostics.Debug.WriteLine("----------- END -----------");
+#endif
                 this.ParseRateLimitHeaders(response);
 
                 DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));

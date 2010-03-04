@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="NamespaceDoc.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="pin-based.aspx.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,16 +29,42 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The dummy file for supplying xml documentation for the Twitterizer.Core namespace.</summary>
+// <summary>The example file for pin-base oauth authentication.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+using System;
+using System.Configuration;
+using Twitterizer;
+
+public partial class authenticate_pin_based : System.Web.UI.Page
 {
-    /// <summary>
-    /// The <see cref="Twitterizer.Core"/> namespace contains abstract classes and interfaces
-    /// </summary>  
-    [System.Runtime.CompilerServices.CompilerGenerated]
-    internal class NamespaceDoc
+    protected void Page_Load(object sender, EventArgs e)
     {
+    }
+
+    protected void AuthWizard_ActiveStepChanged(object sender, EventArgs e)
+    {
+        if (this.AuthWizard.ActiveStep == this.ClickLinkStep)
+        {
+            OAuthTokenResponse tokens = OAuthUtility.GetRequestToken(
+                ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
+                ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
+
+            this.RequestHyperLink.NavigateUrl =
+                string.Format("http://twitter.com/oauth/authorize?oauth_token={0}", tokens.Token);
+        }
+    }
+
+    protected void GetRequestToken_Click(object sender, EventArgs e)
+    {
+        OAuthTokenResponse tokens = OAuthUtility.GetAccessTokenFromPin(
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
+            PIN.Text);
+
+        AccessTokenLabel.Text = tokens.Token;
+        AccessSecretLabel.Text = tokens.TokenSecret;
+
+        AuthWizard.MoveTo(DoneStep);
     }
 }

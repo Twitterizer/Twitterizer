@@ -46,7 +46,7 @@ namespace Twitterizer_Desktop
         /// </summary>
         public Form1()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

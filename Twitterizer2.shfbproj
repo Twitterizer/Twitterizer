@@ -18,8 +18,8 @@
     <HtmlHelpName>twitterizer2</HtmlHelpName>
     <HelpTitle>Twitterizer 2 Documentation</HelpTitle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.dll" xmlns="" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.dll" />
+<DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.XML" /></DocumentationSources>
     <PresentationStyle>Prototype</PresentationStyle>
     <FeedbackEMailAddress>twitterizer%40googlegroups.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>Mailing List</FeedbackEMailLinkText>

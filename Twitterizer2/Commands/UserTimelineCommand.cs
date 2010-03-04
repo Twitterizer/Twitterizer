@@ -40,8 +40,8 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The user timeline command.
     /// </summary>
-    internal sealed class UserTimelineCommand : 
-        Core.BaseCommand<TwitterStatusCollection>, 
+    internal sealed class UserTimelineCommand :
+        Core.BaseCommand<TwitterStatusCollection>,
         Core.IPagedCommand<TwitterStatusCollection>
     {
         #region Constructors

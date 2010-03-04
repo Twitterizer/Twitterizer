@@ -112,10 +112,50 @@ namespace Twitterizer
                 HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
                     "http://twitter.com/oauth/access_token",
                     null,
-                    "GET",
+                    "POST",
                     consumerKey,
                     consumerSecret,
                     requestToken,
+                    string.Empty);
+
+                string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
+
+                response.Token = Regex.Match(responseBody, @"oauth_token=([^&]+)").Groups[1].Value;
+                response.TokenSecret = Regex.Match(responseBody, @"oauth_token_secret=([^&]+)").Groups[1].Value;
+                response.UserId = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value, CultureInfo.CurrentCulture);
+                response.ScreenName = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
+            }
+            catch (WebException wex)
+            {
+                throw new TwitterizerException(wex.Message, wex);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Gets the access token from pin.
+        /// </summary>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="pinNumber">The pin number.</param>
+        /// <returns>An <see cref="OAuthTokenResponse"/> class containing access token information.</returns>
+        public static OAuthTokenResponse GetAccessTokenFromPin(string consumerKey, string consumerSecret, string pinNumber)
+        {
+            OAuthTokenResponse response = new OAuthTokenResponse();
+
+            try
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("oauth_verifier", pinNumber);
+
+                HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
+                    "http://twitter.com/oauth/access_token",
+                    parameters,
+                    "POST",
+                    consumerKey,
+                    consumerSecret,
+                    string.Empty,
                     string.Empty);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
@@ -376,7 +416,8 @@ namespace Twitterizer
             Dictionary<string, string> baseStringParameters =
                 (from p in parameters
                  where !(p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
-                    p.Key.StartsWith("oauth_", StringComparison.OrdinalIgnoreCase))
+                    p.Key.StartsWith("oauth_", StringComparison.OrdinalIgnoreCase) &&
+                    !p.Key.EndsWith("_verifier", StringComparison.OrdinalIgnoreCase))
                  select p).ToDictionary(p => p.Key, p => p.Value);
 
             string signatureBase = string.Format(
