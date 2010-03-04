@@ -143,7 +143,7 @@ namespace Twitterizer
         /// <returns>
         /// An <see cref="OAuthTokenResponse"/> class containing access token information.
         /// </returns>
-        public static OAuthTokenResponse GetAccessTokenFromPin(string consumerKey, string consumerSecret, string requestToken, string pinNumber)
+        public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken, string pinNumber)
         {
             OAuthTokenResponse response = new OAuthTokenResponse();
 

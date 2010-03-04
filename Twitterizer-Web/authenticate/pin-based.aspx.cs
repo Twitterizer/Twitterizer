@@ -59,7 +59,7 @@ public partial class authenticate_pin_based : System.Web.UI.Page
 
     protected void GetRequestToken_Click(object sender, EventArgs e)
     {
-        OAuthTokenResponse tokens = OAuthUtility.GetAccessTokenFromPin(
+        OAuthTokenResponse tokens = OAuthUtility.GetAccessToken(
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
             (string)ViewState["RequestToken"],
