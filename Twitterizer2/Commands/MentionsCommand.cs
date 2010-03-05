@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserShowCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="MentionsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,61 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The 'Show User' command class.</summary>
+// <summary>The mentions command class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
-    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The User Show Command
+    /// The Mentions Command class
     /// </summary>
-    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
-    internal sealed class UserShowCommand : Core.BaseCommand<TwitterUser>
+    internal sealed class MentionsCommand : PagedCommand<TwitterStatusCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/users/show.json";
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserShowCommand"/> class.
+        /// Initializes a new instance of the <see cref="MentionsCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public UserShowCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public MentionsCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/mentions.json"), tokens)
         {
         }
         #endregion
 
-        #region Properties
+        #region API Properties
         /// <summary>
-        /// Gets or sets the user ID.
+        /// Gets or sets the since status id.
         /// </summary>
-        /// <value>The user ID.</value>
-        public long UserId { get; set; }
+        /// <value>The since status id.</value>
+        public long SinceStatusId { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the user.
+        /// Gets or sets the max status id.
         /// </summary>
-        /// <value>The name of the user.</value>
-        public string Username { get; set; }
+        /// <value>The max status id.</value>
+        public long MaxStatusId { get; set; }
         #endregion
 
         /// <summary>
-        /// Inits this instance.
+        /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            
-            if (!string.IsNullOrEmpty(this.Username))
-                this.RequestParameters.Add("screen_name", this.Username);
+            if (this.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -91,9 +85,22 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Tokens != null || 
-                this.UserId > 0 || 
-                !string.IsNullOrEmpty(this.Username);
+            this.IsValid = this.Tokens != null;
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
+        /// </returns>
+        internal override PagedCommand<TwitterStatusCollection> Clone()
+        {
+            return new MentionsCommand(this.Tokens)
+            {
+                SinceStatusId = this.SinceStatusId,
+                MaxStatusId = this.MaxStatusId
+            };
         }
     }
 }

@@ -145,70 +145,6 @@
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="Twitterizer.Commands">
-        <Types>
-         <Type Name="UpdateStatusCommand">
-          <Members>
-           <Member Name="#InReplyToStatusId">
-            <Accessors>
-             <Accessor Name="#set_InReplyToStatusId(System.Int64)">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-03-04 23:02:22Z">
-                <Issue>
-                 <Item>'UpdateStatusCommand.InReplyToStatusId.set(long)'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Latitude">
-            <Accessors>
-             <Accessor Name="#set_Latitude(System.String)">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-03-04 23:02:22Z">
-                <Issue>
-                 <Item>'UpdateStatusCommand.Latitude.set(string)'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Longitude">
-            <Accessors>
-             <Accessor Name="#set_Longitude(System.String)">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-03-04 23:02:22Z">
-                <Issue>
-                 <Item>'UpdateStatusCommand.Longitude.set(string)'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="UserShowCommand">
-          <Members>
-           <Member Name="#UserIdOrName">
-            <Accessors>
-             <Accessor Name="#set_UserIdOrName(System.String)">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-03-04 23:02:22Z">
-                <Issue>
-                 <Item>'UserShowCommand.UserIdOrName.set(string)'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
       </Namespaces>
      </Module>
     </Modules>
@@ -221,10 +157,8 @@
    </User>
   </Notes>
   <Rules>
-   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
-    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
-   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="UriReturnValuesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1055">

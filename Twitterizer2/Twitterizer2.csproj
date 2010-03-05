@@ -59,15 +59,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\DeleteStatusCommand.cs" />
+    <Compile Include="Commands\DirectMessagesCommand.cs" />
+    <Compile Include="Commands\FriendsCommand.cs" />
+    <Compile Include="Commands\FriendsTimelineCommand.cs" />
     <Compile Include="Commands\HomeTimelineCommand.cs" />
+    <Compile Include="Commands\MentionsCommand.cs" />
     <Compile Include="Commands\PublicTimelineCommand.cs" />
+    <Compile Include="Commands\RetweetCommand.cs" />
+    <Compile Include="Commands\RetweetedByMeCommand.cs" />
+    <Compile Include="Commands\RetweetedToMeCommand.cs" />
+    <Compile Include="Commands\RetweetsCommand.cs" />
+    <Compile Include="Commands\RetweetsOfMeCommand.cs" />
+    <Compile Include="Commands\ShowStatusCommand.cs" />
     <Compile Include="Commands\UpdateStatusCommand.cs" />
-    <Compile Include="Commands\UserFollowersCommand.cs" />
+    <Compile Include="Commands\FollowersCommand.cs" />
+    <Compile Include="Commands\UserSearchCommand.cs" />
     <Compile Include="Commands\UserTimelineCommand.cs" />
     <Compile Include="Core\BaseCollection.cs" />
     <Compile Include="Core\ICommand.cs" />
     <Compile Include="Core\PagedCommand.cs" />
-    <Compile Include="Commands\UserShowCommand.cs" />
+    <Compile Include="Commands\ShowUserCommand.cs" />
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
@@ -82,6 +93,8 @@
     <Compile Include="Core\BaseCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
+    <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
     <Compile Include="TwitterEntities\TwitterStatusCollection.cs" />
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="UserSearchCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,43 +29,85 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain the public timeline</summary>
+// <summary>The user search command class.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The Public Timeline Command class
+    /// The User Search Command class.
     /// </summary>
-    internal sealed class PublicTimelineCommand :
-        Core.PagedCommand<TwitterStatusCollection>
+    internal sealed class UserSearchCommand : PagedCommand<TwitterUserCollection>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="UserSearchCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public PublicTimelineCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/public_timeline.json"), tokens)
+        public UserSearchCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/users/search.json"), tokens)
         {
         }
         #endregion
 
-       /// <summary>
-        /// Initializes the command.
+        #region API Properties
+        /// <summary>
+        /// Gets or sets the query.
         /// </summary>
-        public override void Init()
-        {
-        }
+        /// <value>The query.</value>
+        public string Query { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number per page. Cannot be greater than 20.
+        /// </summary>
+        /// <value>The number per page.</value>
+        public int NumberPerPage { get; set; }
+        #endregion
 
         /// <summary>
         /// Validates this instance.
         /// </summary>
         public override void Validate()
         {
+            this.IsValid = false;
+
+            if (this.Tokens == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.Query))
+            {
+                return;
+            }
+
+            if (this.Page > 0 && this.NumberPerPage > 0)
+            {
+                if (this.NumberPerPage * this.Page > 1000)
+                {
+                    return;
+                }
+            }
+
             this.IsValid = true;
+        }
+
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
+        public override void Init()
+        {
+            this.RequestParameters.Add("q", this.Query);
+
+            if (this.NumberPerPage > 0)
+                this.RequestParameters.Add("per_page", this.NumberPerPage.ToString(CultureInfo.InvariantCulture));
+
+            if (this.Page > 0)
+                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -74,9 +116,14 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override PagedCommand<TwitterStatusCollection> Clone()
+        internal override PagedCommand<TwitterUserCollection> Clone()
         {
-            throw new NotImplementedException();
+            return new UserSearchCommand(this.Tokens)
+            {
+                NumberPerPage = this.NumberPerPage,
+                Query = this.Query,
+                Page = this.Page
+            };
         }
     }
 }

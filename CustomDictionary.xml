@@ -5,6 +5,9 @@
       <Word>Twitterizer</Word>
       <Word>OAuth</Word>
       <Word>Favorited</Word>
+      <Word>Retweet</Word>
+      <Word>Retweeted</Word>
+      <Word>Retweets</Word>
     </Recognized>
   </Words>
 </Dictionary>

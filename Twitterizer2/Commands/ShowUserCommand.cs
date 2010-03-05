@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PagedCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ShowUserCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,63 +29,71 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The interface that indicates that the command results can be paged through.</summary>
+// <summary>The 'Show User' command class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+
+namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
+    using Twitterizer;
 
     /// <summary>
-    /// The IPagedCommand interface.
+    /// The Show User Command
     /// </summary>
-    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
-    internal abstract class PagedCommand<T> : BaseCommand<T>
-        where T : ITwitterObject
+    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
+    internal sealed class ShowUserCommand : Core.BaseCommand<TwitterUser>
     {
+        /// <summary>
+        /// The base address to the API method.
+        /// </summary>
+        private const string Path = "http://api.twitter.com/1/users/show.json";
+
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
-        /// <param name="tokens">The request tokens.</param>
-        protected PagedCommand(string method, Uri uri, OAuthTokens tokens)
-            : base(method, uri, tokens)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="tokens">The tokens.</param>
-        protected PagedCommand(string method, OAuthTokens tokens)
-            : base(method, tokens)
+        /// <param name="requestTokens">The request tokens.</param>
+        public ShowUserCommand(OAuthTokens requestTokens)
+            : base("GET", new Uri(Path), requestTokens)
         {
         }
         #endregion
 
+        #region Properties
         /// <summary>
-        /// Gets or sets the cursor.
+        /// Gets or sets the user ID.
         /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
+        /// <value>The user ID.</value>
+        public long UserId { get; set; }
 
         /// <summary>
-        /// Gets or sets the page number to obtain.
+        /// Gets or sets the name of the user.
         /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
+        /// <value>The name of the user.</value>
+        public string Username { get; set; }
+        #endregion
 
         /// <summary>
-        /// Clones this instance.
+        /// Inits this instance.
         /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal abstract PagedCommand<T> Clone();
+        public override void Init()
+        {
+            if (this.UserId > 0)
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+            
+            if (!string.IsNullOrEmpty(this.Username))
+                this.RequestParameters.Add("screen_name", this.Username);
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = this.Tokens != null || 
+                this.UserId > 0 || 
+                !string.IsNullOrEmpty(this.Username);
+        }
     }
 }

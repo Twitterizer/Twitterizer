@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterDirectMessageCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,24 +29,17 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The default example page.</summary>
+// <summary>The Direct Message Collection class</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class _Default : System.Web.UI.Page
+namespace Twitterizer
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
-        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
-        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
+    using Twitterizer.Core;
 
-        myGridView.DataSource = TwitterDirectMessage.GetDirectMessages(tokens, -1, -1, -1);
-        myGridView.DataBind();
+    /// <summary>
+    /// The Direct Message Collection class
+    /// </summary>
+    public class TwitterDirectMessageCollection : BaseCollection<TwitterDirectMessage>
+    {
     }
 }

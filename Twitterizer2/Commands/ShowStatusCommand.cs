@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ShowStatusCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,24 +29,60 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The default example page.</summary>
+// <summary>The Show Status Command class</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class _Default : System.Web.UI.Page
+namespace Twitterizer.Commands
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
-        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
-        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
+    using System;
+    using System.Globalization;
+    using Twitterizer;
 
-        myGridView.DataSource = TwitterDirectMessage.GetDirectMessages(tokens, -1, -1, -1);
-        myGridView.DataBind();
+    /// <summary>
+    /// The Show Status Command
+    /// </summary>
+    internal sealed class ShowStatusCommand : Core.BaseCommand<TwitterStatus>
+    {
+        /// <summary>
+        /// The base address to the API method.
+        /// </summary>
+        private const string Path = "http://api.twitter.com/1/statuses/show/{0}.json";
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShowStatusCommand"/> class.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        public ShowStatusCommand(OAuthTokens requestTokens)
+            : base("GET", requestTokens)
+        {
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the status id.
+        /// </summary>
+        /// <value>The status id.</value>
+        public long StatusId { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Inits this instance.
+        /// </summary>
+        public override void Init()
+        {
+            this.Uri = new Uri(
+                string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = this.StatusId > 0;
+        }
     }
 }
+

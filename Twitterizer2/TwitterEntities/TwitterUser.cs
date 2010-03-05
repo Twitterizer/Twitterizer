@@ -300,7 +300,7 @@ namespace Twitterizer
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
         public static TwitterUser GetUser(long id)
         {
-            Commands.UserShowCommand command = new Commands.UserShowCommand(null);
+            Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
             command.UserId = id;
 
             command.Validate();
@@ -323,7 +323,7 @@ namespace Twitterizer
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
         public static TwitterUser GetUser(string username)
         {
-            Commands.UserShowCommand command = new Commands.UserShowCommand(null);
+            Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
             command.Username = username;
 
             command.Validate();
@@ -347,7 +347,7 @@ namespace Twitterizer
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
         public static TwitterUser GetUser(OAuthTokens requestTokens, long id)
         {
-            Commands.UserShowCommand command = new Commands.UserShowCommand(requestTokens);
+            Commands.ShowUserCommand command = new Commands.ShowUserCommand(requestTokens);
             command.UserId = id;
 
             command.Validate();
@@ -371,7 +371,7 @@ namespace Twitterizer
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
         public static TwitterUser GetUser(OAuthTokens tokens, string username)
         {
-            Commands.UserShowCommand command = new Twitterizer.Commands.UserShowCommand(tokens);
+            Commands.ShowUserCommand command = new Twitterizer.Commands.ShowUserCommand(tokens);
             command.Username = username;
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
@@ -475,6 +475,115 @@ namespace Twitterizer
             return result;
         }
         #endregion
+
+        /// <summary>
+        /// Searches the specified tokens.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="numberPerPage">The number per page.</param>
+        /// <returns>A <see cref="TwitterUserCollection"/> instance.</returns>
+        /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
+        public static TwitterUserCollection Search(OAuthTokens tokens, string query, int numberPerPage)
+        {
+            Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens)
+            {
+                NumberPerPage = numberPerPage,
+                Query = query
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterUserCollection>()
+                {
+                    Command = command,
+                    MethodName = "Search"
+                };
+            }
+
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+
+        #region GetFriends
+        /// <summary>
+        /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="screenName">Name of the screen.</param>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        public static TwitterUserCollection GetFriends(OAuthTokens tokens, long userId, string screenName)
+        {
+            Commands.FriendsCommand command = new Commands.FriendsCommand(tokens)
+            {
+                UserId = userId,
+                ScreenName = screenName
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterUserCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetFriends"
+                };
+            }
+
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        public static TwitterUserCollection GetFriends(OAuthTokens tokens, long userId)
+        {
+            return GetFriends(tokens, userId, string.Empty);
+        }
+
+        /// <summary>
+        /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">Name of the screen.</param>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        public static TwitterUserCollection GetFriends(OAuthTokens tokens, string screenName)
+        {
+            return GetFriends(tokens, -1, screenName);
+        }
+
+        /// <summary>
+        /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        public static TwitterUserCollection GetFriends(OAuthTokens tokens)
+        {
+            return GetFriends(tokens, -1, string.Empty);
+        }
+        #endregion
         #endregion
 
         #region Non-Static Members
@@ -485,7 +594,7 @@ namespace Twitterizer
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUserCollection"/> class.</returns>
         public TwitterUserCollection GetFollowers()
         {
-            Commands.UserFollowersCommand command = new Commands.UserFollowersCommand(this.Tokens);
+            Commands.FollowersCommand command = new Commands.FollowersCommand(this.Tokens);
             command.UserId = this.Id;
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
@@ -509,6 +618,199 @@ namespace Twitterizer
                 -1,
                 -1,
                 -1);
+        }
+
+        #region GetFriendsTimeline
+        /// <summary>
+        /// Gets the friends timeline.
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
+        public TwitterStatusCollection GetFriendsTimeline()
+        {
+            return this.GetFriendsTimeline(-1, -1);
+        }
+
+        /// <summary>
+        /// Gets the friends timeline.
+        /// </summary>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
+        public TwitterStatusCollection GetFriendsTimeline(long sinceStatusId, long maxStatusId)
+        {
+            Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(this.Tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId
+            };
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        } 
+        #endregion
+
+        #region GetMentions
+        /// <summary>
+        /// Gets the 20 most recent statuses that mention the authorized user.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> object.
+        /// </returns>
+        public TwitterStatusCollection GetMentions()
+        {
+            return this.GetMentions(-1, -1);
+        }
+
+        /// <summary>
+        /// Gets the 20 most recent statuses that mention the authorized user.
+        /// </summary>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
+        public TwitterStatusCollection GetMentions(long sinceStatusId, long maxStatusId)
+        {
+            Commands.MentionsCommand command = new Commands.MentionsCommand(this.Tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId
+            };
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+        #endregion
+
+        #region RetweetedByMe
+        /// <summary>
+        /// Returns the 20 most recent retweets posted by the authenticating user.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> object.
+        /// </returns>
+        public TwitterStatusCollection RetweetedByUser()
+        {
+            return this.RetweetedByUser(-1, -1);
+        }
+
+        /// <summary>
+        /// Returns the 20 most recent retweets posted by the authenticating user.
+        /// </summary>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
+        public TwitterStatusCollection RetweetedByUser(long sinceStatusId, long maxStatusId)
+        {
+            Commands.RetweetedByMeCommand command = new Commands.RetweetedByMeCommand(this.Tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId
+            };
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+        #endregion
+
+        #region RetweetedToMe
+        /// <summary>
+        /// Returns the 20 most recent retweets posted by the authenticating user's friends.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> object.
+        /// </returns>
+        public TwitterStatusCollection RetweetedToUser()
+        {
+            return this.RetweetedToUser(-1, -1);
+        }
+
+        /// <summary>
+        /// Returns the 20 most recent retweets posted by the authenticating user's friends.
+        /// </summary>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
+        public TwitterStatusCollection RetweetedToUser(long sinceStatusId, long maxStatusId)
+        {
+            Commands.RetweetedToMeCommand command = new Commands.RetweetedToMeCommand(this.Tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId
+            };
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+        #endregion
+
+        #region RetweetsOfMe
+        /// <summary>
+        /// Returns the 20 most recent tweets of the authenticated user that have been retweeted by others.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> object.
+        /// </returns>
+        public TwitterStatusCollection RetweetsOfUser()
+        {
+            return this.RetweetsOfUser(-1, -1);
+        }
+
+        /// <summary>
+        /// Returns the 20 most recent tweets of the authenticated user that have been retweeted by others.
+        /// </summary>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
+        public TwitterStatusCollection RetweetsOfUser(long sinceStatusId, long maxStatusId)
+        {
+            Commands.RetweetsOfMeCommand command = new Commands.RetweetsOfMeCommand(this.Tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId
+            };
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
+        }
+        #endregion
+
+        /// <summary>
+        /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        public TwitterUserCollection GetFriends()
+        {
+            Commands.FriendsCommand command = new Commands.FriendsCommand(this.Tokens)
+            {
+                UserId = this.Id
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterUserCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetFriends"
+                };
+            }
+
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
         }
         #endregion
     }

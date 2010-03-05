@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PagedCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DirectMessagesCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,63 +29,78 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The interface that indicates that the command results can be paged through.</summary>
+// <summary>The Direct Messages Command class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+
+namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
+    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The IPagedCommand interface.
+    /// The Direct Messages Command
     /// </summary>
-    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
-    internal abstract class PagedCommand<T> : BaseCommand<T>
-        where T : ITwitterObject
+    internal sealed class DirectMessagesCommand : BaseCommand<TwitterDirectMessageCollection>
     {
+        /// <summary>
+        /// The base address to the API method.
+        /// </summary>
+        private const string Path = "http://api.twitter.com/1/direct_messages.json";
+
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="DirectMessagesCommand"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        protected PagedCommand(string method, Uri uri, OAuthTokens tokens)
-            : base(method, uri, tokens)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="tokens">The tokens.</param>
-        protected PagedCommand(string method, OAuthTokens tokens)
-            : base(method, tokens)
+        public DirectMessagesCommand(OAuthTokens tokens)
+            : base("GET", new Uri(Path), tokens)
         {
         }
         #endregion
 
+        #region API Properties
         /// <summary>
-        /// Gets or sets the cursor.
+        /// Gets or sets the since status id.
         /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
+        /// <value>The since status id.</value>
+        public long SinceStatusId { get; set; }
 
         /// <summary>
-        /// Gets or sets the page number to obtain.
+        /// Gets or sets the max status id.
         /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
+        /// <value>The max status id.</value>
+        public long MaxStatusId { get; set; }
 
         /// <summary>
-        /// Clones this instance.
+        /// Gets or sets the count.
         /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal abstract PagedCommand<T> Clone();
+        /// <value>The count.</value>
+        public int Count { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
+        public override void Init()
+        {
+            if (this.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.Count > 0)
+                this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = this.Tokens != null;
+        }
     }
 }

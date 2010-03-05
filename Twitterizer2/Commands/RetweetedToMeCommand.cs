@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserFollowersCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RetweetedToMeCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,56 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain followers of a user.</summary>
+// <summary>The retweeted by me command.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
-    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command to obtain followers of a user.
+    /// The Retweeted By Me Command.
     /// </summary>
-    internal sealed class UserFollowersCommand : 
-        Core.PagedCommand<TwitterUserCollection>
+    internal sealed class RetweetedToMeCommand : PagedCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserFollowersCommand"/> class.
+        /// Initializes a new instance of the <see cref="RetweetedToMeCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public UserFollowersCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/followers.json"), tokens)
+        public RetweetedToMeCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/retweeted_to_me.json"), tokens)
         {
         }
         #endregion
 
-        #region API Parameters
+        #region API Properties
         /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers. 
+        /// Gets or sets the since status id.
         /// </summary>
-        /// <value>The user id.</value>
-        public long UserId { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
-        #endregion
+        /// <value>The since status id.</value>
+        public long SinceStatusId { get; set; }
 
         /// <summary>
+        /// Gets or sets the max status id.
+        /// </summary>
+        /// <value>The max status id.</value>
+        public long MaxStatusId { get; set; }
+        #endregion
+
+         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            if (!string.IsNullOrEmpty(this.ScreenName))
-                this.RequestParameters.Add("screen_name", this.ScreenName);
-            if (this.Cursor > 0)
-                this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+            if (this.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -86,22 +85,22 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.UserId > 0 ||
-                !string.IsNullOrEmpty(this.ScreenName);
+            this.IsValid = this.Tokens != null;
         }
 
         /// <summary>
         /// Clones this instance.
         /// </summary>
-        /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.PagedCommand<TwitterUserCollection> Clone()
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
+        /// </returns>
+        internal override PagedCommand<TwitterStatusCollection> Clone()
         {
-            UserFollowersCommand newCommand = new UserFollowersCommand(this.Tokens);
-
-            newCommand.ScreenName = this.ScreenName;
-            newCommand.UserId = this.UserId;
-
-            return newCommand;
+            return new RetweetedToMeCommand(this.Tokens)
+            {
+                SinceStatusId = this.SinceStatusId,
+                MaxStatusId = this.MaxStatusId
+            };
         }
     }
 }

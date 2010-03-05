@@ -167,7 +167,6 @@ namespace Twitterizer
         #endregion
 
         #region Static Methods
-        #region Public Static Methods
         /// <summary>
         /// Updates the authenticated user's status to the supplied text.
         /// </summary>
@@ -195,6 +194,42 @@ namespace Twitterizer
 
             return status.Delete();
         }
+
+        #region GetStatus
+        /// <summary>
+        /// Returns a single status, with user information, specified by the id parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        public static TwitterStatus GetStatus(OAuthTokens tokens, long statusId)
+        {
+            Commands.ShowStatusCommand command = new Commands.ShowStatusCommand(tokens);
+            command.StatusId = statusId;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatus>()
+                {
+                    Command = command,
+                    MethodName = "GetStatus"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns a single status, with user information, specified by the id parameter.
+        /// </summary>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        public static TwitterStatus GetStatus(long statusId)
+        {
+            return GetStatus(null, statusId);
+        } 
+        #endregion
 
         #region GetPublicTimeline
         /// <summary>
@@ -290,11 +325,72 @@ namespace Twitterizer
         }
         #endregion
 
+        /// <summary>
+        /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        public static TwitterStatus Retweet(OAuthTokens tokens, long statusId)
+        {
+            Commands.RetweetCommand command = new Commands.RetweetCommand(tokens);
+            command.StatusId = statusId;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatus>()
+                {
+                    Command = command,
+                    MethodName = "Retweet"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
+        }
+
+        #region Retweets
+        /// <summary>
+        /// Returns up to 100 of the first retweets of a given tweet.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="count">The count.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, long statusId, int count)
+        {
+            Commands.RetweetsCommand command = new Commands.RetweetsCommand(tokens);
+            command.StatusId = statusId;
+            command.Count = count;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "Retweet"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns up to 100 of the first retweets of a given tweet.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, long statusId)
+        {
+            return Retweets(tokens, statusId, -1);
+        } 
         #endregion
         #endregion
 
         #region Non-Static Methods
-        #region Public Non-Static Methods
+        #region Update
         /// <summary>
         /// Updates the authenticated user's status to the supplied text.
         /// </summary>
@@ -353,7 +449,8 @@ namespace Twitterizer
             }
 
             return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
-        }
+        } 
+        #endregion
 
         /// <summary>
         /// Deletes this instance.
@@ -375,6 +472,66 @@ namespace Twitterizer
             }
 
             return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
+        /// </summary>
+        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        public TwitterStatus Retweet()
+        {
+            Commands.RetweetCommand command = new Commands.RetweetCommand(this.Tokens);
+            command.StatusId = this.Id;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatus>()
+                {
+                    Command = command,
+                    MethodName = "Retweet"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
+        }
+
+        #region Retweets
+        /// <summary>
+        /// Returns up to 100 of the first retweets of a given tweet.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public TwitterStatusCollection Retweets(int count)
+        {
+            Commands.RetweetsCommand command = new Commands.RetweetsCommand(this.Tokens);
+            command.StatusId = this.Id;
+            command.Count = count;
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "Retweet"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns up to 100 of the first retweets of a given tweet.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public TwitterStatusCollection Retweets()
+        {
+            return Retweets(this.Tokens, this.Id, -1);
         }
         #endregion
         #endregion

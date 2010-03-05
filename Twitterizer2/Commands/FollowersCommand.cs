@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PagedCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="FollowersCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,63 +29,79 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The interface that indicates that the command results can be paged through.</summary>
+// <summary>The command to obtain followers of a user.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
+    using Twitterizer;
 
     /// <summary>
-    /// The IPagedCommand interface.
+    /// The command to obtain followers of a user.
     /// </summary>
-    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
-    internal abstract class PagedCommand<T> : BaseCommand<T>
-        where T : ITwitterObject
+    internal sealed class FollowersCommand : 
+        Core.PagedCommand<TwitterUserCollection>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="FollowersCommand"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        protected PagedCommand(string method, Uri uri, OAuthTokens tokens)
-            : base(method, uri, tokens)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="tokens">The tokens.</param>
-        protected PagedCommand(string method, OAuthTokens tokens)
-            : base(method, tokens)
+        public FollowersCommand(OAuthTokens tokens)
+            : base("GET", new Uri("http://api.twitter.com/1/statuses/followers.json"), tokens)
         {
         }
         #endregion
 
+        #region API Parameters
         /// <summary>
-        /// Gets or sets the cursor.
+        /// Gets or sets the ID of the user for whom to request a list of followers. 
         /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
+        /// <value>The user id.</value>
+        public long UserId { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the screen name of the user for whom to request a list of followers. 
+        /// </summary>
+        /// <value>The name of the screen.</value>
+        public string ScreenName { get; set; }
+        #endregion
 
         /// <summary>
-        /// Gets or sets the page number to obtain.
+        /// Initializes the command.
         /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
+        public override void Init()
+        {
+            if (this.UserId > 0)
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+            if (!string.IsNullOrEmpty(this.ScreenName))
+                this.RequestParameters.Add("screen_name", this.ScreenName);
+            if (this.Cursor > 0)
+                this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = this.UserId > 0 ||
+                !string.IsNullOrEmpty(this.ScreenName);
+        }
 
         /// <summary>
         /// Clones this instance.
         /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal abstract PagedCommand<T> Clone();
+        /// <returns>A cloned command object.</returns>
+        internal override Twitterizer.Core.PagedCommand<TwitterUserCollection> Clone()
+        {
+            FollowersCommand newCommand = new FollowersCommand(this.Tokens);
+
+            newCommand.ScreenName = this.ScreenName;
+            newCommand.UserId = this.UserId;
+
+            return newCommand;
+        }
     }
 }
