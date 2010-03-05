@@ -40,8 +40,7 @@ namespace Twitterizer.Commands
     /// The Public Timeline Command class
     /// </summary>
     internal sealed class PublicTimelineCommand :
-        Core.BaseCommand<TwitterStatusCollection>,
-        Core.IPagedCommand<TwitterStatusCollection>
+        Core.PagedCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -54,61 +53,7 @@ namespace Twitterizer.Commands
         }
         #endregion
 
-        #region IPagedCommand<TwitterStatusCollection> Members
-
-        /// <summary>
-        /// Gets or sets the cursor.
-        /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional.
-        /// Breaks the results into pages.
-        /// A single page contains 100 users.
-        /// </remarks>
-        long IPagedCommand<TwitterStatusCollection>.Cursor
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the page number to obtain.
-        /// </summary>
-        /// <value>The page number.</value>
-        int IPagedCommand<TwitterStatusCollection>.Page
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.IPagedCommand{T}"/> interface.
-        /// </returns>
-        IPagedCommand<TwitterStatusCollection> IPagedCommand<TwitterStatusCollection>.Clone()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        /// <summary>
+       /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
@@ -121,6 +66,17 @@ namespace Twitterizer.Commands
         public override void Validate()
         {
             this.IsValid = true;
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.IPagedCommand{T}"/> interface.
+        /// </returns>
+        internal override PagedCommand<TwitterStatusCollection> Clone()
+        {
+            throw new NotImplementedException();
         }
     }
 }

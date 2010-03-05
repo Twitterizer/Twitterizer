@@ -48,7 +48,7 @@ namespace Twitterizer
         {
             get
             {
-                IPagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
+                PagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
                 newCommand.Cursor = this.NextCursor;
 
                 TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
@@ -65,7 +65,7 @@ namespace Twitterizer
         {
             get
             {
-                IPagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
+                PagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
                 newCommand.Cursor = this.PreviousCursor;
 
                 TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
@@ -102,6 +102,6 @@ namespace Twitterizer
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        internal IPagedCommand<TwitterUserCollection> Command { get; set; }
+        internal PagedCommand<TwitterUserCollection> Command { get; set; }
     }
 }

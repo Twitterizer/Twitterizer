@@ -41,8 +41,7 @@ namespace Twitterizer.Commands
     /// The command to obtain followers of a user.
     /// </summary>
     internal sealed class UserFollowersCommand : 
-        Core.BaseCommand<TwitterUserCollection>, 
-        Core.IPagedCommand<TwitterUserCollection>
+        Core.PagedCommand<TwitterUserCollection>
     {
         #region Constructors
         /// <summary>
@@ -56,13 +55,6 @@ namespace Twitterizer.Commands
         #endregion
 
         #region API Parameters
-
-        /// <summary>
-        /// Gets or sets the ID or screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the id or screen.</value>
-        public string IdOrScreenName { get; set; }
-
         /// <summary>
         /// Gets or sets the ID of the user for whom to request a list of followers. 
         /// </summary>
@@ -74,24 +66,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The name of the screen.</value>
         public string ScreenName { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the cursor.
-        /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number to obtain.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
-
         #endregion
 
         /// <summary>
@@ -99,8 +73,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (!string.IsNullOrEmpty(this.IdOrScreenName))
-                this.RequestParameters.Add("id", this.IdOrScreenName);
             if (this.UserId > 0)
                 this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
             if (!string.IsNullOrEmpty(this.ScreenName))
@@ -115,7 +87,6 @@ namespace Twitterizer.Commands
         public override void Validate()
         {
             this.IsValid = this.UserId > 0 ||
-                !string.IsNullOrEmpty(this.IdOrScreenName) ||
                 !string.IsNullOrEmpty(this.ScreenName);
         }
 
@@ -123,11 +94,10 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        public Twitterizer.Core.IPagedCommand<TwitterUserCollection> Clone()
+        internal override Twitterizer.Core.PagedCommand<TwitterUserCollection> Clone()
         {
             UserFollowersCommand newCommand = new UserFollowersCommand(this.Tokens);
 
-            newCommand.IdOrScreenName = this.IdOrScreenName;
             newCommand.ScreenName = this.ScreenName;
             newCommand.UserId = this.UserId;
 

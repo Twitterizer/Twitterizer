@@ -66,7 +66,7 @@
     <Compile Include="Commands\UserTimelineCommand.cs" />
     <Compile Include="Core\BaseCollection.cs" />
     <Compile Include="Core\ICommand.cs" />
-    <Compile Include="Core\IPagedCommand.cs" />
+    <Compile Include="Core\PagedCommand.cs" />
     <Compile Include="Commands\UserShowCommand.cs" />
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Core\ITwitterObject.cs" />

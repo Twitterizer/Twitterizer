@@ -72,12 +72,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The name of the user.</value>
         public string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the user ID or.
-        /// </summary>
-        /// <value>The name of the user ID or.</value>
-        public string UserIdOrName { get; set; }
         #endregion
 
         /// <summary>
@@ -85,9 +79,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (!string.IsNullOrEmpty(this.UserIdOrName))
-                this.RequestParameters.Add("id", this.UserIdOrName);
-            
             if (this.UserId > 0)
                 this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
             
@@ -102,7 +93,6 @@ namespace Twitterizer.Commands
         {
             this.IsValid = this.Tokens != null || 
                 this.UserId > 0 || 
-                !string.IsNullOrEmpty(this.UserIdOrName) || 
                 !string.IsNullOrEmpty(this.Username);
         }
     }

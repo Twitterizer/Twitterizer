@@ -41,8 +41,7 @@ namespace Twitterizer.Commands
     /// The user timeline command.
     /// </summary>
     internal sealed class UserTimelineCommand :
-        Core.BaseCommand<TwitterStatusCollection>,
-        Core.IPagedCommand<TwitterStatusCollection>
+        Core.PagedCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -91,23 +90,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The count of statuses to obtain.</value>
         public int Count { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cursor.
-        /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number to obtain.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
         #endregion
 
         /// <summary>
@@ -146,7 +128,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        public Core.IPagedCommand<TwitterStatusCollection> Clone()
+        internal override Core.PagedCommand<TwitterStatusCollection> Clone()
         {
             return new UserTimelineCommand(this.Tokens)
             {

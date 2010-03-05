@@ -40,8 +40,7 @@ namespace Twitterizer.Commands
     /// The Home Timeline Command
     /// </summary>
     internal sealed class HomeTimelineCommand :
-        Core.BaseCommand<TwitterStatusCollection>,
-        Core.IPagedCommand<TwitterStatusCollection>
+        Core.PagedCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -72,23 +71,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The max status id.</value>
         public long MaxId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number to obtain.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cursor.
-        /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional.
-        /// Breaks the results into pages.
-        /// A single page contains 100 users.
-        /// </remarks>
-        long Core.IPagedCommand<TwitterStatusCollection>.Cursor { get; set; }
         #endregion
 
         /// <summary>
@@ -118,7 +100,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        public Core.IPagedCommand<TwitterStatusCollection> Clone()
+        internal override Core.PagedCommand<TwitterStatusCollection> Clone()
         {
             return new UserTimelineCommand(this.Tokens)
             {

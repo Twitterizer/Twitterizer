@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IPagedCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="PagedCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -33,13 +33,38 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core
 {
+    using System;
+
     /// <summary>
     /// The IPagedCommand interface.
     /// </summary>
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
-    internal interface IPagedCommand<T> : ICommand<T>
+    internal abstract class PagedCommand<T> : BaseCommand<T>
         where T : ITwitterObject
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="uri">The URI for the API method.</param>
+        /// <param name="tokens">The request tokens.</param>
+        protected PagedCommand(string method, Uri uri, OAuthTokens tokens)
+            : base(method, uri, tokens)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="tokens">The tokens.</param>
+        protected PagedCommand(string method, OAuthTokens tokens)
+            : base(method, tokens)
+        {
+        }
+        #endregion
+
         /// <summary>
         /// Gets or sets the cursor.
         /// </summary>
@@ -49,18 +74,18 @@ namespace Twitterizer.Core
         /// Breaks the results into pages. 
         /// A single page contains 100 users.
         /// </remarks>
-        long Cursor { get; set; }
+        public long Cursor { get; set; }
 
         /// <summary>
         /// Gets or sets the page number to obtain.
         /// </summary>
         /// <value>The page number.</value>
-        int Page { get; set; }
+        public int Page { get; set; }
 
         /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A new instance of the <see cref="Twitterizer.Core.IPagedCommand{T}"/> interface.</returns>
-        IPagedCommand<T> Clone();
+        internal abstract PagedCommand<T> Clone();
     }
 }

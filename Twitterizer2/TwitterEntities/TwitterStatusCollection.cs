@@ -51,7 +51,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The command.</value>
         [IgnoreDataMember]
-        internal IPagedCommand<TwitterStatusCollection> Command { get; set; }
+        internal PagedCommand<TwitterStatusCollection> Command { get; set; }
 
         /// <summary>
         /// Gets the next page.
@@ -59,7 +59,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public TwitterStatusCollection GetNextPage()
         {
-            IPagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
+            PagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
             newCommand.Page += 1;
 
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
@@ -73,7 +73,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public TwitterStatusCollection GetPreviousPage()
         {
-            IPagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
+            PagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
             newCommand.Page -= 1;
 
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);

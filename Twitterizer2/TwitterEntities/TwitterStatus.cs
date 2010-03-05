@@ -302,8 +302,45 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> object of the newly created status.</returns>
         public TwitterStatus Update(string text)
         {
-            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens);
-            command.Text = text;
+            return this.Update(
+                text,
+                -1,
+                string.Empty,
+                string.Empty);
+        }
+
+        /// <summary>
+        /// Updates the authenticated user's status to the supplied text.
+        /// </summary>
+        /// <param name="text">The status text.</param>
+        /// <param name="replyToStatusId">The reply to status id.</param>
+        /// <returns>A <see cref="TwitterStatus"/> object.</returns>
+        public TwitterStatus Update(string text, long replyToStatusId)
+        {
+            return this.Update(
+                text,
+                replyToStatusId,
+                string.Empty,
+                string.Empty);
+        }
+
+        /// <summary>
+        /// Updates the authenticated user's status to the supplied text.
+        /// </summary>
+        /// <param name="text">The status text.</param>
+        /// <param name="replyToStatusId">The reply to status id.</param>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <returns>A <see cref="TwitterStatus"/> object.</returns>
+        public TwitterStatus Update(string text, long replyToStatusId, string latitude, string longitude)
+        {
+            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens)
+            {
+                Text = text,
+                InReplyToStatusId = replyToStatusId,
+                Latitude = latitude,
+                Longitude = longitude,
+            };
 
             command.Validate();
             if (!command.IsValid)

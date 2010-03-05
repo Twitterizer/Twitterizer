@@ -116,6 +116,8 @@ namespace Twitterizer.Core
         /// <value>The request tokens.</value>
         internal OAuthTokens Tokens { get; private set; }
 
+        #region ICommand<T> Members
+
         /// <summary>
         /// Initializes the command.
         /// </summary>
@@ -125,6 +127,8 @@ namespace Twitterizer.Core
         /// Validates this instance.
         /// </summary>
         public abstract void Validate();
+
+        #endregion
 
         /// <summary>
         /// Executes the command.
@@ -231,24 +235,6 @@ namespace Twitterizer.Core
 
             return resultObject;
         }
-
-        #region ICommand<T> Members
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        void ICommand<T>.Init()
-        {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        void ICommand<T>.Validate()
-        {
-        }
-
-        #endregion
 
         /// <summary>
         /// Parses the rate limit headers.
