@@ -51,6 +51,10 @@ namespace Twitterizer.Commands
         public RetweetsOfMeCommand(OAuthTokens tokens)
             : base("GET", new Uri("http://api.twitter.com/1/statuses/retweets_of_me.json"), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 
@@ -85,7 +89,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Tokens != null;
+            this.IsValid = true;
         }
 
         /// <summary>

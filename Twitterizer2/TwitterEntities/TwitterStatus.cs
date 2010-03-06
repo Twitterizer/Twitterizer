@@ -204,8 +204,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
         public static TwitterStatus GetStatus(OAuthTokens tokens, long statusId)
         {
-            Commands.ShowStatusCommand command = new Commands.ShowStatusCommand(tokens);
-            command.StatusId = statusId;
+            Commands.ShowStatusCommand command = new Commands.ShowStatusCommand(tokens, statusId);
 
             command.Validate();
             if (!command.IsValid)
@@ -359,8 +358,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, long statusId, int count)
         {
-            Commands.RetweetsCommand command = new Commands.RetweetsCommand(tokens);
-            command.StatusId = statusId;
+            Commands.RetweetsCommand command = new Commands.RetweetsCommand(tokens, statusId);
             command.Count = count;
 
             command.Validate();
@@ -430,9 +428,8 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> object.</returns>
         public TwitterStatus Update(string text, long replyToStatusId, string latitude, string longitude)
         {
-            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens)
+            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens, text)
             {
-                Text = text,
                 InReplyToStatusId = replyToStatusId,
                 Latitude = latitude,
                 Longitude = longitude,
@@ -458,8 +455,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> object of the deleted status.</returns>
         public TwitterStatus Delete()
         {
-            Commands.DeleteStatusCommand command = new Commands.DeleteStatusCommand(this.Tokens);
-            command.Id = this.Id;
+            Commands.DeleteStatusCommand command = new Commands.DeleteStatusCommand(this.Tokens, this.Id);
 
             command.Validate();
             if (!command.IsValid)
@@ -506,8 +502,7 @@ namespace Twitterizer
         /// </returns>
         public TwitterStatusCollection Retweets(int count)
         {
-            Commands.RetweetsCommand command = new Commands.RetweetsCommand(this.Tokens);
-            command.StatusId = this.Id;
+            Commands.RetweetsCommand command = new Commands.RetweetsCommand(this.Tokens, this.Id);
             command.Count = count;
 
             command.Validate();

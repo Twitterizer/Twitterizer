@@ -57,6 +57,10 @@ namespace Twitterizer.Commands
         public DirectMessagesCommand(OAuthTokens tokens)
             : base("GET", new Uri(Path), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 

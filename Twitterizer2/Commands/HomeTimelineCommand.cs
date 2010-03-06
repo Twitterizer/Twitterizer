@@ -50,6 +50,10 @@ namespace Twitterizer.Commands
         public HomeTimelineCommand(OAuthTokens tokens)
             : base("GET", new Uri("http://api.twitter.com/1/statuses/home_timeline.json"), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 
@@ -93,7 +97,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = true;
+            this.IsValid = this.Tokens != null;
         }
 
         /// <summary>

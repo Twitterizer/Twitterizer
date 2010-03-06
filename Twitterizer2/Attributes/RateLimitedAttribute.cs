@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RateLimitedAttribute.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,56 +29,23 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The rate limited attribute class.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
     using System;
-    using System.Globalization;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// Identifies command classes that must enforce rate limiting. This will cause rate status to be queried before each command call.
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    internal sealed class RateLimitedAttribute : Attribute
     {
         /// <summary>
-        /// The base address to the API method.
+        /// Initializes a new instance of the <see cref="RateLimitedAttribute"/> class.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
-        /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, long id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        public RateLimitedAttribute()
         {
-            this.Id = id;
-        }
-        #endregion
-
-        /// <summary>
-        /// Gets or sets the status id.
-        /// </summary>
-        /// <value>The status id.</value>
-        public long Id { get; set; }
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Id > 0;
         }
     }
 }

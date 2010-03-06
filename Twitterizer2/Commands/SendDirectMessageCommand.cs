@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="SendDirectMessageCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,48 +29,80 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The Send Direct Message Command class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// The Send Direct Message Command class
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class SendDirectMessageCommand : BaseCommand<TwitterDirectMessage>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
+        private const string Path = "http://api.twitter.com/1/direct_messages/new.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, long id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="text">The message text.</param>
+        public SendDirectMessageCommand(OAuthTokens tokens, string text)
+            : base("POST", new Uri(Path), tokens)
         {
-            this.Id = id;
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            this.Text = text;
         }
         #endregion
 
+        #region Properties
         /// <summary>
-        /// Gets or sets the status id.
+        /// Gets or sets the status text.
         /// </summary>
-        /// <value>The status id.</value>
-        public long Id { get; set; }
+        /// <value>The status text.</value>
+        public string Text { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recipient user id.
+        /// </summary>
+        /// <value>The recipient user id.</value>
+        public long RecipientUserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the recipient user.
+        /// </summary>
+        /// <value>The name of the recipient user.</value>
+        public string RecipientUserName { get; set; }
+        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
+            this.RequestParameters.Add("text", this.Text);
+
+            if (this.RecipientUserId > 0)
+                this.RequestParameters.Add("user_id", this.RecipientUserId.ToString(CultureInfo.InvariantCulture));
+
+            if (!string.IsNullOrEmpty(this.RecipientUserName) && this.RecipientUserId <= 0)
+                this.RequestParameters.Add("screen_name", this.RecipientUserName);
         }
 
         /// <summary>
@@ -78,7 +110,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Id > 0;
+            this.IsValid = this.RecipientUserId > 0 || !string.IsNullOrEmpty(this.RecipientUserName);
         }
     }
 }

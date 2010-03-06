@@ -75,8 +75,10 @@ namespace Twitterizer.Commands
         {
             if (this.UserId > 0)
                 this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+
             if (!string.IsNullOrEmpty(this.ScreenName))
                 this.RequestParameters.Add("screen_name", this.ScreenName);
+
             if (this.Cursor > 0)
                 this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
         }

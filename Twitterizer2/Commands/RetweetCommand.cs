@@ -52,10 +52,14 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="RetweetCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public RetweetCommand(OAuthTokens requestTokens)
-            : base("POST", requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public RetweetCommand(OAuthTokens tokens)
+            : base("POST", tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 

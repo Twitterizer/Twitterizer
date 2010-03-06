@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RateLimitStatusCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,42 +29,33 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The rate limit status command class.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// The rate limit status command class.
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class RateLimitStatusCommand : BaseCommand<TwitterRateLimitStatus>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
+        private const string Path = "http://api.twitter.com/1/account/rate_limit_status.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="RateLimitStatusCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, long id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        public RateLimitStatusCommand(OAuthTokens requestTokens)
+            : base("GET", new Uri(Path), requestTokens)
         {
-            this.Id = id;
         }
         #endregion
-
-        /// <summary>
-        /// Gets or sets the status id.
-        /// </summary>
-        /// <value>The status id.</value>
-        public long Id { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -78,7 +69,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Id > 0;
+            this.IsValid = true;
         }
     }
 }

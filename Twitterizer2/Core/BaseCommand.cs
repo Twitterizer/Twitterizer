@@ -137,6 +137,16 @@ namespace Twitterizer.Core
         /// <see cref="Twitterizer.Core.BaseObject"/>
         public T ExecuteCommand()
         {
+            // Check if the command is flagged to check for rate limiting.
+            if (this.GetType().GetCustomAttributes(typeof(RateLimitedAttribute), false).Length > 0)
+            {
+                // Get the rate limiting status
+                if (TwitterRateLimitStatus.GetStatus(this.Tokens).RemainingHits == 0)
+                {
+                    throw new TwitterizerException("You are being rate limited.");
+                }
+            }
+
             if (!this.IsValid)
             {
                 throw new CommandValidationException<T>()

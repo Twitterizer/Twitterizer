@@ -291,6 +291,136 @@ namespace Twitterizer
         public string Website { get; set; }
         #endregion
 
+        #region Lookup readonly properties
+        /// <summary>
+        /// Gets the followers.
+        /// </summary>
+        /// <value>The followers.</value>
+        public TwitterUserCollection Followers
+        {
+            get
+            {
+                Commands.FollowersCommand command = new Commands.FollowersCommand(this.Tokens);
+                command.UserId = this.Id;
+
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+                result.Command = command;
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        public TwitterUserCollection Friends
+        {
+            get
+            {
+                Commands.FriendsCommand command = new Commands.FriendsCommand(this.Tokens);
+
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+                result.Command = command;
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the user's timeline.
+        /// </summary>
+        /// <value>The timeline.</value>
+        public TwitterStatusCollection Timeline
+        {
+            get
+            {
+                return GetTimeline(
+                    this.Tokens,
+                    this.Id,
+                    string.Empty,
+                    -1,
+                    -1,
+                    -1,
+                    -1);
+            }
+        }
+
+        /// <summary>
+        /// Gets the user's friends timeline.
+        /// </summary>
+        /// <value>The friends timeline.</value>
+        public TwitterStatusCollection FriendsTimeline
+        {
+            get
+            {
+                return GetFriendsTimeline(this.Tokens, -1, -1);
+            }
+        }
+
+        /// <summary>
+        /// Gets statuses that mention the user.
+        /// </summary>
+        /// <value>The mentions.</value>
+        public TwitterStatusCollection Mentions
+        {
+            get
+            {
+                return GetMentions(this.Tokens, -1, -1);
+            }
+        }
+
+        /// <summary>
+        /// Gets the 20 most recent retweets posted by the authenticating user.
+        /// </summary>
+        /// <value>The retweets.</value>
+        public TwitterStatusCollection Retweets
+        {
+            get
+            {
+                return this.RetweetedByUser(-1, -1);
+            }
+        }
+
+        /// <summary>
+        /// Gets the 20 most recent retweets posted by the authenticating user's friends.
+        /// </summary>
+        public TwitterStatusCollection Retweeted
+        {
+            get
+            {
+                return this.RetweetedToUser(-1, -1);
+            }
+        }
+
+        /// <summary>
+        /// Gets the direct messages received.
+        /// </summary>
+        /// <value>The direct messages received.</value>
+        public TwitterDirectMessageCollection DirectMessagesReceived
+        {
+            get
+            {
+                return TwitterDirectMessage.GetDirectMessages(this.Tokens);
+            }
+        }
+
+        /// <summary>
+        /// Gets the direct messages sent.
+        /// </summary>
+        /// <value>The direct messages sent.</value>
+        public TwitterDirectMessageCollection DirectMessagesSent
+        {
+            get
+            {
+                return TwitterDirectMessage.GetDirectMessagesSent(this.Tokens);
+            }
+        }
+        #endregion
+
         #region Static Methods
         #region GetUser
         /// <summary>
@@ -319,12 +449,12 @@ namespace Twitterizer
         /// <summary>
         /// Gets the user.
         /// </summary>
-        /// <param name="username">The username.</param>
+        /// <param name="userName">The username.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser GetUser(string username)
+        public static TwitterUser GetUser(string userName)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
-            command.Username = username;
+            command.Username = userName;
 
             command.Validate();
             if (!command.IsValid)
@@ -367,12 +497,12 @@ namespace Twitterizer
         /// Gets the user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="userName">The username.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser GetUser(OAuthTokens tokens, string username)
+        public static TwitterUser GetUser(OAuthTokens tokens, string userName)
         {
             Commands.ShowUserCommand command = new Twitterizer.Commands.ShowUserCommand(tokens);
-            command.Username = username;
+            command.Username = userName;
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
@@ -446,7 +576,7 @@ namespace Twitterizer
                 Id = userId
             };
 
-            return user.GetFollowers();
+            return user.Followers;
         }
 
         #region Get Home Timeline
@@ -476,6 +606,7 @@ namespace Twitterizer
         }
         #endregion
 
+        #region Search
         /// <summary>
         /// Searches the specified tokens.
         /// </summary>
@@ -486,7 +617,7 @@ namespace Twitterizer
         /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
         public static TwitterUserCollection Search(OAuthTokens tokens, string query, int numberPerPage)
         {
-            Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens)
+            Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query)
             {
                 NumberPerPage = numberPerPage,
                 Query = query
@@ -507,6 +638,21 @@ namespace Twitterizer
 
             return result;
         }
+
+        /// <summary>
+        /// Searches the specified tokens.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="query">The query.</param>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
+        /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
+        public static TwitterUserCollection Search(OAuthTokens tokens, string query)
+        {
+            return Search(tokens, query, -1);
+        } 
+        #endregion
 
         #region GetFriends
         /// <summary>
@@ -587,91 +733,18 @@ namespace Twitterizer
         #endregion
 
         #region Non-Static Members
-        #region GetFollowers
-        /// <summary>
-        /// Gets the user's followers.
-        /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUserCollection"/> class.</returns>
-        public TwitterUserCollection GetFollowers()
-        {
-            Commands.FollowersCommand command = new Commands.FollowersCommand(this.Tokens);
-            command.UserId = this.Id;
-
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            result.Command = command;
-
-            return result;
-        }
-        #endregion
-
-        /// <summary>
-        /// Gets the user time line.
-        /// </summary>
-        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection GetTimeline()
-        {
-            return GetTimeline(
-                this.Tokens,
-                this.Id,
-                string.Empty,
-                -1,
-                -1,
-                -1,
-                -1);
-        }
-
-        #region GetFriendsTimeline
         /// <summary>
         /// Gets the friends timeline.
         /// </summary>
-        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection GetFriendsTimeline()
-        {
-            return this.GetFriendsTimeline(-1, -1);
-        }
-
-        /// <summary>
-        /// Gets the friends timeline.
-        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
         /// <param name="sinceStatusId">The since status id.</param>
         /// <param name="maxStatusId">The max status id.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection GetFriendsTimeline(long sinceStatusId, long maxStatusId)
-        {
-            Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(this.Tokens)
-            {
-                SinceStatusId = sinceStatusId,
-                MaxStatusId = maxStatusId
-            };
-
-            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-            result.Command = command;
-
-            return result;
-        } 
-        #endregion
-
-        #region GetMentions
-        /// <summary>
-        /// Gets the 20 most recent statuses that mention the authorized user.
-        /// </summary>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> object.
         /// </returns>
-        public TwitterStatusCollection GetMentions()
+        public static TwitterStatusCollection GetFriendsTimeline(OAuthTokens tokens, long sinceStatusId, long maxStatusId)
         {
-            return this.GetMentions(-1, -1);
-        }
-
-        /// <summary>
-        /// Gets the 20 most recent statuses that mention the authorized user.
-        /// </summary>
-        /// <param name="sinceStatusId">The since status id.</param>
-        /// <param name="maxStatusId">The max status id.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection GetMentions(long sinceStatusId, long maxStatusId)
-        {
-            Commands.MentionsCommand command = new Commands.MentionsCommand(this.Tokens)
+            Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(tokens)
             {
                 SinceStatusId = sinceStatusId,
                 MaxStatusId = maxStatusId
@@ -682,18 +755,28 @@ namespace Twitterizer
 
             return result;
         }
-        #endregion
 
-        #region RetweetedByMe
         /// <summary>
-        /// Returns the 20 most recent retweets posted by the authenticating user.
+        /// Gets the 20 most recent statuses that mention the authorized user.
         /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> object.
         /// </returns>
-        public TwitterStatusCollection RetweetedByUser()
+        public static TwitterStatusCollection GetMentions(OAuthTokens tokens, long sinceStatusId, long maxStatusId)
         {
-            return this.RetweetedByUser(-1, -1);
+            Commands.MentionsCommand command = new Commands.MentionsCommand(tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId
+            };
+
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
         }
 
         /// <summary>
@@ -715,19 +798,6 @@ namespace Twitterizer
 
             return result;
         }
-        #endregion
-
-        #region RetweetedToMe
-        /// <summary>
-        /// Returns the 20 most recent retweets posted by the authenticating user's friends.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/> object.
-        /// </returns>
-        public TwitterStatusCollection RetweetedToUser()
-        {
-            return this.RetweetedToUser(-1, -1);
-        }
 
         /// <summary>
         /// Returns the 20 most recent retweets posted by the authenticating user's friends.
@@ -748,7 +818,6 @@ namespace Twitterizer
 
             return result;
         }
-        #endregion
 
         #region RetweetsOfMe
         /// <summary>
@@ -784,34 +853,24 @@ namespace Twitterizer
         #endregion
 
         /// <summary>
-        /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
+        /// Creates a friendship between this user and the authenticated user.
         /// </summary>
-        /// <returns>
-        /// A <see cref="TwitterUserCollection"/> instance.
-        /// </returns>
-        /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        public TwitterUserCollection GetFriends()
+        /// <param name="follow">if set to <c>true</c> enables delivery of statuses from this user to the authenticated user's device.</param>
+        /// <returns>A <see cref="TwitterUser"/> instance.</returns>
+        public TwitterUser CreateFriendship(bool follow)
         {
-            Commands.FriendsCommand command = new Commands.FriendsCommand(this.Tokens)
+            Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(this.Tokens)
             {
-                UserId = this.Id
+                UserId = this.Id,
+                UserName = this.ScreenName,
+                Follow = follow
             };
 
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterUserCollection>()
-                {
-                    Command = command,
-                    MethodName = "GetFriends"
-                };
-            }
-
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            result.Command = command;
+            TwitterUser result = Core.CommandPerformer<TwitterUser>.PerformAction(command);
 
             return result;
         }
+
         #endregion
     }
 }

@@ -53,9 +53,16 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="ShowStatusCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        public ShowStatusCommand(OAuthTokens requestTokens)
-            : base("GET", requestTokens)
+        /// <param name="statusId">The status id.</param>
+        public ShowStatusCommand(OAuthTokens requestTokens, long statusId)
+            : base("GET", new Uri(string.Format(CultureInfo.InvariantCulture, Path, statusId)), requestTokens)
         {
+            if (statusId <= 0)
+            {
+                throw new ArgumentNullException("statusId");
+            }
+
+            this.StatusId = statusId;
         }
         #endregion
 
@@ -72,8 +79,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.Uri = new Uri(
-                string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
+            this.Uri = new Uri(string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
         }
 
         /// <summary>

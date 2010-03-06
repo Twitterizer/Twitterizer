@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DeleteDirectMessageCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,33 +29,38 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The Delete Direct Message Command class.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// The Delete Direct Message Command class.
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class DeleteDirectMessageCommand : BaseCommand<TwitterDirectMessage>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
+        private const string Path = "http://api.twitter.com/1/direct_messages/destroy/{0}.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="DeleteDirectMessageCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="tokens">The request tokens.</param>
         /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, long id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        public DeleteDirectMessageCommand(OAuthTokens tokens, long id)
+            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
             this.Id = id;
         }
         #endregion

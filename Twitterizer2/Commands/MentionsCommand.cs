@@ -51,6 +51,10 @@ namespace Twitterizer.Commands
         public MentionsCommand(OAuthTokens tokens)
             : base("GET", new Uri("http://api.twitter.com/1/statuses/mentions.json"), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 

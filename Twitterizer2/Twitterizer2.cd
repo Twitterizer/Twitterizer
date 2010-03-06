@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Twitterizer.TwitterDirectMessage">
+    <Position X="0.5" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAQACABgIAAAEAAAAAAABEBAAACAgAACAAIAAA=</HashCode>
+      <FileName>TwitterEntities\TwitterDirectMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.TwitterRateLimitStatus">
+    <Position X="12.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAIEAAAAAAEAAAQAAAAAAAA=</HashCode>
+      <FileName>TwitterEntities\TwitterRateLimitStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.TwitterStatus">
+    <Position X="9.25" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AQQDAAQAAgABAAAAICAAAAAEQAEAAAAIAgAACAAoAAA=</HashCode>
+      <FileName>TwitterEntities\TwitterStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.TwitterUser">
+    <Position X="5.25" Y="0.5" Width="2.5" />
+    <AssociationLine Name="Followers" Type="Twitterizer.TwitterUser" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="1.25" />
+        <Point X="8.125" Y="1.25" />
+        <Point X="8.125" Y="0.125" />
+        <Point X="6.812" Y="0.125" />
+        <Point X="6.812" Y="0.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.044" Y="0.1" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Friends" Type="Twitterizer.TwitterUser" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.25" Y="1.188" />
+        <Point X="4.875" Y="1.188" />
+        <Point X="4.875" Y="0.125" />
+        <Point X="6.125" Y="0.125" />
+        <Point X="6.125" Y="0.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAATQAQkDAIxwBBoZAIZIiQBABEAEAICEoAwAABgAAA=</HashCode>
+      <FileName>TwitterEntities\TwitterUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="FriendsTimeline" />
+      <Property Name="Followers" />
+      <Property Name="Mentions" />
+      <Property Name="Retweeted" />
+      <Property Name="Retweets" />
+      <Property Name="Timeline" />
+      <Property Name="DirectMessagesReceived" />
+      <Property Name="DirectMessagesSent" />
+      <Property Name="Friends" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

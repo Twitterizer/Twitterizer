@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DirectMessagesSentCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,48 +29,77 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The Direct Messages Sent Command class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// The Direct Messages Sent Command class
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class DirectMessagesSentCommand : PagedCommand<TwitterDirectMessageCollection>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
+        private const string Path = "http://api.twitter.com/1/direct_messages.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="DirectMessagesSentCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, long id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public DirectMessagesSentCommand(OAuthTokens tokens)
+            : base("GET", new Uri(Path), tokens)
         {
-            this.Id = id;
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 
+        #region API Properties
         /// <summary>
-        /// Gets or sets the status id.
+        /// Gets or sets the since status id.
         /// </summary>
-        /// <value>The status id.</value>
-        public long Id { get; set; }
+        /// <value>The since status id.</value>
+        public long SinceStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max status id.
+        /// </summary>
+        /// <value>The max status id.</value>
+        public long MaxStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the count.
+        /// </summary>
+        /// <value>The count.</value>
+        public int Count { get; set; }
+        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
+            if (this.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.Count > 0)
+                this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
+
+            if (this.Page > 0)
+                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InstalledUICulture));
         }
 
         /// <summary>
@@ -78,7 +107,24 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Id > 0;
+            this.IsValid = this.Tokens != null;
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
+        /// </returns>
+        internal override PagedCommand<TwitterDirectMessageCollection> Clone()
+        {
+            return new DirectMessagesSentCommand(this.Tokens)
+            {
+                Count = this.Count,
+                SinceStatusId = this.SinceStatusId,
+                MaxStatusId = this.MaxStatusId,
+                Page = this.Page
+            };
         }
     }
 }

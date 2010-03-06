@@ -51,10 +51,22 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateStatusCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public UpdateStatusCommand(OAuthTokens requestTokens)
-            : base("POST", new Uri(Path), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="text">The status text.</param>
+        public UpdateStatusCommand(OAuthTokens tokens, string text)
+            : base("POST", new Uri(Path), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            this.Text = text;
         }
         #endregion
 
@@ -107,7 +119,7 @@ namespace Twitterizer.Commands
         public override void Validate()
         {
             // TODO: Ricky - Add Latitude and Longitude value validation
-            this.IsValid = !string.IsNullOrEmpty(this.Text);
+            this.IsValid = true;
         }
     }
 }

@@ -53,9 +53,24 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="RetweetsCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public RetweetsCommand(OAuthTokens tokens)
-            : base("GET", tokens)
+        /// <param name="statusId">The status id.</param>
+        public RetweetsCommand(OAuthTokens tokens, long statusId)
+            : base(
+                "GET",
+                new Uri(string.Format(CultureInfo.InvariantCulture, Path, statusId)),
+                tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            if (statusId <= 0)
+            {
+                throw new ArgumentNullException("statusId");
+            }
+
+            this.StatusId = statusId;
         }
         #endregion
 
@@ -76,8 +91,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.Uri = new Uri(
-                string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
+            this.Uri = new Uri(string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
 
             if (this.Count > 0)
                 this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
@@ -88,7 +102,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.StatusId > 0 && this.Tokens != null;
+            this.IsValid = true;
         }
     }
 }

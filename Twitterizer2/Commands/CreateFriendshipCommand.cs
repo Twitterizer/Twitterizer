@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CreateFriendshipCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,48 +29,77 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command class to delete a status update.</summary>
+// <summary>The Direct Messages Sent Command class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The command class to delete a status update.
+    /// Creates a friendship between the authenticated user and another user
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class CreateFriendshipCommand : BaseCommand<TwitterUser>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
+        private const string Path = "http://api.twitter.com/1/friendships/create.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="CreateFriendshipCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, long id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public CreateFriendshipCommand(OAuthTokens tokens)
+            : base("GET", new Uri(Path), tokens)
         {
-            this.Id = id;
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 
+        #region API Properties
         /// <summary>
-        /// Gets or sets the status id.
+        /// Gets or sets the user id.
         /// </summary>
-        /// <value>The status id.</value>
-        public long Id { get; set; }
+        /// <value>The user id.</value>
+        public long UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable delivery of statuses from this user to the authenticated user's device
+        /// </summary>
+        /// <value><c>true</c> if follow; otherwise, <c>false</c>.</value>
+        public bool Follow { get; set; }
+        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
+            if (this.UserId > 0)
+            {
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (!string.IsNullOrEmpty(this.UserName))
+            {
+                this.RequestParameters.Add("screen_name", this.UserName);
+            }
+
+            if (this.Follow)
+                this.RequestParameters.Add("follow", "true");
         }
 
         /// <summary>
@@ -78,7 +107,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Id > 0;
+            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.UserName);
         }
     }
 }

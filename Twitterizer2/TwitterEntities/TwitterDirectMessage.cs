@@ -161,6 +161,16 @@ namespace Twitterizer
         /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
+        public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens)
+        {
+            return GetDirectMessages(tokens, -1, -1, -1);
+        }
+
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="sinceStatusId">The since status id.</param>
         /// <param name="maxStatusId">The max status id.</param>
         /// <param name="count">The count.</param>
@@ -180,7 +190,7 @@ namespace Twitterizer
                 throw new CommandValidationException<TwitterDirectMessageCollection>()
                 {
                     Command = command,
-                    MethodName = "Search"
+                    MethodName = "GetDirectMessages"
                 };
             }
 
@@ -189,6 +199,135 @@ namespace Twitterizer
             return result;
         }
 
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessageCollection"/> instance.
+        /// </returns>
+        public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens)
+        {
+            return GetDirectMessagesSent(tokens, -1, -1, -1, -1);
+        }
+
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sinceStatusId">The since status id.</param>
+        /// <param name="maxStatusId">The max status id.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessageCollection"/> instance.
+        /// </returns>
+        public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens, long sinceStatusId, long maxStatusId, int count, int page)
+        {
+            Commands.DirectMessagesSentCommand command = new Commands.DirectMessagesSentCommand(tokens)
+            {
+                SinceStatusId = sinceStatusId,
+                MaxStatusId = maxStatusId,
+                Count = count,
+                Page = page
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterDirectMessageCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetDirectMessagesSent"
+                };
+            }
+
+            TwitterDirectMessageCollection result = Core.CommandPerformer<TwitterDirectMessageCollection>.PerformAction(command);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sends a new direct message to the specified user from the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="userId">The user id of the recipient user.</param>
+        /// <param name="text">The text of your direct message.</param>
+        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
+        public static TwitterDirectMessage Send(OAuthTokens tokens, long userId, string text)
+        {
+            return Send(tokens, userId, string.Empty, text);
+        }
+
+        /// <summary>
+        /// Sends a new direct message to the specified user from the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="userName">The user nmae of the recipient user.</param>
+        /// <param name="text">The text of your direct message.</param>
+        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
+        public static TwitterDirectMessage Send(OAuthTokens tokens, string userName, string text)
+        {
+            return Send(tokens, -1, userName, text);
+        }
+        #endregion
+
+        #region Non-static Methods
+        /// <summary>
+        /// Deletes this direct message.
+        /// </summary>
+        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
+        public TwitterDirectMessage Delete()
+        {
+            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id);
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterDirectMessage>()
+                {
+                    Command = command,
+                    MethodName = "Delete"
+                };
+            }
+
+            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+
+            return result;
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Sends a new direct message to the specified user from the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="text">The text of your direct message.</param>
+        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
+        private static TwitterDirectMessage Send(OAuthTokens tokens, long userId, string userName, string text)
+        {
+            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text)
+            {
+                RecipientUserId = userId,
+                RecipientUserName = userName
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterDirectMessage>()
+                {
+                    Command = command,
+                    MethodName = "Send"
+                };
+            }
+
+            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+
+            return result;
+        }
         #endregion
     }
 }

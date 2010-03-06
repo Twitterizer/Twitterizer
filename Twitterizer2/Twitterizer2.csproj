@@ -58,18 +58,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\RateLimitedAttribute.cs" />
+    <Compile Include="Commands\CreateFriendshipCommand.cs" />
     <Compile Include="Commands\DeleteStatusCommand.cs" />
+    <Compile Include="Commands\DeleteDirectMessageCommand.cs" />
     <Compile Include="Commands\DirectMessagesCommand.cs" />
+    <Compile Include="Commands\DirectMessagesSentCommand.cs" />
     <Compile Include="Commands\FriendsCommand.cs" />
     <Compile Include="Commands\FriendsTimelineCommand.cs" />
     <Compile Include="Commands\HomeTimelineCommand.cs" />
     <Compile Include="Commands\MentionsCommand.cs" />
     <Compile Include="Commands\PublicTimelineCommand.cs" />
+    <Compile Include="Commands\RateLimitStatusCommand.cs" />
     <Compile Include="Commands\RetweetCommand.cs" />
     <Compile Include="Commands\RetweetedByMeCommand.cs" />
     <Compile Include="Commands\RetweetedToMeCommand.cs" />
     <Compile Include="Commands\RetweetsCommand.cs" />
     <Compile Include="Commands\RetweetsOfMeCommand.cs" />
+    <Compile Include="Commands\SendDirectMessageCommand.cs" />
     <Compile Include="Commands\ShowStatusCommand.cs" />
     <Compile Include="Commands\UpdateStatusCommand.cs" />
     <Compile Include="Commands\FollowersCommand.cs" />
@@ -95,6 +101,7 @@
     <Compile Include="Core\RateLimit.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
+    <Compile Include="TwitterEntities\TwitterRateLimitStatus.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
     <Compile Include="TwitterEntities\TwitterStatusCollection.cs" />
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
@@ -103,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />
+    <None Include="Twitterizer2.cd" />
     <None Include="Twitterizer2.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -51,6 +51,10 @@ namespace Twitterizer.Commands
         public RetweetedToMeCommand(OAuthTokens tokens)
             : base("GET", new Uri("http://api.twitter.com/1/statuses/retweeted_to_me.json"), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 

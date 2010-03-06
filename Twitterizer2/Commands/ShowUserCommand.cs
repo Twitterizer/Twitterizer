@@ -53,10 +53,14 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public ShowUserCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        public ShowUserCommand(OAuthTokens tokens)
+            : base("GET", new Uri(Path), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 

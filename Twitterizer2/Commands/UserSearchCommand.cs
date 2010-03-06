@@ -48,9 +48,21 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="UserSearchCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public UserSearchCommand(OAuthTokens tokens)
+        /// <param name="query">The query.</param>
+        public UserSearchCommand(OAuthTokens tokens, string query)
             : base("GET", new Uri("http://api.twitter.com/1/users/search.json"), tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            if (string.IsNullOrEmpty(query))
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            this.Query = query;
         }
         #endregion
 
@@ -74,16 +86,6 @@ namespace Twitterizer.Commands
         public override void Validate()
         {
             this.IsValid = false;
-
-            if (this.Tokens == null)
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.Query))
-            {
-                return;
-            }
 
             if (this.Page > 0 && this.NumberPerPage > 0)
             {
@@ -118,10 +120,9 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override PagedCommand<TwitterUserCollection> Clone()
         {
-            return new UserSearchCommand(this.Tokens)
+            return new UserSearchCommand(this.Tokens, this.Query)
             {
                 NumberPerPage = this.NumberPerPage,
-                Query = this.Query,
                 Page = this.Page
             };
         }
