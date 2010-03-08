@@ -263,12 +263,12 @@ namespace Twitterizer
         /// Sends a new direct message to the specified user from the authenticating user.
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
-        /// <param name="userName">The user nmae of the recipient user.</param>
+        /// <param name="username">The user nmae of the recipient user.</param>
         /// <param name="text">The text of your direct message.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, string userName, string text)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, string username, string text)
         {
-            return Send(tokens, -1, userName, text);
+            return Send(tokens, -1, username, text);
         }
         #endregion
 

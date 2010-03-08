@@ -50,8 +50,7 @@ public partial class authenticate_pin_based : System.Web.UI.Page
                 ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
                 ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
 
-            this.RequestHyperLink.NavigateUrl =
-                string.Format("http://twitter.com/oauth/authorize?oauth_token={0}", tokens.Token);
+            this.RequestHyperLink.NavigateUrl = OAuthUtility.BuildAuthorizationUri(tokens.Token).AbsoluteUri;
 
             ViewState.Add("RequestToken", tokens.Token);
         }

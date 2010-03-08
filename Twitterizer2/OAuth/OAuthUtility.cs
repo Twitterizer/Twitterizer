@@ -44,7 +44,6 @@ namespace Twitterizer
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Security.Permissions;
 
     /// <summary>
     /// A utility for handling the oauth protocol.
@@ -254,6 +253,16 @@ namespace Twitterizer
             return result.ToString();
         }
         #endregion
+
+        /// <summary>
+        /// Builds the authorization URI.
+        /// </summary>
+        /// <param name="requestToken">The request token.</param>
+        /// <returns>A new <see cref="Uri"/> instance.</returns>
+        public static Uri BuildAuthorizationUri(string requestToken)
+        {
+            return new Uri(string.Format(CultureInfo.CurrentCulture, "http://twitter.com/oauth/authorize?oauth_token={0}", requestToken));
+        }
 
         /// <summary>
         /// Creates the OAuth request.

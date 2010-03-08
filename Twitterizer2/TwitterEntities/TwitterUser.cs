@@ -34,6 +34,7 @@
 namespace Twitterizer
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Runtime.Serialization;
     
@@ -41,6 +42,7 @@ namespace Twitterizer
     /// The class that represents a twitter user account
     /// </summary>
     [DataContract]
+    [DebuggerDisplay("TwitterUser = {ScreenName}")]
     public class TwitterUser : Core.BaseObject
     {
         #region Constructors
@@ -296,6 +298,7 @@ namespace Twitterizer
         /// Gets the followers.
         /// </summary>
         /// <value>The followers.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterUserCollection Followers
         {
             get
@@ -317,6 +320,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterUserCollection Friends
         {
             get
@@ -334,6 +338,7 @@ namespace Twitterizer
         /// Gets the user's timeline.
         /// </summary>
         /// <value>The timeline.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterStatusCollection Timeline
         {
             get
@@ -353,6 +358,7 @@ namespace Twitterizer
         /// Gets the user's friends timeline.
         /// </summary>
         /// <value>The friends timeline.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterStatusCollection FriendsTimeline
         {
             get
@@ -365,6 +371,7 @@ namespace Twitterizer
         /// Gets statuses that mention the user.
         /// </summary>
         /// <value>The mentions.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterStatusCollection Mentions
         {
             get
@@ -377,6 +384,7 @@ namespace Twitterizer
         /// Gets the 20 most recent retweets posted by the authenticating user.
         /// </summary>
         /// <value>The retweets.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterStatusCollection Retweets
         {
             get
@@ -388,6 +396,7 @@ namespace Twitterizer
         /// <summary>
         /// Gets the 20 most recent retweets posted by the authenticating user's friends.
         /// </summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterStatusCollection Retweeted
         {
             get
@@ -400,6 +409,7 @@ namespace Twitterizer
         /// Gets the direct messages received.
         /// </summary>
         /// <value>The direct messages received.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterDirectMessageCollection DirectMessagesReceived
         {
             get
@@ -412,6 +422,7 @@ namespace Twitterizer
         /// Gets the direct messages sent.
         /// </summary>
         /// <value>The direct messages sent.</value>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public TwitterDirectMessageCollection DirectMessagesSent
         {
             get
@@ -449,12 +460,12 @@ namespace Twitterizer
         /// <summary>
         /// Gets the user.
         /// </summary>
-        /// <param name="userName">The username.</param>
+        /// <param name="username">The username.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser GetUser(string userName)
+        public static TwitterUser GetUser(string username)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
-            command.Username = userName;
+            command.Username = username;
 
             command.Validate();
             if (!command.IsValid)
@@ -497,12 +508,12 @@ namespace Twitterizer
         /// Gets the user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="userName">The username.</param>
+        /// <param name="username">The username.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser GetUser(OAuthTokens tokens, string userName)
+        public static TwitterUser GetUser(OAuthTokens tokens, string username)
         {
             Commands.ShowUserCommand command = new Twitterizer.Commands.ShowUserCommand(tokens);
-            command.Username = userName;
+            command.Username = username;
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }

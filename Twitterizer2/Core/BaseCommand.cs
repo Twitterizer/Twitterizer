@@ -155,10 +155,10 @@ namespace Twitterizer.Core
                 };
             }
 
-            //WebPermission permission = new WebPermission(
-            //   NetworkAccess.Connect,
-            //   new System.Text.RegularExpressions.Regex(@"https?://(www\.|api\.)?twitter\.com/.*"));
-            //permission.Demand();
+            WebPermission permission = new WebPermission(
+                NetworkAccess.Connect,
+                new System.Text.RegularExpressions.Regex(@"https?://(www\.|api\.)?twitter\.com/.*"));
+            permission.Demand();
 
             // Prepare the query parameters
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();

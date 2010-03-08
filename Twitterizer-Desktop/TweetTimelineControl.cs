@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Default.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TweetTimelineControl.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,25 +29,37 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <date>2010-02-25</date>
-// <summary>The default page for the sample web site.</summary>
+// <summary>The tweet timeline user control class.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class _Default : System.Web.UI.Page 
+namespace Twitterizer_Desktop
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        // First, get the request token
-        OAuthTokenResponse authorizationTokens = OAuthUtility.GetRequestToken(
-            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
-            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
+    using System;
+    using System.Windows.Forms;
+    using Twitterizer;
 
-        this.RequestTokenLabel.Text = authorizationTokens.Token;
-        this.GetAccessHyperLink.NavigateUrl = OAuthUtility.BuildAuthorizationUri(authorizationTokens.Token).AbsoluteUri;
+    /// <summary>
+    /// The tweet timeline user control class.
+    /// </summary>
+    public partial class TweetTimelineControl : UserControl
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TweetTimelineControl"/> class.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        public TweetTimelineControl(TwitterStatus status)
+        {
+            if (status == null)
+            {
+                throw new ArgumentNullException("status");
+            }
+
+            InitializeComponent();
+
+            this.userPictureBox.LoadAsync(status.User.ProfileImageLocation);
+            this.UserNameLabel.Text = status.User.ScreenName;
+            this.DateLabel.Text = status.CreatedDate.ToShortDateString();
+            this.TextLabel.Text = status.Text;
+        }
     }
 }

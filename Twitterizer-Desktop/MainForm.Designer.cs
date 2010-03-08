@@ -28,34 +28,63 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.WelcomeLabel = new System.Windows.Forms.Label();
+            this.WelcomeTextPanel = new System.Windows.Forms.Panel();
+            this.HomeTimelinePanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.WelcomeTextPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // WelcomeLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.WelcomeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WelcomeLabel.Location = new System.Drawing.Point(0, 0);
+            this.WelcomeLabel.Name = "WelcomeLabel";
+            this.WelcomeLabel.Size = new System.Drawing.Size(326, 89);
+            this.WelcomeLabel.TabIndex = 0;
+            this.WelcomeLabel.Text = "Welcome Text Here.";
+            // 
+            // WelcomeTextPanel
+            // 
+            this.WelcomeTextPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WelcomeTextPanel.Controls.Add(this.WelcomeLabel);
+            this.WelcomeTextPanel.Location = new System.Drawing.Point(12, 12);
+            this.WelcomeTextPanel.Name = "WelcomeTextPanel";
+            this.WelcomeTextPanel.Size = new System.Drawing.Size(328, 91);
+            this.WelcomeTextPanel.TabIndex = 1;
+            // 
+            // HomeTimelinePanel
+            // 
+            this.HomeTimelinePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.HomeTimelinePanel.AutoScroll = true;
+            this.HomeTimelinePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.HomeTimelinePanel.Location = new System.Drawing.Point(12, 109);
+            this.HomeTimelinePanel.Name = "HomeTimelinePanel";
+            this.HomeTimelinePanel.Size = new System.Drawing.Size(327, 461);
+            this.HomeTimelinePanel.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 311);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(350, 592);
+            this.Controls.Add(this.HomeTimelinePanel);
+            this.Controls.Add(this.WelcomeTextPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.WelcomeTextPanel.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label WelcomeLabel;
+        private System.Windows.Forms.Panel WelcomeTextPanel;
+        private System.Windows.Forms.FlowLayoutPanel HomeTimelinePanel;
     }
 }
