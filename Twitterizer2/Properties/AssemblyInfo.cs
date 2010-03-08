@@ -33,6 +33,9 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Net;
+using System.Security.Permissions;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -44,6 +47,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Twitterizer")]
 [assembly: AssemblyCopyright("Copyright © Patrick 'Ricky' Smith 2010")]
 [assembly: AssemblyTrademark("")]
+[assembly: AllowPartiallyTrustedCallersAttribute()]
+[assembly: ReflectionPermission(SecurityAction.RequestMinimum)]
 
 [assembly: CLSCompliant(true)]
 

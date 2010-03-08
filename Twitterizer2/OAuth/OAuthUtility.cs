@@ -44,6 +44,7 @@ namespace Twitterizer
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
+    using System.Security.Permissions;
 
     /// <summary>
     /// A utility for handling the oauth protocol.
@@ -66,6 +67,16 @@ namespace Twitterizer
         /// </returns>
         public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret)
         {
+            if (string.IsNullOrEmpty(consumerKey))
+            {
+                throw new ArgumentNullException("consumerKey");
+            }
+
+            if (string.IsNullOrEmpty(consumerSecret))
+            {
+                throw new ArgumentNullException("consumerSecret");
+            }
+
             OAuthTokenResponse response = new OAuthTokenResponse();
 
             try
@@ -105,6 +116,21 @@ namespace Twitterizer
         /// </returns>
         public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
         {
+            if (string.IsNullOrEmpty(consumerKey))
+            {
+                throw new ArgumentNullException("consumerKey");
+            }
+
+            if (string.IsNullOrEmpty(consumerSecret))
+            {
+                throw new ArgumentNullException("consumerSecret");
+            }
+
+            if (string.IsNullOrEmpty(requestToken))
+            {
+                throw new ArgumentNullException("requestToken");
+            }
+
             OAuthTokenResponse response = new OAuthTokenResponse();
 
             try
@@ -145,6 +171,26 @@ namespace Twitterizer
         /// </returns>
         public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken, string pinNumber)
         {
+            if (string.IsNullOrEmpty(consumerKey))
+            {
+                throw new ArgumentNullException("consumerKey");
+            }
+
+            if (string.IsNullOrEmpty(consumerSecret))
+            {
+                throw new ArgumentNullException("consumerSecret");
+            }
+
+            if (string.IsNullOrEmpty(requestToken))
+            {
+                throw new ArgumentNullException("requestToken");
+            }
+
+            if (string.IsNullOrEmpty(pinNumber))
+            {
+                throw new ArgumentNullException("pinNumber");
+            }
+
             OAuthTokenResponse response = new OAuthTokenResponse();
 
             try
@@ -263,6 +309,12 @@ namespace Twitterizer
                 consumerSecret,
                 tokenSecret);
 
+            WebPermission permission = new WebPermission();
+            permission.AddPermission(NetworkAccess.Connect, @"http://twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"http://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"http://search.twitter.com/.*");
+            permission.Demand();
+
             HttpWebResponse response;
 
             if (httpMethod == "GET")
@@ -286,7 +338,7 @@ namespace Twitterizer
             {
                 StringBuilder requestParametersBuilder = new StringBuilder();
 
-                foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_")))
+                foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_") || p.Key == "oauth_verifier"))
                 {
                     if (requestParametersBuilder.Length > 0)
                     {
@@ -358,6 +410,7 @@ namespace Twitterizer
                 .Where(p => p.Key.Contains("oauth_") &&
                     !p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
                     p.Key != "oauth_signature" &&
+                    p.Key != "oauth_verifier" &&
                     !string.IsNullOrEmpty(p.Value))
                 .OrderBy(p => p.Key)
                 .ThenBy(p => EncodeForUrl(p.Value)))
@@ -395,7 +448,9 @@ namespace Twitterizer
         private static string GenerateNonce()
         {
             // Just a simple implementation of a random number between 123400 and 9999999
-            return new Random().Next(123400, int.MaxValue).ToString(CultureInfo.InvariantCulture);
+            return new Random()
+                .Next(123400, int.MaxValue)
+                .ToString("X", CultureInfo.InvariantCulture);
         }
 
         /// <summary>

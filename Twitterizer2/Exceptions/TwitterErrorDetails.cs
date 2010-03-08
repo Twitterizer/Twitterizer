@@ -35,12 +35,14 @@
 namespace Twitterizer
 {
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// Twitter Error Details class
     /// </summary>
     /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
     [DataContract]
+    [XmlRoot("hash")]
     public class TwitterErrorDetails
     {
         /// <summary>
@@ -48,6 +50,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The request path.</value>
         [DataMember(Name = "request")]
+        [XmlElement("request")]
         public string RequestPath { get; set; }
 
         /// <summary>
@@ -55,6 +58,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The error message.</value>
         [DataMember(Name = "error")]
+        [XmlElement("error")]
         public string ErrorMessage { get; set; }
     }
 }
