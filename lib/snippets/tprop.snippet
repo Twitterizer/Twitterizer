@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Twitter Property</Title>
+      <Author>Ricky Smith</Author>
+      <Description></Description>
+      <HelpUrl></HelpUrl>
+      <SnippetTypes />
+      <Keywords />
+      <Shortcut>tprop</Shortcut>
+    </Header>
+    <Snippet>
+      <References />
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>json_name</ID>
+          <Type></Type>
+          <ToolTip></ToolTip>
+          <Default>jsonproperty</Default>
+          <Function></Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>property_name</ID>
+          <Type></Type>
+          <ToolTip></ToolTip>
+          <Default>PropertyName</Default>
+          <Function></Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>property_type</ID>
+          <Type></Type>
+          <ToolTip></ToolTip>
+          <Default>string</Default>
+          <Function></Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Kind="method decl" Delimiter="$"><![CDATA[
+[DataMember(Name = "$json_name$")]
+public $property_type$ $property_name$ { get; set; }$selected$$end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
