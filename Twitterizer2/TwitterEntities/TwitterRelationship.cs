@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TweetTimelineControl.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterRelationship.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,37 +29,53 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The tweet timeline user control class.</summary>
+// <summary>The twitter relationship entity class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer_Desktop
+namespace Twitterizer
 {
-    using System;
-    using System.Windows.Forms;
-    using Twitterizer;
+    using System.Diagnostics;
+    using System.Runtime.Serialization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The tweet timeline user control class.
+    /// The Twitter Relationship entity class
     /// </summary>
-    public partial class TweetTimelineControl : UserControl
+    [DataContract]
+    [DebuggerDisplay("TwitterRelationship = {ScreenName}")]
+    public class TwitterRelationship : BaseObject
     {
+        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TweetTimelineControl"/> class.
+        /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
         /// </summary>
-        /// <param name="status">The status.</param>
-        public TweetTimelineControl(TwitterStatus status)
+        internal TwitterRelationship() : base() 
         {
-            if (status == null)
-            {
-                throw new ArgumentNullException("status");
-            }
-
-            this.InitializeComponent();
-
-            this.userPictureBox.LoadAsync(status.User.ProfileImageLocation);
-            this.UserNameLabel.Text = status.User.ScreenName;
-            this.DateLabel.Text = status.CreatedDate.ToShortDateString();
-            this.TextLabel.Text = status.Text;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
+        /// </summary>
+        /// <param name="tokens">OAuth access tokens.</param>
+        public TwitterRelationship(OAuthTokens tokens) 
+            : base()
+        {
+            this.Tokens = tokens;
+        }
+        #endregion
+
+        /// <summary>
+        /// Gets or sets the source.
+        /// </summary>
+        /// <value>The source.</value>
+        [DataMember(Name = "source")]
+        public TwitterUser Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target.
+        /// </summary>
+        /// <value>The target.</value>
+        [DataMember(Name = "target")]
+        public TwitterUser Target { get; set; }
     }
 }

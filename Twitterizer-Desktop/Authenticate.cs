@@ -55,7 +55,7 @@ namespace Twitterizer_Desktop
         /// </summary>
         public Authenticate()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ To authenticate yourself, please click here. When prompted, come back here and e
                         ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerKey"],
                         ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerSecret"],
                         this.requestToken,
-                        PinTextBox.Text);
+                        this.PinTextBox.Text);
 
                 Configuration appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 appConfig.AppSettings.Settings.Add("Twitterizer.Desktop.AccessToken", accessTokens.Token);
@@ -109,7 +109,7 @@ To authenticate yourself, please click here. When prompted, come back here and e
                 appConfig.AppSettings.Settings.Add("Twitterizer.Desktop.ScreenName", accessTokens.ScreenName);
                 appConfig.Save();
 
-                ConfigurationManager.RefreshSection("AppSettings");
+                ConfigurationManager.RefreshSection("appSettings");
 
                 MessageBox.Show(
                     string.Format("Thanks for authenticating, {0}.", accessTokens.ScreenName));

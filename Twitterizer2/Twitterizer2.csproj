@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Commands\CreateFriendshipCommand.cs" />
+    <Compile Include="Commands\DeleteFriendshipCommand.cs" />
     <Compile Include="Commands\DeleteStatusCommand.cs" />
     <Compile Include="Commands\DeleteDirectMessageCommand.cs" />
     <Compile Include="Commands\DirectMessagesCommand.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Commands\RetweetsCommand.cs" />
     <Compile Include="Commands\RetweetsOfMeCommand.cs" />
     <Compile Include="Commands\SendDirectMessageCommand.cs" />
+    <Compile Include="Commands\ShowFriendshipCommand.cs" />
     <Compile Include="Commands\ShowStatusCommand.cs" />
     <Compile Include="Commands\UpdateStatusCommand.cs" />
     <Compile Include="Commands\FollowersCommand.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterRateLimitStatus.cs" />
+    <Compile Include="TwitterEntities\TwitterRelationship.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
     <Compile Include="TwitterEntities\TwitterStatusCollection.cs" />
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TweetTimelineControl.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DeleteFriendshipCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,37 +29,74 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The tweet timeline user control class.</summary>
+// <summary>The delete friendship command class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer_Desktop
+namespace Twitterizer.Commands
 {
     using System;
-    using System.Windows.Forms;
-    using Twitterizer;
+    using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The tweet timeline user control class.
+    /// The delete friendship command class.
     /// </summary>
-    public partial class TweetTimelineControl : UserControl
+    internal sealed class DeleteFriendshipCommand : BaseCommand<TwitterUser>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TweetTimelineControl"/> class.
+        /// The base address to the API method.
         /// </summary>
-        /// <param name="status">The status.</param>
-        public TweetTimelineControl(TwitterStatus status)
+        private const string Path = "http://api.twitter.com/1/friendships/destroy.json";
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteFriendshipCommand"/> class.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        public DeleteFriendshipCommand(OAuthTokens requestTokens)
+            : base("POST", new Uri(Path), requestTokens)
         {
-            if (status == null)
+            if (requestTokens == null)
             {
-                throw new ArgumentNullException("status");
+                throw new ArgumentNullException("requestTokens");
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// Gets or sets the user id.
+        /// </summary>
+        /// <value>The user id.</value>
+        public long UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string Username { get; set; }
+
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
+        public override void Init()
+        {
+            if (this.UserId > 0)
+            {
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
             }
 
-            this.InitializeComponent();
+            if (this.UserId <= 0 && !string.IsNullOrEmpty(this.Username))
+            {
+                this.RequestParameters.Add("screen_name", this.Username);
+            }
+        }
 
-            this.userPictureBox.LoadAsync(status.User.ProfileImageLocation);
-            this.UserNameLabel.Text = status.User.ScreenName;
-            this.DateLabel.Text = status.CreatedDate.ToShortDateString();
-            this.TextLabel.Text = status.Text;
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.Username);
         }
     }
 }

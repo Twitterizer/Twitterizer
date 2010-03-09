@@ -58,7 +58,7 @@ namespace Twitterizer_Desktop
         /// </summary>
         public MainForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ Your last status was ""{3}"" on {4:D}
 
             foreach (TwitterStatus status in TwitterStatus.GetHomeTimeline(this.oauthTokens))
             {
-                HomeTimelinePanel.Controls.Add(new TweetTimelineControl(status));
+                this.HomeTimelinePanel.Controls.Add(new TweetTimelineControl(status));
             }
         }
 
