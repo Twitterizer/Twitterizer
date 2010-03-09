@@ -111,6 +111,27 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="TwitterDirectMessage">
+          <Members>
+           <Member Name="#Send(Twitterizer.OAuthTokens,System.String,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-09 04:08:27Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterDirectMessage.Send(OAuthTokens, string, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="TwitterStatusCollection">
           <Members>
            <Member Name="#GetNextPage()">
@@ -143,6 +164,84 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="TwitterUser">
+          <Members>
+           <Member Name="#DeleteFriendship(Twitterizer.OAuthTokens,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-09 05:59:02Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterUser.DeleteFriendship(OAuthTokens, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="2" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetFriendship(System.String,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-09 05:56:46Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterUser.GetFriendship(string, string)'</Item>
+               <Item>username</Item>
+               <Item>'username1'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterUser.GetFriendship(string, string)'</Item>
+               <Item>username</Item>
+               <Item>'username2'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="1" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetUser(System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-06 17:53:00Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterUser.GetUser(string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetUser(Twitterizer.OAuthTokens,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-06 17:53:00Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterUser.GetUser(OAuthTokens, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
         </Types>
        </Namespace>
       </Namespaces>
@@ -155,9 +254,15 @@
     <Note Id="0" Modified="2010-03-03 18:46:30Z">OAuth is a proper noun.</Note>
     <Note Id="1" Modified="2010-03-03 18:49:46Z">Method is long running and not appropriate as a property.</Note>
    </User>
+   <User Name="Ricky">
+    <Note Id="0" Modified="2010-03-09 04:12:23Z">For our project, "username" will be the standard naming convention.</Note>
+    <Note Id="1" Modified="2010-03-09 05:58:30Z">For our project, "username" will be the standard naming convention.</Note>
+    <Note Id="2" Modified="2010-03-09 05:59:19Z">For our project, "username" will be the standard naming convention.</Note>
+   </User>
   </Notes>
   <Rules>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
     <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="UriReturnValuesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1055">

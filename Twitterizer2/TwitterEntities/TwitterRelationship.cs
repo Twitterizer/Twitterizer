@@ -49,18 +49,19 @@ namespace Twitterizer
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
         /// </summary>
-        internal TwitterRelationship() : base() 
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
-        /// </summary>
         /// <param name="tokens">OAuth access tokens.</param>
         public TwitterRelationship(OAuthTokens tokens) 
             : base()
         {
             this.Tokens = tokens;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
+        /// </summary>
+        internal TwitterRelationship()
+            : base()
+        {
         }
         #endregion
 

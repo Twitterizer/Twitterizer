@@ -743,6 +743,49 @@ namespace Twitterizer
         }
         #endregion
 
+        #region DeleteFriendship
+        /// <summary>
+        /// Allows the authenticating users to unfollow the user specified in the ID parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>
+        /// Returns the unfollowed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser DeleteFriendship(OAuthTokens tokens, long userId)
+        {
+            Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens)
+            {
+                UserId = userId
+            };
+
+            TwitterUser result = Core.CommandPerformer<TwitterUser>.PerformAction(command);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Allows the authenticating users to unfollow the user specified in the ID parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// Returns the unfollowed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser DeleteFriendship(OAuthTokens tokens, string username)
+        {
+            Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens)
+            {
+                Username = username
+            };
+
+            TwitterUser result = Core.CommandPerformer<TwitterUser>.PerformAction(command);
+
+            return result;
+        } 
+        #endregion
+
+        #region GetFriendship
         /// <summary>
         /// Gets the friendship.
         /// </summary>
@@ -777,6 +820,26 @@ namespace Twitterizer
 
             return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
         }
+
+        /// <summary>
+        /// Gets the friendship between two users.
+        /// </summary>
+        /// <param name="username1">The first username.</param>
+        /// <param name="username2">The second username.</param>
+        /// <returns>
+        /// A <see cref="TwitterRelationship"/> instance.
+        /// </returns>
+        public static TwitterRelationship GetFriendship(string username1, string username2)
+        {
+            Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(null)
+            {
+                SourceScreenName = username1,
+                TargetScreenName = username2
+            };
+
+            return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
+        } 
+        #endregion
         #endregion
 
         #region Non-Static Members
