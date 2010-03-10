@@ -132,6 +132,61 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="TwitterList">
+          <Members>
+           <Member Name="#New(System.String,System.String,System.Boolean,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-10 04:03:23Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.New(string, string, bool, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#New(Twitterizer.OAuthTokens,System.String,System.String,System.Boolean,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-10 04:03:23Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.New(OAuthTokens, string, string, bool, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Update(Twitterizer.OAuthTokens,System.String,System.Int64,System.String,System.Boolean,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-10 04:22:34Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.Update(OAuthTokens, string, long, string, bool, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="TwitterStatusCollection">
           <Members>
            <Member Name="#GetNextPage()">
@@ -258,6 +313,8 @@
     <Note Id="0" Modified="2010-03-09 04:12:23Z">For our project, "username" will be the standard naming convention.</Note>
     <Note Id="1" Modified="2010-03-09 05:58:30Z">For our project, "username" will be the standard naming convention.</Note>
     <Note Id="2" Modified="2010-03-09 05:59:19Z">For our project, "username" will be the standard naming convention.</Note>
+    <Note Id="3" Modified="2010-03-10 04:04:27Z">For our project, "username" will be the standard naming convention.</Note>
+    <Note Id="4" Modified="2010-03-10 04:22:49Z">For our project, "username" will be the standard naming convention.</Note>
    </User>
   </Notes>
   <Rules>
