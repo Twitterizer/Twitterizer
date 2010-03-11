@@ -47,7 +47,7 @@ namespace Twitterizer.Core
     /// The base command class.
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
-    public abstract class BaseCommand<T> : ICommand<T>
+    internal abstract class BaseCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
         /// <summary>

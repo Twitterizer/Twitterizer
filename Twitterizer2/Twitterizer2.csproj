@@ -68,6 +68,7 @@
     <Compile Include="Commands\DirectMessagesSentCommand.cs" />
     <Compile Include="Commands\FriendsCommand.cs" />
     <Compile Include="Commands\FriendsTimelineCommand.cs" />
+    <Compile Include="Commands\GetListsCommand.cs" />
     <Compile Include="Commands\HomeTimelineCommand.cs" />
     <Compile Include="Commands\MentionsCommand.cs" />
     <Compile Include="Commands\PublicTimelineCommand.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterList.cs" />
+    <Compile Include="TwitterEntities\TwitterListCollection.cs" />
+    <Compile Include="TwitterEntities\TwitterListWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterRateLimitStatus.cs" />
     <Compile Include="TwitterEntities\TwitterRelationship.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />

@@ -193,6 +193,19 @@ namespace Twitterizer
 
             return Core.CommandPerformer<TwitterList>.PerformAction(command);
         }
+
+        /// <summary>
+        /// Gets the lists.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
+        public static TwitterListCollection GetLists(OAuthTokens tokens, string username)
+        {
+            Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, username);
+
+            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+        }
         #endregion
 
         #region Non-Static Members

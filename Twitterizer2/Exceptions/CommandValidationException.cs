@@ -34,8 +34,10 @@
 namespace Twitterizer
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using System.Text;
     using Twitterizer.Core;
 
     /// <summary>
@@ -103,10 +105,40 @@ namespace Twitterizer
         public string MethodName { get; set; }
 
         /// <summary>
+        /// Gets the name of the command.
+        /// </summary>
+        /// <value>The name of the command.</value>
+        public string CommandName
+        {
+            get
+            {
+                return this.Command.GetType().ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the parameters.
+        /// </summary>
+        /// <value>The parameters.</value>
+        public string Parameters
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (KeyValuePair<string, string> item in this.Command.RequestParameters)
+                {
+                    sb.AppendFormat("{0} = \"{1}\"\n", item.Key, item.Value);
+                }
+
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        public BaseCommand<T> Command { get; set; }
+        internal BaseCommand<T> Command { get; set; }
 
         #region ISerializable Members
 
