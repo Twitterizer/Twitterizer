@@ -326,52 +326,60 @@ namespace Twitterizer
 
             HttpWebResponse response;
 
-            if (httpMethod == "GET")
+            switch (httpMethod)
             {
-                string querystring = GenerateGetQueryString(combinedParameters);
+                case "GET":
+                    string querystring = GenerateGetQueryString(combinedParameters);
 
-                if (!string.IsNullOrEmpty(querystring))
-                {
-                    baseUrl = string.Concat(baseUrl, "?", querystring);
-                }
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
-                request.Method = httpMethod;
-                request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion()); 
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OAUTH GET: {0}", baseUrl));
-#endif
-                response = (HttpWebResponse)request.GetResponse();
-            }
-            else if (httpMethod == "POST")
-            {
-                StringBuilder requestParametersBuilder = new StringBuilder();
-
-                foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_") || p.Key == "oauth_verifier"))
-                {
-                    if (requestParametersBuilder.Length > 0)
+                    if (!string.IsNullOrEmpty(querystring))
                     {
-                        requestParametersBuilder.Append("&");
+                        baseUrl = string.Concat(baseUrl, "?", querystring);
                     }
 
-                    requestParametersBuilder.AppendFormat(
-                        "{0}={1}",
-                        item.Key,
-                        EncodeForUrl(item.Value));
-                }
+                    HttpWebRequest getRequest = (HttpWebRequest)WebRequest.Create(baseUrl);
+                    getRequest.Method = httpMethod;
+                    getRequest.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OAUTH GET: {0}", baseUrl));
+#endif
+                    response = (HttpWebResponse)getRequest.GetResponse();
+                    break;
+                case "POST":
+                    StringBuilder requestParametersBuilder = new StringBuilder();
 
-                baseUrl = string.Concat(baseUrl, "?", requestParametersBuilder.ToString());
+                    foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_") || p.Key == "oauth_verifier"))
+                    {
+                        if (requestParametersBuilder.Length > 0)
+                        {
+                            requestParametersBuilder.Append("&");
+                        }
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
-                request.Method = httpMethod;
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
-                request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion()); 
-                response = (HttpWebResponse)request.GetResponse();
-            }
-            else
-            {
-                throw new ArgumentException("The HTTP method supplied is not supported.", "httpMethod");
+                        requestParametersBuilder.AppendFormat(
+                            "{0}={1}",
+                            item.Key,
+                            EncodeForUrl(item.Value));
+                    }
+
+                    baseUrl = string.Concat(baseUrl, "?", requestParametersBuilder.ToString());
+
+                    HttpWebRequest postRequest = (HttpWebRequest)WebRequest.Create(baseUrl);
+                    postRequest.Method = httpMethod;
+                    postRequest.ContentType = "application/x-www-form-urlencoded";
+                    postRequest.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
+                    postRequest.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+                    response = (HttpWebResponse)postRequest.GetResponse();
+                    break;
+                case "DELETE":
+                    HttpWebRequest deleteRequest = (HttpWebRequest)WebRequest.Create(baseUrl);
+                    deleteRequest.Method = httpMethod;
+                    deleteRequest.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OAUTH DELETE: {0}", baseUrl));
+#endif
+                    response = (HttpWebResponse)deleteRequest.GetResponse();
+                    break;
+                default:
+                    throw new ArgumentException("The HTTP method supplied is not supported.", "httpMethod");
             }
 
             return response;

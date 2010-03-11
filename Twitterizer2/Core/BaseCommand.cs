@@ -331,47 +331,65 @@ namespace Twitterizer.Core
                 queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
             }
 
-            if (this.HttpMethod.ToUpper(CultureInfo.InvariantCulture) == "GET")
+            switch (this.HttpMethod.ToUpper(CultureInfo.InvariantCulture))
             {
-                string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
+                case "GET":
+                    string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        "ANON GET: {0}", 
-                        fullPathAndQuery));
+                    System.Diagnostics.Debug.WriteLine(
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            "ANON GET: {0}",
+                            fullPathAndQuery));
 #endif
-                request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
-                request.Method = "GET";
-                request.UserAgent = string.Format(
-                    CultureInfo.InvariantCulture,
-                    "Twitterizer/{0}", 
-                    Information.AssemblyVersion()); 
-            }
-            else
-            {
-                request = (HttpWebRequest)WebRequest.Create(this.Uri);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.UserAgent = string.Format(
-                    CultureInfo.InvariantCulture,
-                    "Twitterizer/{0}", 
-                    Information.AssemblyVersion()); 
+                    request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
+                    request.Method = "GET";
+                    request.UserAgent = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Twitterizer/{0}",
+                        Information.AssemblyVersion());
+                    break;
+                case "POST":
+                    request = (HttpWebRequest)WebRequest.Create(this.Uri);
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.UserAgent = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Twitterizer/{0}",
+                        Information.AssemblyVersion());
 
-                using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    postDataWriter.Write(queryStringBuilder.ToString());
-                    postDataWriter.Close();
-                }
+                    using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        postDataWriter.Write(queryStringBuilder.ToString());
+                        postDataWriter.Close();
+                    }
 
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(
-                    string.Format(
-                        CultureInfo.CurrentCulture, 
-                        "ANON POST: {1}\n{0}", 
-                        this.Uri, 
-                        queryStringBuilder.ToString()));
+                    System.Diagnostics.Debug.WriteLine(
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            "ANON POST: {1}\n{0}",
+                            this.Uri,
+                            queryStringBuilder.ToString()));
 #endif
+                    break;
+                case "DELETE":
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine(
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            "ANON DELETE: {0}",
+                            this.Uri.AbsoluteUri));
+#endif
+                    request = (HttpWebRequest)WebRequest.Create(this.Uri);
+                    request.Method = "DELETE";
+                    request.UserAgent = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Twitterizer/{0}",
+                        Information.AssemblyVersion());
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
 
             return (HttpWebResponse)request.GetResponse();
