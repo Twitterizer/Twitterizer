@@ -59,6 +59,11 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public TwitterStatusCollection GetNextPage()
         {
+            if (this.Command == null || this.Command.Page <= 1)
+            {
+                return null;
+            }
+
             PagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
             newCommand.Page += 1;
 
@@ -73,8 +78,18 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public TwitterStatusCollection GetPreviousPage()
         {
+            if (this.Command == null || this.Command.Page <= 1)
+            {
+                return null;
+            }
+
             PagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
             newCommand.Page -= 1;
+
+            if (newCommand.Page <= 0)
+            {
+                return null;
+            }
 
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
             result.Command = newCommand;

@@ -261,7 +261,19 @@ namespace Twitterizer
         /// <returns>A new <see cref="Uri"/> instance.</returns>
         public static Uri BuildAuthorizationUri(string requestToken)
         {
-            return new Uri(string.Format(CultureInfo.CurrentCulture, "http://twitter.com/oauth/authorize?oauth_token={0}", requestToken));
+            return BuildAuthorizationUri(requestToken, false);
+        }
+
+        /// <summary>
+        /// Builds the authorization URI.
+        /// </summary>
+        /// <param name="requestToken">The request token.</param>
+        /// <param name="authenticate">if set to <c>true</c>, the authenticate url will be used. (See: "Sign in with Twitter")</param>
+        /// <returns>A new <see cref="Uri"/> instance.</returns>
+        public static Uri BuildAuthorizationUri(string requestToken, bool authenticate)
+        {
+            string path = string.Concat("http://twitter.com/oauth/", authenticate ? "authenticate" : "authorize", "?oauth_token={0}");
+            return new Uri(string.Format(CultureInfo.CurrentCulture, path, requestToken));
         }
 
         /// <summary>

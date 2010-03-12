@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Twitterizer2.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,45 +52,45 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
-    <Compile Include="Commands\CreateFriendshipCommand.cs" />
-    <Compile Include="Commands\CreateListCommand.cs" />
-    <Compile Include="Commands\DeleteFriendshipCommand.cs" />
-    <Compile Include="Commands\DeleteStatusCommand.cs" />
-    <Compile Include="Commands\DeleteDirectMessageCommand.cs" />
-    <Compile Include="Commands\DirectMessagesCommand.cs" />
-    <Compile Include="Commands\DirectMessagesSentCommand.cs" />
-    <Compile Include="Commands\FriendsCommand.cs" />
-    <Compile Include="Commands\FriendsTimelineCommand.cs" />
-    <Compile Include="Commands\GetListsCommand.cs" />
-    <Compile Include="Commands\HomeTimelineCommand.cs" />
-    <Compile Include="Commands\MentionsCommand.cs" />
-    <Compile Include="Commands\PublicTimelineCommand.cs" />
-    <Compile Include="Commands\RateLimitStatusCommand.cs" />
-    <Compile Include="Commands\RetweetCommand.cs" />
-    <Compile Include="Commands\RetweetedByMeCommand.cs" />
-    <Compile Include="Commands\RetweetedToMeCommand.cs" />
-    <Compile Include="Commands\RetweetsCommand.cs" />
-    <Compile Include="Commands\RetweetsOfMeCommand.cs" />
-    <Compile Include="Commands\SendDirectMessageCommand.cs" />
-    <Compile Include="Commands\ShowFriendshipCommand.cs" />
-    <Compile Include="Commands\ShowStatusCommand.cs" />
-    <Compile Include="Commands\UpdateListCommand.cs" />
-    <Compile Include="Commands\UpdateStatusCommand.cs" />
-    <Compile Include="Commands\FollowersCommand.cs" />
-    <Compile Include="Commands\UserSearchCommand.cs" />
-    <Compile Include="Commands\UserTimelineCommand.cs" />
+    <Compile Include="Commands\Friendship\CreateFriendshipCommand.cs" />
+    <Compile Include="Commands\Lists\CreateListCommand.cs" />
+    <Compile Include="Commands\Friendship\DeleteFriendshipCommand.cs" />
+    <Compile Include="Commands\Lists\DeleteListCommand.cs" />
+    <Compile Include="Commands\Status\DeleteStatusCommand.cs" />
+    <Compile Include="Commands\Direct Messages\DeleteDirectMessageCommand.cs" />
+    <Compile Include="Commands\Direct Messages\DirectMessagesCommand.cs" />
+    <Compile Include="Commands\Direct Messages\DirectMessagesSentCommand.cs" />
+    <Compile Include="Commands\User\FriendsCommand.cs" />
+    <Compile Include="Commands\Timelines\FriendsTimelineCommand.cs" />
+    <Compile Include="Commands\Lists\GetListCommand.cs" />
+    <Compile Include="Commands\Lists\GetListsCommand.cs" />
+    <Compile Include="Commands\Timelines\HomeTimelineCommand.cs" />
+    <Compile Include="Commands\Lists\ListMembershipsCommand.cs" />
+    <Compile Include="Commands\Lists\ListStatusesCommand.cs" />
+    <Compile Include="Commands\Timelines\MentionsCommand.cs" />
+    <Compile Include="Commands\Timelines\PublicTimelineCommand.cs" />
+    <Compile Include="Commands\Account\RateLimitStatusCommand.cs" />
+    <Compile Include="Commands\Status\RetweetCommand.cs" />
+    <Compile Include="Commands\Timelines\RetweetedByMeCommand.cs" />
+    <Compile Include="Commands\Timelines\RetweetedToMeCommand.cs" />
+    <Compile Include="Commands\Status\RetweetsCommand.cs" />
+    <Compile Include="Commands\Timelines\RetweetsOfMeCommand.cs" />
+    <Compile Include="Commands\Direct Messages\SendDirectMessageCommand.cs" />
+    <Compile Include="Commands\Friendship\ShowFriendshipCommand.cs" />
+    <Compile Include="Commands\Status\ShowStatusCommand.cs" />
+    <Compile Include="Commands\Lists\UpdateListCommand.cs" />
+    <Compile Include="Commands\Status\UpdateStatusCommand.cs" />
+    <Compile Include="Commands\User\FollowersCommand.cs" />
+    <Compile Include="Commands\User\UserSearchCommand.cs" />
+    <Compile Include="Commands\Timelines\UserTimelineCommand.cs" />
     <Compile Include="Core\BaseCollection.cs" />
     <Compile Include="Core\ICommand.cs" />
     <Compile Include="Core\PagedCommand.cs" />
-    <Compile Include="Commands\ShowUserCommand.cs" />
+    <Compile Include="Commands\User\ShowUserCommand.cs" />
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
@@ -130,4 +131,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(SolutionDir)Twitterizer2.license.txt $(TargetDir)Twitterizer2.license.txt</PostBuildEvent>
+  </PropertyGroup>
 </Project>

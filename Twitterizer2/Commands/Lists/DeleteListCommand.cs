@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DeleteListCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,33 +29,68 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <summary>The delete list command class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer.Commands
 {
-    using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
+    using System;
+    using System.Globalization;
+    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The base class for object collections.
+    /// The create list command class
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
-    public abstract class BaseCollection<T> : Collection<T>, ITwitterObject
-        where T : ITwitterObject
+    internal sealed class DeleteListCommand : BaseCommand<TwitterList>
     {
         /// <summary>
-        /// Gets or sets information about the user's rate usage.
+        /// The base address to the API method.
         /// </summary>
-        /// <value>The rate limiting object.</value>
-        [IgnoreDataMember]
-        public RateLimiting RateLimiting { get; set; }
+        private const string Path = "http://api.twitter.com/1/{0}/lists/{1}.json";
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteListCommand"/> class.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        public DeleteListCommand(OAuthTokens requestTokens, string username, string listIdOrSlug)
+            : base("DELETE", requestTokens)
+        {
+            if (Tokens == null)
+            {
+                throw new ArgumentNullException("requestTokens");
+            }
+
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username");
+            }
+
+            if (string.IsNullOrEmpty(listIdOrSlug))
+            {
+                throw new ArgumentNullException("listIdOrSlug");
+            }
+
+            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username, listIdOrSlug));
+        }
+        #endregion
 
         /// <summary>
-        /// Gets or sets the oauth tokens.
+        /// Initializes the command.
         /// </summary>
-        /// <value>The oauth tokens.</value>
-        [IgnoreDataMember]
-        public OAuthTokens Tokens { get; set; }
+        public override void Init()
+        {
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = true;
+        }
     }
 }

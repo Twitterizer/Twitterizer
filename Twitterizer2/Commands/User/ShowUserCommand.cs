@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ShowUserCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,33 +29,70 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <summary>The 'Show User' command class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer.Commands
 {
-    using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
+    using System;
+    using System.Globalization;
+    using Twitterizer;
 
     /// <summary>
-    /// The base class for object collections.
+    /// The Show User Command
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
-    public abstract class BaseCollection<T> : Collection<T>, ITwitterObject
-        where T : ITwitterObject
+    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
+    internal sealed class ShowUserCommand : Core.BaseCommand<TwitterUser>
     {
         /// <summary>
-        /// Gets or sets information about the user's rate usage.
+        /// The base address to the API method.
         /// </summary>
-        /// <value>The rate limiting object.</value>
-        [IgnoreDataMember]
-        public RateLimiting RateLimiting { get; set; }
+        private const string Path = "http://api.twitter.com/1/users/show.json";
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
+        /// </summary>
+        /// <param name="tokens">The request tokens.</param>
+        public ShowUserCommand(OAuthTokens tokens)
+            : base("GET", new Uri(Path), tokens)
+        {
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the user ID.
+        /// </summary>
+        /// <value>The user ID.</value>
+        public long UserId { get; set; }
 
         /// <summary>
-        /// Gets or sets the oauth tokens.
+        /// Gets or sets the name of the user.
         /// </summary>
-        /// <value>The oauth tokens.</value>
-        [IgnoreDataMember]
-        public OAuthTokens Tokens { get; set; }
+        /// <value>The name of the user.</value>
+        public string Username { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Inits this instance.
+        /// </summary>
+        public override void Init()
+        {
+            if (this.UserId > 0)
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+            
+            if (!string.IsNullOrEmpty(this.Username))
+                this.RequestParameters.Add("screen_name", this.Username);
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = this.UserId > 0 || 
+                !string.IsNullOrEmpty(this.Username);
+        }
     }
 }

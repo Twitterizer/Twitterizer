@@ -155,9 +155,10 @@ namespace Twitterizer.Core
                 };
             }
 
-            WebPermission permission = new WebPermission(
-                NetworkAccess.Connect,
-                new System.Text.RegularExpressions.Regex(@"https?://(www\.|api\.)?twitter\.com/.*"));
+            WebPermission permission = new WebPermission();
+            permission.AddPermission(NetworkAccess.Connect, @"http://twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"http://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"http://search.twitter.com/.*");
             permission.Demand();
 
             // Prepare the query parameters

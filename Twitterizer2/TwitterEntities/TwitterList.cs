@@ -206,26 +206,84 @@ namespace Twitterizer
 
             return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
         }
-        #endregion
 
-        #region Non-Static Members
         /// <summary>
-        /// Creates a new list.
+        /// Gets a single list by id number.
         /// </summary>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="name">The list name.</param>
-        /// <param name="isPublic">if set to <c>true</c> creates a public list.</param>
-        /// <param name="description">The description.</param>
-        /// <returns>A <see cref="TwitterList"/> instance.</returns>
-        public TwitterList New(string username, string name, bool isPublic, string description)
+        /// <param name="listId">The list id.</param>
+        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
+        public static TwitterListCollection GetList(OAuthTokens tokens, string username, long listId)
         {
-            Commands.CreateListCommand command = new Twitterizer.Commands.CreateListCommand(this.Tokens, name, username)
+            Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username)
             {
-                IsPublic = isPublic,
-                Description = description
+                ListId = listId
             };
 
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets a single list by slug (name).
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="slug">The list slug.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetList(OAuthTokens tokens, string username, string slug)
+        {
+            Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username)
+            {
+                Slug = slug
+            };
+
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Deletes the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <returns>A <see cref="TwitterList"/> instance.</returns>
+        public static TwitterList Delete(OAuthTokens tokens, string username, string listIdOrSlug)
+        {
+            Commands.DeleteListCommand command = new Twitterizer.Commands.DeleteListCommand(tokens, username, listIdOrSlug);
+
             return Core.CommandPerformer<TwitterList>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the statuses for all the members of a list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listId">The list id.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, long listId)
+        {
+            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listId);
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+        #endregion
+
+        #region Non-static methods
+        /// <summary>
+        /// Gets the statuses for all the members of a list.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public TwitterStatusCollection GetStatuses()
+        {
+            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(this.Tokens, this.User.ScreenName, this.Id);
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
         }
         #endregion
     }

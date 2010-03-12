@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ShowUserCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,75 +29,53 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The 'Show User' command class.</summary>
+// <summary>The list membership command class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Globalization;
     using Twitterizer;
+    using Twitterizer.Core;
+    using System.Globalization;
 
     /// <summary>
-    /// The Show User Command
+    /// The list membership command class
     /// </summary>
-    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
-    internal sealed class ShowUserCommand : Core.BaseCommand<TwitterUser>
+    internal sealed class ListMembershipsCommand : BaseCommand<TwitterListWrapper>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/users/show.json";
+        private const string Path = "http://api.twitter.com/1/{0}/lists/memberships.json";
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
+        /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
         /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        public ShowUserCommand(OAuthTokens tokens)
-            : base("GET", new Uri(Path), tokens)
+        /// <param name="requestTokens">The request tokens.</param>
+        public ListMembershipsCommand(OAuthTokens requestTokens)
+            : base("GET", new Uri(Path), requestTokens)
         {
-            if (tokens == null)
+            if (Tokens == null)
             {
-                throw new ArgumentNullException("tokens");
+                throw new ArgumentNullException("requestTokens");
             }
         }
         #endregion
 
-        #region Properties
-        /// <summary>
-        /// Gets or sets the user ID.
-        /// </summary>
-        /// <value>The user ID.</value>
-        public long UserId { get; set; }
+        #region API Properties
 
-        /// <summary>
-        /// Gets or sets the name of the user.
-        /// </summary>
-        /// <value>The name of the user.</value>
-        public string Username { get; set; }
         #endregion
 
-        /// <summary>
-        /// Inits this instance.
-        /// </summary>
         public override void Init()
         {
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            
-            if (!string.IsNullOrEmpty(this.Username))
-                this.RequestParameters.Add("screen_name", this.Username);
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.Tokens != null || 
-                this.UserId > 0 || 
-                !string.IsNullOrEmpty(this.Username);
+            throw new NotImplementedException();
         }
     }
 }
