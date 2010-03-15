@@ -32,6 +32,7 @@
 // <summary>The twitter list collection class.</summary>
 //-----------------------------------------------------------------------
 
+using Twitterizer.Core;
 namespace Twitterizer
 {
     /// <summary>
@@ -47,10 +48,11 @@ namespace Twitterizer
         {
             get
             {
-                Core.PagedCommand<TwitterListWrapper> newCommand = this.Command.Clone();
+                CursorPagedCommand<TwitterListWrapper> newCommand = 
+                    (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
                 newCommand.Cursor = this.NextCursor;
 
-                TwitterListWrapper result = Core.CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
+                TwitterListWrapper result = CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
                 result.Lists.Command = newCommand;
                 return result.Lists;
             }
@@ -64,7 +66,8 @@ namespace Twitterizer
         {
             get
             {
-                Core.PagedCommand<TwitterListWrapper> newCommand = this.Command.Clone();
+                CursorPagedCommand<TwitterListWrapper> newCommand = 
+                    (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
                 newCommand.Cursor = this.PreviousCursor;
 
                 TwitterListWrapper result = Core.CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
@@ -101,6 +104,6 @@ namespace Twitterizer
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        internal Core.PagedCommand<TwitterListWrapper> Command { get; set; }
+        internal Core.BaseCommand<TwitterListWrapper> Command { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="FriendsTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CursorPagedCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,78 +29,51 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The friends timeline command class</summary>
+// <summary>The interface that indicates that the command results can be paged through using cursors.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Commands
+namespace Twitterizer.Core
 {
     using System;
-    using System.Globalization;
-    using Twitterizer.Core;
 
     /// <summary>
-    /// The Friends Timeline Command class
+    /// The CursorCursorPagedCommand class.
     /// </summary>
-    internal sealed class FriendsTimelineCommand : PagedCommand<TwitterStatusCollection>
+    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
+    internal abstract class CursorPagedCommand<T> : BaseCommand<T>
+        where T : ITwitterObject
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="FriendsTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
         /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        public FriendsTimelineCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/friends_timeline.json"), tokens)
+        protected CursorPagedCommand(string method, Uri uri, OAuthTokens tokens)
+            : base(method, uri, tokens)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="tokens">The tokens.</param>
+        protected CursorPagedCommand(string method, OAuthTokens tokens)
+            : base(method, tokens)
         {
         }
         #endregion
 
-        #region API Properties
         /// <summary>
-        /// Gets or sets the since status id.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <value>The since status id.</value>
-        public long SinceStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max status id.
-        /// </summary>
-        /// <value>The max status id.</value>
-        public long MaxStatusId { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            if (this.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (this.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null;
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override BaseCommand<TwitterStatusCollection> Clone()
-        {
-            return new FriendsTimelineCommand(this.Tokens)
-            {
-                SinceStatusId = this.SinceStatusId,
-                MaxStatusId = this.MaxStatusId
-            };
-        }
+        /// <value>The cursor.</value>
+        /// <remarks>
+        /// Optional. 
+        /// Breaks the results into pages. 
+        /// A single page contains 100 users.
+        /// </remarks>
+        public long Cursor { get; set; }
     }
 }

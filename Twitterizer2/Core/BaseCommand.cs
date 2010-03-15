@@ -105,18 +105,18 @@ namespace Twitterizer.Core
         public string HttpMethod { get; set; }
 
         /// <summary>
-        /// Gets the request parameters.
-        /// </summary>
-        /// <value>The request parameters.</value>
-        public Dictionary<string, string> RequestParameters { get; private set; }
-
-        /// <summary>
         /// Gets the request tokens.
         /// </summary>
         /// <value>The request tokens.</value>
         internal OAuthTokens Tokens { get; private set; }
 
         #region ICommand<T> Members
+
+        /// <summary>
+        /// Gets the request parameters.
+        /// </summary>
+        /// <value>The request parameters.</value>
+        public Dictionary<string, string> RequestParameters { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -394,6 +394,15 @@ namespace Twitterizer.Core
             }
 
             return (HttpWebResponse)request.GetResponse();
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
+        internal virtual BaseCommand<T> Clone()
+        {
+            return default(BaseCommand<T>);
         }
     }
 }

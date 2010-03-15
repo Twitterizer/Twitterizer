@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The get lists command class
     /// </summary>
-    internal sealed class GetListsCommand : PagedCommand<TwitterListWrapper>
+    internal sealed class GetListsCommand : CursorPagedCommand<TwitterListWrapper>
     {
         /// <summary>
         /// The base address to the API method.
@@ -107,7 +107,7 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override PagedCommand<TwitterListWrapper> Clone()
+        internal override BaseCommand<TwitterListWrapper> Clone()
         {
             return new GetListsCommand(this.Tokens, this.Username)
             {

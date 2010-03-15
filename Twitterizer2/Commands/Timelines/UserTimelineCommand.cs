@@ -128,7 +128,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Core.PagedCommand<TwitterStatusCollection> Clone()
+        internal override Core.BaseCommand<TwitterStatusCollection> Clone()
         {
             return new UserTimelineCommand(this.Tokens)
             {
@@ -136,7 +136,6 @@ namespace Twitterizer.Commands
                 ScreenName = this.ScreenName,
                 UserId = this.UserId,
                 Page = this.Page,
-                Cursor = this.Cursor,
                 Count = this.Count,
                 MaxId = this.MaxId,
                 SinceId = this.SinceId

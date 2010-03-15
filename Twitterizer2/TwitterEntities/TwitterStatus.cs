@@ -320,7 +320,10 @@ namespace Twitterizer
                 };
             }
 
-            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
         }
         #endregion
 

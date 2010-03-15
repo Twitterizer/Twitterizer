@@ -57,7 +57,7 @@ namespace Twitterizer.Core
             {
                 throw new CommandValidationException<T>()
                 {
-                    Command = command as BaseCommand<T>
+                    Command = command
                 };
             }
 

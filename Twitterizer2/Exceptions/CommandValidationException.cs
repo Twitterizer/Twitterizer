@@ -138,7 +138,7 @@ namespace Twitterizer
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        internal BaseCommand<T> Command { get; set; }
+        internal ICommand<T> Command { get; set; }
 
         #region ISerializable Members
 

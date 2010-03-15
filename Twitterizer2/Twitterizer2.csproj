@@ -39,6 +39,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Net">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -88,6 +89,7 @@
     <Compile Include="Commands\User\UserSearchCommand.cs" />
     <Compile Include="Commands\Timelines\UserTimelineCommand.cs" />
     <Compile Include="Core\BaseCollection.cs" />
+    <Compile Include="Core\CursorPagedCommand.cs" />
     <Compile Include="Core\ICommand.cs" />
     <Compile Include="Core\PagedCommand.cs" />
     <Compile Include="Commands\User\ShowUserCommand.cs" />
@@ -122,6 +124,7 @@
     <None Include="Settings.StyleCop" />
     <None Include="Twitterizer2.cd" />
     <None Include="Twitterizer2.snk" />
+    <None Include="Twitterizer2Inheritance.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

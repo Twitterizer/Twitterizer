@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The list membership command class
     /// </summary>
-    internal sealed class ListMembershipsCommand : BaseCommand<TwitterListWrapper>
+    internal sealed class ListMembershipsCommand : PagedCommand<TwitterListWrapper>
     {
         /// <summary>
         /// The base address to the API method.
@@ -74,6 +74,11 @@ namespace Twitterizer.Commands
         }
 
         public override void Validate()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override BaseCommand<TwitterListWrapper> Clone()
         {
             throw new NotImplementedException();
         }

@@ -48,7 +48,15 @@ namespace Twitterizer
         {
             get
             {
-                PagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
+                if (!(this.Command is CursorPagedCommand<TwitterUserCollection> || this.Command is PagedCommand<TwitterUserCollection>))
+                {
+                    throw new System.NotSupportedException("Paging is not supported for this API call.");
+                }
+
+                
+
+                CursorPagedCommand<TwitterUserCollection> newCommand =
+                    (CursorPagedCommand<TwitterUserCollection>)this.Command.Clone();
                 newCommand.Cursor = this.NextCursor;
 
                 TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
@@ -65,7 +73,13 @@ namespace Twitterizer
         {
             get
             {
-                PagedCommand<TwitterUserCollection> newCommand = this.Command.Clone();
+                if (!(this.Command is CursorPagedCommand<TwitterUserCollection> || this.Command is PagedCommand<TwitterUserCollection>))
+                {
+                    throw new System.NotSupportedException("Paging is not supported for this API call.");
+                }
+
+                CursorPagedCommand<TwitterUserCollection> newCommand =
+                    (CursorPagedCommand<TwitterUserCollection>)this.Command.Clone();
                 newCommand.Cursor = this.PreviousCursor;
 
                 TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
@@ -102,6 +116,6 @@ namespace Twitterizer
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        internal PagedCommand<TwitterUserCollection> Command { get; set; }
+        internal BaseCommand<TwitterUserCollection> Command { get; set; }
     }
 }

@@ -33,6 +33,8 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The ICommand interface.
     /// </summary>
@@ -40,6 +42,12 @@ namespace Twitterizer.Core
     public interface ICommand<T>
         where T : ITwitterObject
     {
+        /// <summary>
+        /// Gets the request parameters.
+        /// </summary>
+        /// <value>The request parameters.</value>
+        Dictionary<string, string> RequestParameters { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.
         /// </summary>

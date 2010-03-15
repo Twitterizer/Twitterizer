@@ -66,26 +66,9 @@ namespace Twitterizer.Core
         #endregion
 
         /// <summary>
-        /// Gets or sets the cursor.
-        /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
-
-        /// <summary>
         /// Gets or sets the page number to obtain.
         /// </summary>
         /// <value>The page number.</value>
         public int Page { get; set; }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal abstract PagedCommand<T> Clone();
     }
 }

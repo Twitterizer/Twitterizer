@@ -98,7 +98,7 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override PagedCommand<TwitterStatusCollection> Clone()
+        internal override BaseCommand<TwitterStatusCollection> Clone()
         {
             return new MentionsCommand(this.Tokens)
             {

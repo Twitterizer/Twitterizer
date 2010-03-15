@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// The command to obtain followers of a user.
     /// </summary>
     internal sealed class FriendsCommand :
-        Core.PagedCommand<TwitterUserCollection>
+        Core.CursorPagedCommand<TwitterUserCollection>
     {
         #region Constructors
         /// <summary>
@@ -97,7 +97,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.PagedCommand<TwitterUserCollection> Clone()
+        internal override Twitterizer.Core.BaseCommand<TwitterUserCollection> Clone()
         {
             FriendsCommand newCommand = new FriendsCommand(this.Tokens);
 

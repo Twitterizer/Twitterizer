@@ -88,8 +88,12 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("since_id", this.SinceId.ToString(CultureInfo.InvariantCulture));
             if (this.MaxId > 0)
                 this.RequestParameters.Add("max_id", this.MaxId.ToString(CultureInfo.InvariantCulture));
-            if (this.Page > 0)
-                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            
+            this.RequestParameters.Add(
+                "page", 
+                this.Page > 1 ? this.Page.ToString(CultureInfo.InvariantCulture) : "1");
+
+            this.Page = 1;
         }
 
         /// <summary>
@@ -104,9 +108,9 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Core.PagedCommand<TwitterStatusCollection> Clone()
+        internal override Core.BaseCommand<TwitterStatusCollection> Clone()
         {
-            return new UserTimelineCommand(this.Tokens)
+            return new HomeTimelineCommand(this.Tokens)
             {
                 Page = this.Page,
                 Count = this.Count,

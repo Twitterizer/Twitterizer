@@ -59,12 +59,13 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public TwitterStatusCollection GetNextPage()
         {
-            if (this.Command == null || this.Command.Page <= 1)
+            if (this.Command == null || this.Command.Page < 0)
             {
                 return null;
             }
 
-            PagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
+            PagedCommand<TwitterStatusCollection> newCommand = 
+                (PagedCommand<TwitterStatusCollection>)this.Command.Clone();
             newCommand.Page += 1;
 
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
@@ -83,7 +84,8 @@ namespace Twitterizer
                 return null;
             }
 
-            PagedCommand<TwitterStatusCollection> newCommand = this.Command.Clone();
+            PagedCommand<TwitterStatusCollection> newCommand = 
+                (PagedCommand<TwitterStatusCollection>)this.Command.Clone();
             newCommand.Page -= 1;
 
             if (newCommand.Page <= 0)
