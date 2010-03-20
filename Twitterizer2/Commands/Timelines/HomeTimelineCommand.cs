@@ -39,6 +39,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Home Timeline Command
     /// </summary>
+    [Serializable]
     internal sealed class HomeTimelineCommand :
         Core.PagedCommand<TwitterStatusCollection>
     {
@@ -88,12 +89,15 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("since_id", this.SinceId.ToString(CultureInfo.InvariantCulture));
             if (this.MaxId > 0)
                 this.RequestParameters.Add("max_id", this.MaxId.ToString(CultureInfo.InvariantCulture));
-            
+
+            if (this.Page <= 1)
+            {
+                this.Page = 1;
+            }
+
             this.RequestParameters.Add(
                 "page", 
-                this.Page > 1 ? this.Page.ToString(CultureInfo.InvariantCulture) : "1");
-
-            this.Page = 1;
+                this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace Twitterizer
     /// <summary>
     /// The Twitter Rate Limit Status class
     /// </summary>
-    [DataContract]
+    [DataContract, Serializable]
     public class TwitterRateLimitStatus : BaseObject
     {
         #region Constructors

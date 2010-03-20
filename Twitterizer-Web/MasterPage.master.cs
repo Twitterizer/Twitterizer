@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="MasterPage.master.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,74 +29,50 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The list membership command class</summary>
+// <summary>The example web application master page.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+using System;
+using System.Configuration;
+using Twitterizer;
+
+public partial class MasterPage : System.Web.UI.MasterPage
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer;
-    using Twitterizer.Core;
-
     /// <summary>
-    /// The list membership command class
+    /// Gets the tokens.
     /// </summary>
-    internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
+    /// <value>The tokens.</value>
+    public OAuthTokens Tokens
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/memberships.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
-        /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public ListMembershipsCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        get
         {
-            if (Tokens == null)
+            OAuthTokens tokens = new OAuthTokens()
             {
-                throw new ArgumentNullException("requestTokens");
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            if (this.Cursor <= 0)
-            {
-                this.Cursor = -1;
-            }
-
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override BaseCommand<TwitterListWrapper> Clone()
-        {
-            return new ListMembershipsCommand(this.Tokens)
-            {
-                Cursor = this.Cursor
+                AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"],
+                AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"],
+                ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
+                ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]
             };
+
+            if (string.IsNullOrEmpty(tokens.AccessToken))
+            {
+                Response.Redirect("~/authenticate/", true);
+            }
+
+            return tokens;
         }
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        this.StatusTimer.Enabled = true;
+    }
+
+    protected void StatusTimer_Tick(object sender, EventArgs e)
+    {
+        this.StatusTimer.Enabled = false;
+
+        TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
+        this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
     }
 }

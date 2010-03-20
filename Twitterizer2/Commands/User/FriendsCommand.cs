@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// The command to obtain followers of a user.
     /// </summary>
     internal sealed class FriendsCommand :
-        Core.CursorPagedCommand<TwitterUserCollection>
+        Core.CursorPagedCommand<TwitterUserWrapper>
     {
         #region Constructors
         /// <summary>
@@ -79,8 +79,12 @@ namespace Twitterizer.Commands
             if (!string.IsNullOrEmpty(this.ScreenName))
                 this.RequestParameters.Add("screen_name", this.ScreenName);
 
-            if (this.Cursor > 0)
-                this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+            if (this.Cursor <= 0)
+            {
+                this.Cursor = -1;
+            }
+
+            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -97,12 +101,13 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.BaseCommand<TwitterUserCollection> Clone()
+        internal override Twitterizer.Core.BaseCommand<TwitterUserWrapper> Clone()
         {
             FriendsCommand newCommand = new FriendsCommand(this.Tokens);
 
             newCommand.ScreenName = this.ScreenName;
             newCommand.UserId = this.UserId;
+            newCommand.Cursor = this.Cursor;
 
             return newCommand;
         }

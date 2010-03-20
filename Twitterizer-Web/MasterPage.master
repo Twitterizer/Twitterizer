@@ -1,0 +1,27 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+    <asp:ScriptManager runat="server" />
+    <asp:ContentPlaceHolder ID="PageBodyContentPlaceHolder" runat="server">
+    </asp:ContentPlaceHolder>
+    
+    <asp:UpdatePanel runat="server">
+        <ContentTemplate>
+            <asp:Timer ID="StatusTimer" runat="server" OnTick="StatusTimer_Tick" Enabled="true"
+                Interval="1">
+            </asp:Timer>
+            <asp:Label runat="server" ID="RemainingRequestsLabel" EnableViewState="false" />
+        </ContentTemplate>
+    </asp:UpdatePanel>
+    </form>
+</body>
+</html>

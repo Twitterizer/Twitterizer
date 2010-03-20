@@ -134,18 +134,86 @@
          </Type>
          <Type Name="TwitterList">
           <Members>
-           <Member Name="#New(System.String,System.String,System.Boolean,System.String)">
+           <Member Name="#Delete(Twitterizer.OAuthTokens,System.String,System.String)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-10 04:03:23Z">
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
               <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.New(string, string, bool, string)'</Item>
+               <Item>'TwitterList.Delete(OAuthTokens, string, string)'</Item>
                <Item>username</Item>
                <Item>'username'</Item>
                <Item>userName</Item>
               </Issue>
               <Notes>
                <User Name="Ricky">
-                <Note Id="3" />
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetList(Twitterizer.OAuthTokens,System.String,System.Int64)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.GetList(OAuthTokens, string, long)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetList(Twitterizer.OAuthTokens,System.String,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.GetList(OAuthTokens, string, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetLists(Twitterizer.OAuthTokens,System.String)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.GetLists(OAuthTokens, string)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetStatuses(Twitterizer.OAuthTokens,System.String,System.Int64)">
+            <Messages>
+             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'TwitterList.GetStatuses(OAuthTokens, string, long)'</Item>
+               <Item>username</Item>
+               <Item>'username'</Item>
+               <Item>userName</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="5" />
                </User>
               </Notes>
              </Message>
@@ -187,37 +255,19 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="TwitterStatusCollection">
-          <Members>
-           <Member Name="#GetNextPage()">
-            <Messages>
-             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Excluded" Created="2010-03-02 21:53:53Z">
-              <Issue Certainty="50">
-               <Item>'TwitterStatusCollection.GetNextPage()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="patricks">
-                <Note Id="1" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#GetPreviousPage()">
-            <Messages>
-             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Excluded" Created="2010-03-02 21:53:53Z">
-              <Issue Certainty="50">
-               <Item>'TwitterStatusCollection.GetPreviousPage()'</Item>
-              </Issue>
-              <Notes>
-               <User Name="patricks">
-                <Note Id="1" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
+         <Type Name="TwitterListWrapper">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Status="Excluded" Created="2010-03-20 18:57:19Z">
+            <Issue>
+             <Item>'TwitterListWrapper'</Item>
+            </Issue>
+            <Notes>
+             <User Name="Ricky">
+              <Note Id="6" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
          </Type>
          <Type Name="TwitterUser">
           <Members>
@@ -297,6 +347,20 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="TwitterUserWrapper">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Status="Excluded" Created="2010-03-20 18:57:19Z">
+            <Issue>
+             <Item>'TwitterUserWrapper'</Item>
+            </Issue>
+            <Notes>
+             <User Name="Ricky">
+              <Note Id="6" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
         </Types>
        </Namespace>
       </Namespaces>
@@ -307,7 +371,6 @@
   <Notes>
    <User Name="patricks">
     <Note Id="0" Modified="2010-03-03 18:46:30Z">OAuth is a proper noun.</Note>
-    <Note Id="1" Modified="2010-03-03 18:49:46Z">Method is long running and not appropriate as a property.</Note>
    </User>
    <User Name="Ricky">
     <Note Id="0" Modified="2010-03-09 04:12:23Z">For our project, "username" will be the standard naming convention.</Note>
@@ -315,18 +378,20 @@
     <Note Id="2" Modified="2010-03-09 05:59:19Z">For our project, "username" will be the standard naming convention.</Note>
     <Note Id="3" Modified="2010-03-10 04:04:27Z">For our project, "username" will be the standard naming convention.</Note>
     <Note Id="4" Modified="2010-03-10 04:22:49Z">For our project, "username" will be the standard naming convention.</Note>
+    <Note Id="5" Modified="2010-03-20 19:04:27Z">"username" is correct for our project.</Note>
+    <Note Id="6" Modified="2010-03-20 19:04:59Z">Wrapper classes are instantiated by the deserializer, so do not show up in the assembly.</Note>
    </User>
   </Notes>
   <Rules>
+   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
+    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
+   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
     <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="UriReturnValuesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1055">
     <Resolution Name="Default">Change the return type of {0} from string to System.Uri.</Resolution>
-   </Rule>
-   <Rule TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024">
-    <Resolution Name="Default">Change {0} to a property if appropriate.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

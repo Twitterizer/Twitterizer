@@ -39,6 +39,7 @@ namespace Twitterizer.Core
     /// The CursorCursorPagedCommand class.
     /// </summary>
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
+    [Serializable]
     internal abstract class CursorPagedCommand<T> : BaseCommand<T>
         where T : ITwitterObject
     {

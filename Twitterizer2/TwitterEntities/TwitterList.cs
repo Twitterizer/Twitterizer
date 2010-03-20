@@ -34,6 +34,7 @@
 
 namespace Twitterizer
 {
+    using System;
     using System.Diagnostics;
     using System.Runtime.Serialization;
     using Twitterizer.Core;
@@ -41,8 +42,9 @@ namespace Twitterizer
     /// <summary>
     /// The twitter list entity class
     /// </summary>
-    [DataContract]
-    [DebuggerDisplay("TwitterList = {ScreenName}")]
+    [DataContract,
+    DebuggerDisplay("TwitterList = {FullName}"),
+    Serializable]
     public class TwitterList : BaseObject
     {
         #region Constructors
@@ -203,8 +205,11 @@ namespace Twitterizer
         public static TwitterListCollection GetLists(OAuthTokens tokens, string username)
         {
             Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, username);
+            TwitterListWrapper resultWrapper = Core.CommandPerformer<TwitterListWrapper>.PerformAction(command);
 
-            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+            TwitterListCollection results = resultWrapper.Lists;
+            results.Command = command;
+            return results;
         }
 
         /// <summary>
@@ -269,6 +274,18 @@ namespace Twitterizer
             Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listId);
 
             return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the lists the specified user has been added to.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
+        public static TwitterListCollection GetMemberships(OAuthTokens tokens)
+        {
+            Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens);
+
+            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
         }
         #endregion
 

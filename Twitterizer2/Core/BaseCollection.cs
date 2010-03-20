@@ -34,6 +34,7 @@
 
 namespace Twitterizer.Core
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Runtime.Serialization;
 
@@ -41,6 +42,7 @@ namespace Twitterizer.Core
     /// The base class for object collections.
     /// </summary>
     /// <typeparam name="T">The type of object stored in the collection.</typeparam>
+    [Serializable]
     public abstract class BaseCollection<T> : Collection<T>, ITwitterObject
         where T : ITwitterObject
     {

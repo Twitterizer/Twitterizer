@@ -261,7 +261,7 @@ namespace Twitterizer
         /// <returns>A new <see cref="Uri"/> instance.</returns>
         public static Uri BuildAuthorizationUri(string requestToken)
         {
-            return BuildAuthorizationUri(requestToken, false);
+            return BuildAuthorizationUri(requestToken, false, string.Empty);
         }
 
         /// <summary>
@@ -272,8 +272,37 @@ namespace Twitterizer
         /// <returns>A new <see cref="Uri"/> instance.</returns>
         public static Uri BuildAuthorizationUri(string requestToken, bool authenticate)
         {
-            string path = string.Concat("http://twitter.com/oauth/", authenticate ? "authenticate" : "authorize", "?oauth_token={0}");
-            return new Uri(string.Format(CultureInfo.CurrentCulture, path, requestToken));
+            return BuildAuthorizationUri(requestToken, authenticate, string.Empty);
+        }
+
+        /// <summary>
+        /// Builds the authorization URI.
+        /// </summary>
+        /// <param name="requestToken">The request token.</param>
+        /// <param name="authenticate">if set to <c>true</c>, the authenticate url will be used. (See: "Sign in with Twitter")</param>
+        /// <param name="callbackUri">The callback URI.</param>
+        /// <returns>A new <see cref="Uri"/> instance.</returns>
+        public static Uri BuildAuthorizationUri(string requestToken, bool authenticate, string callbackUri)
+        {
+            StringBuilder parameters = new StringBuilder("http://twitter.com/oauth/");
+
+            if (authenticate)
+            {
+                parameters.Append("authenticate");
+            }
+            else
+            {
+                parameters.Append("authorize");
+            }
+
+            parameters.AppendFormat("?oauth_token={0}", requestToken);
+
+            if (!string.IsNullOrEmpty(callbackUri))
+            {
+                parameters.AppendFormat("&oauth_callback={0}", callbackUri);
+            }
+
+            return new Uri(parameters.ToString());
         }
 
         /// <summary>

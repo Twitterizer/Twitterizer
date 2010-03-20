@@ -38,15 +38,26 @@ using Twitterizer;
 
 public partial class Lists : System.Web.UI.Page
 {
+    public TwitterListCollection ListCollection { get; set; }
+
     protected void Page_Load(object sender, EventArgs e)
     {
-        OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
-        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
-        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
+        if (!this.IsPostBack)
+        {
+            this.ListCollection = TwitterList.GetLists(Master.Tokens, "DigitallyBorn");
+            this.DataBind();
 
-        this.ListGridView.DataSource = TwitterList.GetLists(tokens, "DigitallyBorn");
-        this.ListGridView.DataBind();
+            ViewState.Add("lists", this.ListCollection);
+        }
+        else
+        {
+            this.ListCollection = ViewState["lists"] as TwitterListCollection;
+        }
+    }
+
+    protected void NextPageLinkButton_Click(object sender, EventArgs e)
+    {
+        this.ListCollection = this.ListCollection.NextPage();
+        this.DataBind();
     }
 }

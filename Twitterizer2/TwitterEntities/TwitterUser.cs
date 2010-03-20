@@ -35,6 +35,7 @@ namespace Twitterizer
 {
     using System;
     using System.Diagnostics;
+    using System.Drawing;
     using System.Globalization;
     using System.Runtime.Serialization;
     
@@ -43,6 +44,7 @@ namespace Twitterizer
     /// </summary>
     [DataContract]
     [DebuggerDisplay("TwitterUser = {ScreenName}")]
+    [Serializable]
     public class TwitterUser : Core.BaseObject
     {
         #region Constructors
@@ -143,13 +145,6 @@ namespace Twitterizer
         public string TimeZone { get; set; }
 
         /// <summary>
-        /// Gets or sets the color of the profile sidebar border.
-        /// </summary>
-        /// <value>The color of the profile sidebar border.</value>
-        [DataMember(Name = "profile_sidebar_border_color")]
-        public string ProfileSidebarBorderColor { get; set; }
-
-        /// <summary>
         /// Gets or sets the number of followers.
         /// </summary>
         /// <value>The number of followers.</value>
@@ -162,13 +157,6 @@ namespace Twitterizer
         /// <value>The number of statuses.</value>
         [DataMember(Name = "statuses_count")]
         public int NumberOfStatuses { get; set; }
-
-        /// <summary>
-        /// Gets or sets the profile image location.
-        /// </summary>
-        /// <value>The profile image location.</value>
-        [DataMember(Name = "profile_image_url")]
-        public string ProfileImageLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the number of friends.
@@ -201,13 +189,6 @@ namespace Twitterizer
         public bool? DoesReceiveNotifications { get; set; }
 
         /// <summary>
-        /// Gets or sets the color of the profile text.
-        /// </summary>
-        /// <value>The color of the profile text.</value>
-        [DataMember(Name = "profile_text_color")]
-        public string ProfileTextColor { get; set; }
-
-        /// <summary>
         /// Gets or sets the screenname.
         /// </summary>
         /// <value>The screenname.</value>
@@ -222,13 +203,6 @@ namespace Twitterizer
         /// </value>
         [DataMember(Name = "following", IsRequired = false)]
         public bool? IsFollowing { get; set; }
-
-        /// <summary>
-        /// Gets or sets the profile background image location.
-        /// </summary>
-        /// <value>The profile background image location.</value>
-        [DataMember(Name = "profile_background_image_url")]
-        public string ProfileBackgroundImageLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the number of favorites.
@@ -247,13 +221,6 @@ namespace Twitterizer
         public bool IsProtected { get; set; }
 
         /// <summary>
-        /// Gets or sets the color of the profile link.
-        /// </summary>
-        /// <value>The color of the profile link.</value>
-        [DataMember(Name = "profile_link_color")]
-        public string ProfileLinkColor { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this user is geo enabled.
         /// </summary>
         /// <value>
@@ -261,6 +228,41 @@ namespace Twitterizer
         /// </value>
         [DataMember(Name = "geo_enabled", IsRequired = false)]
         public bool? IsGeoEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the time zone offset.
+        /// </summary>
+        /// <value>The time zone offset.</value>
+        /// <remarks>Also called the Coordinated Universal Time (UTC) offset.</remarks>
+        [DataMember(Name = "utc_offset")]
+        public double? TimeZoneOffset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's website.
+        /// </summary>
+        /// <value>The website address.</value>
+        [DataMember(Name = "url")]
+        public string Website { get; set; }
+
+        #region Profile Layout Properties
+        /// <summary>
+        /// Gets or sets the color of the profile background.
+        /// </summary>
+        /// <value>The color of the profile background.</value>
+        [DataMember(Name = "profile_background_color")]
+        public string ProfileBackgroundColorString { get; set; }
+
+        /// <summary>
+        /// Gets the color of the profile background.
+        /// </summary>
+        /// <value>The color of the profile background.</value>
+        public Color ProfileBackgroundColor
+        {
+            get
+            {
+                return ColorTranslatorHelper.FromTwitterString(this.ProfileBackgroundColorString);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this user's profile background image is tiled.
@@ -272,26 +274,77 @@ namespace Twitterizer
         public bool? IsProfileBackgroundTiled { get; set; }
 
         /// <summary>
-        /// Gets or sets the time zone offset.
+        /// Gets or sets the color of the profile link.
         /// </summary>
-        /// <value>The time zone offset.</value>
-        /// <remarks>Also called the Coordinated Universal Time (UTC) offset.</remarks>
-        [DataMember(Name = "utc_offset")]
-        public double? TimeZoneOffset { get; set; }
+        /// <value>The color of the profile link.</value>
+        [DataMember(Name = "profile_link_color")]
+        public string ProfileLinkColorString { get; set; }
 
         /// <summary>
-        /// Gets or sets the color of the profile background.
+        /// Gets the color of the profile link.
         /// </summary>
-        /// <value>The color of the profile background.</value>
-        [DataMember(Name = "profile_background_color")]
-        public string ProfileBackgroundColor { get; set; }
+        /// <value>The color of the profile link.</value>
+        public Color ProfileLinkColor
+        {
+            get
+            {
+                return ColorTranslatorHelper.FromTwitterString(this.ProfileLinkColorString);
+            }
+        }
 
         /// <summary>
-        /// Gets or sets the user's website.
+        /// Gets or sets the profile background image location.
         /// </summary>
-        /// <value>The website address.</value>
-        [DataMember(Name = "url")]
-        public string Website { get; set; }
+        /// <value>The profile background image location.</value>
+        [DataMember(Name = "profile_background_image_url")]
+        public string ProfileBackgroundImageLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the profile text.
+        /// </summary>
+        /// <value>The color of the profile text.</value>
+        [DataMember(Name = "profile_text_color")]
+        public string ProfileTextColorString { get; set; }
+
+        /// <summary>
+        /// Gets the color of the profile text.
+        /// </summary>
+        /// <value>The color of the profile text.</value>
+        public Color ProfileTextColor
+        {
+            get
+            {
+                return ColorTranslatorHelper.FromTwitterString(this.ProfileTextColorString);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the profile image location.
+        /// </summary>
+        /// <value>The profile image location.</value>
+        [DataMember(Name = "profile_image_url")]
+        public string ProfileImageLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the profile sidebar border.
+        /// </summary>
+        /// <value>The color of the profile sidebar border.</value>
+        [DataMember(Name = "profile_sidebar_border_color")]
+        public string ProfileSidebarBorderColorString { get; set; }
+
+        /// <summary>
+        /// Gets the color of the profile sidebar border.
+        /// </summary>
+        /// <value>The color of the profile sidebar border.</value>
+        public Color ProfileSidebarBorderColor
+        {
+            get
+            {
+                return ColorTranslatorHelper.FromTwitterString(this.ProfileSidebarBorderColorString);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Lookup readonly properties
@@ -304,13 +357,7 @@ namespace Twitterizer
         {
             get
             {
-                Commands.FollowersCommand command = new Commands.FollowersCommand(this.Tokens);
-                command.UserId = this.Id;
-
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-                result.Command = command;
-
-                return result;
+                return GetFollowers(this.Tokens, this.Id);
             }
         }
 
@@ -328,8 +375,8 @@ namespace Twitterizer
             {
                 Commands.FriendsCommand command = new Commands.FriendsCommand(this.Tokens);
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-                result.Command = command;
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command).Users;
+                result.CursorPagedCommand = command;
 
                 return result;
             }
@@ -576,22 +623,48 @@ namespace Twitterizer
         /// Gets the followers.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterUserCollection GetFollowers(OAuthTokens tokens)
+        {
+            return GetFollowers(tokens, -1);
+        }
+
+        /// <summary>
+        /// Gets the followers.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="userId">The user id.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
         public static TwitterUserCollection GetFollowers(OAuthTokens tokens, long userId)
         {
-            TwitterUser user = new TwitterUser()
+            Commands.FollowersCommand command = new Commands.FollowersCommand(tokens)
             {
-                Tokens = tokens,
-                Id = userId
+                UserId = userId
             };
 
-            return user.Followers;
+            TwitterUserWrapper resultWrapper = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command);
+            TwitterUserCollection result = resultWrapper.Users;
+
+            result.CursorPagedCommand = command;
+
+            return result;
         }
 
         #region Get Home Timeline
+        /// <summary>
+        /// Gets the home timeline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens)
+        {
+            return GetHomeTimeline(tokens, -1, -1, -1, -1);
+        }
+
         /// <summary>
         /// Gets the home timeline.
         /// </summary>
@@ -646,7 +719,7 @@ namespace Twitterizer
             }
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            result.Command = command;
+            result.PagedCommand = command;
 
             return result;
         }
@@ -688,15 +761,15 @@ namespace Twitterizer
             command.Validate();
             if (!command.IsValid)
             {
-                throw new CommandValidationException<TwitterUserCollection>()
+                throw new CommandValidationException<TwitterUserWrapper>()
                 {
                     Command = command,
                     MethodName = "GetFriends"
                 };
             }
 
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            result.Command = command;
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command).Users;
+            result.CursorPagedCommand = command;
 
             return result;
         }

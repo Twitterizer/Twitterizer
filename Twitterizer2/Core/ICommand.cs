@@ -46,7 +46,7 @@ namespace Twitterizer.Core
         /// Gets the request parameters.
         /// </summary>
         /// <value>The request parameters.</value>
-        Dictionary<string, string> RequestParameters { get; set; }
+        Dictionary<string, string> RequestParameters { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.

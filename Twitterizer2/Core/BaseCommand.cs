@@ -47,6 +47,7 @@ namespace Twitterizer.Core
     /// The base command class.
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
+    [Serializable]
     internal abstract class BaseCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
@@ -105,18 +106,16 @@ namespace Twitterizer.Core
         public string HttpMethod { get; set; }
 
         /// <summary>
+        /// Gets or sets the request parameters.
+        /// </summary>
+        /// <value>The request parameters.</value>
+        public Dictionary<string, string> RequestParameters { get; set; }
+
+        /// <summary>
         /// Gets the request tokens.
         /// </summary>
         /// <value>The request tokens.</value>
         internal OAuthTokens Tokens { get; private set; }
-
-        #region ICommand<T> Members
-
-        /// <summary>
-        /// Gets the request parameters.
-        /// </summary>
-        /// <value>The request parameters.</value>
-        public Dictionary<string, string> RequestParameters { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -127,8 +126,6 @@ namespace Twitterizer.Core
         /// Validates this instance.
         /// </summary>
         public abstract void Validate();
-
-        #endregion
 
         /// <summary>
         /// Executes the command.
@@ -206,7 +203,7 @@ namespace Twitterizer.Core
                     byte[] data = ReadStream(responseStream);
 
                     System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
-                    System.Diagnostics.Debug.Write(Encoding.UTF8.GetString(data));
+                    System.Diagnostics.Debug.WriteLine(Encoding.UTF8.GetString(data));
                     System.Diagnostics.Debug.WriteLine("----------- END -----------");
 
                     // Deserialize the results.
@@ -250,6 +247,15 @@ namespace Twitterizer.Core
             resultObject.Tokens = this.Tokens;
 
             return resultObject;
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
+        internal virtual BaseCommand<T> Clone()
+        {
+            return default(BaseCommand<T>);
         }
 
         /// <summary>
@@ -394,15 +400,6 @@ namespace Twitterizer.Core
             }
 
             return (HttpWebResponse)request.GetResponse();
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal virtual BaseCommand<T> Clone()
-        {
-            return default(BaseCommand<T>);
         }
     }
 }

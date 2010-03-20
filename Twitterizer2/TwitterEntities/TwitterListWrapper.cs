@@ -44,11 +44,30 @@ namespace Twitterizer
     internal class TwitterListWrapper : BaseObject
     {
         /// <summary>
+        /// The private variable for the Lists property
+        /// </summary>
+        private TwitterListCollection lists;
+
+        /// <summary>
         /// Gets or sets the lists.
         /// </summary>
         /// <value>The lists.</value>
         [DataMember(Name = "lists")]
-        public TwitterListCollection Lists { get; set; }
+        public TwitterListCollection Lists
+        {
+            get
+            {
+                this.lists.RateLimiting = this.RateLimiting;
+                this.lists.Tokens = this.Tokens;
+
+                return this.lists;
+            }
+
+            set
+            {
+                this.lists = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the next cursor.

@@ -37,6 +37,7 @@
 using System;
 using System.Configuration;
 using Twitterizer;
+using System.Web;
 
 public partial class _Default : System.Web.UI.Page 
 {
@@ -47,7 +48,12 @@ public partial class _Default : System.Web.UI.Page
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
 
+        Uri authorizeUri = OAuthUtility.BuildAuthorizationUri(
+            authorizationTokens.Token, 
+            false,
+            HttpUtility.UrlEncodeUnicode(Request.Url.AbsoluteUri.Replace("Default.aspx", "callback.aspx")));
+
         this.RequestTokenLabel.Text = authorizationTokens.Token;
-        this.GetAccessHyperLink.NavigateUrl = OAuthUtility.BuildAuthorizationUri(authorizationTokens.Token).AbsoluteUri;
+        this.GetAccessHyperLink.NavigateUrl = authorizeUri.AbsoluteUri;
     }
 }

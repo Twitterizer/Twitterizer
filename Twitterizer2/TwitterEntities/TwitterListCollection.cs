@@ -32,50 +32,17 @@
 // <summary>The twitter list collection class.</summary>
 //-----------------------------------------------------------------------
 
-using Twitterizer.Core;
 namespace Twitterizer
 {
+    using System;
+    using Twitterizer.Core;
+
     /// <summary>
     /// The twitter list collection class.
     /// </summary>
+    [Serializable]
     public class TwitterListCollection : Core.BaseCollection<TwitterList>
     {
-        /// <summary>
-        /// Gets the next page.
-        /// </summary>
-        /// <value>The next page.</value>
-        public TwitterListCollection NextPage
-        {
-            get
-            {
-                CursorPagedCommand<TwitterListWrapper> newCommand = 
-                    (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
-                newCommand.Cursor = this.NextCursor;
-
-                TwitterListWrapper result = CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
-                result.Lists.Command = newCommand;
-                return result.Lists;
-            }
-        }
-
-        /// <summary>
-        /// Gets the previous page.
-        /// </summary>
-        /// <value>The previous page.</value>
-        public TwitterListCollection PreviousPage
-        {
-            get
-            {
-                CursorPagedCommand<TwitterListWrapper> newCommand = 
-                    (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
-                newCommand.Cursor = this.PreviousCursor;
-
-                TwitterListWrapper result = Core.CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
-                result.Lists.Command = newCommand;
-                return result.Lists;
-            }
-        }
-
         /// <summary>
         /// Gets or sets the next cursor.
         /// </summary>
@@ -105,5 +72,37 @@ namespace Twitterizer
         /// </summary>
         /// <value>The command.</value>
         internal Core.BaseCommand<TwitterListWrapper> Command { get; set; }
+
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
+        /// <value>The next page.</value>
+        public TwitterListCollection NextPage()
+        {
+            CursorPagedCommand<TwitterListWrapper> newCommand =
+                (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
+            newCommand.Cursor = this.NextCursor;
+
+            TwitterListWrapper result = CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
+            result.Lists.Command = newCommand;
+            return result.Lists;
+        }
+
+        /// <summary>
+        /// Gets the previous page.
+        /// </summary>
+        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
+        /// <value>The previous page.</value>
+        public TwitterListCollection PreviousPage()
+        {
+            CursorPagedCommand<TwitterListWrapper> newCommand =
+                (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
+            newCommand.Cursor = this.PreviousCursor;
+
+            TwitterListWrapper result = Core.CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
+            result.Lists.Command = newCommand;
+            return result.Lists;
+        }
     }
 }

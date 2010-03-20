@@ -36,6 +36,7 @@
 using System;
 using System.Configuration;
 using Twitterizer;
+using System.Web.Configuration;
 
 public partial class callback : System.Web.UI.Page
 {
@@ -50,5 +51,22 @@ public partial class callback : System.Web.UI.Page
         this.AccessTokenSecretLabel.Text = tokens.TokenSecret;
         this.UserIdLabel.Text = tokens.UserId.ToString();
         this.ScreenNameLabel.Text = tokens.ScreenName;
+
+        try
+        {
+            Configuration config = WebConfigurationManager.OpenWebConfiguration(null);
+            config.AppSettings.Settings.Add("Twitterizer2.Example.AccessToken", tokens.Token);
+            config.AppSettings.Settings.Add("Twitterizer2.Example.AccessTokenSecret", tokens.TokenSecret);
+            config.Save();
+
+            ConfigurationManager.RefreshSection("appSettings");
+
+            ResultLabel.Text = @"The web site's configuration has been automatically updated.";
+        }
+        catch (Exception)
+        {
+            ResultLabel.Text = @"The web site's configuration could not be updated. Please place these values in the web.config file.";
+        }
+        
     }
 }

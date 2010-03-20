@@ -42,6 +42,7 @@ namespace Twitterizer
     /// The TwitterStatus class.
     /// </summary>
     [DataContract]
+    [Serializable]
     public class TwitterStatus : BaseObject
     {
         #region Constructors

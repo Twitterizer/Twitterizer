@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ColorTranslatorHelper.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,74 +29,37 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The list membership command class</summary>
+// <summary>The color translation helper class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer;
-    using Twitterizer.Core;
+    using System.Drawing;
+    using System.Text.RegularExpressions;
 
     /// <summary>
-    /// The list membership command class
+    /// Provides common color converstion methods
     /// </summary>
-    internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
+    internal static class ColorTranslatorHelper
     {
         /// <summary>
-        /// The base address to the API method.
+        /// Converts the color string to a <see cref="System.Drawing.Color"/>
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/memberships.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
-        /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public ListMembershipsCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="value">The value.</param>
+        /// <returns>A <see cref="System.Drawing.Color"/> representation of the color, or null.</returns>
+        internal static Color FromTwitterString(string value)
         {
-            if (Tokens == null)
+            if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException("requestTokens");
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            if (this.Cursor <= 0)
-            {
-                this.Cursor = -1;
+                return new Color();
             }
 
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override BaseCommand<TwitterListWrapper> Clone()
-        {
-            return new ListMembershipsCommand(this.Tokens)
+            if (Regex.IsMatch(value, @"^#?[a-f0-9]{6}$", RegexOptions.IgnoreCase))
             {
-                Cursor = this.Cursor
-            };
+                return ColorTranslator.FromHtml(Regex.Replace(value, "^#?([a-f0-9]{6})$", "#$1", RegexOptions.IgnoreCase));
+            }
+
+            return Color.FromName(value);
         }
     }
 }

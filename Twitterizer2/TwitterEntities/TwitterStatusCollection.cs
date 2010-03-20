@@ -44,6 +44,7 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterStatusCollection class.
     /// </summary>
+    [Serializable]
     public class TwitterStatusCollection : BaseCollection<TwitterStatus>
     {
         /// <summary>
@@ -57,7 +58,7 @@ namespace Twitterizer
         /// Gets the next page.
         /// </summary>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public TwitterStatusCollection GetNextPage()
+        public TwitterStatusCollection NextPage()
         {
             if (this.Command == null || this.Command.Page < 0)
             {
@@ -77,7 +78,7 @@ namespace Twitterizer
         /// Gets the previous page.
         /// </summary>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public TwitterStatusCollection GetPreviousPage()
+        public TwitterStatusCollection PreviousPage()
         {
             if (this.Command == null || this.Command.Page <= 1)
             {

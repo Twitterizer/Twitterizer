@@ -38,6 +38,7 @@ namespace Twitterizer.Core
     /// <summary>
     /// Provides data about the user's current rate limiting.
     /// </summary>
+    [Serializable]
     public class RateLimiting
     {
         /// <summary>

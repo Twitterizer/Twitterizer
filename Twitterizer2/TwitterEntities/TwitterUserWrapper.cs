@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterUserWrapper.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,74 +29,61 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The list membership command class</summary>
+// <summary>The twitter user wrapper class.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
     using System;
-    using System.Globalization;
-    using Twitterizer;
+    using System.Runtime.Serialization;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The list membership command class
+    /// The Twitter User Wrapper class.
     /// </summary>
-    internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
+    [Serializable]
+    [DataContract]
+    internal class TwitterUserWrapper : BaseObject
     {
         /// <summary>
-        /// The base address to the API method.
+        /// The private collection for the contained collection
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/memberships.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
-        /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public ListMembershipsCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
-        {
-            if (Tokens == null)
-            {
-                throw new ArgumentNullException("requestTokens");
-            }
-        }
-        #endregion
+        private TwitterUserCollection users;
 
         /// <summary>
-        /// Initializes the command.
+        /// Gets or sets the users.
         /// </summary>
-        public override void Init()
+        /// <value>The users.</value>
+        [DataMember(Name = "users")]
+        public TwitterUserCollection Users
         {
-            if (this.Cursor <= 0)
+            get
             {
-                this.Cursor = -1;
+                this.users.RateLimiting = this.RateLimiting;
+                this.users.Tokens = this.Tokens;
+                this.users.NextCursor = this.NextCursor;
+                this.users.PreviousCursor = this.PreviousCursor;
+
+                return this.users;
             }
 
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override BaseCommand<TwitterListWrapper> Clone()
-        {
-            return new ListMembershipsCommand(this.Tokens)
+            set
             {
-                Cursor = this.Cursor
-            };
+                this.users = value;
+            }
         }
+
+        /// <summary>
+        /// Gets or sets the next cursor.
+        /// </summary>
+        /// <value>The next cursor.</value>
+        [DataMember(Name = "next_cursor")]
+        public long NextCursor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the previous cursor.
+        /// </summary>
+        /// <value>The previous cursor.</value>
+        [DataMember(Name = "previous_cursor")]
+        public long PreviousCursor { get; set; }
     }
 }

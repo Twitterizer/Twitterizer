@@ -1,16 +1,8 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Lists.aspx.cs" Inherits="Lists" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Lists.aspx.cs" Inherits="Lists"
+    MasterPageFile="~/MasterPage.master" %>
+<%@ MasterType TypeName="MasterPage" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-    <div>
-    <asp:GridView ID="ListGridView" runat="server" />
-    </div>
-    </form>
-</body>
-</html>
+<asp:Content runat="server" ContentPlaceHolderID="PageBodyContentPlaceHolder">
+    <asp:GridView ID="ListGridView" runat="server" DataSource='<%# ListCollection %>' EnableViewState="false" />
+    <asp:LinkButton ID="NextPageLinkButton" runat="server" Text="Next Page" OnClick="NextPageLinkButton_Click" EnableViewState="false" />
+</asp:Content>

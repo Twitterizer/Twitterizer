@@ -38,15 +38,27 @@ using Twitterizer;
 
 public partial class _Default : System.Web.UI.Page
 {
+    public TwitterStatusCollection HomePageStatuses { get; set; }
+
     protected void Page_Load(object sender, EventArgs e)
     {
-        OAuthTokens tokens = new OAuthTokens();
-        tokens.AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"];
-        tokens.AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"];
-        tokens.ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"];
-        tokens.ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"];
+        if (!this.IsPostBack)
+        {
+            this.HomePageStatuses = TwitterUser.GetHomeTimeline(this.Master.Tokens);
+            this.DataBind();
 
-        myGridView.DataSource = TwitterDirectMessage.GetDirectMessages(tokens, -1, -1, -1);
-        myGridView.DataBind();
+            ViewState.Add("homePageStatuses", this.HomePageStatuses);
+        }
+        else
+        {
+            this.HomePageStatuses = ViewState["homePageStatuses"] as TwitterStatusCollection;
+        }
+    }
+
+    protected void NextPageLinkButton_Click(object sender, EventArgs e)
+    {
+        this.HomePageStatuses = this.HomePageStatuses.NextPage();
+        ViewState["homePageStatuses"] = this.HomePageStatuses;
+        this.DataBind();
     }
 }

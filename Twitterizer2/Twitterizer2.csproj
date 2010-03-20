@@ -40,6 +40,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -89,6 +90,7 @@
     <Compile Include="Commands\User\UserSearchCommand.cs" />
     <Compile Include="Commands\Timelines\UserTimelineCommand.cs" />
     <Compile Include="Core\BaseCollection.cs" />
+    <Compile Include="Core\ColorTranslatorHelper.cs" />
     <Compile Include="Core\CursorPagedCommand.cs" />
     <Compile Include="Core\ICommand.cs" />
     <Compile Include="Core\PagedCommand.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="TwitterEntities\TwitterUser.cs" />
+    <Compile Include="TwitterEntities\TwitterUserWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

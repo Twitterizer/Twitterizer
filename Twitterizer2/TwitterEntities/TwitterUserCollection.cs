@@ -38,67 +38,20 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterUserCollection class.
     /// </summary>
+    [System.Serializable]
     public class TwitterUserCollection : BaseCollection<TwitterUser>
     {
-        /// <summary>
-        /// Gets the next page.
-        /// </summary>
-        /// <value>The next page.</value>
-        public TwitterUserCollection NextPage
-        {
-            get
-            {
-                if (!(this.Command is CursorPagedCommand<TwitterUserCollection> || this.Command is PagedCommand<TwitterUserCollection>))
-                {
-                    throw new System.NotSupportedException("Paging is not supported for this API call.");
-                }
-
-                
-
-                CursorPagedCommand<TwitterUserCollection> newCommand =
-                    (CursorPagedCommand<TwitterUserCollection>)this.Command.Clone();
-                newCommand.Cursor = this.NextCursor;
-
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                result.Command = newCommand;
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Gets the previous page.
-        /// </summary>
-        /// <value>The previous page.</value>
-        public TwitterUserCollection PreviousPage
-        {
-            get
-            {
-                if (!(this.Command is CursorPagedCommand<TwitterUserCollection> || this.Command is PagedCommand<TwitterUserCollection>))
-                {
-                    throw new System.NotSupportedException("Paging is not supported for this API call.");
-                }
-
-                CursorPagedCommand<TwitterUserCollection> newCommand =
-                    (CursorPagedCommand<TwitterUserCollection>)this.Command.Clone();
-                newCommand.Cursor = this.PreviousCursor;
-
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                result.Command = newCommand;
-                return result;
-            }
-        }
-
         /// <summary>
         /// Gets or sets the next cursor.
         /// </summary>
         /// <value>The next cursor.</value>
-        public int NextCursor { get; set; }
+        public long NextCursor { get; set; }
 
         /// <summary>
         /// Gets or sets the previous cursor.
         /// </summary>
         /// <value>The previous cursor.</value>
-        public int PreviousCursor { get; set; }
+        public long PreviousCursor { get; set; }
 
         /// <summary>
         /// Gets or sets the request parameters.
@@ -113,9 +66,81 @@ namespace Twitterizer
         public new RateLimiting RateLimiting { get; set; }
 
         /// <summary>
-        /// Gets or sets the command.
+        /// Gets or sets the paged command.
         /// </summary>
-        /// <value>The command.</value>
-        internal BaseCommand<TwitterUserCollection> Command { get; set; }
+        /// <value>The paged command.</value>
+        internal PagedCommand<TwitterUserCollection> PagedCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cursor paged command.
+        /// </summary>
+        /// <value>The cursor paged command.</value>
+        internal CursorPagedCommand<TwitterUserWrapper> CursorPagedCommand { get; set; }
+
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <returns>A <see cref="TwitterUserCollection"/> instance.</returns>
+        /// <value>The next page.</value>
+        public TwitterUserCollection NextPage()
+        {
+            if (this.PagedCommand != null)
+            {
+                PagedCommand<TwitterUserCollection> newCommand =
+                    (PagedCommand<TwitterUserCollection>)this.PagedCommand.Clone();
+                newCommand.Page += 1;
+
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+                result.PagedCommand = newCommand;
+                return result;
+            }
+            else if (this.CursorPagedCommand != null)
+            {
+                CursorPagedCommand<TwitterUserWrapper> newCommand =
+                    (CursorPagedCommand<TwitterUserWrapper>)this.CursorPagedCommand.Clone();
+                newCommand.Cursor = this.NextCursor;
+
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(newCommand).Users;
+                result.CursorPagedCommand = newCommand;
+                return result;
+            }
+            else
+            {
+                throw new System.NotSupportedException("Paging is not supported for this API call.");
+            }
+        }
+
+        /// <summary>
+        /// Gets the previous page.
+        /// </summary>
+        /// <returns>A <see cref="TwitterUserCollection"/> instance.</returns>
+        /// <value>The previous page.</value>
+        public TwitterUserCollection PreviousPage()
+        {
+            if (this.PagedCommand != null)
+            {
+                PagedCommand<TwitterUserCollection> newCommand =
+                    (PagedCommand<TwitterUserCollection>)this.PagedCommand.Clone();
+                newCommand.Page -= 1;
+
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+                result.PagedCommand = newCommand;
+                return result;
+            }
+            else if (this.CursorPagedCommand != null)
+            {
+                CursorPagedCommand<TwitterUserWrapper> newCommand =
+                    (CursorPagedCommand<TwitterUserWrapper>)this.CursorPagedCommand.Clone();
+                newCommand.Cursor = this.PreviousCursor;
+
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(newCommand).Users;
+                result.CursorPagedCommand = newCommand;
+                return result;
+            }
+            else
+            {
+                throw new System.NotSupportedException("Paging is not supported for this API call.");
+            }
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The get lists command class
     /// </summary>
+    [Serializable]
     internal sealed class GetListsCommand : CursorPagedCommand<TwitterListWrapper>
     {
         /// <summary>
@@ -70,7 +71,7 @@ namespace Twitterizer.Commands
 
             this.Username = username;
 
-            this.Uri = new Uri(string.Format(Path, username));
+            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username));
         }
         #endregion
 
@@ -87,10 +88,12 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor != 0)
+            if (this.Cursor <= 0)
             {
-                this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
+                this.Cursor = -1;
             }
+
+            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

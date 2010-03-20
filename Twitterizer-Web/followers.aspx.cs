@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="followers.aspx.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,74 +29,77 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The list membership command class</summary>
+// <summary>The followers example page.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+using System;
+using System.Web.UI.WebControls;
+using Twitterizer;
+
+public partial class followers : System.Web.UI.Page
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer;
-    using Twitterizer.Core;
+    public TwitterUserCollection FollowersCollection { get; set; }
 
-    /// <summary>
-    /// The list membership command class
-    /// </summary>
-    internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
+    protected void Page_Load(object sender, EventArgs e)
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/memberships.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
-        /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public ListMembershipsCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        if (!this.IsPostBack)
         {
-            if (Tokens == null)
-            {
-                throw new ArgumentNullException("requestTokens");
-            }
+            this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens);
+            ViewState.Add("followers", this.FollowersCollection);
+            this.DataBind();
         }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
+        else
         {
-            if (this.Cursor <= 0)
-            {
-                this.Cursor = -1;
-            }
+            this.FollowersCollection = ViewState["followers"] as TwitterUserCollection;
+        }
+    }
 
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
+    protected string SafeBooleanText(bool? value)
+    {
+        if (value == null)
+        {
+            return "No (Null)";
         }
 
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
+        return value == true ? "Yes" : "No";
+    }
+
+    protected void NextPageLinkButton_Click(object sender, EventArgs e)
+    {
+        this.FollowersCollection = this.FollowersCollection.NextPage();
+        this.DataBind();
+
+        ViewState["followers"] = this.FollowersCollection;
+    }
+
+    protected void FollowersGridView_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType != DataControlRowType.DataRow)
         {
-            this.IsValid = true;
+            return;
         }
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override BaseCommand<TwitterListWrapper> Clone()
+        TwitterUser dataItem = e.Row.DataItem as TwitterUser;
+
+        if (dataItem == null)
         {
-            return new ListMembershipsCommand(this.Tokens)
-            {
-                Cursor = this.Cursor
-            };
+            return;
+        }
+
+        e.Row.BackColor = dataItem.ProfileBackgroundColor;
+        e.Row.ForeColor = dataItem.ProfileTextColor;
+    }
+
+    protected void FollowersGridView_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "DrillDownUser")
+        {
+            int rowIndex = int.Parse((string)e.CommandArgument);
+            long userId = (long)FollowersGridView.DataKeys[rowIndex].Value;
+
+            this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens, userId);
+            ViewState["followers"] = this.FollowersCollection;
+            this.DataBind();
         }
     }
 }
