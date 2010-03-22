@@ -110,6 +110,7 @@
     <Compile Include="Core\BaseCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="TwitterEntities\GeoRssEntities\BaseObject.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterList.cs" />
