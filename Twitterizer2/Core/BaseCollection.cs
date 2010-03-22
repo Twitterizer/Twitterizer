@@ -59,5 +59,11 @@ namespace Twitterizer.Core
         /// <value>The oauth tokens.</value>
         [IgnoreDataMember]
         public OAuthTokens Tokens { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last request status.
+        /// </summary>
+        /// <value>The last request status.</value>
+        public static RequestStatus LastRequestStatus { get; internal set; }
     }
 }

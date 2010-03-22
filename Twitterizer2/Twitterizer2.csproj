@@ -98,6 +98,7 @@
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\RequestStatus.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />

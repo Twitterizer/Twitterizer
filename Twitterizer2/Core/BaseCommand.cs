@@ -199,48 +199,35 @@ namespace Twitterizer.Core
                 // Get the response
                 using (Stream responseStream = webResponse.GetResponseStream())
                 {
-#if DEBUG
                     byte[] data = ReadStream(responseStream);
 
+#if DEBUG
                     System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
                     System.Diagnostics.Debug.WriteLine(Encoding.UTF8.GetString(data));
                     System.Diagnostics.Debug.WriteLine("----------- END -----------");
-
+#endif
                     // Deserialize the results.
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
                     resultObject = (T)ds.ReadObject(new MemoryStream(data));
                     responseStream.Close();
-#else
-                    // Deserialize the results.
-                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
-                    resultObject = (T)ds.ReadObject(responseStream);
-                    responseStream.Close();
-#endif
                 }
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
+
+                // Update the last status
+                RequestStatus.UpdateRequestStatus(webResponse as HttpWebResponse);
             }
             catch (WebException wex)
             {
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
-                if (response == null)
+                if (response == null || !RequestStatus.UpdateRequestStatus(response))
                 {
                     throw;
                 }
 
-                // Determine what the problem was based on the HTTP Status Code
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.BadRequest:
-                        throw new TwitterizerException("The request was invalid. It is possible you are being rate limited.", wex);
-                    case HttpStatusCode.Unauthorized:
-                        throw new AuthenticationFailedException(wex);
-                }
-
-                // We don't know what the issue is, throw a generic exception
-                throw new TwitterizerException(wex.Message, wex);
+                return default(T);
             }
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
@@ -284,7 +271,6 @@ namespace Twitterizer.Core
             }
         }
 
-#if DEBUG
         /// <summary>
         /// Reads the stream into a byte array.
         /// </summary>
@@ -315,7 +301,6 @@ namespace Twitterizer.Core
 
             return data;
         }
-#endif
 
         /// <summary>
         /// Builds the request.
