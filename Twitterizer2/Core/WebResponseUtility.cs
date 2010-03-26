@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseObject.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="WebResponseUtility.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,15 +29,46 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The geo rss abstract base class.</summary>
+// <summary>The web response utility class.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.GeoRss
+namespace Twitterizer
 {
+    using System.IO;
+
     /// <summary>
-    /// The Geo Rss abstract base class.
+    /// A utility for assisting in processing web responses
     /// </summary>
-    public abstract class BaseObject
+    public static class WebResponseUtility
     {
+        /// <summary>
+        /// Reads the stream into a byte array.
+        /// </summary>
+        /// <param name="responseStream">The response stream.</param>
+        /// <returns>A byte array.</returns>
+        internal static byte[] ReadStream(Stream responseStream)
+        {
+            byte[] data = new byte[32768];
+
+            byte[] buffer = new byte[32768];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bool exit = false;
+                while (!exit)
+                {
+                    int read = responseStream.Read(buffer, 0, buffer.Length);
+                    if (read <= 0)
+                    {
+                        data = ms.ToArray();
+                        exit = true;
+                    }
+                    else
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                }
+            }
+
+            return data;
+        }
     }
 }

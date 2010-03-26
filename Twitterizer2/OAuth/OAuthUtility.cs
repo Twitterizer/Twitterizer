@@ -280,9 +280,9 @@ namespace Twitterizer
         /// </summary>
         /// <param name="requestToken">The request token.</param>
         /// <param name="authenticate">if set to <c>true</c>, the authenticate url will be used. (See: "Sign in with Twitter")</param>
-        /// <param name="callbackUri">The callback URI.</param>
+        /// <param name="callbackAddress">The callback address.</param>
         /// <returns>A new <see cref="Uri"/> instance.</returns>
-        public static Uri BuildAuthorizationUri(string requestToken, bool authenticate, string callbackUri)
+        public static Uri BuildAuthorizationUri(string requestToken, bool authenticate, string callbackAddress)
         {
             StringBuilder parameters = new StringBuilder("http://twitter.com/oauth/");
 
@@ -297,9 +297,9 @@ namespace Twitterizer
 
             parameters.AppendFormat("?oauth_token={0}", requestToken);
 
-            if (!string.IsNullOrEmpty(callbackUri))
+            if (!string.IsNullOrEmpty(callbackAddress))
             {
-                parameters.AppendFormat("&oauth_callback={0}", callbackUri);
+                parameters.AppendFormat("&oauth_callback={0}", callbackAddress);
             }
 
             return new Uri(parameters.ToString());

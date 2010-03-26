@@ -685,7 +685,11 @@ namespace Twitterizer
             };
 
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-            result.Command = command;
+
+            if (result != null)
+            {
+                result.Command = command;
+            }
 
             return result;
         }

@@ -62,6 +62,7 @@
     <Compile Include="Commands\Lists\CreateListCommand.cs" />
     <Compile Include="Commands\Friendship\DeleteFriendshipCommand.cs" />
     <Compile Include="Commands\Lists\DeleteListCommand.cs" />
+    <Compile Include="Commands\Lists\GetListSubscriptionsCommand.cs" />
     <Compile Include="Commands\Status\DeleteStatusCommand.cs" />
     <Compile Include="Commands\Direct Messages\DeleteDirectMessageCommand.cs" />
     <Compile Include="Commands\Direct Messages\DirectMessagesCommand.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Core\RequestStatus.cs" />
+    <Compile Include="Core\WebResponseUtility.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />
@@ -110,7 +112,6 @@
     <Compile Include="Core\BaseCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
-    <Compile Include="TwitterEntities\GeoRssEntities\BaseObject.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterList.cs" />

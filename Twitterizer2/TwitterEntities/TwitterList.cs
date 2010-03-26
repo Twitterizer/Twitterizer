@@ -287,6 +287,18 @@ namespace Twitterizer
 
             return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
         }
+
+        /// <summary>
+        /// Gets the subscriptions.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens)
+        {
+            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens);
+
+            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+        }
         #endregion
 
         #region Non-static methods

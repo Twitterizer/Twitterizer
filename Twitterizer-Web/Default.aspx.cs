@@ -44,7 +44,7 @@ public partial class _Default : System.Web.UI.Page
     {
         if (!this.IsPostBack)
         {
-            this.HomePageStatuses = TwitterUser.GetHomeTimeline(this.Master.Tokens);
+            this.HomePageStatuses = TwitterUser.GetHomeTimeline(Master.Tokens);
             this.DataBind();
 
             ViewState.Add("homePageStatuses", this.HomePageStatuses);

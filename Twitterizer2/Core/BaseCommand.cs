@@ -199,7 +199,7 @@ namespace Twitterizer.Core
                 // Get the response
                 using (Stream responseStream = webResponse.GetResponseStream())
                 {
-                    byte[] data = ReadStream(responseStream);
+                    byte[] data = WebResponseUtility.ReadStream(responseStream);
 
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
@@ -270,38 +270,7 @@ namespace Twitterizer.Core
                     .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
-
-        /// <summary>
-        /// Reads the stream into a byte array.
-        /// </summary>
-        /// <param name="responseStream">The response stream.</param>
-        /// <returns>A byte array.</returns>
-        private static byte[] ReadStream(Stream responseStream)
-        {
-            byte[] data = new byte[32768];
-
-            byte[] buffer = new byte[32768];
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bool exit = false;
-                while (!exit)
-                {
-                    int read = responseStream.Read(buffer, 0, buffer.Length);
-                    if (read <= 0)
-                    {
-                        data = ms.ToArray();
-                        exit = true;
-                    }
-                    else
-                    {
-                        ms.Write(buffer, 0, read);
-                    }
-                }
-            }
-
-            return data;
-        }
-
+        
         /// <summary>
         /// Builds the request.
         /// </summary>

@@ -37,135 +37,13 @@ namespace Twitterizer
     using System;
     using System.Net;
     using System.Runtime.Serialization.Json;
+    using System.Text;
     using System.Xml.Serialization;
-
-    /// <summary>
-    /// The twitter status class. Provides thread-safe information about the last request made.
-    /// </summary>
-    [Serializable]
-    public sealed class RequestStatus
-    {
-        /// <summary>
-        /// The last request status
-        /// </summary>
-        private static RequestStatus lastRequestStatus = null;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RequestStatus"/> class.
-        /// </summary>
-        internal RequestStatus()
-        {
-            this.Status = RequestStatuses.Success;
-        }
-
-        /// <summary>
-        /// Gets or sets the last request status.
-        /// </summary>
-        /// <value>The last request status.</value>
-        public static RequestStatus LastRequestStatus
-        {
-            get
-            {
-                lock (padlock)
-                {
-                    if (lastRequestStatus == null)
-                    {
-                        lastRequestStatus = new RequestStatus();
-                    }
-
-                    return lastRequestStatus;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the full path.
-        /// </summary>
-        /// <value>The full path.</value>
-        public string FullPath { get; internal set; }
-
-        /// <summary>
-        /// Gets or sets the error details.
-        /// </summary>
-        /// <value>The error details.</value>
-        public TwitterErrorDetails ErrorDetails { get; internal set; }
-
-        /// <summary>
-        /// Gets or sets the response body.
-        /// </summary>
-        /// <value>The response body.</value>
-        public string ResponseBody { get; internal set; }
-
-        /// <summary>
-        /// Gets or sets the status.
-        /// </summary>
-        /// <value>The status.</value>
-        public RequestStatuses Status { get; internal set; }
-
-        /// <summary>
-        /// A lock for the last status instance
-        /// </summary>
-        static readonly object padlock = new object();
-
-        /// <summary>
-        /// Updates the request status.
-        /// </summary>
-        /// <param name="webResponse">The web response.</param>
-        /// <returns><c>true</c> if the status was updated successfully, otherwise <c>false</c></returns>
-        public static bool UpdateRequestStatus(HttpWebResponse webResponse)
-        {
-            if (webResponse == null)
-            {
-                return false;
-            }
-
-            RequestStatus newStatus = new RequestStatus();
-
-            switch (webResponse.StatusCode)
-            {
-                case HttpStatusCode.OK:
-                    newStatus.Status = RequestStatuses.Success;
-                    lastRequestStatus = newStatus;
-                    return true;
-                    
-                case HttpStatusCode.BadRequest:
-                    newStatus.Status = RequestStatuses.BadRequest;
-                    break;
-
-                case HttpStatusCode.Unauthorized:
-                    newStatus.Status = RequestStatuses.Unauthorized;
-                    break;
-                
-                case HttpStatusCode.Forbidden:
-                    newStatus.Status = RequestStatuses.RateLimited;
-                    break;
-                
-                default:
-                    return false;
-            }
-
-            if (webResponse.ContentType.ToLower() == "text/xml")
-            {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(TwitterErrorDetails));
-                lastRequestStatus.ErrorDetails = xmlSerializer.Deserialize(webResponse.GetResponseStream()) as TwitterErrorDetails;
-            }
-
-            if (webResponse.ContentType.ToLower() == "application/json")
-            {
-                DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
-                lastRequestStatus.ErrorDetails = ds.ReadObject(webResponse.GetResponseStream()) as TwitterErrorDetails;
-            }
-
-            lastRequestStatus = newStatus;
-
-            return true;
-        }
-    }
 
     /// <summary>
     /// Describes the result status of a request
     /// </summary>
-    public enum RequestStatuses
+    public enum RequestResult
     {
         /// <summary>
         /// The request was completed successfully
@@ -211,5 +89,140 @@ namespace Twitterizer
         /// Something unexpected happened. See the error message for additional information.
         /// </summary>
         Unknown
+    }
+
+    /// <summary>
+    /// The twitter status class. Provides thread-safe information about the last request made.
+    /// </summary>
+    [Serializable]
+    public sealed class RequestStatus
+    {
+        /// <summary>
+        /// A lock for the last status instance
+        /// </summary>
+        private static readonly object padlock = new object();
+
+        /// <summary>
+        /// The last request status
+        /// </summary>
+        private static RequestStatus lastRequestStatus;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestStatus"/> class.
+        /// </summary>
+        internal RequestStatus()
+        {
+            this.Status = RequestResult.Success;
+        }
+
+        /// <summary>
+        /// Gets the last request status.
+        /// </summary>
+        /// <value>The last request status.</value>
+        public static RequestStatus LastRequestStatus
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (lastRequestStatus == null)
+                    {
+                        lastRequestStatus = new RequestStatus();
+                    }
+
+                    return lastRequestStatus;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the full path.
+        /// </summary>
+        /// <value>The full path.</value>
+        public string FullPath { get; internal set; }
+
+        /// <summary>
+        /// Gets the error details.
+        /// </summary>
+        /// <value>The error details.</value>
+        public TwitterErrorDetails ErrorDetails { get; internal set; }
+
+        /// <summary>
+        /// Gets the response body.
+        /// </summary>
+        /// <value>The response body.</value>
+        public string ResponseBody { get; internal set; }
+
+        /// <summary>
+        /// Gets the status.
+        /// </summary>
+        /// <value>The status.</value>
+        public RequestResult Status { get; internal set; }
+
+        /// <summary>
+        /// Updates the request status.
+        /// </summary>
+        /// <param name="webResponse">The web response.</param>
+        /// <returns><c>true</c> if the status was updated successfully, otherwise <c>false</c></returns>
+        public static bool UpdateRequestStatus(HttpWebResponse webResponse)
+        {
+            if (webResponse == null)
+            {
+                return false;
+            }
+
+            System.IO.Stream responseStream = webResponse.GetResponseStream();
+
+            if (responseStream != null && responseStream.CanRead)
+            {
+                LastRequestStatus.ResponseBody = Encoding.UTF8.GetString(WebResponseUtility.ReadStream(responseStream));
+            }
+
+            LastRequestStatus.FullPath = webResponse.ResponseUri.AbsolutePath;
+
+            switch (webResponse.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    LastRequestStatus.Status = RequestResult.Success;
+                    return true;
+
+                case HttpStatusCode.BadRequest:
+                    LastRequestStatus.Status = RequestResult.BadRequest;
+                    break;
+
+                case HttpStatusCode.Unauthorized:
+                    LastRequestStatus.Status = RequestResult.Unauthorized;
+                    break;
+
+                case HttpStatusCode.Forbidden:
+                    LastRequestStatus.Status = RequestResult.RateLimited;
+                    break;
+
+                default:
+                    LastRequestStatus.Status = RequestResult.Unknown;
+                    return false;
+            }
+
+            try
+            {
+                if (webResponse.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(TwitterErrorDetails));
+                    LastRequestStatus.ErrorDetails = xmlSerializer.Deserialize(webResponse.GetResponseStream()) as TwitterErrorDetails;
+                }
+
+                if (webResponse.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+                {
+                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
+                    LastRequestStatus.ErrorDetails = ds.ReadObject(webResponse.GetResponseStream()) as TwitterErrorDetails;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // Do nothing. This is no-fail code.
+            }
+
+            return true;
+        }
     }
 }

@@ -120,6 +120,12 @@ namespace Twitterizer
         #endregion
 
         /// <summary>
+        /// Gets or sets the result.
+        /// </summary>
+        /// <value>The result.</value>
+        public RequestResult Result { get; set; }
+
+        /// <summary>
         /// Gets or sets the response body.
         /// </summary>
         /// <value>The response body.</value>

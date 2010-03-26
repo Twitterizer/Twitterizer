@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="GetListSubscriptionsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,35 +29,60 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <summary>The get list subscriptions command class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer.Commands
 {
     using System;
-    using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
+    using System.Globalization;
+    using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The base class for object collections.
+    /// The create list command class
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
-    [Serializable]
-    public abstract class BaseCollection<T> : Collection<T>, ITwitterObject
-        where T : ITwitterObject
+    internal sealed class GetListSubscriptionsCommand : CursorPagedCommand<TwitterListWrapper>
     {
         /// <summary>
-        /// Gets or sets information about the user's rate usage.
+        /// The base address to the API method.
         /// </summary>
-        /// <value>The rate limiting object.</value>
-        [IgnoreDataMember]
-        public RateLimiting RateLimiting { get; set; }
+        private const string Path = "http://api.twitter.com/1/user/lists/subscriptions.json";
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetListSubscriptionsCommand"/> class.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        public GetListSubscriptionsCommand(OAuthTokens requestTokens)
+            : base("GET", new Uri(Path), requestTokens)
+        {
+            if (requestTokens == null)
+            {
+                throw new ArgumentNullException("requestTokens");
+            }
+        }
+        #endregion
 
         /// <summary>
-        /// Gets or sets the oauth tokens.
+        /// Initializes the command.
         /// </summary>
-        /// <value>The oauth tokens.</value>
-        [IgnoreDataMember]
-        public OAuthTokens Tokens { get; set; }
+        public override void Init()
+        {
+            if (this.Cursor <= 0)
+            {
+                this.Cursor = -1;
+            }
+
+            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public override void Validate()
+        {
+            this.IsValid = true;
+        }
     }
 }

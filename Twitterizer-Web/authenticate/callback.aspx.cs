@@ -35,8 +35,8 @@
 
 using System;
 using System.Configuration;
-using Twitterizer;
 using System.Web.Configuration;
+using Twitterizer;
 
 public partial class callback : System.Web.UI.Page
 {
@@ -67,6 +67,5 @@ public partial class callback : System.Web.UI.Page
         {
             ResultLabel.Text = @"The web site's configuration could not be updated. Please place these values in the web.config file.";
         }
-        
     }
 }
