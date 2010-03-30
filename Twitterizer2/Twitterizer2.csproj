@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -99,7 +100,9 @@
     <Compile Include="Core\BaseObject.cs" />
     <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\PerformanceCounter.cs" />
     <Compile Include="Core\RequestStatus.cs" />
+    <Compile Include="Core\UsageStatsCollector.cs" />
     <Compile Include="Core\WebResponseUtility.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
@@ -116,7 +119,7 @@
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterList.cs" />
     <Compile Include="TwitterEntities\TwitterListCollection.cs" />
-    <Compile Include="TwitterEntities\TwitterListWrapper.cs" />
+    <Compile Include="TwitterEntities\Collection Wrappers\TwitterListWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterRateLimitStatus.cs" />
     <Compile Include="TwitterEntities\TwitterRelationship.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
@@ -124,7 +127,7 @@
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="TwitterEntities\TwitterUser.cs" />
-    <Compile Include="TwitterEntities\TwitterUserWrapper.cs" />
+    <Compile Include="TwitterEntities\Collection Wrappers\TwitterUserWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

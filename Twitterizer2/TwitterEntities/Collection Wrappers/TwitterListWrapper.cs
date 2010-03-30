@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ShowUserCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterListWrapper.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,78 +29,39 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The 'Show User' command class.</summary>
+// <summary>The twitter list wrapper class. </summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer;
+    using System.Runtime.Serialization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The Show User Command
+    /// A wrapper class for the lists collection (Twitter has their data structure wierd for this one)
     /// </summary>
-    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
-    internal sealed class ShowUserCommand : Core.BaseCommand<TwitterUser>
+    [DataContract]
+    internal class TwitterListWrapper : BaseObject
     {
         /// <summary>
-        /// The base address to the API method.
+        /// Gets or sets the lists.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/users/show.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
-        /// </summary>
-        public ShowUserCommand()
-            : this(null)
-        {
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        public ShowUserCommand(OAuthTokens tokens)
-            : base("GET", new Uri(Path), tokens)
-        {
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the user ID.
-        /// </summary>
-        /// <value>The user ID.</value>
-        public long UserId { get; set; }
+        /// <value>The lists.</value>
+        [DataMember(Name = "lists")]
+        public TwitterListCollection Lists { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the user.
+        /// Gets or sets the next cursor.
         /// </summary>
-        /// <value>The name of the user.</value>
-        public string Username { get; set; }
-        #endregion
+        /// <value>The next cursor.</value>
+        [DataMember(Name = "next_cursor")]
+        public int NextCursor { get; set; }
 
         /// <summary>
-        /// Inits this instance.
+        /// Gets or sets the previous cursor.
         /// </summary>
-        public override void Init()
-        {
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            
-            if (!string.IsNullOrEmpty(this.Username))
-                this.RequestParameters.Add("screen_name", this.Username);
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.UserId > 0 || 
-                !string.IsNullOrEmpty(this.Username);
-        }
+        /// <value>The previous cursor.</value>
+        [DataMember(Name = "previous_cursor")]
+        public int PreviousCursor { get; set; }
     }
 }

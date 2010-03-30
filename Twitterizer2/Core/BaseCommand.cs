@@ -212,6 +212,9 @@ namespace Twitterizer.Core
                     responseStream.Close();
                 }
 
+                PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
+                PerformanceCounter.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
+
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
 
@@ -220,6 +223,9 @@ namespace Twitterizer.Core
             }
             catch (WebException wex)
             {
+                PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
+                PerformanceCounter.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
+
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
                 if (response == null || !RequestStatus.UpdateRequestStatus(response))
@@ -280,6 +286,10 @@ namespace Twitterizer.Core
         /// </returns>
         private HttpWebResponse BuildRequestAndGetResponse(Dictionary<string, string> queryParameters)
         {
+            UsageStatsCollector.ReportCallAsync(this.Uri.AbsolutePath);
+            PerformanceCounter.ReportToCounter(TwitterizerCounter.AnonymousRequests);
+            PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);
+
             // Prepare and execute un-authorized query
             HttpWebRequest request;
 

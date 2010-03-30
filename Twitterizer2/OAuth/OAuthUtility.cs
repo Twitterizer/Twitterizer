@@ -327,6 +327,10 @@ namespace Twitterizer
             string token,
             string tokenSecret)
         {
+            UsageStatsCollector.ReportCallAsync(baseUrl);
+            PerformanceCounter.ReportToCounter(TwitterizerCounter.OAuthRequests);
+            PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);
+
             Dictionary<string, string> combinedParameters = new Dictionary<string, string>();
 
             if (parameters != null)
@@ -380,6 +384,7 @@ namespace Twitterizer
                     HttpWebRequest getRequest = (HttpWebRequest)WebRequest.Create(baseUrl);
                     getRequest.Method = httpMethod;
                     getRequest.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OAUTH GET: {0}", baseUrl));
 #endif
