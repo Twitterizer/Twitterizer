@@ -34,7 +34,9 @@
 
 using System;
 using System.Configuration;
+using System.Text.RegularExpressions;
 using Twitterizer;
+using System.Web;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -60,5 +62,15 @@ public partial class _Default : System.Web.UI.Page
         this.HomePageStatuses = this.HomePageStatuses.NextPage();
         ViewState["homePageStatuses"] = this.HomePageStatuses;
         this.DataBind();
+    }
+
+    protected string LinkifyText(string Text)
+    {
+        string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
+
+        Text = Regex.Replace(Text, @"@([^ ]+)", string.Format(@"<a href=""{0}?username=$1"">@$1</a>", pathToUserPage));
+        Text = Regex.Replace(Text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"">$1</a>");
+
+        return Text;
     }
 }

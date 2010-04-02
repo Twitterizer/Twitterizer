@@ -61,5 +61,17 @@ public partial class callback : System.Web.UI.Page
         };
 
         Session["OAuthTokens"] = oauthTokens;
+        Session["Username"] = tokens.ScreenName;
+        Session["UserId"] = tokens.UserId;
+
+        string redirectPath = "~/";
+
+        if (!string.IsNullOrEmpty(Request.QueryString["p"]))
+        {
+            redirectPath = Request.QueryString["p"];
+        }
+
+        // Comment this line to be shown your access keys
+        Response.Redirect(redirectPath, true);
     }
 }

@@ -40,6 +40,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The command to obtain followers of a user.
     /// </summary>
+    [Serializable]
     internal sealed class FriendsCommand :
         Core.CursorPagedCommand<TwitterUserWrapper>
     {

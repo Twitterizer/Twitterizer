@@ -44,7 +44,16 @@ public partial class followers : System.Web.UI.Page
     {
         if (!this.IsPostBack)
         {
-            this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens);
+            long userId = 0;
+            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && long.TryParse(Request.QueryString["userid"], out userId))
+            {
+                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens, userId);
+            }
+            else
+            {
+                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens);
+            }
+            
             ViewState.Add("followers", this.FollowersCollection);
             this.DataBind();
         }
@@ -70,36 +79,5 @@ public partial class followers : System.Web.UI.Page
         this.DataBind();
 
         ViewState["followers"] = this.FollowersCollection;
-    }
-
-    protected void FollowersGridView_RowDataBound(object sender, GridViewRowEventArgs e)
-    {
-        if (e.Row.RowType != DataControlRowType.DataRow)
-        {
-            return;
-        }
-
-        TwitterUser dataItem = e.Row.DataItem as TwitterUser;
-
-        if (dataItem == null)
-        {
-            return;
-        }
-
-        e.Row.BackColor = dataItem.ProfileBackgroundColor;
-        e.Row.ForeColor = dataItem.ProfileTextColor;
-    }
-
-    protected void FollowersGridView_RowCommand(object sender, GridViewCommandEventArgs e)
-    {
-        if (e.CommandName == "DrillDownUser")
-        {
-            int rowIndex = int.Parse((string)e.CommandArgument);
-            long userId = (long)FollowersGridView.DataKeys[rowIndex].Value;
-
-            this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens, userId);
-            ViewState["followers"] = this.FollowersCollection;
-            this.DataBind();
-        }
     }
 }
