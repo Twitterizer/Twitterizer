@@ -327,7 +327,7 @@ namespace Twitterizer
             string token,
             string tokenSecret)
         {
-            UsageStatsCollector.ReportCallAsync(baseUrl);
+            UsageStatsCollector.ReportCallAsync(new Uri(baseUrl).AbsolutePath);
             PerformanceCounter.ReportToCounter(TwitterizerCounter.OAuthRequests);
             PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);
 

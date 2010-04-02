@@ -50,10 +50,13 @@ public partial class _Default : System.Web.UI.Page
 
         Uri authorizeUri = OAuthUtility.BuildAuthorizationUri(
             authorizationTokens.Token, 
-            false,
+            true,
             HttpUtility.UrlEncodeUnicode(Request.Url.AbsoluteUri.Replace("Default.aspx", "callback.aspx")));
 
         this.RequestTokenLabel.Text = authorizationTokens.Token;
         this.GetAccessHyperLink.NavigateUrl = authorizeUri.AbsoluteUri;
+
+        // Comment this line to prompt the user to continue before directing them to twitter
+        Response.Redirect(authorizeUri.AbsoluteUri, true);
     }
 }

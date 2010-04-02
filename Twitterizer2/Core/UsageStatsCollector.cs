@@ -117,10 +117,17 @@ namespace Twitterizer
 
             try
             {
+                WebPermission permission = new WebPermission();
+                permission.AddPermission(NetworkAccess.Connect, @"http://www.twitterizer.net/.*");
+                permission.Demand();
+
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(collectionAddress);
                 WebResponse response = request.GetResponse();
             }
-            catch (Exception)
+            catch (WebException)
+            { 
+            }
+            catch (System.Security.SecurityException)
             {
             }
         }

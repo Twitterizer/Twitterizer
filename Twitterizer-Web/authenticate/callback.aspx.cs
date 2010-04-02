@@ -52,20 +52,14 @@ public partial class callback : System.Web.UI.Page
         this.UserIdLabel.Text = tokens.UserId.ToString();
         this.ScreenNameLabel.Text = tokens.ScreenName;
 
-        try
+        OAuthTokens oauthTokens = new OAuthTokens()
         {
-            Configuration config = WebConfigurationManager.OpenWebConfiguration(null);
-            config.AppSettings.Settings.Add("Twitterizer2.Example.AccessToken", tokens.Token);
-            config.AppSettings.Settings.Add("Twitterizer2.Example.AccessTokenSecret", tokens.TokenSecret);
-            config.Save();
+            AccessToken = tokens.Token,
+            AccessTokenSecret = tokens.TokenSecret,
+            ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
+            ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]
+        };
 
-            ConfigurationManager.RefreshSection("appSettings");
-
-            ResultLabel.Text = @"The web site's configuration has been automatically updated.";
-        }
-        catch (Exception)
-        {
-            ResultLabel.Text = @"The web site's configuration could not be updated. Please place these values in the web.config file.";
-        }
+        Session["OAuthTokens"] = oauthTokens;
     }
 }

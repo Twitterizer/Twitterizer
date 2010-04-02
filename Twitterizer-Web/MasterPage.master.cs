@@ -46,15 +46,9 @@ public partial class MasterPage : System.Web.UI.MasterPage
     {
         get
         {
-            OAuthTokens tokens = new OAuthTokens()
-            {
-                AccessToken = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessToken"],
-                AccessTokenSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.AccessTokenSecret"],
-                ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
-                ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]
-            };
+            OAuthTokens tokens = Session["OAuthTokens"] as OAuthTokens;
 
-            if (string.IsNullOrEmpty(tokens.AccessToken))
+            if (tokens == null)
             {
                 Response.Redirect("~/authenticate/", true);
             }

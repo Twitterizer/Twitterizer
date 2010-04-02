@@ -16,7 +16,6 @@
         <asp:Label ID="AccessTokenLabel" runat="server" /><br />
         Your access token secret is:
         <asp:Label ID="AccessTokenSecretLabel" runat="server" /><br />
-        <asp:Label runat="server" ID="ResultLabel" /><br />
         <asp:HyperLink runat="server" NavigateUrl="~/default.aspx" Text="Click here to continue." />
     </div>
     </form>
