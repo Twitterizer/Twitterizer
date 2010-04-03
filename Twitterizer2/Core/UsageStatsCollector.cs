@@ -58,13 +58,13 @@ namespace Twitterizer
         {
             // Make sure statistics collection hasn't been disabled
             string configValue = ConfigurationManager.AppSettings["Twitterizer2.EnableStatisticsCollection"];
-            if (!string.IsNullOrEmpty(configValue) && configValue.ToLower() == "false")
+            if (!string.IsNullOrEmpty(configValue) && configValue.ToLower(CultureInfo.CurrentCulture) == "false")
             {
                 return;
             }
             
             ReportCaller caller = new ReportCaller(ReportCall);
-            IAsyncResult result = caller.BeginInvoke(apiMethodUri, null, null);
+            caller.BeginInvoke(apiMethodUri, null, null);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Twitterizer
                 permission.Demand();
 
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(collectionAddress);
-                WebResponse response = request.GetResponse();
+                request.GetResponse();
             }
             catch (WebException)
             { 

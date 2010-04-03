@@ -32,7 +32,7 @@
 // <summary>The twitter result type enumeration</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.TwitterEntities
+namespace Twitterizer
 {
     /// <summary>
     /// The Twitter Result Type Enumeration

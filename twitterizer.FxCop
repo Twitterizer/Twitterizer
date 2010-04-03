@@ -132,6 +132,26 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="TwitterizerCounter">
+          <Members>
+           <Member Name="#OAuthRequests">
+            <Messages>
+             <Message Id="OAuth" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-04-03 06:01:24Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>OAuth</Item>
+               <Item>'TwitterizerCounter.OAuthRequests'</Item>
+               <Item>Oauth</Item>
+              </Issue>
+              <Notes>
+               <User Name="Ricky">
+                <Note Id="8" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="TwitterList">
           <Members>
            <Member Name="#Delete(Twitterizer.OAuthTokens,System.String,System.String)">
@@ -269,6 +289,20 @@
            </Message>
           </Messages>
          </Type>
+         <Type Name="TwitterSearchResultWrapper">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Status="Excluded" Created="2010-04-03 06:01:24Z">
+            <Issue>
+             <Item>'TwitterSearchResultWrapper'</Item>
+            </Issue>
+            <Notes>
+             <User Name="Ricky">
+              <Note Id="7" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
          <Type Name="TwitterUser">
           <Members>
            <Member Name="#DeleteFriendship(Twitterizer.OAuthTokens,System.String)">
@@ -380,6 +414,8 @@
     <Note Id="4" Modified="2010-03-10 04:22:49Z">For our project, "username" will be the standard naming convention.</Note>
     <Note Id="5" Modified="2010-03-20 19:04:27Z">"username" is correct for our project.</Note>
     <Note Id="6" Modified="2010-03-20 19:04:59Z">Wrapper classes are instantiated by the deserializer, so do not show up in the assembly.</Note>
+    <Note Id="7" Modified="2010-04-03 06:02:46Z">Wrapper classes are instantiated by the deserializer, so do not show up in the assembly.</Note>
+    <Note Id="8" Modified="2010-04-03 06:03:13Z">OAuth is a proper noun.</Note>
    </User>
   </Notes>
   <Rules>
@@ -388,6 +424,7 @@
    </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
+    <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="UriReturnValuesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1055">
