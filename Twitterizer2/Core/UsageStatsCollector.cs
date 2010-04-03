@@ -37,6 +37,8 @@ namespace Twitterizer
     using System.Configuration;
     using System.Globalization;
     using System.Net;
+    using System.Security;
+    using System.Security.Permissions;
     using System.Web;
 
     /// <summary>
@@ -62,16 +64,38 @@ namespace Twitterizer
             {
                 return;
             }
-            
-            ReportCaller caller = new ReportCaller(ReportCall);
-            caller.BeginInvoke(apiMethodUri, null, null);
+
+            try
+            {
+                // You can thank Dirm from irc://chat.freenode.net/##csharp for helping me with this security permission check
+                // Without it, the report call method isn't executed in Medium trust
+                if (SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode)))
+                {
+                    ReportCaller caller = new ReportCaller(ReportCall);
+                    caller.BeginInvoke(apiMethodUri, null, null);
+                }
+                else
+                {
+                    ReportCall(apiMethodUri);
+                }
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("Reported method: {0}", apiMethodUri));
+#endif
+            }
+            catch (SecurityException ex)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(string.Format("Failed to report method: {0} ({1})", apiMethodUri, ex.Message));
+#endif
+            }
         }
 
         /// <summary>
         /// Reports the call.
         /// </summary>
         /// <param name="apiMethodUri">The API method URI.</param>
-        private static void ReportCall(string apiMethodUri)
+        public static void ReportCall(string apiMethodUri)
         {
             string platform;
             switch (Environment.OSVersion.Platform)
@@ -105,15 +129,35 @@ namespace Twitterizer
             platform = string.Format(CultureInfo.CurrentCulture, "{0} ({1})", platform, Environment.OSVersion.Version);
 
             string version = typeof(Twitterizer.Core.BaseObject).Assembly.GetName().Version.ToString();
+            string processName = string.Empty;
             string framework = Environment.Version.ToString();
 
+            try
+            {
+                if (SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode)))
+                {
+                    processName = GetProcessName(processName);
+                }
+            }
+            catch (SecurityException)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Lacking ReflectionPermission.");
+#endif
+            }
+
             string collectionAddress = string.Format(
-                CultureInfo.CurrentCulture, 
-                "http://www.twitterizer.net/collect?framework={0}&method={1}&platform={2}&version={3}",
+                CultureInfo.CurrentCulture,
+                "http://www.twitterizer.net/collect?framework={0}&method={1}&platform={2}&version={3}&process={4}",
                 HttpUtility.UrlEncode(framework),
                 HttpUtility.UrlEncode(apiMethodUri),
                 HttpUtility.UrlEncode(platform),
-                HttpUtility.UrlEncode(version));
+                HttpUtility.UrlEncode(version),
+                HttpUtility.UrlEncode(processName));
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(string.Format("Reporting Address: {0}", collectionAddress));
+#endif
 
             try
             {
@@ -125,11 +169,24 @@ namespace Twitterizer
                 request.GetResponse();
             }
             catch (WebException)
-            { 
-            }
-            catch (System.Security.SecurityException)
             {
             }
+            catch (SecurityException)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Lacking WebPermission.");
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the process.
+        /// </summary>
+        /// <param name="processName">Name of the process.</param>
+        /// <returns>string; The process name.</returns>
+        private static string GetProcessName(string processName)
+        {
+            return System.Diagnostics.Process.GetCurrentProcess().ProcessName;
         }
     }
 }

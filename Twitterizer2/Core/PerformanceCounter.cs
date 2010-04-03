@@ -33,9 +33,9 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
-    using System;
+    using System.Configuration;
     using System.Diagnostics;
-    using System.Security.Permissions;
+    using System.Globalization;
 
     /// <summary>
     /// The available performance counters for Twitterizer
@@ -89,11 +89,16 @@ namespace Twitterizer
         /// <param name="twitterizerCounter">The twitterizer counter.</param>
         internal static void ReportToCounter(TwitterizerCounter twitterizerCounter)
         {
-            PerformanceCounterPermission permission = new PerformanceCounterPermission(PerformanceCounterPermissionAccess.Administer, ".", "Twitterizer");
-            permission.Demand();
+            if (ConfigurationManager.AppSettings["Twitterizer2.EnablePerformanceMonitor"].ToLower(CultureInfo.CurrentCulture) != "true")
+            {
+                return;
+            }
 
             try
             {
+                PerformanceCounterPermission permission = new PerformanceCounterPermission(PerformanceCounterPermissionAccess.Administer, ".", "Twitterizer");
+                permission.Demand();
+
                 CreateCounterCategory();
             }
             catch (System.Security.SecurityException)
