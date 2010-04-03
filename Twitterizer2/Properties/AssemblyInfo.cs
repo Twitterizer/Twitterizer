@@ -40,7 +40,7 @@ using System.Security.Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Twitterizer")]
-[assembly: AssemblyDescription("Twitter integration library")]
+[assembly: AssemblyDescription("Twitter integration library (Revision 210)")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -48,11 +48,9 @@ using System.Security.Permissions;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-// Test
-
-[assembly: AssemblyCompany("Twitterizer Group")]
+[assembly: AssemblyCompany("Twitterizer Group (www.twitterizer.net)")]
 [assembly: AssemblyProduct("Twitterizer")]
-[assembly: AssemblyCopyright("Copyright © Patrick 'Ricky' Smith 2010")]
+[assembly: AssemblyCopyright("Copyright ©2010 Patrick 'Ricky' Smith")]
 [assembly: AssemblyTrademark("")]
 [assembly: AllowPartiallyTrustedCallersAttribute()]
 [assembly: ReflectionPermission(SecurityAction.RequestMinimum)]
@@ -67,15 +65,5 @@ using System.Security.Permissions;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.209.1")]
-[assembly: AssemblyFileVersion("2.0.209.1")]
+[assembly: AssemblyVersion("2.0.0.210")]
+[assembly: AssemblyFileVersion("2.0.0.210")]
