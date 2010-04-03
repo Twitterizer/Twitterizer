@@ -112,10 +112,11 @@
     <Compile Include="OAuth\OAuthTokenResponse.cs" />
     <Compile Include="OAuth\OAuthUtility.cs" />
     <Compile Include="OAuth\OAuthTokens.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Properties\AssemblyInfo.cs.template" />
     <Compile Include="Core\BaseCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterEntities\Collection Wrappers\TwitterSearchResultWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
@@ -151,5 +152,6 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>copy $(SolutionDir)Twitterizer2.license.txt $(TargetDir)Twitterizer2.license.txt</PostBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)lib\SubWCRev.bat" "$(SolutionDir)Twitterizer2" "$(ProjectDir)Properties\AssemblyInfo.cs.template" "$(ProjectDir)Properties\AssemblyInfo.cs"</PreBuildEvent>
   </PropertyGroup>
 </Project>
