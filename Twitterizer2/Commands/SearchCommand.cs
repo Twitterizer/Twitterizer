@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="MasterPage.master.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="SearchCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,54 +29,62 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The example web application master page.</summary>
+// <summary>The search command class</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class MasterPage : System.Web.UI.MasterPage
+namespace Twitterizer.Commands
 {
-    /// <summary>
-    /// Gets the tokens.
-    /// </summary>
-    /// <value>The tokens.</value>
-    public OAuthTokens Tokens
-    {
-        get
-        {
-            OAuthTokens tokens = Session["OAuthTokens"] as OAuthTokens;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Twitterizer;
+    using Twitterizer.Core;
 
-            if (tokens == null)
+    /// <summary>
+    /// The create list command class
+    /// </summary>
+    internal sealed class SearchCommand : BaseCommand<TwitterSearchResultWrapper>
+    {
+        /// <summary>
+        /// The base address to the API method.
+        /// </summary>
+        private const string Path = "http://search.twitter.com/search.json";
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchCommand"/> class.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="query">The query.</param>
+        public SearchCommand(OAuthTokens requestTokens, string query)
+            : base("GET", new Uri(Path), requestTokens)
+        {
+            if (string.IsNullOrEmpty(query))
             {
-                Response.Redirect("~/authenticate/", true);
+                throw new ArgumentNullException("query");
             }
 
-            return tokens;
+            this.Query = query;
         }
-    }
+        #endregion
 
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        this.StatusTimer.Enabled = true;
-    }
+        #region API Properties
+        /// <summary>
+        /// Gets or sets the query.
+        /// </summary>
+        /// <value>The query.</value>
+        public string Query { get; set; }
+        #endregion
 
-    protected void StatusTimer_Tick(object sender, EventArgs e)
-    {
-        this.StatusTimer.Enabled = false;
+        public override void Init()
+        {
+            this.RequestParameters.Add("q", this.Query);
+        }
 
-        TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
-        this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
-    }
-
-    public string LinkifyText(string Text)
-    {
-        string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
-
-        Text = System.Text.RegularExpressions.Regex.Replace(Text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
-        Text = System.Text.RegularExpressions.Regex.Replace(Text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
-
-        return Text;
+        public override void Validate()
+        {
+            this.IsValid = true;
+        }
     }
 }

@@ -64,6 +64,7 @@
     <Compile Include="Commands\Friendship\DeleteFriendshipCommand.cs" />
     <Compile Include="Commands\Lists\DeleteListCommand.cs" />
     <Compile Include="Commands\Lists\GetListSubscriptionsCommand.cs" />
+    <Compile Include="Commands\SearchCommand.cs" />
     <Compile Include="Commands\Status\DeleteStatusCommand.cs" />
     <Compile Include="Commands\Direct Messages\DeleteDirectMessageCommand.cs" />
     <Compile Include="Commands\Direct Messages\DirectMessagesCommand.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Core\BaseCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="TwitterEntities\Collection Wrappers\TwitterSearchResultWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterList.cs" />
@@ -122,6 +124,10 @@
     <Compile Include="TwitterEntities\Collection Wrappers\TwitterListWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterRateLimitStatus.cs" />
     <Compile Include="TwitterEntities\TwitterRelationship.cs" />
+    <Compile Include="TwitterEntities\TwitterResultTypeEnum.cs" />
+    <Compile Include="TwitterEntities\TwitterSearch.cs" />
+    <Compile Include="TwitterEntities\TwitterSearchResult.cs" />
+    <Compile Include="TwitterEntities\TwitterSearchResultCollection.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
     <Compile Include="TwitterEntities\TwitterStatusCollection.cs" />
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />

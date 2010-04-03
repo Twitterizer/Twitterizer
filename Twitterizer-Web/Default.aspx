@@ -27,7 +27,7 @@
                     height: 14px; position: relative; top: 2px; width: 18px;"></span>
             </asp:Literal>
             <a href="user.aspx?id=<%# Eval("User.Id") %>">
-                <%# Eval("User.ScreenName") %></a>&nbsp;<%# LinkifyText((string)Eval("Text"))%><br />
+                <%# Eval("User.ScreenName") %></a>&nbsp;<%# this.Master.LinkifyText((string)Eval("Text"))%><br />
             <div style="font-size: smaller;">
                 via
                 <%# Eval("Source") %></div>

@@ -49,6 +49,11 @@ namespace Twitterizer.Core
         protected const string DateFormat = "ddd MMM dd HH:mm:ss zz00 yyyy";
 
         /// <summary>
+        /// The format that all twitter search api dates are in.
+        /// </summary>
+        protected const string SearchDateFormat = "ddd, dd MMM yyyy HH:mm:ss +zz00";
+
+        /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>

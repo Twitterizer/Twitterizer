@@ -19,7 +19,10 @@
         |
         <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/followers.aspx"
             Text="Followers" />
-        | Lists | Search | Logout
+        | Lists |
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/search.aspx"
+            Text="Search" />
+        | Logout
     </div>
     <div class="CenterColumn">
         <asp:ContentPlaceHolder ID="PageBodyContentPlaceHolder" runat="server">

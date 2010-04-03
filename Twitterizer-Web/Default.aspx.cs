@@ -64,16 +64,6 @@ public partial class _Default : System.Web.UI.Page
         this.DataBind();
     }
 
-    protected string LinkifyText(string Text)
-    {
-        string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
-
-        Text = Regex.Replace(Text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
-        Text = Regex.Replace(Text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
-
-        return Text;
-    }
-
     protected void UpdateButton_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(this.UpdateTextBox.Text))
