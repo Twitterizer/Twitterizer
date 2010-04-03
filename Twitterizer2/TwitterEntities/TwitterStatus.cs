@@ -165,6 +165,13 @@ namespace Twitterizer
         /// <value>The user that posted this status.</value>
         [DataMember(Name = "user")]
         public TwitterUser User { get; set; }
+
+        /// <summary>
+        /// Gets or sets the retweeted status.
+        /// </summary>
+        /// <value>The retweeted status.</value>
+        [DataMember(Name = "retweeted_status")]
+        public TwitterStatus RetweetedStatus { get; set; }
         #endregion
 
         #region Static Methods

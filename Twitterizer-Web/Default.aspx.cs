@@ -68,9 +68,36 @@ public partial class _Default : System.Web.UI.Page
     {
         string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
 
-        Text = Regex.Replace(Text, @"@([^ ]+)", string.Format(@"<a href=""{0}?username=$1"">@$1</a>", pathToUserPage));
-        Text = Regex.Replace(Text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"">$1</a>");
+        Text = Regex.Replace(Text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
+        Text = Regex.Replace(Text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
 
         return Text;
+    }
+
+    protected void UpdateButton_Click(object sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(this.UpdateTextBox.Text))
+        {
+            StatusUpdateLabel.Text = "You have to enter something first.<br/>";
+            return;
+        }
+
+        if (this.UpdateTextBox.Text.Length > 140)
+        {
+            StatusUpdateLabel.Text = "Your tweet is too long.<br/>";
+            return;
+        }
+
+        if (TwitterStatus.Update(this.Master.Tokens, this.UpdateTextBox.Text) != null)
+        {
+            StatusUpdateLabel.Text = "Your tweet has been posted successfully.<br/>";
+
+            this.HomePageStatuses = TwitterUser.GetHomeTimeline(Master.Tokens);
+            this.DataBind();
+        }
+        else
+        {
+            StatusUpdateLabel.Text = "Your tweet could not be posted.";
+        }
     }
 }
