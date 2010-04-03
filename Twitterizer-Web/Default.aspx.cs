@@ -33,10 +33,7 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Configuration;
-using System.Text.RegularExpressions;
 using Twitterizer;
-using System.Web;
 
 public partial class _Default : System.Web.UI.Page
 {

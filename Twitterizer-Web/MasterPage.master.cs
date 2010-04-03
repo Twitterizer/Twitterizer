@@ -57,6 +57,16 @@ public partial class MasterPage : System.Web.UI.MasterPage
         }
     }
 
+    public string LinkifyText(string text)
+    {
+        string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
+
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
+
+        return text;
+    }
+
     protected void Page_Load(object sender, EventArgs e)
     {
         this.StatusTimer.Enabled = true;
@@ -68,15 +78,5 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
         TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
         this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
-    }
-
-    public string LinkifyText(string Text)
-    {
-        string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
-
-        Text = System.Text.RegularExpressions.Regex.Replace(Text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
-        Text = System.Text.RegularExpressions.Regex.Replace(Text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
-
-        return Text;
     }
 }

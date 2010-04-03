@@ -38,7 +38,6 @@ namespace Twitterizer
     using System.Globalization;
     using System.Net;
     using System.Web;
-    using System.Threading;
 
     /// <summary>
     /// The Usage Statistics Collector class
@@ -48,7 +47,8 @@ namespace Twitterizer
         /// <summary>
         /// The Report Call Delegate for async reporting
         /// </summary>
-        delegate void ReportCaller(string apiMethodUri);
+        /// <param name="apiMethodUri">The API method being called.</param>
+        private delegate void ReportCaller(string apiMethodUri);
 
         /// <summary>
         /// Reports the call async.

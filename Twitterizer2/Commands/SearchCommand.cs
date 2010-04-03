@@ -77,11 +77,17 @@ namespace Twitterizer.Commands
         public string Query { get; set; }
         #endregion
 
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
         public override void Init()
         {
             this.RequestParameters.Add("q", this.Query);
         }
 
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
         public override void Validate()
         {
             this.IsValid = true;

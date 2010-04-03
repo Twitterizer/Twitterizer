@@ -78,12 +78,15 @@ namespace Twitterizer
         FailedRequestsPerSecond = 6
     }
 
+    /// <summary>
+    /// The Performance Counter class
+    /// </summary>
     internal static class PerformanceCounter
     {
         /// <summary>
         /// Reports a hit to a counter.
         /// </summary>
-        /// <param name="counter">The counter.</param>
+        /// <param name="twitterizerCounter">The twitterizer counter.</param>
         internal static void ReportToCounter(TwitterizerCounter twitterizerCounter)
         {
             PerformanceCounterPermission permission = new PerformanceCounterPermission(PerformanceCounterPermissionAccess.Administer, ".", "Twitterizer");
@@ -173,7 +176,7 @@ namespace Twitterizer
         /// Gets the name of the counter.
         /// </summary>
         /// <param name="counter">The counter.</param>
-        /// <returns></returns>
+        /// <returns>The name of the custom counter.</returns>
         private static string GetCounterName(TwitterizerCounter counter)
         {
             switch (counter)
@@ -182,7 +185,6 @@ namespace Twitterizer
                     return "Total # of Requests";
                 case TwitterizerCounter.TotalSuccessfulRequests:
                     return "Total # of Successful Requests";
-                    break;
                 case TwitterizerCounter.TotalFailedRequests:
                     return "Total # of Failed Requests";
                 case TwitterizerCounter.OAuthRequests:
