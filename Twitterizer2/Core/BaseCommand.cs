@@ -45,6 +45,7 @@ namespace Twitterizer.Core
     using System.Web;
     using System.Web.Caching;
     using Twitterizer;
+    using System.Diagnostics;
 
     /// <summary>
     /// The base command class.
@@ -192,6 +193,11 @@ namespace Twitterizer.Core
                 }
             }
 
+            Trace.Write("Twitterizer2");
+            Trace.Indent();
+            Trace.Write(string.Format("Starting {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+            Trace.Unindent();
+
             try
             {
                 // This must be set for all twitter request.
@@ -217,6 +223,10 @@ namespace Twitterizer.Core
                     webResponse = this.BuildRequestAndGetResponse(queryParameters);
                 }
 
+                Trace.Indent();
+                Trace.Write(string.Format("Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+                Trace.Unindent();
+
                 // Set this back to the default so it doesn't affect other .net code.
                 System.Net.ServicePointManager.Expect100Continue = true;
 
@@ -224,11 +234,10 @@ namespace Twitterizer.Core
                 using (Stream responseStream = webResponse.GetResponseStream())
                 {
                     byte[] data = WebResponseUtility.ReadStream(responseStream);
-
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
-                    System.Diagnostics.Debug.WriteLine(Encoding.UTF8.GetString(data));
-                    System.Diagnostics.Debug.WriteLine("----------- END -----------");
+                    Debug.WriteLine("----------- RESPONSE -----------");
+                    Debug.WriteLine(Encoding.UTF8.GetString(data));
+                    Debug.WriteLine("----------- END -----------");
 #endif
                     // Deserialize the results.
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
@@ -239,11 +248,33 @@ namespace Twitterizer.Core
                 // If caching is enabled, add the result to the cache.
                 if (enableCaching)
                 {
-                    cache.Add(cacheKeyBuilder.ToString(), resultObject, null, Cache.NoAbsoluteExpiration, new TimeSpan(0, 30, 0), CacheItemPriority.Normal, null);
+                    // Default the timespan to 30 minutes.
+                    TimeSpan cacheTimeSpan = new TimeSpan(0, 30, 0);
+
+                    // See if a custom timeout value has been supplied
+                    string cacheTimeoutSetting = ConfigurationManager.AppSettings["Twitterizer2.CacheTimeout"];
+                    if (!string.IsNullOrEmpty(cacheTimeoutSetting))
+                    {
+                        long cacheTimeoutSeconds;
+                        if (long.TryParse(cacheTimeoutSetting, out cacheTimeoutSeconds))
+                        {
+                            // Convert the seconds value to ticks and instantiate a new timespan
+                            cacheTimeSpan = new TimeSpan(cacheTimeoutSeconds * 10000000);
+                        }
+                    }
+
+                    cache.Add(
+                        cacheKeyBuilder.ToString(), 
+                        resultObject, 
+                        null, 
+                        Cache.NoAbsoluteExpiration, 
+                        cacheTimeSpan, 
+                        CacheItemPriority.Normal, 
+                        null);
                 }
 
-                PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
-                PerformanceCounter.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
+                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
+                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
@@ -253,8 +284,8 @@ namespace Twitterizer.Core
             }
             catch (WebException wex)
             {
-                PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
-                PerformanceCounter.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
+                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
+                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
@@ -322,9 +353,9 @@ namespace Twitterizer.Core
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
             }
 
-            UsageStatsCollector.ReportCallAsync(this.Uri.AbsolutePath);
-            PerformanceCounter.ReportToCounter(TwitterizerCounter.AnonymousRequests);
-            PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);
+            UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
+            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
+            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
 
             // Prepare and execute un-authorized query
             HttpWebRequest request;

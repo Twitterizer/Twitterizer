@@ -333,9 +333,9 @@ namespace Twitterizer
                 baseUrl = baseUrl.Replace("http://", "https://");
             }
 
-            UsageStatsCollector.ReportCallAsync(new Uri(baseUrl).AbsolutePath);
-            PerformanceCounter.ReportToCounter(TwitterizerCounter.OAuthRequests);
-            PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);
+            UsageStatsCollector.ReportCall(new Uri(baseUrl).AbsolutePath);
+            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.OAuthRequests);
+            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
 
             Dictionary<string, string> combinedParameters = new Dictionary<string, string>();
 

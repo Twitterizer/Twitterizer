@@ -81,7 +81,7 @@ namespace Twitterizer
     /// <summary>
     /// The Performance Counter class
     /// </summary>
-    internal static class PerformanceCounter
+    internal static class PerformanceCounterUtility
     {
         /// <summary>
         /// Reports a hit to a counter.
