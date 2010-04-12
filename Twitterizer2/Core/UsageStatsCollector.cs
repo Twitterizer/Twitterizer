@@ -80,13 +80,22 @@ namespace Twitterizer
                 }
 
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("Reported method: {0}", apiMethodUri));
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        CultureInfo.CurrentCulture, 
+                        "Reported method: {0}", 
+                        apiMethodUri));
 #endif
             }
             catch (SecurityException ex)
             {
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(string.Format("Failed to report method: {0} ({1})", apiMethodUri, ex.Message));
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        CultureInfo.CurrentCulture, 
+                        "Failed to report method: {0} ({1})", 
+                        apiMethodUri, 
+                        ex.Message));
 #endif
             }
         }
@@ -136,7 +145,7 @@ namespace Twitterizer
             {
                 if (SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode)))
                 {
-                    processName = GetProcessName(processName);
+                    processName = GetProcessName();
                 }
             }
             catch (SecurityException)
@@ -156,7 +165,7 @@ namespace Twitterizer
                 HttpUtility.UrlEncode(processName));
 
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(string.Format("Reporting Address: {0}", collectionAddress));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Reporting Address: {0}", collectionAddress));
 #endif
 
             try
@@ -182,9 +191,8 @@ namespace Twitterizer
         /// <summary>
         /// Gets the name of the process.
         /// </summary>
-        /// <param name="processName">Name of the process.</param>
         /// <returns>string; The process name.</returns>
-        private static string GetProcessName(string processName)
+        private static string GetProcessName()
         {
             return System.Diagnostics.Process.GetCurrentProcess().ProcessName;
         }

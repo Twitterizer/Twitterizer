@@ -35,9 +35,7 @@
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Globalization;
     using Twitterizer;
     using Twitterizer.Core;
 
@@ -75,6 +73,74 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The query.</value>
         public string Query { get; set; }
+
+        /// <summary>
+        /// Gets or sets the language.
+        /// </summary>
+        /// <value>The language.</value>
+        public string Language { get; set; }
+
+        /// <summary>
+        /// Gets or sets the locale.
+        /// </summary>
+        /// <value>The locale.</value>
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max id.
+        /// </summary>
+        /// <value>The max id.</value>
+        public long MaxId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number per page.
+        /// </summary>
+        /// <value>The number per page.</value>
+        public int NumberPerPage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the page number.
+        /// </summary>
+        /// <value>The page number.</value>
+        public int PageNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the since date.
+        /// </summary>
+        /// <value>The since date.</value>
+        public DateTime SinceDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the since id.
+        /// </summary>
+        /// <value>The since id.</value>
+        public long SinceId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the geo code.
+        /// </summary>
+        /// <value>The geo code.</value>
+        public string GeoCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to prefix the user name to the tweet.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to prefix the user name to the tweet; otherwise, <c>false</c>.
+        /// </value>
+        public bool PrefixUsername { get; set; }
+
+        /// <summary>
+        /// Gets or sets the until date.
+        /// </summary>
+        /// <value>The until date.</value>
+        public DateTime UntilDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the result.
+        /// </summary>
+        /// <value>The type of the result.</value>
+        public string ResultType { get; set; }
         #endregion
 
         /// <summary>
@@ -82,7 +148,64 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            CultureInfo unitedStatesEnglishCulture = CultureInfo.GetCultureInfo("en-us");
+
             this.RequestParameters.Add("q", this.Query);
+
+            if (!string.IsNullOrEmpty(this.Language))
+            {
+                this.RequestParameters.Add("lang", this.Language);
+            }
+
+            if (!string.IsNullOrEmpty(this.Locale))
+            {
+                this.RequestParameters.Add("locale", this.Locale);
+            }
+
+            if (this.MaxId > 0)
+            {
+                this.RequestParameters.Add("max_id", this.MaxId.ToString(unitedStatesEnglishCulture));
+            }
+
+            if (this.NumberPerPage > 0)
+            {
+                this.RequestParameters.Add("rpp", this.NumberPerPage.ToString(unitedStatesEnglishCulture));
+            }
+
+            if (this.PageNumber > 0)
+            {
+                this.RequestParameters.Add("page", this.PageNumber.ToString(unitedStatesEnglishCulture));
+            }
+
+            if (this.SinceDate > new DateTime())
+            {
+                this.RequestParameters.Add("since", this.SinceDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
+            }
+
+            if (this.SinceId > 0)
+            {
+                this.RequestParameters.Add("since_id", this.SinceId.ToString(unitedStatesEnglishCulture));
+            }
+
+            if (!string.IsNullOrEmpty(this.GeoCode))
+            {
+                this.RequestParameters.Add("geocode", this.GeoCode);
+            }
+
+            if (this.PrefixUsername)
+            {
+                this.RequestParameters.Add("show_user", "true");
+            }
+
+            if (this.UntilDate > new DateTime())
+            {
+                this.RequestParameters.Add("until", this.UntilDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
+            }
+
+            if (!string.IsNullOrEmpty(this.ResultType))
+            {
+                this.RequestParameters.Add("result_type", this.ResultType);
+            }
         }
 
         /// <summary>
