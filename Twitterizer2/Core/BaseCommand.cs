@@ -138,6 +138,8 @@ namespace Twitterizer.Core
         /// <see cref="Twitterizer.Core.BaseObject"/>
         public T ExecuteCommand()
         {
+            Trace.Write(string.Format("Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+
             // Check if the command is flagged to check for rate limiting.
             if (this.GetType().GetCustomAttributes(typeof(RateLimitedAttribute), false).Length > 0)
             {
@@ -189,15 +191,12 @@ namespace Twitterizer.Core
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
+                    Trace.Write("Found in cache", "Twitterizer2");
+                    Trace.Write(string.Format("End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
                     return (T)cache[cacheKeyBuilder.ToString()];
                 }
             }
-
-            Trace.Write("Twitterizer2");
-            Trace.Indent();
-            Trace.Write(string.Format("Starting {0}", this.Uri.AbsoluteUri), "Twitterizer2");
-            Trace.Unindent();
-
+            
             try
             {
                 // This must be set for all twitter request.
@@ -223,10 +222,6 @@ namespace Twitterizer.Core
                     webResponse = this.BuildRequestAndGetResponse(queryParameters);
                 }
 
-                Trace.Indent();
-                Trace.Write(string.Format("Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
-                Trace.Unindent();
-
                 // Set this back to the default so it doesn't affect other .net code.
                 System.Net.ServicePointManager.Expect100Continue = true;
 
@@ -243,6 +238,8 @@ namespace Twitterizer.Core
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
                     resultObject = (T)ds.ReadObject(new MemoryStream(data));
                     responseStream.Close();
+
+                    Trace.Write(resultObject, "Twitterizer2");
                 }
 
                 // If caching is enabled, add the result to the cache.
@@ -271,6 +268,8 @@ namespace Twitterizer.Core
                         cacheTimeSpan, 
                         CacheItemPriority.Normal, 
                         null);
+
+                    Trace.Write(string.Format("Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
                 }
 
                 PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
@@ -284,6 +283,8 @@ namespace Twitterizer.Core
             }
             catch (WebException wex)
             {
+                Trace.TraceError(wex.Message);
+
                 PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
                 PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
 
@@ -299,6 +300,8 @@ namespace Twitterizer.Core
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             resultObject.Tokens = this.Tokens;
+
+            Trace.Write(string.Format("Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             return resultObject;
         }

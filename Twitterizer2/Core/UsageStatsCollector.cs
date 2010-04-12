@@ -40,6 +40,7 @@ namespace Twitterizer
     using System.Security;
     using System.Security.Permissions;
     using System.Web;
+    using System.Diagnostics;
 
     /// <summary>
     /// The Usage Statistics Collector class
@@ -58,6 +59,8 @@ namespace Twitterizer
         /// <param name="apiMethodUri">The API method URI.</param>
         public static void ReportCallAsync(string apiMethodUri)
         {
+            Trace.Write("Begin Usage Stats Collection Async", "Twitterizer2");
+
             // Make sure statistics collection hasn't been disabled
             string configValue = ConfigurationManager.AppSettings["Twitterizer2.EnableStatisticsCollection"];
             if (!string.IsNullOrEmpty(configValue) && configValue.ToLower(CultureInfo.CurrentCulture) == "false")
@@ -89,6 +92,7 @@ namespace Twitterizer
             }
             catch (SecurityException ex)
             {
+                Trace.TraceError(ex.Message);
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine(
                     string.Format(
@@ -98,6 +102,8 @@ namespace Twitterizer
                         ex.Message));
 #endif
             }
+
+            Trace.Write("End Usage Stats Collection Async", "Twitterizer2");
         }
 
         /// <summary>
@@ -106,6 +112,8 @@ namespace Twitterizer
         /// <param name="apiMethodUri">The API method URI.</param>
         public static void ReportCall(string apiMethodUri)
         {
+            Trace.Write("Begin Usage Stats Collection", "Twitterizer2");
+
             string platform;
             switch (Environment.OSVersion.Platform)
             {
@@ -186,6 +194,8 @@ namespace Twitterizer
                 System.Diagnostics.Debug.WriteLine("Lacking WebPermission.");
 #endif
             }
+
+            Trace.Write("End Usage Stats Collection Async", "Twitterizer2");
         }
 
         /// <summary>
