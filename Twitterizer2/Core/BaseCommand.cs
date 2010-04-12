@@ -36,11 +36,14 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Runtime.Serialization.Json;
     using System.Text;
+    using System.Web;
+    using System.Web.Caching;
     using Twitterizer;
 
     /// <summary>
@@ -152,10 +155,21 @@ namespace Twitterizer.Core
                 };
             }
 
+            // Variables and objects needed for caching
+            bool enableCaching = ConfigurationManager.AppSettings["Twitterizer2.EnableCaching"] != null &&
+                bool.Parse(ConfigurationManager.AppSettings["Twitterizer2.EnableCaching"]);
+            StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
+            if (this.Tokens != null)
+            {
+                cacheKeyBuilder.AppendFormat("|{0}|{1}", this.Tokens.ConsumerKey, this.Tokens.ConsumerKey);
+            }
+
+            Cache cache = HttpRuntime.Cache;
+
             WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"http://twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"http://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"http://search.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
             permission.Demand();
 
             // Prepare the query parameters
@@ -163,10 +177,20 @@ namespace Twitterizer.Core
             foreach (KeyValuePair<string, string> item in this.RequestParameters)
             {
                 queryParameters.Add(item.Key, item.Value);
+                cacheKeyBuilder.AppendFormat("|{0}={1}", item.Key, item.Value);
             }
 
             // Declare the variable to be returned
             T resultObject = default(T);
+
+            // Lookup the cached item and return it
+            if (enableCaching && cache[cacheKeyBuilder.ToString()] != null)
+            {
+                if (cache[cacheKeyBuilder.ToString()] is T)
+                {
+                    return (T)cache[cacheKeyBuilder.ToString()];
+                }
+            }
 
             try
             {
@@ -210,6 +234,12 @@ namespace Twitterizer.Core
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
                     resultObject = (T)ds.ReadObject(new MemoryStream(data));
                     responseStream.Close();
+                }
+
+                // If caching is enabled, add the result to the cache.
+                if (enableCaching)
+                {
+                    cache.Add(cacheKeyBuilder.ToString(), resultObject, null, Cache.NoAbsoluteExpiration, new TimeSpan(0, 30, 0), CacheItemPriority.Normal, null);
                 }
 
                 PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
@@ -286,6 +316,12 @@ namespace Twitterizer.Core
         /// </returns>
         private HttpWebResponse BuildRequestAndGetResponse(Dictionary<string, string> queryParameters)
         {
+            // Check if the SSL configuration flag is set and modify the address accordingly
+            if (ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"] == "true")
+            {
+                this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
+            }
+
             UsageStatsCollector.ReportCallAsync(this.Uri.AbsolutePath);
             PerformanceCounter.ReportToCounter(TwitterizerCounter.AnonymousRequests);
             PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);

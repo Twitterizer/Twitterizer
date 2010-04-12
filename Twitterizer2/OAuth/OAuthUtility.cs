@@ -36,6 +36,7 @@ namespace Twitterizer
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
@@ -327,6 +328,11 @@ namespace Twitterizer
             string token,
             string tokenSecret)
         {
+            if (ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"] == "true")
+            {
+                baseUrl = baseUrl.Replace("http://", "https://");
+            }
+
             UsageStatsCollector.ReportCallAsync(new Uri(baseUrl).AbsolutePath);
             PerformanceCounter.ReportToCounter(TwitterizerCounter.OAuthRequests);
             PerformanceCounter.ReportToCounter(TwitterizerCounter.TotalRequests);
