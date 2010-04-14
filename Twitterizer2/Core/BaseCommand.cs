@@ -37,6 +37,7 @@ namespace Twitterizer.Core
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Net;
@@ -45,7 +46,6 @@ namespace Twitterizer.Core
     using System.Web;
     using System.Web.Caching;
     using Twitterizer;
-    using System.Diagnostics;
 
     /// <summary>
     /// The base command class.
@@ -138,7 +138,7 @@ namespace Twitterizer.Core
         /// <see cref="Twitterizer.Core.BaseObject"/>
         public T ExecuteCommand()
         {
-            Trace.Write(string.Format("Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+            Trace.Write(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             // Check if the command is flagged to check for rate limiting.
             if (this.GetType().GetCustomAttributes(typeof(RateLimitedAttribute), false).Length > 0)
@@ -192,7 +192,7 @@ namespace Twitterizer.Core
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
                     Trace.Write("Found in cache", "Twitterizer2");
-                    Trace.Write(string.Format("End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+                    Trace.Write(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
                     return (T)cache[cacheKeyBuilder.ToString()];
                 }
             }
@@ -269,7 +269,7 @@ namespace Twitterizer.Core
                         CacheItemPriority.Normal, 
                         null);
 
-                    Trace.Write(string.Format("Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
+                    Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
                 }
 
                 PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
@@ -301,7 +301,7 @@ namespace Twitterizer.Core
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             resultObject.Tokens = this.Tokens;
 
-            Trace.Write(string.Format("Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+            Trace.Write(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             return resultObject;
         }

@@ -55,7 +55,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         public CreateFriendshipCommand(OAuthTokens tokens)
-            : base("GET", new Uri(Path), tokens)
+            : base("POST", new Uri(Path), tokens)
         {
             if (tokens == null)
             {
@@ -69,7 +69,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the user id.
         /// </summary>
         /// <value>The user id.</value>
-        public long UserId { get; set; }
+        public ulong UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the username.

@@ -47,6 +47,11 @@ namespace Twitterizer.Core
         where T : ITwitterObject
     {
         /// <summary>
+        /// The oauth tokens
+        /// </summary>
+        private OAuthTokens tokens;
+
+        /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
@@ -58,6 +63,21 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The oauth tokens.</value>
         [IgnoreDataMember]
-        public OAuthTokens Tokens { get; set; }
+        public OAuthTokens Tokens
+        {
+            get
+            {
+                return this.tokens;
+            }
+            set
+            {
+                this.tokens = value;
+
+                foreach (T item in this)
+                {
+                    item.Tokens = value;
+                }
+            }
+        }
     }
 }

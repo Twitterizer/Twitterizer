@@ -73,7 +73,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the user ID.
         /// </summary>
         /// <value>The user ID.</value>
-        public long UserId { get; set; }
+        public ulong UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.

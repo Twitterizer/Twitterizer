@@ -35,12 +35,12 @@ namespace Twitterizer
 {
     using System;
     using System.Configuration;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Net;
     using System.Security;
     using System.Security.Permissions;
     using System.Web;
-    using System.Diagnostics;
 
     /// <summary>
     /// The Usage Statistics Collector class
@@ -112,6 +112,12 @@ namespace Twitterizer
         /// <param name="apiMethodUri">The API method URI.</param>
         public static void ReportCall(string apiMethodUri)
         {
+            string configValue = ConfigurationManager.AppSettings["Twitterizer2.EnableStatisticsCollection"];
+            if (!string.IsNullOrEmpty(configValue) && configValue.ToLower(CultureInfo.CurrentCulture) == "false")
+            {
+                return;
+            }
+
             Trace.Write("Begin Usage Stats Collection", "Twitterizer2");
 
             string platform;

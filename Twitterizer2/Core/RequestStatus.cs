@@ -39,6 +39,7 @@ namespace Twitterizer
     using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Xml.Serialization;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Describes the result status of a request
@@ -197,7 +198,9 @@ namespace Twitterizer
                 case HttpStatusCode.Forbidden:
                     LastRequestStatus.Status = RequestResult.RateLimited;
                     break;
-
+                case HttpStatusCode.NotFound:
+                    lastRequestStatus.Status = RequestResult.FileNotFound;
+                    break;
                 default:
                     LastRequestStatus.Status = RequestResult.Unknown;
                     return false;
@@ -216,6 +219,10 @@ namespace Twitterizer
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
                     LastRequestStatus.ErrorDetails = ds.ReadObject(webResponse.GetResponseStream()) as TwitterErrorDetails;
                 }
+            }
+            catch (SerializationException)
+            {
+                // Do nothing. This is no-fail code.
             }
             catch (InvalidOperationException)
             {

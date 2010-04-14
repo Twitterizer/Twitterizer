@@ -69,13 +69,13 @@ namespace Twitterizer.Commands
         /// Gets or sets the id of the status to obtain all statuses posted thereafter.
         /// </summary>
         /// <value>The status id.</value>
-        public long SinceId { get; set; }
+        public ulong SinceId { get; set; }
 
         /// <summary>
         /// Gets or sets the max status id to obtain.
         /// </summary>
         /// <value>The max status id.</value>
-        public long MaxId { get; set; }
+        public ulong MaxId { get; set; }
         #endregion
 
         /// <summary>

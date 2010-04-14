@@ -395,6 +395,19 @@
            </Message>
           </Messages>
          </Type>
+         <Type Name="UsageStatsCollector">
+          <Members>
+           <Member Name="#ReportCallAsync(System.String)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-04-13 20:54:16Z">
+              <Issue>
+               <Item>'UsageStatsCollector.ReportCallAsync(string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
         </Types>
        </Namespace>
       </Namespaces>
@@ -419,6 +432,9 @@
    </User>
   </Notes>
   <Rules>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
    <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
     <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
    </Rule>

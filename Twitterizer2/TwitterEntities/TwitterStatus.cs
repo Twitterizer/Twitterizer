@@ -70,7 +70,8 @@ namespace Twitterizer
         /// </summary>
         /// <value>The status id.</value>
         [DataMember(Name = "id")]
-        public long Id { get; set; }
+        [CLSCompliantAttribute(false)]
+        public ulong Id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this status message is truncated.
@@ -134,14 +135,14 @@ namespace Twitterizer
         /// </summary>
         /// <value>The user id.</value>
         [DataMember(Name = "in_reply_to_user_id")]
-        public long? InReplyToUserId { get; set; }
+        public ulong? InReplyToUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status id the status is in reply to.
         /// </summary>
         /// <value>The status id.</value>
         [DataMember(Name = "in_reply_to_status_id")]
-        public long? InReplyToStatusId { get; set; }
+        public ulong? InReplyToStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the authenticated user has favorited this status.
@@ -192,7 +193,7 @@ namespace Twitterizer
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object of the deleted status.</returns>
-        public static TwitterStatus Delete(OAuthTokens tokens, long id)
+        public static TwitterStatus Delete(OAuthTokens tokens, ulong id)
         {
             TwitterStatus status = new TwitterStatus()
             {
@@ -210,7 +211,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus GetStatus(OAuthTokens tokens, long statusId)
+        public static TwitterStatus GetStatus(OAuthTokens tokens, ulong statusId)
         {
             Commands.ShowStatusCommand command = new Commands.ShowStatusCommand(tokens, statusId);
 
@@ -232,7 +233,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus GetStatus(long statusId)
+        public static TwitterStatus GetStatus(ulong statusId)
         {
             return GetStatus(null, statusId);
         } 
@@ -341,7 +342,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus Retweet(OAuthTokens tokens, long statusId)
+        public static TwitterStatus Retweet(OAuthTokens tokens, ulong statusId)
         {
             Commands.RetweetCommand command = new Commands.RetweetCommand(tokens);
             command.StatusId = statusId;
@@ -367,7 +368,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="count">The count.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, long statusId, int count)
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId, int count)
         {
             Commands.RetweetsCommand command = new Commands.RetweetsCommand(tokens, statusId);
             command.Count = count;
@@ -391,7 +392,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, long statusId)
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId)
         {
             return Retweets(tokens, statusId, -1);
         } 
@@ -409,7 +410,7 @@ namespace Twitterizer
         {
             return this.Update(
                 text,
-                -1,
+                0,
                 string.Empty,
                 string.Empty);
         }
@@ -420,7 +421,7 @@ namespace Twitterizer
         /// <param name="text">The status text.</param>
         /// <param name="replyToStatusId">The reply to status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object.</returns>
-        public TwitterStatus Update(string text, long replyToStatusId)
+        public TwitterStatus Update(string text, ulong replyToStatusId)
         {
             return this.Update(
                 text,
@@ -437,7 +438,7 @@ namespace Twitterizer
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
         /// <returns>A <see cref="TwitterStatus"/> object.</returns>
-        public TwitterStatus Update(string text, long replyToStatusId, string latitude, string longitude)
+        public TwitterStatus Update(string text, ulong replyToStatusId, string latitude, string longitude)
         {
             Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens, text)
             {

@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="statusId">The status id.</param>
-        public RetweetsCommand(OAuthTokens tokens, long statusId)
+        public RetweetsCommand(OAuthTokens tokens, ulong statusId)
             : base(
                 "GET",
                 new Uri(string.Format(CultureInfo.InvariantCulture, Path, statusId)),
@@ -78,7 +78,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public long StatusId { get; set; }
+        public ulong StatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the count.

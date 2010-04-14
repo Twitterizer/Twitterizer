@@ -81,7 +81,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the status id the new status is in reply to.
         /// </summary>
         /// <value>The status id.</value>
-        public long InReplyToStatusId { get; set; }
+        public ulong InReplyToStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the latitude.

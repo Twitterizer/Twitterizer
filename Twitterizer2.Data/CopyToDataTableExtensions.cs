@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="followers.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CopyToDataTableExtensions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,55 +29,43 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The followers example page.</summary>
+// <summary>The Copy To Data Table Extensions class</summary>
 //-----------------------------------------------------------------------
-
-using System;
-using System.Web.UI.WebControls;
-using Twitterizer;
-
-public partial class followers : System.Web.UI.Page
+namespace Twitterizer.Data
 {
-    public TwitterUserCollection FollowersCollection { get; set; }
+    using System.Collections.Generic;
+    using System.Data;
 
-    protected void Page_Load(object sender, EventArgs e)
+    /// <summary>
+    /// The CopyToDataTableExtensions class.
+    /// </summary>
+    public static class CopyToDataTableExtensions
     {
-        if (!this.IsPostBack)
+        /// <summary>
+        /// Copies the collection to a data table.
+        /// </summary>
+        /// <typeparam name="T">The type of object to be represented in the datatable.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns>A new <see cref="System.Data.DataTable"/> instance.</returns>
+        public static DataTable CopyToDataTable<T>(this IEnumerable<T> source)
         {
-            ulong userId = 0;
-            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && ulong.TryParse(Request.QueryString["userid"], out userId))
-            {
-                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens, userId);
-            }
-            else
-            {
-                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens);
-            }
-            
-            ViewState.Add("followers", this.FollowersCollection);
-            this.DataBind();
-        }
-        else
-        {
-            this.FollowersCollection = ViewState["followers"] as TwitterUserCollection;
-        }
-    }
-
-    protected string SafeBooleanText(bool? value)
-    {
-        if (value == null)
-        {
-            return "No (Null)";
+            return new ObjectShredder<T>().Shred(source, null, null);
         }
 
-        return value == true ? "Yes" : "No";
-    }
-
-    protected void NextPageLinkButton_Click(object sender, EventArgs e)
-    {
-        this.FollowersCollection = this.FollowersCollection.NextPage();
-        this.DataBind();
-
-        ViewState["followers"] = this.FollowersCollection;
+        /// <summary>
+        /// Copies the collection to a data table.
+        /// </summary>
+        /// <typeparam name="T">The type of object to be represented in the datatable.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="table">The table.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>The value of <paramref name="table"/> modified to incorporate the structure of <typeparamref name="T"/> appended with data from <paramref name="source"/>.</returns>
+        public static DataTable CopyToDataTable<T>(
+            this IEnumerable<T> source,
+            DataTable table, 
+            LoadOption? options)
+        {
+            return new ObjectShredder<T>().Shred(source, table, options);
+        }
     }
 }

@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 		CustomDictionary.xml = CustomDictionary.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Data", "Twitterizer2.Data\Twitterizer2.Data.csproj", "{4ACED651-D888-4E46-A38B-13291C00FABF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,12 @@ Global
 		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Framework-Only-Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{A202C98F-EFD6-422A-8C03-BCD069377FA9}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{4ACED651-D888-4E46-A38B-13291C00FABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ACED651-D888-4E46-A38B-13291C00FABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ACED651-D888-4E46-A38B-13291C00FABF}.Framework-Only-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ACED651-D888-4E46-A38B-13291C00FABF}.Framework-Only-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ACED651-D888-4E46-A38B-13291C00FABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ACED651-D888-4E46-A38B-13291C00FABF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

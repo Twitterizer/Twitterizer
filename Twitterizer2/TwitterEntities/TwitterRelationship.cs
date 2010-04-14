@@ -42,9 +42,19 @@ namespace Twitterizer
     /// The Twitter Relationship entity class
     /// </summary>
     [DataContract]
-    [DebuggerDisplay("TwitterRelationship = {ScreenName}")]
+    [DebuggerDisplay("TwitterRelationship = {Source} -> {Target}")]
     public class TwitterRelationship : BaseObject
     {
+        /// <summary>
+        /// The relationship source
+        /// </summary>
+        private TwitterUser source;
+
+        /// <summary>
+        /// The relationship target
+        /// </summary>
+        private TwitterUser target;
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
@@ -70,13 +80,64 @@ namespace Twitterizer
         /// </summary>
         /// <value>The source.</value>
         [DataMember(Name = "source")]
-        public TwitterUser Source { get; set; }
+        public TwitterUser Source
+        {
+            get
+            {
+                if (this.source != null)
+                {
+                    this.source.Tokens = this.Tokens;
+                }
+
+                return this.source;
+            }
+            set
+            {
+                this.source = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the target.
         /// </summary>
         /// <value>The target.</value>
         [DataMember(Name = "target")]
-        public TwitterUser Target { get; set; }
+        public TwitterUser Target
+        {
+            get
+            {
+                if (this.target != null)
+                {
+                    this.target.Tokens = this.Tokens;
+                }
+
+                return this.target;
+            }
+            set
+            {
+                this.target = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the relationship.
+        /// </summary>
+        /// <value>The relationship.</value>
+        [DataMember(Name = "relationship")]
+        public TwitterRelationship Relationship
+        {
+            get
+            {
+                return this;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    this.Target = value.Target;
+                    this.Source = value.Source;
+                }
+            }
+        }
     }
 }

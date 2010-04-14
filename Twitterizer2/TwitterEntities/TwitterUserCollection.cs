@@ -54,12 +54,6 @@ namespace Twitterizer
         public long PreviousCursor { get; set; }
 
         /// <summary>
-        /// Gets or sets the request parameters.
-        /// </summary>
-        /// <value>The request parameters.</value>
-        public new OAuthTokens Tokens { get; set; }
-
-        /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>

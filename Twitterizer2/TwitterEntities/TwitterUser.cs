@@ -73,7 +73,8 @@ namespace Twitterizer
         /// </summary>
         /// <value>The User ID.</value>
         [DataMember(Name = "id")]
-        public long Id { get; set; }
+        [CLSCompliant(false)]
+        public ulong Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.
@@ -149,21 +150,21 @@ namespace Twitterizer
         /// </summary>
         /// <value>The number of followers.</value>
         [DataMember(Name = "followers_count")]
-        public int NumberOfFollowers { get; set; }
+        public uint NumberOfFollowers { get; set; }
 
         /// <summary>
         /// Gets or sets the number of statuses.
         /// </summary>
         /// <value>The number of statuses.</value>
         [DataMember(Name = "statuses_count")]
-        public int NumberOfStatuses { get; set; }
+        public uint NumberOfStatuses { get; set; }
 
         /// <summary>
         /// Gets or sets the number of friends.
         /// </summary>
         /// <value>The number of friends.</value>
         [DataMember(Name = "friends_count")]
-        public int NumberOfFriends { get; set; }
+        public uint NumberOfFriends { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the user has enabled contributors access to his or her account.
@@ -209,7 +210,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The number of favorites.</value>
         [DataMember(Name = "favourites_count")]
-        public int NumberOfFavorites { get; set; }
+        public uint NumberOfFavorites { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this user is protected.
@@ -395,8 +396,8 @@ namespace Twitterizer
                     this.Tokens,
                     this.Id,
                     string.Empty,
-                    -1,
-                    -1,
+                    0,
+                    0,
                     -1,
                     -1);
             }
@@ -411,7 +412,7 @@ namespace Twitterizer
         {
             get
             {
-                return GetFriendsTimeline(this.Tokens, -1, -1);
+                return GetFriendsTimeline(this.Tokens, 0, 0);
             }
         }
 
@@ -424,7 +425,7 @@ namespace Twitterizer
         {
             get
             {
-                return GetMentions(this.Tokens, -1, -1);
+                return GetMentions(this.Tokens, 0, 0);
             }
         }
 
@@ -437,7 +438,7 @@ namespace Twitterizer
         {
             get
             {
-                return this.RetweetedByUser(-1, -1);
+                return this.RetweetedByUser(0, 0);
             }
         }
 
@@ -449,7 +450,7 @@ namespace Twitterizer
         {
             get
             {
-                return this.RetweetedToUser(-1, -1);
+                return this.RetweetedToUser(0, 0);
             }
         }
 
@@ -487,7 +488,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="id">The user id.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser GetUser(long id)
+        public static TwitterUser GetUser(ulong id)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
             command.UserId = id;
@@ -534,7 +535,7 @@ namespace Twitterizer
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="id">The user id.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser GetUser(OAuthTokens requestTokens, long id)
+        public static TwitterUser GetUser(OAuthTokens requestTokens, ulong id)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(requestTokens);
             command.UserId = id;
@@ -579,10 +580,10 @@ namespace Twitterizer
         {
             return GetTimeline(
                 tokens,
-                -1,
+                0,
                 string.Empty,
-                -1,
-                -1,
+                0,
+                0,
                 -1,
                 -1);
         }
@@ -600,7 +601,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection GetTimeline(OAuthTokens tokens, long userId, string screenName, long sinceId, long maxId, int count, int page)
+        public static TwitterStatusCollection GetTimeline(OAuthTokens tokens, ulong userId, string screenName, ulong sinceId, ulong maxId, int count, int page)
         {
             Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens)
             {
@@ -628,7 +629,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterUserCollection GetFollowers(OAuthTokens tokens)
         {
-            return GetFollowers(tokens, -1);
+            return GetFollowers(tokens, 0);
         }
 
         /// <summary>
@@ -639,7 +640,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterUserCollection GetFollowers(OAuthTokens tokens, long userId)
+        public static TwitterUserCollection GetFollowers(OAuthTokens tokens, ulong userId)
         {
             Commands.FollowersCommand command = new Commands.FollowersCommand(tokens)
             {
@@ -662,7 +663,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens)
         {
-            return GetHomeTimeline(tokens, -1, -1, -1, -1);
+            return GetHomeTimeline(tokens, 0, 0, -1, -1);
         }
 
         /// <summary>
@@ -674,7 +675,7 @@ namespace Twitterizer
         /// <param name="count">The number of items per page.</param>
         /// <param name="page">The page number.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens, long sinceId, long maxId, int count, int page)
+        public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens, ulong sinceId, ulong maxId, int count, int page)
         {
             Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens)
             {
@@ -754,7 +755,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        public static TwitterUserCollection GetFriends(OAuthTokens tokens, long userId, string screenName)
+        public static TwitterUserCollection GetFriends(OAuthTokens tokens, ulong userId, string screenName)
         {
             Commands.FriendsCommand command = new Commands.FriendsCommand(tokens)
             {
@@ -787,7 +788,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        public static TwitterUserCollection GetFriends(OAuthTokens tokens, long userId)
+        public static TwitterUserCollection GetFriends(OAuthTokens tokens, ulong userId)
         {
             return GetFriends(tokens, userId, string.Empty);
         }
@@ -803,7 +804,7 @@ namespace Twitterizer
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
         public static TwitterUserCollection GetFriends(OAuthTokens tokens, string screenName)
         {
-            return GetFriends(tokens, -1, screenName);
+            return GetFriends(tokens, 0, screenName);
         }
 
         /// <summary>
@@ -816,7 +817,7 @@ namespace Twitterizer
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
         public static TwitterUserCollection GetFriends(OAuthTokens tokens)
         {
-            return GetFriends(tokens, -1, string.Empty);
+            return GetFriends(tokens, 0, string.Empty);
         }
         #endregion
 
@@ -829,7 +830,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser DeleteFriendship(OAuthTokens tokens, long userId)
+        public static TwitterUser DeleteFriendship(OAuthTokens tokens, ulong userId)
         {
             Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens)
             {
@@ -869,7 +870,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="userId">The user id.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship GetFriendship(OAuthTokens tokens, long userId)
+        public static TwitterRelationship GetFriendship(OAuthTokens tokens, ulong userId)
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens)
             {
@@ -887,7 +888,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRelationship"/> instance.
         /// </returns>
-        public static TwitterRelationship GetFriendship(long userId1, long userId2)
+        public static TwitterRelationship GetFriendship(ulong userId1, ulong userId2)
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(null)
             {
@@ -929,7 +930,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> object.
         /// </returns>
-        public static TwitterStatusCollection GetFriendsTimeline(OAuthTokens tokens, long sinceStatusId, long maxStatusId)
+        public static TwitterStatusCollection GetFriendsTimeline(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId)
         {
             Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(tokens)
             {
@@ -952,7 +953,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> object.
         /// </returns>
-        public static TwitterStatusCollection GetMentions(OAuthTokens tokens, long sinceStatusId, long maxStatusId)
+        public static TwitterStatusCollection GetMentions(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId)
         {
             Commands.MentionsCommand command = new Commands.MentionsCommand(tokens)
             {
@@ -972,7 +973,7 @@ namespace Twitterizer
         /// <param name="sinceStatusId">The since status id.</param>
         /// <param name="maxStatusId">The max status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection RetweetedByUser(long sinceStatusId, long maxStatusId)
+        public TwitterStatusCollection RetweetedByUser(ulong sinceStatusId, ulong maxStatusId)
         {
             Commands.RetweetedByMeCommand command = new Commands.RetweetedByMeCommand(this.Tokens)
             {
@@ -992,7 +993,7 @@ namespace Twitterizer
         /// <param name="sinceStatusId">The since status id.</param>
         /// <param name="maxStatusId">The max status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection RetweetedToUser(long sinceStatusId, long maxStatusId)
+        public TwitterStatusCollection RetweetedToUser(ulong sinceStatusId, ulong maxStatusId)
         {
             Commands.RetweetedToMeCommand command = new Commands.RetweetedToMeCommand(this.Tokens)
             {
@@ -1015,7 +1016,7 @@ namespace Twitterizer
         /// </returns>
         public TwitterStatusCollection RetweetsOfUser()
         {
-            return this.RetweetsOfUser(-1, -1);
+            return this.RetweetsOfUser(0, 0);
         }
 
         /// <summary>
@@ -1024,7 +1025,7 @@ namespace Twitterizer
         /// <param name="sinceStatusId">The since status id.</param>
         /// <param name="maxStatusId">The max status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> object.</returns>
-        public TwitterStatusCollection RetweetsOfUser(long sinceStatusId, long maxStatusId)
+        public TwitterStatusCollection RetweetsOfUser(ulong sinceStatusId, ulong maxStatusId)
         {
             Commands.RetweetsOfMeCommand command = new Commands.RetweetsOfMeCommand(this.Tokens)
             {

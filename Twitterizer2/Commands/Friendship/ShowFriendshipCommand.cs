@@ -64,7 +64,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the id of the source user.
         /// </summary>
         /// <value>The source id.</value>
-        public long SourceId { get; set; }
+        public ulong SourceId { get; set; }
 
         /// <summary>
         /// Gets or sets the screenname of the source user.
@@ -76,7 +76,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the id of the target user.
         /// </summary>
         /// <value>The target id.</value>
-        public long TargetId { get; set; }
+        public ulong TargetId { get; set; }
 
         /// <summary>
         /// Gets or sets the screenname of the target user.

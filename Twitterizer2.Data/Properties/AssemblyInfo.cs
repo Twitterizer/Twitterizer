@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="followers.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="AssemblyInfo.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,56 +28,48 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The followers example page.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Web.UI.WebControls;
-using Twitterizer;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
 
-public partial class followers : System.Web.UI.Page
-{
-    public TwitterUserCollection FollowersCollection { get; set; }
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("Twitterizer 2 Data Addon Utilities")]
+[assembly: AssemblyDescription("")]
 
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        if (!this.IsPostBack)
-        {
-            ulong userId = 0;
-            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && ulong.TryParse(Request.QueryString["userid"], out userId))
-            {
-                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens, userId);
-            }
-            else
-            {
-                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens);
-            }
-            
-            ViewState.Add("followers", this.FollowersCollection);
-            this.DataBind();
-        }
-        else
-        {
-            this.FollowersCollection = ViewState["followers"] as TwitterUserCollection;
-        }
-    }
+[assembly: AssemblyCompany("Twitterizer Group (www.twitterizer.net)")]
+[assembly: AssemblyProduct("Twitterizer")]
+[assembly: AssemblyCopyright("Copyright ©2010 Patrick 'Ricky' Smith")]
+[assembly: AssemblyTrademark("")]
 
-    protected string SafeBooleanText(bool? value)
-    {
-        if (value == null)
-        {
-            return "No (Null)";
-        }
+[assembly: ReflectionPermission(SecurityAction.RequestMinimum)]
 
-        return value == true ? "Yes" : "No";
-    }
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 
-    protected void NextPageLinkButton_Click(object sender, EventArgs e)
-    {
-        this.FollowersCollection = this.FollowersCollection.NextPage();
-        this.DataBind();
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
 
-        ViewState["followers"] = this.FollowersCollection;
-    }
-}
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("ada51838-a4c9-4e46-aea1-f60b58d992b4")]
+
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

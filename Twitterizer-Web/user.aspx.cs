@@ -40,9 +40,9 @@ public partial class user : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        int userId = 0;
+        ulong userId = 0;
 
-        if (string.IsNullOrEmpty(Request.QueryString["id"]) || !int.TryParse(Request.QueryString["id"], out userId))
+        if (string.IsNullOrEmpty(Request.QueryString["id"]) || !ulong.TryParse(Request.QueryString["id"], out userId))
         {
             Response.Redirect("~/", true);
         }
