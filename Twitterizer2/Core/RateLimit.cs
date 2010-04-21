@@ -31,7 +31,7 @@
 // <author>Ricky Smith</author>
 // <summary>Contains information about the state of the user's available service usage.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+namespace Twitterizer
 {
     using System;
 

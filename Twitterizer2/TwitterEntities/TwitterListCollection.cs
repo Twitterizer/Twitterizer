@@ -41,7 +41,7 @@ namespace Twitterizer
     /// The twitter list collection class.
     /// </summary>
     [Serializable]
-    public class TwitterListCollection : Core.BaseCollection<TwitterList>
+    public class TwitterListCollection : Core.TwitterCollection<TwitterList>
     {
         /// <summary>
         /// Gets or sets the next cursor.
@@ -65,13 +65,13 @@ namespace Twitterizer
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
-        public new Core.RateLimiting RateLimiting { get; set; }
+        public new RateLimiting RateLimiting { get; set; }
 
         /// <summary>
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        internal Core.BaseCommand<TwitterListWrapper> Command { get; set; }
+        internal Core.TwitterCommand<TwitterListWrapper> Command { get; set; }
 
         /// <summary>
         /// Gets the next page.

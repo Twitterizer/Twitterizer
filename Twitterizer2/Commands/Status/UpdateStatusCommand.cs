@@ -40,7 +40,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The command to update the user's status. (a.k.a. post a new tweet)
     /// </summary>
-    internal sealed class UpdateStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class UpdateStatusCommand : Core.TwitterCommand<TwitterStatus>
     {
         /// <summary>
         /// The base address to the API method.

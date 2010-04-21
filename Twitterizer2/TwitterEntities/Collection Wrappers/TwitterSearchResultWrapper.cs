@@ -41,7 +41,7 @@ namespace Twitterizer
     /// The Twitter search result wrapper class
     /// </summary>
     [DataContract]
-    internal class TwitterSearchResultWrapper : BaseObject
+    internal class TwitterSearchResultWrapper : TwitterObject
     {
         /// <summary>
         /// Gets or sets the results.

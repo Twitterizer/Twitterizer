@@ -151,7 +151,7 @@ namespace Twitterizer
 
             platform = string.Format(CultureInfo.CurrentCulture, "{0} ({1})", platform, Environment.OSVersion.Version);
 
-            string version = typeof(Twitterizer.Core.BaseObject).Assembly.GetName().Version.ToString();
+            string version = typeof(Twitterizer.Core.TwitterObject).Assembly.GetName().Version.ToString();
             string processName = string.Empty;
             string framework = Environment.Version.ToString();
 

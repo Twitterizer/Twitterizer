@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Show Status Command
     /// </summary>
-    internal sealed class ShowStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class ShowStatusCommand : Core.TwitterCommand<TwitterStatus>
     {
         /// <summary>
         /// The base address to the API method.

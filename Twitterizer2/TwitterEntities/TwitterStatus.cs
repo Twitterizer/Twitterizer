@@ -43,7 +43,7 @@ namespace Twitterizer
     /// </summary>
     [DataContract]
     [Serializable]
-    public class TwitterStatus : BaseObject
+    public class TwitterStatus : TwitterObject
     {
         #region Constructors
         /// <summary>
@@ -135,6 +135,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The user id.</value>
         [DataMember(Name = "in_reply_to_user_id")]
+        [CLSCompliant(false)]
         public ulong? InReplyToUserId { get; set; }
 
         /// <summary>
@@ -142,6 +143,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The status id.</value>
         [DataMember(Name = "in_reply_to_status_id")]
+        [CLSCompliant(false)]
         public ulong? InReplyToStatusId { get; set; }
 
         /// <summary>
@@ -193,6 +195,7 @@ namespace Twitterizer
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object of the deleted status.</returns>
+        [CLSCompliant(false)]
         public static TwitterStatus Delete(OAuthTokens tokens, ulong id)
         {
             TwitterStatus status = new TwitterStatus()
@@ -211,6 +214,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterStatus GetStatus(OAuthTokens tokens, ulong statusId)
         {
             Commands.ShowStatusCommand command = new Commands.ShowStatusCommand(tokens, statusId);
@@ -233,6 +237,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterStatus GetStatus(ulong statusId)
         {
             return GetStatus(null, statusId);
@@ -342,6 +347,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterStatus Retweet(OAuthTokens tokens, ulong statusId)
         {
             Commands.RetweetCommand command = new Commands.RetweetCommand(tokens);
@@ -368,6 +374,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="count">The count.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId, int count)
         {
             Commands.RetweetsCommand command = new Commands.RetweetsCommand(tokens, statusId);
@@ -392,6 +399,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId)
         {
             return Retweets(tokens, statusId, -1);
@@ -421,6 +429,7 @@ namespace Twitterizer
         /// <param name="text">The status text.</param>
         /// <param name="replyToStatusId">The reply to status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object.</returns>
+        [CLSCompliant(false)]
         public TwitterStatus Update(string text, ulong replyToStatusId)
         {
             return this.Update(
@@ -438,6 +447,7 @@ namespace Twitterizer
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
         /// <returns>A <see cref="TwitterStatus"/> object.</returns>
+        [CLSCompliant(false)]
         public TwitterStatus Update(string text, ulong replyToStatusId, string latitude, string longitude)
         {
             Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens, text)

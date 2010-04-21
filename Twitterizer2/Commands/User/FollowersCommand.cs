@@ -103,7 +103,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.BaseCommand<TwitterUserWrapper> Clone()
+        internal override Twitterizer.Core.TwitterCommand<TwitterUserWrapper> Clone()
         {
             FollowersCommand newCommand = new FollowersCommand(this.Tokens);
 

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseCommand.cs" company="Patrick Ricky Smith">
+// <copyright file="TwitterCommand.cs" company="Patrick Ricky Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -52,16 +52,16 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
     [Serializable]
-    internal abstract class BaseCommand<T> : ICommand<T>
+    internal abstract class TwitterCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="method">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        protected BaseCommand(string method, Uri uri, OAuthTokens tokens)
+        protected TwitterCommand(string method, Uri uri, OAuthTokens tokens)
         {
             if (string.IsNullOrEmpty(method))
             {
@@ -80,11 +80,11 @@ namespace Twitterizer.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="method">The method.</param>
         /// <param name="tokens">The tokens.</param>
-        protected BaseCommand(string method, OAuthTokens tokens)
+        protected TwitterCommand(string method, OAuthTokens tokens)
         {
             this.RequestParameters = new Dictionary<string, string>();
             this.HttpMethod = method;
@@ -135,7 +135,6 @@ namespace Twitterizer.Core
         /// Executes the command.
         /// </summary>
         /// <returns>The results of the command.</returns>
-        /// <see cref="Twitterizer.Core.BaseObject"/>
         public T ExecuteCommand()
         {
             Trace.Write(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
@@ -228,7 +227,7 @@ namespace Twitterizer.Core
                 // Get the response
                 using (Stream responseStream = webResponse.GetResponseStream())
                 {
-                    byte[] data = WebResponseUtility.ReadStream(responseStream);
+                    byte[] data = ConversionUtility.ReadStream(responseStream);
 #if DEBUG
                     Debug.WriteLine("----------- RESPONSE -----------");
                     Debug.WriteLine(Encoding.UTF8.GetString(data));
@@ -310,9 +309,9 @@ namespace Twitterizer.Core
         /// Clones this instance.
         /// </summary>
         /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal virtual BaseCommand<T> Clone()
+        internal virtual TwitterCommand<T> Clone()
         {
-            return default(BaseCommand<T>);
+            return default(TwitterCommand<T>);
         }
 
         /// <summary>

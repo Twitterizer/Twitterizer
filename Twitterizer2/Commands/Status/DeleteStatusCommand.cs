@@ -40,7 +40,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The command class to delete a status update.
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.BaseCommand<TwitterStatus>
+    internal sealed class DeleteStatusCommand : Core.TwitterCommand<TwitterStatus>
     {
         /// <summary>
         /// The base address to the API method.

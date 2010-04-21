@@ -82,7 +82,7 @@ Your last status was ""{3}"" on {4:D}
  this.user.Status.Text, 
  this.user.Status.CreatedDate);
 
-            foreach (TwitterStatus status in TwitterStatus.GetHomeTimeline(this.oauthTokens).NextPage())
+            foreach (TwitterStatus status in TwitterStatus.GetHomeTimeline(this.oauthTokens))
             {
                 this.HomeTimelinePanel.Controls.Add(new TweetTimelineControl(status));
             }

@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The show friendship command class.
     /// </summary>
-    internal sealed class ShowFriendshipCommand : BaseCommand<TwitterRelationship>
+    internal sealed class ShowFriendshipCommand : TwitterCommand<TwitterRelationship>
     {
         /// <summary>
         /// The base address to the API method.

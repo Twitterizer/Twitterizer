@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// The Show User Command
     /// </summary>
     /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
-    internal sealed class ShowUserCommand : Core.BaseCommand<TwitterUser>
+    internal sealed class ShowUserCommand : Core.TwitterCommand<TwitterUser>
     {
         /// <summary>
         /// The base address to the API method.

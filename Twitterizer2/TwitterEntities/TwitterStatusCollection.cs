@@ -45,7 +45,7 @@ namespace Twitterizer
     /// The TwitterStatusCollection class.
     /// </summary>
     [Serializable]
-    public class TwitterStatusCollection : BaseCollection<TwitterStatus>
+    public class TwitterStatusCollection : TwitterCollection<TwitterStatus>
     {
         /// <summary>
         /// Gets or sets the command.

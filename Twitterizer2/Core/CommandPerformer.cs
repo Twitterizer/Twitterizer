@@ -46,8 +46,8 @@ namespace Twitterizer.Core
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns>The parsed result of the action.</returns>
-        /// <seealso cref="Twitterizer.Core.BaseCommand{T}"/>
-        /// <seealso cref="Twitterizer.Core.BaseObject"/>
+        /// <seealso cref="Twitterizer.Core.TwitterCommand{T}"/>
+        /// <seealso cref="Twitterizer.Core.TwitterObject"/>
         public static T PerformAction(ICommand<T> command)
         {
             command.Init();

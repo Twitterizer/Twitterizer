@@ -36,10 +36,10 @@ namespace Twitterizer
 {
     using System;
     using System.Net;
+    using System.Runtime.Serialization;
     using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Xml.Serialization;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Describes the result status of a request
@@ -176,7 +176,7 @@ namespace Twitterizer
 
             if (responseStream != null && responseStream.CanRead)
             {
-                LastRequestStatus.ResponseBody = Encoding.UTF8.GetString(WebResponseUtility.ReadStream(responseStream));
+                LastRequestStatus.ResponseBody = Encoding.UTF8.GetString(ConversionUtility.ReadStream(responseStream));
             }
 
             LastRequestStatus.FullPath = webResponse.ResponseUri.AbsolutePath;
@@ -198,9 +198,11 @@ namespace Twitterizer
                 case HttpStatusCode.Forbidden:
                     LastRequestStatus.Status = RequestResult.RateLimited;
                     break;
+
                 case HttpStatusCode.NotFound:
                     lastRequestStatus.Status = RequestResult.FileNotFound;
                     break;
+
                 default:
                     LastRequestStatus.Status = RequestResult.Unknown;
                     return false;

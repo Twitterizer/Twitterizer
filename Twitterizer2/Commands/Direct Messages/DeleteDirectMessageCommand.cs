@@ -40,7 +40,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Delete Direct Message Command class.
     /// </summary>
-    internal sealed class DeleteDirectMessageCommand : BaseCommand<TwitterDirectMessage>
+    internal sealed class DeleteDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
         /// <summary>
         /// The base address to the API method.

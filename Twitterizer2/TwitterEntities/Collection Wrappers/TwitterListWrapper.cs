@@ -41,7 +41,7 @@ namespace Twitterizer
     /// A wrapper class for the lists collection (Twitter has their data structure wierd for this one)
     /// </summary>
     [DataContract]
-    internal class TwitterListWrapper : BaseObject
+    internal class TwitterListWrapper : TwitterObject
     {
         /// <summary>
         /// Gets or sets the lists.

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WebResponseUtility.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ConversionUtility.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,17 +29,40 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The web response utility class.</summary>
+// <summary>The color translation helper class.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer
 {
+    using System.Drawing;
     using System.IO;
+    using System.Text.RegularExpressions;
 
     /// <summary>
-    /// A utility for assisting in processing web responses
+    /// Provides common color converstion methods
     /// </summary>
-    public static class WebResponseUtility
+    internal static class ConversionUtility
     {
+        /// <summary>
+        /// Converts the color string to a <see cref="System.Drawing.Color"/>
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>A <see cref="System.Drawing.Color"/> representation of the color, or null.</returns>
+        internal static Color FromTwitterString(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return new Color();
+            }
+
+            if (Regex.IsMatch(value, @"^#?[a-f0-9]{6}$", RegexOptions.IgnoreCase))
+            {
+                return ColorTranslator.FromHtml(Regex.Replace(value, "^#?([a-f0-9]{6})$", "#$1", RegexOptions.IgnoreCase));
+            }
+
+            return Color.FromName(value);
+        }
+
         /// <summary>
         /// Reads the stream into a byte array.
         /// </summary>

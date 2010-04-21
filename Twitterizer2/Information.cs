@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The information class which gives general information about the assembly.
     /// </summary>
-    public static class Information
+    internal static class Information
     {
         /// <summary>
         /// Obtains the current assembly version.

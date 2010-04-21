@@ -43,7 +43,7 @@ namespace Twitterizer
     /// The Direct Message Entity Class
     /// </summary>
     [DataContract]
-    public class TwitterDirectMessage : BaseObject
+    public class TwitterDirectMessage : TwitterObject
     {
         #region Constructors
         /// <summary>

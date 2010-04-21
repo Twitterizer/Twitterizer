@@ -43,7 +43,7 @@ namespace Twitterizer
     /// </summary>
     [DataContract]
     [DebuggerDisplay("TwitterRelationship = {Source} -> {Target}")]
-    public class TwitterRelationship : BaseObject
+    public class TwitterRelationship : TwitterObject
     {
         /// <summary>
         /// The relationship source
@@ -91,6 +91,7 @@ namespace Twitterizer
 
                 return this.source;
             }
+
             set
             {
                 this.source = value;
@@ -113,6 +114,7 @@ namespace Twitterizer
 
                 return this.target;
             }
+
             set
             {
                 this.target = value;
@@ -130,6 +132,7 @@ namespace Twitterizer
             {
                 return this;
             }
+
             set
             {
                 if (value != null)

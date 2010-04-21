@@ -112,7 +112,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Core.BaseCommand<TwitterStatusCollection> Clone()
+        internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
         {
             return new HomeTimelineCommand(this.Tokens)
             {

@@ -40,7 +40,7 @@ namespace Twitterizer
     /// The Twitter Search Result Collection class
     /// </summary>
     [Serializable]
-    public class TwitterSearchResultCollection : Core.BaseCollection<TwitterSearchResult>
+    public class TwitterSearchResultCollection : Core.TwitterCollection<TwitterSearchResult>
     {
     }
 }

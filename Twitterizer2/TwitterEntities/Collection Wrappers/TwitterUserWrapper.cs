@@ -42,7 +42,7 @@ namespace Twitterizer
     /// </summary>
     [Serializable]
     [DataContract]
-    internal class TwitterUserWrapper : BaseObject
+    internal class TwitterUserWrapper : TwitterObject
     {
         /// <summary>
         /// The private collection for the contained collection

@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The retweets command class.
     /// </summary>
-    internal sealed class RetweetsCommand : BaseCommand<TwitterStatusCollection>
+    internal sealed class RetweetsCommand : TwitterCommand<TwitterStatusCollection>
     {
         /// <summary>
         /// The base address to the API method.

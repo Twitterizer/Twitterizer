@@ -116,7 +116,7 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override BaseCommand<TwitterDirectMessageCollection> Clone()
+        internal override TwitterCommand<TwitterDirectMessageCollection> Clone()
         {
             return new DirectMessagesSentCommand(this.Tokens)
             {

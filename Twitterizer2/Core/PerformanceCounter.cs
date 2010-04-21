@@ -40,7 +40,7 @@ namespace Twitterizer
     /// <summary>
     /// The available performance counters for Twitterizer
     /// </summary>
-    public enum TwitterizerCounter
+    internal enum TwitterizerCounter
     {
         /// <summary>
         /// Counts the total number of requests

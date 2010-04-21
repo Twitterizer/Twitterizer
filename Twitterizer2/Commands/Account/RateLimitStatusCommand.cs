@@ -39,7 +39,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The rate limit status command class.
     /// </summary>
-    internal sealed class RateLimitStatusCommand : BaseCommand<TwitterRateLimitStatus>
+    internal sealed class RateLimitStatusCommand : TwitterCommand<TwitterRateLimitStatus>
     {
         /// <summary>
         /// The base address to the API method.

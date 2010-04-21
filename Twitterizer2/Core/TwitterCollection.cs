@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BaseCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -43,7 +43,7 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The type of object stored in the collection.</typeparam>
     [Serializable]
-    public abstract class BaseCollection<T> : Collection<T>, ITwitterObject
+    public abstract class TwitterCollection<T> : Collection<T>, ITwitterObject
         where T : ITwitterObject
     {
         /// <summary>
@@ -69,6 +69,7 @@ namespace Twitterizer.Core
             {
                 return this.tokens;
             }
+
             set
             {
                 this.tokens = value;

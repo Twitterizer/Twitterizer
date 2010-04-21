@@ -40,7 +40,7 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
     [Serializable]
-    internal abstract class PagedCommand<T> : BaseCommand<T>
+    internal abstract class PagedCommand<T> : TwitterCommand<T>
         where T : ITwitterObject
     {
         #region Constructors

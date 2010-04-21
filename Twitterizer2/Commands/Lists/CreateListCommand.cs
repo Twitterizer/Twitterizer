@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
-    internal sealed class CreateListCommand : BaseCommand<TwitterList>
+    internal sealed class CreateListCommand : TwitterCommand<TwitterList>
     {
          /// <summary>
         /// The base address to the API method.

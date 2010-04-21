@@ -42,7 +42,7 @@ namespace Twitterizer
     /// The Twitter Search Result class.
     /// </summary>
     [DataContract, Serializable]
-    public class TwitterSearchResult : Core.BaseObject
+    public class TwitterSearchResult : Core.TwitterObject
     {
         /// <summary>
         /// Gets or sets the profile image URL.

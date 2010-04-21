@@ -19,11 +19,22 @@
     <HelpTitle>Twitterizer 2 Documentation</HelpTitle>
     <DocumentationSources>
       <DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.dll" />
-<DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.XML" /></DocumentationSources>
+      <DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.XML" />
+    </DocumentationSources>
     <PresentationStyle>Prototype</PresentationStyle>
     <FeedbackEMailAddress>twitterizer%40googlegroups.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>Mailing List</FeedbackEMailLinkText>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
+    <PlugInConfigurations>
+      <PlugInConfig id="Hierarchical Table of Contents" enabled="True" xmlns="">
+        <configuration />
+      </PlugInConfig>
+    </PlugInConfigurations>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="Twitterizer.Core" isDocumented="True" />
+    </NamespaceSummaries>
+    <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

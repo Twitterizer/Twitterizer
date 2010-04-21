@@ -45,7 +45,7 @@ namespace Twitterizer
     [DataContract,
     DebuggerDisplay("TwitterList = {FullName}"),
     Serializable]
-    public class TwitterList : BaseObject
+    public class TwitterList : TwitterObject
     {
         #region Constructors
         /// <summary>

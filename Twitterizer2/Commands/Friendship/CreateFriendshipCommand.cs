@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// Creates a friendship between the authenticated user and another user
     /// </summary>
-    internal sealed class CreateFriendshipCommand : BaseCommand<TwitterUser>
+    internal sealed class CreateFriendshipCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>
         /// The base address to the API method.

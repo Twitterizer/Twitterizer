@@ -39,7 +39,7 @@ namespace Twitterizer
     /// <summary>
     /// The Direct Message Collection class
     /// </summary>
-    public class TwitterDirectMessageCollection : BaseCollection<TwitterDirectMessage>
+    public class TwitterDirectMessageCollection : TwitterCollection<TwitterDirectMessage>
     {
     }
 }

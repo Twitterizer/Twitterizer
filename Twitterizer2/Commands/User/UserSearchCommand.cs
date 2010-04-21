@@ -118,7 +118,7 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override BaseCommand<TwitterUserCollection> Clone()
+        internal override TwitterCommand<TwitterUserCollection> Clone()
         {
             return new UserSearchCommand(this.Tokens, this.Query)
             {

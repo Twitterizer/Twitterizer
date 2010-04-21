@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Send Direct Message Command class
     /// </summary>
-    internal sealed class SendDirectMessageCommand : BaseCommand<TwitterDirectMessage>
+    internal sealed class SendDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
         /// <summary>
         /// The base address to the API method.

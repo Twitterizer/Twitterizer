@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ColorTranslatorHelper.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterObject.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,37 +29,42 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The color translation helper class.</summary>
+// <summary>The base class for all data objects.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer
+namespace Twitterizer.Core
 {
-    using System.Drawing;
-    using System.Text.RegularExpressions;
+    using System.Runtime.Serialization;
+    using Twitterizer;
 
     /// <summary>
-    /// Provides common color converstion methods
+    /// The base object class
     /// </summary>
-    internal static class ColorTranslatorHelper
+    [DataContract]
+    [System.Serializable]
+    public class TwitterObject : ITwitterObject
     {
         /// <summary>
-        /// Converts the color string to a <see cref="System.Drawing.Color"/>
+        /// The format that all twitter dates are in.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>A <see cref="System.Drawing.Color"/> representation of the color, or null.</returns>
-        internal static Color FromTwitterString(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return new Color();
-            }
+        protected const string DateFormat = "ddd MMM dd HH:mm:ss zz00 yyyy";
 
-            if (Regex.IsMatch(value, @"^#?[a-f0-9]{6}$", RegexOptions.IgnoreCase))
-            {
-                return ColorTranslator.FromHtml(Regex.Replace(value, "^#?([a-f0-9]{6})$", "#$1", RegexOptions.IgnoreCase));
-            }
+        /// <summary>
+        /// The format that all twitter search api dates are in.
+        /// </summary>
+        protected const string SearchDateFormat = "ddd, dd MMM yyyy HH:mm:ss +zz00";
 
-            return Color.FromName(value);
-        }
+        /// <summary>
+        /// Gets or sets information about the user's rate usage.
+        /// </summary>
+        /// <value>The rate limiting object.</value>
+        [IgnoreDataMember]
+        public RateLimiting RateLimiting { get; set; }
+
+        /// <summary>
+        /// Gets or sets the oauth tokens.
+        /// </summary>
+        /// <value>The oauth tokens.</value>
+        [IgnoreDataMember]
+        public OAuthTokens Tokens { get; set; }
     }
 }
