@@ -45,6 +45,7 @@ namespace Twitterizer
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
+    using System.Web;
 
     /// <summary>
     /// A utility for handling the oauth protocol.
@@ -236,22 +237,24 @@ namespace Twitterizer
                 return string.Empty;
             }
 
-            char[] unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~".ToCharArray();
+            value = HttpUtility.UrlEncode(value).Replace("+", "%20");
 
-            StringBuilder result = new StringBuilder();
+            // UrlEncode escapes with lowercase characters (e.g. %2f) but oAuth needs %2F
+            value = Regex.Replace(value, "(%[0-9a-f][0-9a-f])", c => c.Value.ToUpper());
 
-            foreach (char symbol in value)
-            {
-                if (unreservedChars.Contains(symbol))
-                {
-                    result.Append(symbol);
-                    continue;
-                }
+            // these characters are not escaped by UrlEncode() but needed to be escaped
+            value = value
+                .Replace("(", "%28")
+                .Replace(")", "%29")
+                .Replace("$", "%24")
+                .Replace("!", "%21")
+                .Replace("*", "%2A")
+                .Replace("'", "%27");
 
-                result.AppendFormat("%{0:X2}", (int)symbol);
-            }
+            // these characters are escaped by UrlEncode() but will fail if unescaped!
+            value = value.Replace("%7E", "~");
 
-            return result.ToString();
+            return value;
         }
         #endregion
 

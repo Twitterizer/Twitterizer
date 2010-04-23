@@ -18,8 +18,7 @@
     <HtmlHelpName>twitterizer2</HtmlHelpName>
     <HelpTitle>Twitterizer 2 Documentation</HelpTitle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.dll" />
-      <DocumentationSource sourceFile="Twitterizer2\bin\Debug\Twitterizer2.XML" />
+      <DocumentationSource sourceFile="Twitterizer2\Twitterizer2.csproj" />
     </DocumentationSources>
     <PresentationStyle>Prototype</PresentationStyle>
     <FeedbackEMailAddress>twitterizer%40googlegroups.com</FeedbackEMailAddress>
@@ -35,6 +34,10 @@
     </NamespaceSummaries>
     <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="Twitterizer.Core" isExposed="False" />
+    </ApiFilter>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

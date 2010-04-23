@@ -89,7 +89,9 @@ namespace Twitterizer
         /// <param name="twitterizerCounter">The twitterizer counter.</param>
         internal static void ReportToCounter(TwitterizerCounter twitterizerCounter)
         {
-            if (ConfigurationManager.AppSettings["Twitterizer2.EnablePerformanceMonitor"].ToLower(CultureInfo.CurrentCulture) != "true")
+            if (
+                string.IsNullOrEmpty(ConfigurationManager.AppSettings["Twitterizer2.EnablePerformanceMonitor"]) ||
+                ConfigurationManager.AppSettings["Twitterizer2.EnablePerformanceMonitor"].ToLower(CultureInfo.CurrentCulture) != "true")
             {
                 return;
             }
