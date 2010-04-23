@@ -69,14 +69,10 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        this.StatusTimer.Enabled = true;
-    }
-
-    protected void StatusTimer_Tick(object sender, EventArgs e)
-    {
-        this.StatusTimer.Enabled = false;
-
-        TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
-        this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
+        if (Session["OAuthTokens"] != null)
+        {
+            TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
+            this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
+        }
     }
 }

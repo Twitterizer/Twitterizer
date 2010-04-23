@@ -88,13 +88,14 @@ namespace Twitterizer
                 System.Diagnostics.Debug.WriteLine("----------- END -----------");
 #endif
                 this.ParseRateLimitHeaders(response);
-                try
+
+                if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
                 {
                     DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
                     webException.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
                     this.ErrorDetails = ds.ReadObject(webException.Response.GetResponseStream()) as TwitterErrorDetails;
                 }
-                catch (System.Runtime.Serialization.SerializationException)
+                else if (response.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
                 {
                     // Try to deserialize as XML (specifically OAuth requests)
                     System.Xml.Serialization.XmlSerializer ds =

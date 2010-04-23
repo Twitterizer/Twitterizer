@@ -52,6 +52,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -64,7 +67,8 @@
     <Compile Include="Commands\Friendship\DeleteFriendshipCommand.cs" />
     <Compile Include="Commands\Lists\DeleteListCommand.cs" />
     <Compile Include="Commands\Lists\GetListSubscriptionsCommand.cs" />
-    <Compile Include="Commands\SearchCommand.cs" />
+    <Compile Include="Commands\SearchAPI\CurrentTrendsCommand.cs" />
+    <Compile Include="Commands\SearchAPI\SearchCommand.cs" />
     <Compile Include="Commands\Status\DeleteStatusCommand.cs" />
     <Compile Include="Commands\Direct Messages\DeleteDirectMessageCommand.cs" />
     <Compile Include="Commands\Direct Messages\DirectMessagesCommand.cs" />
@@ -114,7 +118,9 @@
     <Compile Include="Core\TwitterCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="OAuth\XAuthUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Streaming\TwitterStream.cs" />
     <Compile Include="TwitterEntities\Collection Wrappers\TwitterSearchResultWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
@@ -129,6 +135,8 @@
     <Compile Include="TwitterEntities\TwitterSearchResultCollection.cs" />
     <Compile Include="TwitterEntities\TwitterStatus.cs" />
     <Compile Include="TwitterEntities\TwitterStatusCollection.cs" />
+    <Compile Include="TwitterEntities\TwitterTrend.cs" />
+    <Compile Include="TwitterEntities\TwitterTrendTimeframe.cs" />
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="TwitterEntities\TwitterUser.cs" />

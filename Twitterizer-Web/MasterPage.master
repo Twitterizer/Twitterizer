@@ -29,14 +29,7 @@
         </asp:ContentPlaceHolder>
     </div>
     <div class="Footer">
-        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
-                <asp:Timer ID="StatusTimer" runat="server" OnTick="StatusTimer_Tick" Enabled="true"
-                    Interval="1">
-                </asp:Timer>
-                <asp:Label runat="server" ID="RemainingRequestsLabel" EnableViewState="false" />
-            </ContentTemplate>
-        </asp:UpdatePanel>
+        <asp:Label runat="server" ID="RemainingRequestsLabel" EnableViewState="false" />
     </div>
     </form>
 </body>

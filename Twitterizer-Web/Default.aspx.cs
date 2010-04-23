@@ -43,15 +43,13 @@ public partial class _Default : System.Web.UI.Page
     {
         if (!this.IsPostBack)
         {
-            TwitterUserCollection followers =  TwitterUser.GetFollowers(Master.Tokens);
+            TwitterUserCollection followers = TwitterUser.GetFollowers(Master.Tokens);
 
             foreach (TwitterUser follower in followers)
             {
                 TwitterRelationship friends = TwitterUser.GetFriendship(Master.Tokens, follower.Id);
                 return;
             }
-
-            
 
             this.Trace.Write("Start TwitterUser.GetHomeTimeline");
             this.HomePageStatuses = TwitterUser.GetHomeTimeline(Master.Tokens);

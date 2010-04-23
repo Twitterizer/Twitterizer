@@ -540,9 +540,6 @@ namespace Twitterizer
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="id">The user id.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        /// <example>
-        /// 
-        /// </example>
         [CLSCompliant(false)]
         public static TwitterUser GetUser(OAuthTokens requestTokens, ulong id)
         {

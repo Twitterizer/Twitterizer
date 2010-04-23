@@ -7,8 +7,8 @@
       <FileName>TwitterEntities\TwitterDirectMessage.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Recipient" />
       <Property Name="Sender" />
+      <Property Name="Recipient" />
     </ShowAsAssociation>
   </Class>
   <Class Name="Twitterizer.TwitterRateLimitStatus">
@@ -20,20 +20,26 @@
   </Class>
   <Class Name="Twitterizer.TwitterStatus">
     <Position X="9.25" Y="2" Width="2.5" />
+    <AssociationLine Name="RetweetedStatus" Type="Twitterizer.TwitterStatus">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.348" Y="0.383" Height="0.182" Width="1.379" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AQQDAAQAAgABAAAAICAAAAAEQAEAAAAIAgAACAAoAAA=</HashCode>
+      <HashCode>AQQDAAQAAgABAAAAICAAAAAEQAEAAAAIAgAACAApAAA=</HashCode>
       <FileName>TwitterEntities\TwitterStatus.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="User" />
+      <Property Name="RetweetedStatus" />
     </ShowAsAssociation>
   </Class>
   <Class Name="Twitterizer.TwitterUser">
     <Position X="5.25" Y="0.5" Width="2.5" />
     <AssociationLine Name="Followers" Type="Twitterizer.TwitterUser" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="7.75" Y="1.25" />
-        <Point X="8.125" Y="1.25" />
+        <Point X="7.75" Y="1.236" />
+        <Point X="8.125" Y="1.236" />
         <Point X="8.125" Y="0.125" />
         <Point X="6.812" Y="0.125" />
         <Point X="6.812" Y="0.5" />
@@ -44,17 +50,20 @@
     </AssociationLine>
     <AssociationLine Name="Friends" Type="Twitterizer.TwitterUser" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="5.25" Y="1.188" />
-        <Point X="4.875" Y="1.188" />
+        <Point X="5.25" Y="1.175" />
+        <Point X="4.875" Y="1.175" />
         <Point X="4.875" Y="0.125" />
         <Point X="6.125" Y="0.125" />
         <Point X="6.125" Y="0.5" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAATUAQkDAIxwBBoZAIZIiQBABEAEAICEoAwBABgAAA=</HashCode>
+      <HashCode>AEATUAQkDAIxwBBoZAIZIiQBABEAEAICEqAwBABgAAA=</HashCode>
       <FileName>TwitterEntities\TwitterUser.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Status" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Followers" />
       <Property Name="Friends" />
@@ -70,7 +79,7 @@
   <Class Name="Twitterizer.TwitterList">
     <Position X="1" Y="6.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAADQAAAAIAgAIAAAgAAAAQAACAAAAAAAQAAAAQAAAA=</HashCode>
+      <HashCode>QAQDQAAAAIAgAKAABgAAAAQAACEACAAQAQAAAAQAAAI=</HashCode>
       <FileName>TwitterEntities\TwitterList.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

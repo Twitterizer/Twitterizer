@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterTrend.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,42 +28,50 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <summary>The Twitter Trend class</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
+namespace Twitterizer
+{
+    using System;
+    using System.Runtime.Serialization;
+    using Twitterizer.Core;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("Twitterizer")]
-[assembly: AssemblyDescription("Twitter integration library (Revision 224)")]
+    /// <summary>
+    /// The TwitterTrend class.
+    /// </summary>
+    [Serializable]
+    public class TwitterTrend : TwitterObject
+    {
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name of the trend.</value>
+        public string Name { get; set; }
 
-#if DEBUG
-[assembly: AssemblyConfiguration("Debug")]
-#else
-[assembly: AssemblyConfiguration("Release")]
-#endif
+        /// <summary>
+        /// Gets or sets the address.
+        /// </summary>
+        /// <value>The address.</value>
+        public string Address { get; set; }
 
-[assembly: AssemblyCompany("Twitterizer Group (www.twitterizer.net)")]
-[assembly: AssemblyProduct("Twitterizer")]
-[assembly: AssemblyCopyright("Copyright ©2010 Patrick 'Ricky' Smith")]
-[assembly: AssemblyTrademark("")]
-[assembly: AllowPartiallyTrustedCallersAttribute()]
-[assembly: ReflectionPermission(SecurityAction.RequestMinimum)]
+        /// <summary>
+        /// Gets or sets the search query.
+        /// </summary>
+        /// <value>The search query.</value>
+        public string SearchQuery { get; set; }
 
-[assembly: CLSCompliant(true)]
+        /// <summary>
+        /// Gets the current trends.
+        /// </summary>
+        /// <param name="excludeHashTags">if set to <c>true</c> [exclude hash tags].</param>
+        /// <returns>A <see cref="TwitterTrendTimeframe"/> instance.</returns>
+        public static TwitterTrendTimeframe Current(bool excludeHashTags)
+        {
+            Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(excludeHashTags);
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
-
-[assembly: AssemblyVersion("2.0.1.224")]
-[assembly: AssemblyFileVersion("2.0.1.224")]
+            return Core.CommandPerformer<TwitterTrendTimeframe>.PerformAction(command);
+        }
+    }
+}

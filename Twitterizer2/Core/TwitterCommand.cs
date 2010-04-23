@@ -46,6 +46,13 @@ namespace Twitterizer.Core
     using System.Web;
     using System.Web.Caching;
     using Twitterizer;
+    using System.Web.Script.Serialization;
+
+    internal enum Serializer
+    {
+        DataContractJsonSerializer,
+        JavaScriptSerializer
+    }
 
     /// <summary>
     /// The base command class.
@@ -55,6 +62,8 @@ namespace Twitterizer.Core
     internal abstract class TwitterCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
+        public Serializer SelectedSerializer { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
@@ -233,10 +242,21 @@ namespace Twitterizer.Core
                     Debug.WriteLine(Encoding.UTF8.GetString(data));
                     Debug.WriteLine("----------- END -----------");
 #endif
+
                     // Deserialize the results.
-                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
-                    resultObject = (T)ds.ReadObject(new MemoryStream(data));
-                    responseStream.Close();
+                    switch (this.SelectedSerializer)
+                    {
+                        case Serializer.DataContractJsonSerializer:
+                            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
+                            resultObject = (T)ds.ReadObject(new MemoryStream(data));
+                            responseStream.Close();
+                            break;
+                        case Serializer.JavaScriptSerializer:
+                            JavaScriptSerializer jss = new JavaScriptSerializer();
+                            object result = jss.DeserializeObject(Encoding.UTF8.GetString(data));
+                            resultObject = this.ConvertJavaScriptSerializedObject(result);
+                            break;
+                    }
 
                     Trace.Write(resultObject, "Twitterizer2");
                 }
@@ -433,6 +453,16 @@ namespace Twitterizer.Core
             }
 
             return (HttpWebResponse)request.GetResponse();
+        }
+
+        /// <summary>
+        /// Converts a weakly typed deserialized javascript object to a strongly typed object.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns><typeparamref name="T"/></returns>
+        public virtual T ConvertJavaScriptSerializedObject(object value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Twitterizer.Data
     /// <summary>
     /// The object shredder class
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the object to shred.</typeparam>
     internal class ObjectShredder<T>
     {
         private System.Reflection.FieldInfo[] _fi;
@@ -132,7 +132,7 @@ namespace Twitterizer.Data
             table.BeginLoadData();
             using (IEnumerator<T> e = source.GetEnumerator())
             {
-                Object[] values = new object[table.Columns.Count];
+                object[] values = new object[table.Columns.Count];
                 while (e.MoveNext())
                 {
                     values[table.Columns["Value"].Ordinal] = e.Current;
@@ -147,6 +147,7 @@ namespace Twitterizer.Data
                     }
                 }
             }
+
             table.EndLoadData();
 
             // Return the table.
@@ -168,7 +169,7 @@ namespace Twitterizer.Data
             }
 
             // Add the property and field values of the instance to an array.
-            Object[] values = new object[table.Columns.Count];
+            object[] values = new object[table.Columns.Count];
             foreach (FieldInfo f in fi)
             {
                 values[_ordinalMap[f.Name]] = f.GetValue(instance);
@@ -200,6 +201,7 @@ namespace Twitterizer.Data
                     _ordinalMap.Add(f.Name, dc.Ordinal);
                 }
             }
+
             foreach (PropertyInfo p in type.GetProperties())
             {
                 if (!_ordinalMap.ContainsKey(p.Name))
