@@ -47,7 +47,7 @@ namespace Twitterizer.Commands
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/direct_messages.json";
+        private const string Path = "http://api.twitter.com/1/direct_messages/sent.json";
 
         #region Constructors
         /// <summary>

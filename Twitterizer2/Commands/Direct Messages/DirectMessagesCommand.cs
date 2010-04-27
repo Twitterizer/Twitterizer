@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Direct Messages Command
     /// </summary>
-    internal sealed class DirectMessagesCommand : TwitterCommand<TwitterDirectMessageCollection>
+    internal sealed class DirectMessagesCommand : PagedCommand<TwitterDirectMessageCollection>
     {
         /// <summary>
         /// The base address to the API method.
@@ -89,6 +89,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+
             if (this.SinceStatusId > 0)
                 this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
