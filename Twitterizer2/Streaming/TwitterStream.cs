@@ -8,6 +8,7 @@ using System.Net;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Configuration;
 
 namespace Twitterizer
 {
@@ -23,15 +24,32 @@ namespace Twitterizer
 
         public event TwitterStatusReceivedHandler OnStatus;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterStream"/> class.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
         public TwitterStream(string username, string password)
         {
             this.Username = username;
             this.Password = password;
         }
 
+        /// <summary>
+        /// Starts the stream.
+        /// </summary>
         public void StartStream()
         {
-            request = WebRequest.Create("http://stream.twitter.com/1/statuses/sample.json");
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"]) &&
+                ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"] == "true")
+            {
+                request = WebRequest.Create("https://stream.twitter.com/1/statuses/sample.json");
+            }
+            else
+            {
+                request = WebRequest.Create("http://stream.twitter.com/1/statuses/sample.json");
+            }
+
             request.Credentials = new NetworkCredential(this.Username, this.Password);
             request.BeginGetResponse(ar =>
             {
@@ -67,6 +85,9 @@ namespace Twitterizer
             }, request);
         }
 
+        /// <summary>
+        /// Ends the stream.
+        /// </summary>
         public void EndStream()
         {
             this.stopReceived = true;
