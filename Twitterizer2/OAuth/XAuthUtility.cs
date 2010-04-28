@@ -79,6 +79,7 @@ namespace Twitterizer
             OAuthTokenResponse response = new OAuthTokenResponse();
 
             Dictionary<string, string> parameters = new Dictionary<string, string>();
+            
             parameters.Add("x_auth_username", username);
             parameters.Add("x_auth_password", password);
             parameters.Add("x_auth_mode", "client_auth");

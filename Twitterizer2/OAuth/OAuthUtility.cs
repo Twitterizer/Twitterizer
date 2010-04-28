@@ -358,7 +358,11 @@ namespace Twitterizer
             combinedParameters.Add("oauth_signature_method", "HMAC-SHA1");
             combinedParameters.Add("oauth_consumer_key", consumerKey);
             combinedParameters.Add("oauth_consumer_secret", consumerSecret);
-            combinedParameters.Add("oauth_token", token);
+            
+            if (!string.IsNullOrEmpty(token))
+            {
+                combinedParameters.Add("oauth_token", token);
+            }
 
             if (!string.IsNullOrEmpty(tokenSecret))
             {

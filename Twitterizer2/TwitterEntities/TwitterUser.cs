@@ -378,12 +378,7 @@ namespace Twitterizer
         {
             get
             {
-                Commands.FriendsCommand command = new Commands.FriendsCommand(this.Tokens);
-
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command).Users;
-                result.CursorPagedCommand = command;
-
-                return result;
+                return GetFriends(this.Tokens, this.Id);
             }
         }
 
