@@ -82,7 +82,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the recipient user id.
         /// </summary>
         /// <value>The recipient user id.</value>
-        public long RecipientUserId { get; set; }
+        public ulong RecipientUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the recipient user.

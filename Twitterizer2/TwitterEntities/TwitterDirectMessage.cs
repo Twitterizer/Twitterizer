@@ -163,7 +163,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
         public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens)
         {
-            return GetDirectMessages(tokens, -1, -1, -1);
+            return GetDirectMessages(tokens, 0, 0, 0);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Twitterizer
         /// <param name="maxStatusId">The max status id.</param>
         /// <param name="count">The count.</param>
         /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
-        public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens, long sinceStatusId, long maxStatusId, int count)
+        public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId, int count)
         {
             Commands.DirectMessagesCommand command = new Commands.DirectMessagesCommand(tokens)
             {
@@ -207,7 +207,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens)
         {
-            return GetDirectMessagesSent(tokens, -1, -1, -1, -1);
+            return GetDirectMessagesSent(tokens, 0, 0, 0, 0);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens, long sinceStatusId, long maxStatusId, int count, int page)
+        public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId, int count, int page)
         {
             Commands.DirectMessagesSentCommand command = new Commands.DirectMessagesSentCommand(tokens)
             {
@@ -253,7 +253,7 @@ namespace Twitterizer
         /// <param name="userId">The user id of the recipient user.</param>
         /// <param name="text">The text of your direct message.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, long userId, string text)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, ulong userId, string text)
         {
             return Send(tokens, userId, string.Empty, text);
         }
@@ -267,7 +267,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
         public static TwitterDirectMessage Send(OAuthTokens tokens, string username, string text)
         {
-            return Send(tokens, -1, username, text);
+            return Send(tokens, 0, username, text);
         }
         #endregion
 
@@ -305,7 +305,7 @@ namespace Twitterizer
         /// <param name="userName">Name of the user.</param>
         /// <param name="text">The text of your direct message.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, long userId, string userName, string text)
+        private static TwitterDirectMessage Send(OAuthTokens tokens, ulong userId, string userName, string text)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text)
             {

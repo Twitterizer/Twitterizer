@@ -40,7 +40,7 @@ using System.Security.Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Twitterizer")]
-[assembly: AssemblyDescription("Twitter integration library (Revision 233)")]
+[assembly: AssemblyDescription("Twitter integration library (Revision 234)")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -65,5 +65,5 @@ using System.Security.Permissions;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
 
-[assembly: AssemblyVersion("2.0.1.233")]
-[assembly: AssemblyFileVersion("2.0.1.233")]
+[assembly: AssemblyVersion("2.0.1.234")]
+[assembly: AssemblyFileVersion("2.0.1.234")]
