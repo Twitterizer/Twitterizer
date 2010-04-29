@@ -375,7 +375,8 @@ namespace Twitterizer.Core
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
             }
 
-            UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
+            // Usage stats collection is disabled due to performance issues.
+            // UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
 

@@ -104,7 +104,6 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-        [IgnoreDataMember]
         public DateTime CreatedDate
         {
             get

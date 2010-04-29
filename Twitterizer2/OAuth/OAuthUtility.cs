@@ -336,7 +336,8 @@ namespace Twitterizer
                 baseUrl = baseUrl.Replace("http://", "https://");
             }
 
-            UsageStatsCollector.ReportCall(new Uri(baseUrl).AbsolutePath);
+            // Usage stats collection is disabled due to performance issues.
+            // UsageStatsCollector.ReportCall(new Uri(baseUrl).AbsolutePath);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.OAuthRequests);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
 

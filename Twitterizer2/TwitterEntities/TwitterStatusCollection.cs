@@ -35,10 +35,6 @@
 namespace Twitterizer
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
     using Twitterizer.Core;
 
     /// <summary>
@@ -51,7 +47,6 @@ namespace Twitterizer
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        [IgnoreDataMember]
         internal PagedCommand<TwitterStatusCollection> Command { get; set; }
 
         /// <summary>

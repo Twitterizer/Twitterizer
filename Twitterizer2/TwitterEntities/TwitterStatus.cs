@@ -93,7 +93,6 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-        [IgnoreDataMember]
         public DateTime CreatedDate
         {
             get
@@ -292,6 +291,36 @@ namespace Twitterizer
         #endregion
 
         #region GetHomeTimeline
+        /// <summary>
+        /// Gets the home timeline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sinceId">The since id.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="page">The page.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens, ulong sinceId, int count, int page)
+        {
+            Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens)
+            {
+                Count = count,
+                Page = page,
+                SinceId = sinceId
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetHomeTimeline"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
         /// <summary>
         /// Gets the home timeline.
         /// </summary>
