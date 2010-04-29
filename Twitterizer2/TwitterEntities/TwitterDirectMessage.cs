@@ -70,7 +70,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The direct message id.</value>
         [DataMember(Name = "id")]
-        public long Id { get; set; }
+        public ulong Id { get; set; }
 
         /// <summary>
         /// Gets or sets the sender id.
