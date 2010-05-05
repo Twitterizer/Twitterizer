@@ -70,6 +70,20 @@ namespace Twitterizer_Desktop
         {
             this.AuthorizeAndGetUser();
 
+            TwitterStatus.Update(
+                this.oauthTokens, 
+                "Check this out", 
+                new StatusUpdateOptions()
+            {
+                InReplyToStatusId = 132254,
+                UseSSL = true,
+                ProxyAddress = "127.0.0.1:8080",
+                CacheOutput = true,
+                CacheTimespan = new TimeSpan(1, 0, 0)
+            });
+
+            
+
             this.WelcomeLabel.Text = string.Format(
 @"Welcome {0},
 You have {1} friends and {2} followers.

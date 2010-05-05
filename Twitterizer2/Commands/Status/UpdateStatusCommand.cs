@@ -77,6 +77,8 @@ namespace Twitterizer.Commands
         /// <value>The status text.</value>
         public string Text { get; set; }
 
+        public StatusUpdateOptions Options { get; set; }
+
         /// <summary>
         /// Gets or sets the status id the new status is in reply to.
         /// </summary>

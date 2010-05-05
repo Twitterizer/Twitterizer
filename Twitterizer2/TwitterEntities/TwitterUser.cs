@@ -115,7 +115,9 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
+#if !MONO_2_4
         [IgnoreDataMember]
+#endif
         public DateTime CreatedDate
         {
             get
@@ -136,6 +138,9 @@ namespace Twitterizer
                     return new DateTime();
                 }
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -261,12 +266,18 @@ namespace Twitterizer
         /// Gets the color of the profile background.
         /// </summary>
         /// <value>The color of the profile background.</value>
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public Color ProfileBackgroundColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileBackgroundColorString);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -289,12 +300,18 @@ namespace Twitterizer
         /// Gets the color of the profile link.
         /// </summary>
         /// <value>The color of the profile link.</value>
+#if !MONO_2_4
+            [IgnoreDataMember]
+#endif
         public Color ProfileLinkColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileLinkColorString);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -315,14 +332,20 @@ namespace Twitterizer
         /// Gets the color of the profile text.
         /// </summary>
         /// <value>The color of the profile text.</value>
+#if !MONO_2_4
+            [IgnoreDataMember]
+#endif
         public Color ProfileTextColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileTextColorString);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
-
+        
         /// <summary>
         /// Gets or sets the profile image location.
         /// </summary>
@@ -341,12 +364,18 @@ namespace Twitterizer
         /// Gets the color of the profile sidebar border.
         /// </summary>
         /// <value>The color of the profile sidebar border.</value>
+#if !MONO_2_4
+            [IgnoreDataMember]
+#endif
         public Color ProfileSidebarBorderColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileSidebarBorderColorString);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
         #endregion
 
@@ -358,12 +387,18 @@ namespace Twitterizer
         /// </summary>
         /// <value>The followers.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+            [IgnoreDataMember]
+#endif
         public TwitterUserCollection Followers
         {
             get
             {
                 return GetFollowers(this.Tokens, this.Id);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -374,12 +409,18 @@ namespace Twitterizer
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterUserCollection Friends
         {
             get
             {
                 return GetFriends(this.Tokens, this.Id);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -387,6 +428,9 @@ namespace Twitterizer
         /// </summary>
         /// <value>The timeline.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterStatusCollection Timeline
         {
             get
@@ -400,6 +444,9 @@ namespace Twitterizer
                     -1,
                     -1);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -407,12 +454,18 @@ namespace Twitterizer
         /// </summary>
         /// <value>The friends timeline.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterStatusCollection FriendsTimeline
         {
             get
             {
                 return GetFriendsTimeline(this.Tokens, 0, 0);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -420,12 +473,18 @@ namespace Twitterizer
         /// </summary>
         /// <value>The mentions.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterStatusCollection Mentions
         {
             get
             {
                 return GetMentions(this.Tokens, 0, 0);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -433,24 +492,36 @@ namespace Twitterizer
         /// </summary>
         /// <value>The retweets.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterStatusCollection Retweets
         {
             get
             {
                 return this.RetweetedByUser(0, 0);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
         /// Gets the 20 most recent retweets posted by the authenticating user's friends.
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterStatusCollection Retweeted
         {
             get
             {
                 return this.RetweetedToUser(0, 0);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -458,12 +529,18 @@ namespace Twitterizer
         /// </summary>
         /// <value>The direct messages received.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterDirectMessageCollection DirectMessagesReceived
         {
             get
             {
                 return TwitterDirectMessage.GetDirectMessages(this.Tokens);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -471,12 +548,18 @@ namespace Twitterizer
         /// </summary>
         /// <value>The direct messages sent.</value>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#if !MONO_2_4
+        [IgnoreDataMember]
+#endif
         public TwitterDirectMessageCollection DirectMessagesSent
         {
             get
             {
                 return TwitterDirectMessage.GetDirectMessagesSent(this.Tokens);
             }
+#if MONO_2_4
+            set { }
+#endif
         }
         #endregion
 
@@ -550,6 +633,20 @@ namespace Twitterizer
                     MethodName = "GetUser"
                 };
             }
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser GetUser(OAuthTokens tokens)
+        {
+            Commands.ShowUserCommand command = new Twitterizer.Commands.ShowUserCommand(tokens);
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }

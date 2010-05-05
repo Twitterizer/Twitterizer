@@ -69,13 +69,13 @@ namespace Twitterizer.Commands
         /// Gets or sets the since status id.
         /// </summary>
         /// <value>The since status id.</value>
-        public long SinceStatusId { get; set; }
+        public ulong SinceStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the max status id.
         /// </summary>
         /// <value>The max status id.</value>
-        public long MaxStatusId { get; set; }
+        public ulong MaxStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the count.

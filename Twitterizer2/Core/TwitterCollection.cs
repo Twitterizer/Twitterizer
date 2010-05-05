@@ -36,7 +36,6 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// The base class for object collections.
@@ -55,14 +54,12 @@ namespace Twitterizer.Core
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
-        [IgnoreDataMember]
         public RateLimiting RateLimiting { get; set; }
 
         /// <summary>
         /// Gets or sets the oauth tokens.
         /// </summary>
         /// <value>The oauth tokens.</value>
-        [IgnoreDataMember]
         public OAuthTokens Tokens
         {
             get

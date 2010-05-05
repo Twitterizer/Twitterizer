@@ -35,7 +35,6 @@
 namespace Twitterizer
 {
     using System;
-    using System.Globalization;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -62,7 +61,6 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-        [IgnoreDataMember]
         public DateTime CreatedDate
         {
             get
@@ -128,5 +126,12 @@ namespace Twitterizer
         /// <value>The source.</value>
         [DataMember(Name = "source")]
         public string Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the language.
+        /// </summary>
+        /// <value>The language.</value>
+        [DataMember(Name = "iso_language_code")]
+        public string Language { get; set; }
     }
 }

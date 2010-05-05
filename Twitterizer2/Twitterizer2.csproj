@@ -14,6 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Twitterizer2.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkSubset>Full</TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,7 +33,27 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Twitterizer2.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono-Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Mono-Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MONO_2_4</DefineConstants>
+    <DocumentationFile>bin\Debug\Twitterizer2.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono-Release|AnyCPU' ">
+    <OutputPath>bin\Mono-Release\</OutputPath>
+    <DefineConstants>TRACE;MONO_2_4</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -62,6 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
+    <Compile Include="Commands\DirectMessages\DeleteDirectMessageCommand.cs" />
+    <Compile Include="Commands\DirectMessages\DirectMessagesCommand.cs" />
+    <Compile Include="Commands\DirectMessages\DirectMessagesSentCommand.cs" />
+    <Compile Include="Commands\DirectMessages\SendDirectMessageCommand.cs" />
     <Compile Include="Commands\Friendship\CreateFriendshipCommand.cs" />
     <Compile Include="Commands\Lists\CreateListCommand.cs" />
     <Compile Include="Commands\Friendship\DeleteFriendshipCommand.cs" />
@@ -70,9 +95,6 @@
     <Compile Include="Commands\SearchAPI\CurrentTrendsCommand.cs" />
     <Compile Include="Commands\SearchAPI\SearchCommand.cs" />
     <Compile Include="Commands\Status\DeleteStatusCommand.cs" />
-    <Compile Include="Commands\Direct Messages\DeleteDirectMessageCommand.cs" />
-    <Compile Include="Commands\Direct Messages\DirectMessagesCommand.cs" />
-    <Compile Include="Commands\Direct Messages\DirectMessagesSentCommand.cs" />
     <Compile Include="Commands\User\FriendsCommand.cs" />
     <Compile Include="Commands\Timelines\FriendsTimelineCommand.cs" />
     <Compile Include="Commands\Lists\GetListCommand.cs" />
@@ -88,7 +110,6 @@
     <Compile Include="Commands\Timelines\RetweetedToMeCommand.cs" />
     <Compile Include="Commands\Status\RetweetsCommand.cs" />
     <Compile Include="Commands\Timelines\RetweetsOfMeCommand.cs" />
-    <Compile Include="Commands\Direct Messages\SendDirectMessageCommand.cs" />
     <Compile Include="Commands\Friendship\ShowFriendshipCommand.cs" />
     <Compile Include="Commands\Status\ShowStatusCommand.cs" />
     <Compile Include="Commands\Lists\UpdateListCommand.cs" />
@@ -121,12 +142,14 @@
     <Compile Include="OAuth\XAuthUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Streaming\TwitterStream.cs" />
-    <Compile Include="TwitterEntities\Collection Wrappers\TwitterSearchResultWrapper.cs" />
+    <Compile Include="TwitterEntities\CollectionWrappers\TwitterListWrapper.cs" />
+    <Compile Include="TwitterEntities\CollectionWrappers\TwitterSearchResultWrapper.cs" />
+    <Compile Include="TwitterEntities\CollectionWrappers\TwitterUserWrapper.cs" />
+    <Compile Include="TwitterEntities\OptionalParameterClasses\StatusUpdateOptions.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />
     <Compile Include="TwitterEntities\TwitterList.cs" />
     <Compile Include="TwitterEntities\TwitterListCollection.cs" />
-    <Compile Include="TwitterEntities\Collection Wrappers\TwitterListWrapper.cs" />
     <Compile Include="TwitterEntities\TwitterRateLimitStatus.cs" />
     <Compile Include="TwitterEntities\TwitterRelationship.cs" />
     <Compile Include="TwitterEntities\TwitterResultTypeEnum.cs" />
@@ -140,7 +163,6 @@
     <Compile Include="TwitterEntities\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="TwitterEntities\TwitterUser.cs" />
-    <Compile Include="TwitterEntities\Collection Wrappers\TwitterUserWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

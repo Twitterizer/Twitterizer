@@ -53,7 +53,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="id">The status id.</param>
-        public DeleteDirectMessageCommand(OAuthTokens tokens, long id)
+        public DeleteDirectMessageCommand(OAuthTokens tokens, ulong id)
             : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), tokens)
         {
             if (tokens == null)
@@ -69,7 +69,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public long Id { get; set; }
+        public ulong Id { get; set; }
 
         /// <summary>
         /// Initializes the command.

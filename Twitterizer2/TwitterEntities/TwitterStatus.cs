@@ -93,7 +93,9 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
+#if !MONO_2_4
         [IgnoreDataMember]
+#endif
         public DateTime CreatedDate
         {
             get
@@ -114,6 +116,9 @@ namespace Twitterizer
                     return new DateTime();
                 }
             }
+#if MONO_2_4
+            set { }
+#endif
         }
 
         /// <summary>
@@ -295,6 +300,36 @@ namespace Twitterizer
         /// <summary>
         /// Gets the home timeline.
         /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sinceId">The since id.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="page">The page.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        public static TwitterStatusCollection GetHomeTimeline(OAuthTokens tokens, ulong sinceId, int count, int page)
+        {
+            Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens)
+            {
+                Count = count,
+                Page = page,
+                SinceId = sinceId
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterStatusCollection>()
+                {
+                    Command = command,
+                    MethodName = "GetHomeTimeline"
+                };
+            }
+
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the home timeline.
+        /// </summary>
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
         public static TwitterStatusCollection GetHomeTimeline()
         {
@@ -437,6 +472,16 @@ namespace Twitterizer
                 replyToStatusId,
                 string.Empty,
                 string.Empty);
+        }
+
+        public static TwitterStatus Update(OAuthTokens tokens, string text, StatusUpdateOptions options)
+        {
+            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(tokens, text)
+            {
+                Options = options
+            };
+
+            return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
         }
 
         /// <summary>

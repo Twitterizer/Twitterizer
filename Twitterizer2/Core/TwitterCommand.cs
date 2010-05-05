@@ -177,11 +177,11 @@ namespace Twitterizer.Core
 
             Cache cache = HttpRuntime.Cache;
 
-            WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            permission.Demand();
+            //WebPermission permission = new WebPermission();
+            //permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
+            //permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            //permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
+            //permission.Demand();
 
             // Prepare the query parameters
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
@@ -375,7 +375,8 @@ namespace Twitterizer.Core
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
             }
 
-            UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
+            // Usage stats collection is disabled due to performance issues.
+            // UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
 

@@ -57,14 +57,12 @@ namespace Twitterizer.Core
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
-        [IgnoreDataMember]
         public RateLimiting RateLimiting { get; set; }
 
         /// <summary>
         /// Gets or sets the oauth tokens.
         /// </summary>
         /// <value>The oauth tokens.</value>
-        [IgnoreDataMember]
         public OAuthTokens Tokens { get; set; }
     }
 }
