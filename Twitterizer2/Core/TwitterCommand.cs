@@ -36,7 +36,6 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -62,7 +61,17 @@ namespace Twitterizer.Core
     internal abstract class TwitterCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
+        /// <summary>
+        /// Gets or sets the selected serializer.
+        /// </summary>
+        /// <value>The selected serializer.</value>
         public Serializer SelectedSerializer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the optional properties.
+        /// </summary>
+        /// <value>The optional properties.</value>
+        public OptionalProperties OptionalProperties { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
@@ -71,21 +80,14 @@ namespace Twitterizer.Core
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
         protected TwitterCommand(string method, Uri uri, OAuthTokens tokens)
+            : this(method, tokens)
         {
-            if (string.IsNullOrEmpty(method))
-            {
-                throw new ArgumentNullException("method");
-            }
-
             if (uri == null)
             {
                 throw new ArgumentNullException("uri");
             }
 
-            this.RequestParameters = new Dictionary<string, string>();
             this.Uri = uri;
-            this.HttpMethod = method;
-            this.Tokens = tokens;
         }
 
         /// <summary>
@@ -95,9 +97,15 @@ namespace Twitterizer.Core
         /// <param name="tokens">The tokens.</param>
         protected TwitterCommand(string method, OAuthTokens tokens)
         {
+            if (string.IsNullOrEmpty(method))
+            {
+                throw new ArgumentNullException("method");
+            }
+
             this.RequestParameters = new Dictionary<string, string>();
             this.HttpMethod = method;
             this.Tokens = tokens;
+            this.OptionalProperties = new OptionalProperties();
         }
 
         /// <summary>
@@ -166,9 +174,13 @@ namespace Twitterizer.Core
                 };
             }
 
+            //WebPermission permission = new WebPermission();
+            //permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
+            //permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            //permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
+            //permission.Demand();
+
             // Variables and objects needed for caching
-            bool enableCaching = ConfigurationManager.AppSettings["Twitterizer2.EnableCaching"] != null &&
-                bool.Parse(ConfigurationManager.AppSettings["Twitterizer2.EnableCaching"]);
             StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
             if (this.Tokens != null)
             {
@@ -176,12 +188,6 @@ namespace Twitterizer.Core
             }
 
             Cache cache = HttpRuntime.Cache;
-
-            //WebPermission permission = new WebPermission();
-            //permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
-            //permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            //permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            //permission.Demand();
 
             // Prepare the query parameters
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
@@ -195,7 +201,7 @@ namespace Twitterizer.Core
             T resultObject = default(T);
 
             // Lookup the cached item and return it
-            if (enableCaching && cache[cacheKeyBuilder.ToString()] != null)
+            if (this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
@@ -262,37 +268,25 @@ namespace Twitterizer.Core
                 }
 
                 // If caching is enabled, add the result to the cache.
-                if (enableCaching)
+                if (this.OptionalProperties.CacheOutput)
                 {
-                    // Default the timespan to 30 minutes.
-                    TimeSpan cacheTimeSpan = new TimeSpan(0, 30, 0);
-
-                    // See if a custom timeout value has been supplied
-                    string cacheTimeoutSetting = ConfigurationManager.AppSettings["Twitterizer2.CacheTimeout"];
-                    if (!string.IsNullOrEmpty(cacheTimeoutSetting))
-                    {
-                        long cacheTimeoutSeconds;
-                        if (long.TryParse(cacheTimeoutSetting, out cacheTimeoutSeconds))
-                        {
-                            // Convert the seconds value to ticks and instantiate a new timespan
-                            cacheTimeSpan = new TimeSpan(cacheTimeoutSeconds * 10000000);
-                        }
-                    }
-
                     cache.Add(
                         cacheKeyBuilder.ToString(), 
                         resultObject, 
                         null, 
                         Cache.NoAbsoluteExpiration, 
-                        cacheTimeSpan, 
+                        this.OptionalProperties.CacheTimespan, 
                         CacheItemPriority.Normal, 
                         null);
 
                     Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
                 }
 
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
+                if (this.OptionalProperties.ReportToPerformanceMonitors)
+                {
+                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
+                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
+                }
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
@@ -304,8 +298,11 @@ namespace Twitterizer.Core
             {
                 Trace.TraceError(wex.Message);
 
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
+                if (this.OptionalProperties.ReportToPerformanceMonitors)
+                {
+                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
+                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
+                }
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
@@ -370,15 +367,18 @@ namespace Twitterizer.Core
         private HttpWebResponse BuildRequestAndGetResponse(Dictionary<string, string> queryParameters)
         {
             // Check if the SSL configuration flag is set and modify the address accordingly
-            if (ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"] == "true")
+            if (this.OptionalProperties.UseSSL)
             {
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
             }
 
             // Usage stats collection is disabled due to performance issues.
             // UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
-            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
-            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
+            if (this.OptionalProperties.ReportToPerformanceMonitors)
+            {
+                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
+                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
+            }
 
             // Prepare and execute un-authorized query
             HttpWebRequest request;
@@ -409,6 +409,7 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
+                    request.Proxy = this.OptionalProperties.Proxy;
                     break;
                 case "POST":
                     request = (HttpWebRequest)WebRequest.Create(this.Uri);
@@ -418,6 +419,7 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
+                    request.Proxy = this.OptionalProperties.Proxy;
 
                     using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
                     {
@@ -448,6 +450,7 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
+                    request.Proxy = this.OptionalProperties.Proxy;
                     break;
                 default:
                     throw new NotImplementedException();

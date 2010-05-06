@@ -45,7 +45,7 @@ namespace Twitterizer.Commands
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/update.json";
+        private const string Path = "statuses/update.json";
 
         #region Constructors
         /// <summary>
@@ -76,26 +76,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The status text.</value>
         public string Text { get; set; }
-
-        public StatusUpdateOptions Options { get; set; }
-
-        /// <summary>
-        /// Gets or sets the status id the new status is in reply to.
-        /// </summary>
-        /// <value>The status id.</value>
-        public ulong InReplyToStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the latitude.
-        /// </summary>
-        /// <value>The latitude.</value>
-        public string Latitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the longitude.
-        /// </summary>
-        /// <value>The longitude.</value>
-        public string Longitude { get; set; }
         #endregion
 
         /// <summary>
@@ -105,14 +85,18 @@ namespace Twitterizer.Commands
         {
             this.RequestParameters.Add("status", this.Text);
 
-            if (this.InReplyToStatusId > 0)
-                this.RequestParameters.Add("in_reply_to_status_id", this.InReplyToStatusId.ToString(CultureInfo.CurrentCulture));
+            StatusUpdateOptions options = this.OptionalProperties as StatusUpdateOptions;
+            if (options != null)
+            {
+                if (options.InReplyToStatusId > 0)
+                    this.RequestParameters.Add("in_reply_to_status_id", options.InReplyToStatusId.ToString(CultureInfo.CurrentCulture));
 
-            if (!string.IsNullOrEmpty(this.Latitude))
-                this.RequestParameters.Add("lat", this.Latitude);
+                if (options.Latitude != 0)
+                    this.RequestParameters.Add("lat", options.Latitude.ToString());
 
-            if (!string.IsNullOrEmpty(this.Longitude))
-                this.RequestParameters.Add("long", this.Longitude);
+                if (options.Longitude != 0)
+                    this.RequestParameters.Add("long", options.Longitude.ToString());
+            }
         }
 
         /// <summary>

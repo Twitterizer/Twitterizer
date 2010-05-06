@@ -145,6 +145,7 @@
     <Compile Include="TwitterEntities\CollectionWrappers\TwitterListWrapper.cs" />
     <Compile Include="TwitterEntities\CollectionWrappers\TwitterSearchResultWrapper.cs" />
     <Compile Include="TwitterEntities\CollectionWrappers\TwitterUserWrapper.cs" />
+    <Compile Include="TwitterEntities\OptionalParameterClasses\OptionalProperties.cs" />
     <Compile Include="TwitterEntities\OptionalParameterClasses\StatusUpdateOptions.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessageCollection.cs" />
     <Compile Include="TwitterEntities\TwitterDirectMessage.cs" />

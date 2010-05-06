@@ -68,6 +68,20 @@ namespace Twitterizer
         /// </returns>
         public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret)
         {
+            return GetRequestToken(consumerKey, consumerSecret, string.Empty);
+        }
+
+        /// <summary>
+        /// Gets a new OAuth request token from the twitter api.
+        /// </summary>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="callbackAddress">Address of the callback.</param>
+        /// <returns>
+        /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
+        /// </returns>
+        public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress)
+        {
             if (string.IsNullOrEmpty(consumerKey))
             {
                 throw new ArgumentNullException("consumerKey");
@@ -80,12 +94,19 @@ namespace Twitterizer
 
             OAuthTokenResponse response = new OAuthTokenResponse();
 
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(callbackAddress))
+            {
+                parameters.Add("oauth_callback", callbackAddress);
+            }
+
             try
             {
                 HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
-                    "http://twitter.com/oauth/request_token",
-                    null,
-                    "GET",
+                    "https://api.twitter.com/oauth/request_token",
+                    parameters,
+                    "POST",
                     consumerKey,
                     consumerSecret,
                     null,
@@ -93,10 +114,11 @@ namespace Twitterizer
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
-                Match matchedValues = Regex.Match(responseBody, @"oauth_token=(?<token>[^&]+)|oauth_token_secret=(?<secret>[^&]+)");
+                Match matchedValues = Regex.Match(responseBody, @"oauth_token=(?<token>[^&]+)|oauth_token_secret=(?<secret>[^&]+)|oauth_verifier=(?<verifier>[^&]+)");
 
                 response.Token = matchedValues.Groups["token"].Value;
                 response.TokenSecret = matchedValues.Groups["secret"].Value;
+                response.VerificationString = matchedValues.Groups["verifier"].Value;
             }
             catch (WebException wex)
             {
@@ -117,47 +139,7 @@ namespace Twitterizer
         /// </returns>
         public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
         {
-            if (string.IsNullOrEmpty(consumerKey))
-            {
-                throw new ArgumentNullException("consumerKey");
-            }
-
-            if (string.IsNullOrEmpty(consumerSecret))
-            {
-                throw new ArgumentNullException("consumerSecret");
-            }
-
-            if (string.IsNullOrEmpty(requestToken))
-            {
-                throw new ArgumentNullException("requestToken");
-            }
-
-            OAuthTokenResponse response = new OAuthTokenResponse();
-
-            try
-            {
-                HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
-                    "http://twitter.com/oauth/access_token",
-                    null,
-                    "POST",
-                    consumerKey,
-                    consumerSecret,
-                    requestToken,
-                    string.Empty);
-
-                string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
-
-                response.Token = Regex.Match(responseBody, @"oauth_token=([^&]+)").Groups[1].Value;
-                response.TokenSecret = Regex.Match(responseBody, @"oauth_token_secret=([^&]+)").Groups[1].Value;
-                response.UserId = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value, CultureInfo.CurrentCulture);
-                response.ScreenName = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
-            }
-            catch (WebException wex)
-            {
-                throw new TwitterizerException(wex.Message, wex);
-            }
-
-            return response;
+            return GetAccessToken(consumerKey, consumerSecret, requestToken, string.Empty);
         }
 
         /// <summary>
@@ -166,11 +148,11 @@ namespace Twitterizer
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="requestToken">The request token.</param>
-        /// <param name="pinNumber">The pin number.</param>
+        /// <param name="verifier">The pin number or verifier string.</param>
         /// <returns>
         /// An <see cref="OAuthTokenResponse"/> class containing access token information.
         /// </returns>
-        public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken, string pinNumber)
+        public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken, string verifier)
         {
             if (string.IsNullOrEmpty(consumerKey))
             {
@@ -187,20 +169,19 @@ namespace Twitterizer
                 throw new ArgumentNullException("requestToken");
             }
 
-            if (string.IsNullOrEmpty(pinNumber))
-            {
-                throw new ArgumentNullException("pinNumber");
-            }
-
             OAuthTokenResponse response = new OAuthTokenResponse();
 
             try
             {
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters.Add("oauth_verifier", pinNumber);
+
+                if (!string.IsNullOrEmpty(verifier))
+                {
+                    parameters.Add("oauth_verifier", verifier);
+                }
 
                 HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
-                    "http://twitter.com/oauth/access_token",
+                    "https://api.twitter.com/oauth/access_token",
                     parameters,
                     "POST",
                     consumerKey,
@@ -265,7 +246,7 @@ namespace Twitterizer
         /// <returns>A new <see cref="Uri"/> instance.</returns>
         public static Uri BuildAuthorizationUri(string requestToken)
         {
-            return BuildAuthorizationUri(requestToken, false, string.Empty);
+            return BuildAuthorizationUri(requestToken, false);
         }
 
         /// <summary>
@@ -276,19 +257,7 @@ namespace Twitterizer
         /// <returns>A new <see cref="Uri"/> instance.</returns>
         public static Uri BuildAuthorizationUri(string requestToken, bool authenticate)
         {
-            return BuildAuthorizationUri(requestToken, authenticate, string.Empty);
-        }
-
-        /// <summary>
-        /// Builds the authorization URI.
-        /// </summary>
-        /// <param name="requestToken">The request token.</param>
-        /// <param name="authenticate">if set to <c>true</c>, the authenticate url will be used. (See: "Sign in with Twitter")</param>
-        /// <param name="callbackAddress">The callback address.</param>
-        /// <returns>A new <see cref="Uri"/> instance.</returns>
-        public static Uri BuildAuthorizationUri(string requestToken, bool authenticate, string callbackAddress)
-        {
-            StringBuilder parameters = new StringBuilder("http://twitter.com/oauth/");
+            StringBuilder parameters = new StringBuilder("https://twitter.com/oauth/");
 
             if (authenticate)
             {
@@ -301,10 +270,6 @@ namespace Twitterizer
 
             parameters.AppendFormat("?oauth_token={0}", requestToken);
 
-            if (!string.IsNullOrEmpty(callbackAddress))
-            {
-                parameters.AppendFormat("&oauth_callback={0}", callbackAddress);
-            }
 
             return new Uri(parameters.ToString());
         }
@@ -331,11 +296,6 @@ namespace Twitterizer
             string token,
             string tokenSecret)
         {
-            if (ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"] == "true")
-            {
-                baseUrl = baseUrl.Replace("http://", "https://");
-            }
-
             // Usage stats collection is disabled due to performance issues.
             // UsageStatsCollector.ReportCall(new Uri(baseUrl).AbsolutePath);
             PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.OAuthRequests);
@@ -378,9 +338,9 @@ namespace Twitterizer
                 tokenSecret);
 
             WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"http://twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"http://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"http://search.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
             permission.Demand();
 
             HttpWebResponse response;
@@ -397,6 +357,7 @@ namespace Twitterizer
 
                     HttpWebRequest getRequest = (HttpWebRequest)WebRequest.Create(baseUrl);
                     getRequest.Method = httpMethod;
+                    getRequest.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
                     getRequest.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
 
 #if DEBUG
@@ -427,6 +388,16 @@ namespace Twitterizer
                     postRequest.ContentType = "application/x-www-form-urlencoded";
                     postRequest.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
                     postRequest.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+
+#if DEBUG
+                    Console.WriteLine("----- Headers -----");
+                    foreach (string key in postRequest.Headers.AllKeys)
+                    {
+                        Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} = {1}\n", key, postRequest.Headers[key]));
+                    }
+                    Console.WriteLine("----- End Of Headers -----");
+#endif
+
                     response = (HttpWebResponse)postRequest.GetResponse();
                     break;
                 case "DELETE":
@@ -456,7 +427,7 @@ namespace Twitterizer
         {
             StringBuilder queryStringBuilder = new StringBuilder();
             foreach (var item in from p in parameters
-                                 where !(p.Key.Contains("oauth_") && p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase))
+                                 where !p.Key.Contains("oauth_")
                                  orderby p.Key, p.Value
                                  select p)
             {

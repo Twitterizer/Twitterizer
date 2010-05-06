@@ -43,24 +43,15 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        string callbackUrl = string.Format("{0}://{1}{2}/authenticate/callback.aspx", this.Request.Url.Scheme, this.Request.Url.Authority, this.Request.ApplicationPath);
+
         // First, get the request token
         OAuthTokenResponse authorizationTokens = OAuthUtility.GetRequestToken(
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
-            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
+            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
+            callbackUrl);
 
-        string callbackUrl = Request.Url.AbsoluteUri.Replace("Default.aspx", "callback.aspx");
-        if (this.Request.UrlReferrer != null)
-        {
-            callbackUrl = string.Format(
-                "{0}?p={1}",
-                callbackUrl,
-                HttpUtility.UrlEncode(Request.UrlReferrer.ToString()));
-        }
-
-        Uri authorizeUri = OAuthUtility.BuildAuthorizationUri(
-            authorizationTokens.Token, 
-            true,
-            HttpUtility.UrlEncodeUnicode(callbackUrl));
+        Uri authorizeUri = OAuthUtility.BuildAuthorizationUri(authorizationTokens.Token);
 
         this.RequestTokenLabel.Text = authorizationTokens.Token;
         this.GetAccessHyperLink.NavigateUrl = authorizeUri.AbsoluteUri;

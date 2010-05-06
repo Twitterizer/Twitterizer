@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="callback.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="StatusUpdateOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,50 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <email>ricky@digitally-born.com</email>
-// <summary>An example OAuth callback handler.</summary>
+// <summary>The status update options class</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using System.Web.Configuration;
-using Twitterizer;
-
-public partial class callback : System.Web.UI.Page
+namespace Twitterizer
 {
-    protected void Page_Load(object sender, EventArgs e)
+    using System;
+
+    /// <summary>
+    /// The Status Update Options class
+    /// </summary>
+    public sealed class StatusUpdateOptions : Core.OptionalProperties
     {
-        OAuthTokenResponse tokens = OAuthUtility.GetAccessToken(
-            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
-            ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
-            Request.QueryString["oauth_token"],
-            Request.QueryString["oauth_verifier"]);
+        /// <summary>
+        /// Gets or sets the in reply to status id.
+        /// </summary>
+        /// <value>The in reply to status id.</value>
+        public ulong InReplyToStatusId { get; set; }
 
-        this.AccessTokenLabel.Text = tokens.Token;
-        this.AccessTokenSecretLabel.Text = tokens.TokenSecret;
-        this.UserIdLabel.Text = tokens.UserId.ToString();
-        this.ScreenNameLabel.Text = tokens.ScreenName;
+        /// <summary>
+        /// Gets or sets the latitude.
+        /// </summary>
+        /// <value>The latitude.</value>
+        public double Latitude { get; set; }
 
-        OAuthTokens oauthTokens = new OAuthTokens()
+        /// <summary>
+        /// Gets or sets the longitude.
+        /// </summary>
+        /// <value>The longitude.</value>
+        public double Longitude { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [place pin].
+        /// </summary>
+        /// <value><c>true</c> if [place pin]; otherwise, <c>false</c>.</value>
+        public bool PlacePin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the place id.
+        /// </summary>
+        /// <value>The place id.</value>
+        public string PlaceId { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatusUpdateOptions"/> class.
+        /// </summary>
+        public StatusUpdateOptions()
+            : base()
         {
-            AccessToken = tokens.Token,
-            AccessTokenSecret = tokens.TokenSecret,
-            ConsumerKey = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
-            ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]
-        };
 
-        Session["OAuthTokens"] = oauthTokens;
-        Session["Username"] = tokens.ScreenName;
-        Session["UserId"] = tokens.UserId;
-
-        string redirectPath = "~/";
-
-        if (!string.IsNullOrEmpty(Request.QueryString["p"]))
-        {
-            redirectPath = Request.QueryString["p"];
         }
-
-        // Comment this line to be shown your access keys
-        Response.Redirect(redirectPath, true);
     }
 }

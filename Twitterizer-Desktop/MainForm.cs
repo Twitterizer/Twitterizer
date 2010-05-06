@@ -37,6 +37,7 @@ namespace Twitterizer_Desktop
     using System.Configuration;
     using System.Windows.Forms;
     using Twitterizer;
+    using System.Net;
 
     /// <summary>
     /// The main form of the example desktop application.
@@ -70,17 +71,21 @@ namespace Twitterizer_Desktop
         {
             this.AuthorizeAndGetUser();
 
-            TwitterStatus.Update(
-                this.oauthTokens, 
-                "Check this out", 
-                new StatusUpdateOptions()
-            {
-                InReplyToStatusId = 132254,
-                UseSSL = true,
-                ProxyAddress = "127.0.0.1:8080",
-                CacheOutput = true,
-                CacheTimespan = new TimeSpan(1, 0, 0)
-            });
+StatusUpdateOptions updateOptions = new StatusUpdateOptions();
+updateOptions.InReplyToStatusId = 132254;
+updateOptions.UseSSL = true;
+updateOptions.Proxy = new System.Net.WebProxy()
+{
+    Address = new Uri("http://127.0.0.1:8080"),
+    Credentials = new NetworkCredential("username", "password")
+};
+updateOptions.CacheOutput = true;
+updateOptions.CacheTimespan = new TimeSpan(1, 0, 0);
+
+TwitterStatus.Update(
+    this.oauthTokens, 
+    "Check this out", 
+    updateOptions);
 
             
 

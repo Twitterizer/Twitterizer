@@ -62,5 +62,12 @@ namespace Twitterizer
         /// </summary>
         /// <value>The screenname.</value>
         public string ScreenName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verification string.
+        /// This is required when overriding the application's callback url.
+        /// </summary>
+        /// <value>The verification string.</value>
+        public string VerificationString { get; set; }
     }
 }

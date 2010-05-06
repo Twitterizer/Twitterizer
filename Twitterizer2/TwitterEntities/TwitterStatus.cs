@@ -445,40 +445,17 @@ namespace Twitterizer
         #region Non-Static Methods
         #region Update
         /// <summary>
-        /// Updates the authenticated user's status to the supplied text.
+        /// Updates the specified tokens.
         /// </summary>
-        /// <param name="text">The status text.</param>
-        /// <returns>A <see cref="TwitterStatus"/> object of the newly created status.</returns>
-        public TwitterStatus Update(string text)
-        {
-            return this.Update(
-                text,
-                0,
-                string.Empty,
-                string.Empty);
-        }
-
-        /// <summary>
-        /// Updates the authenticated user's status to the supplied text.
-        /// </summary>
-        /// <param name="text">The status text.</param>
-        /// <param name="replyToStatusId">The reply to status id.</param>
-        /// <returns>A <see cref="TwitterStatus"/> object.</returns>
-        [CLSCompliant(false)]
-        public TwitterStatus Update(string text, ulong replyToStatusId)
-        {
-            return this.Update(
-                text,
-                replyToStatusId,
-                string.Empty,
-                string.Empty);
-        }
-
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
         public static TwitterStatus Update(OAuthTokens tokens, string text, StatusUpdateOptions options)
         {
             Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(tokens, text)
             {
-                Options = options
+                OptionalProperties = options
             };
 
             return Core.CommandPerformer<TwitterStatus>.PerformAction(command);
@@ -493,14 +470,9 @@ namespace Twitterizer
         /// <param name="longitude">The longitude.</param>
         /// <returns>A <see cref="TwitterStatus"/> object.</returns>
         [CLSCompliant(false)]
-        public TwitterStatus Update(string text, ulong replyToStatusId, string latitude, string longitude)
+        public TwitterStatus Update(string text)
         {
-            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens, text)
-            {
-                InReplyToStatusId = replyToStatusId,
-                Latitude = latitude,
-                Longitude = longitude,
-            };
+            Commands.UpdateStatusCommand command = new Commands.UpdateStatusCommand(this.Tokens, text);
 
             command.Validate();
             if (!command.IsValid)
