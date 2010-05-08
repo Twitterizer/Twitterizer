@@ -156,48 +156,28 @@ namespace Twitterizer
         public TwitterUser Recipient { get; set; }
         #endregion
 
-        #region Static Methods
         /// <summary>
         /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
-        public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens)
+        public static TwitterDirectMessageCollection DirectMessages(OAuthTokens tokens)
         {
-            return GetDirectMessages(tokens, 0, 0, 0);
+            return DirectMessages(tokens, null);
         }
 
         /// <summary>
         /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="sinceStatusId">The since status id.</param>
-        /// <param name="maxStatusId">The max status id.</param>
-        /// <param name="count">The count.</param>
-        /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessageCollection"/> instance.
+        /// </returns>
         [CLSCompliant(false)]
-        public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId, int count)
+        public static TwitterDirectMessageCollection DirectMessages(OAuthTokens tokens, DirectMessagesOptions options)
         {
-            Commands.DirectMessagesCommand command = new Commands.DirectMessagesCommand(tokens)
-            {
-                SinceStatusId = sinceStatusId,
-                MaxStatusId = maxStatusId,
-                Count = count
-            };
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterDirectMessageCollection>()
-                {
-                    Command = command,
-                    MethodName = "GetDirectMessages"
-                };
-            }
-
-            TwitterDirectMessageCollection result = Core.CommandPerformer<TwitterDirectMessageCollection>.PerformAction(command);
-
-            return result;
+            return PerformCommand<TwitterDirectMessageCollection>(new Commands.DirectMessagesCommand(tokens, options));
         }
 
         /// <summary>
@@ -207,46 +187,23 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens)
+        public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens)
         {
-            return GetDirectMessagesSent(tokens, 0, 0, 0, 0);
+            return DirectMessagesSent(tokens, null);
         }
 
         /// <summary>
         /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="sinceStatusId">The since status id.</param>
-        /// <param name="maxStatusId">The max status id.</param>
-        /// <param name="count">The count.</param>
-        /// <param name="page">The page number.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
         [CLSCompliant(false)]
-        public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId, int count, int page)
+        public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
         {
-            Commands.DirectMessagesSentCommand command = new Commands.DirectMessagesSentCommand(tokens)
-            {
-                SinceStatusId = sinceStatusId,
-                MaxStatusId = maxStatusId,
-                Count = count,
-                Page = page
-            };
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterDirectMessageCollection>()
-                {
-                    Command = command,
-                    MethodName = "GetDirectMessagesSent"
-                };
-            }
-
-            TwitterDirectMessageCollection result = Core.CommandPerformer<TwitterDirectMessageCollection>.PerformAction(command);
-
-            return result;
+            return PerformCommand<TwitterDirectMessageCollection>(new Commands.DirectMessagesSentCommand(tokens, options));
         }
 
         /// <summary>
@@ -273,9 +230,7 @@ namespace Twitterizer
         {
             return Send(tokens, 0, username, text);
         }
-        #endregion
 
-        #region Non-static Methods
         /// <summary>
         /// Deletes this direct message.
         /// </summary>
@@ -298,9 +253,7 @@ namespace Twitterizer
 
             return result;
         }
-        #endregion
 
-        #region Private Methods
         /// <summary>
         /// Sends a new direct message to the specified user from the authenticating user.
         /// </summary>
@@ -331,6 +284,5 @@ namespace Twitterizer
 
             return result;
         }
-        #endregion
     }
 }

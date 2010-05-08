@@ -54,6 +54,7 @@ namespace Twitterizer_Stream
             Console.WriteLine("What is your passsword?");
             string password = Console.ReadLine();
 
+            // Ask for the password up to 3 times.
             for (int i = 0; i < 3; i++)
             {
                 if (!string.IsNullOrEmpty(password))
@@ -74,12 +75,16 @@ namespace Twitterizer_Stream
             Console.WriteLine("Press any key to begin the stream. Press any key to stop.");
             Console.ReadKey();
 
-            TwitterStream stream = new TwitterStream(username, password);
-            stream.OnStatus += new TwitterStatusReceivedHandler(Stream_OnStatus);
+            using (TwitterStream stream = new TwitterStream(username, password))
+            {
+                stream.OnStatus += new TwitterStatusReceivedHandler(Stream_OnStatus);
 
-            stream.StartStream();
+                stream.StartStream();
 
-            Console.ReadKey();
+                Console.ReadKey();
+
+                stream.EndStream();
+            }
         }
 
         /// <summary>

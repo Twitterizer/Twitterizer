@@ -49,57 +49,43 @@ namespace Twitterizer.Commands
         /// </summary>
         private const string Path = "http://api.twitter.com/1/direct_messages/sent.json";
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectMessagesSentCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public DirectMessagesSentCommand(OAuthTokens tokens)
-            : base("GET", new Uri(Path), tokens)
+        /// <param name="options">The options.</param>
+        public DirectMessagesSentCommand(OAuthTokens tokens, DirectMessagesSentOptions options)
+            : base("GET", Path, tokens, options)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
             }
         }
-        #endregion
-
-        #region API Properties
-        /// <summary>
-        /// Gets or sets the since status id.
-        /// </summary>
-        /// <value>The since status id.</value>
-        public ulong SinceStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max status id.
-        /// </summary>
-        /// <value>The max status id.</value>
-        public ulong MaxStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count.
-        /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+            DirectMessagesSentOptions options = this.OptionalProperties as DirectMessagesSentOptions;
 
-            if (this.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+            if (options == null)
+            {
+                return;
+            }
 
-            if (this.Count > 0)
-                this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
-            if (this.Page > 0)
-                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InstalledUICulture));
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            this.Page = options.Page;
+            this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InstalledUICulture));
         }
 
         /// <summary>
@@ -118,13 +104,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterDirectMessageCollection> Clone()
         {
-            return new DirectMessagesSentCommand(this.Tokens)
-            {
-                Count = this.Count,
-                SinceStatusId = this.SinceStatusId,
-                MaxStatusId = this.MaxStatusId,
-                Page = this.Page
-            };
+            return new DirectMessagesSentCommand(this.Tokens, this.OptionalProperties as DirectMessagesSentOptions);
         }
     }
 }

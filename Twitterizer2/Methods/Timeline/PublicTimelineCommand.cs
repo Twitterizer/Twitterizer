@@ -48,7 +48,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         public PublicTimelineCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/public_timeline.json"), tokens)
+            : base("GET", "statuses/public_timeline.json", tokens, null)
         {
         }
         #endregion

@@ -69,12 +69,14 @@ namespace Twitterizer
         /// Gets or sets the since id.
         /// </summary>
         /// <value>The since id.</value>
+        [CLSCompliant(false)]
         public ulong SinceId { get; set; }
 
         /// <summary>
         /// Gets or sets the max id.
         /// </summary>
         /// <value>The max id.</value>
+        [CLSCompliant(false)]
         public ulong MaxId { get; set; }
 
         /// <summary>

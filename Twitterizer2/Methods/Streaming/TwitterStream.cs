@@ -33,6 +33,7 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+    using System;
     using System.Configuration;
     using System.IO;
     using System.Net;
@@ -47,7 +48,7 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterStream class. Provides an interface to real-time status changes.
     /// </summary>
-    public class TwitterStream
+    public class TwitterStream : IDisposable
     {
         /// <summary>
         /// The web request
@@ -148,6 +149,15 @@ namespace Twitterizer
         public void EndStream()
         {
             this.stopReceived = true;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            this.stopReceived = true;
+            this.request.Abort();
         }
     }
 }

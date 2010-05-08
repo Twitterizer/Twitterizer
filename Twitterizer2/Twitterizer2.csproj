@@ -85,7 +85,11 @@
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Methods\Direct Message\DeleteDirectMessageCommand.cs" />
     <Compile Include="Methods\Direct Message\DirectMessagesCommand.cs" />
+    <Compile Include="Methods\Direct Message\DirectMessagesOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Methods\Direct Message\DirectMessagesSentCommand.cs" />
+    <Compile Include="Methods\Direct Message\DirectMessagesSentOptions.cs" />
     <Compile Include="Methods\Direct Message\SendDirectMessageCommand.cs" />
     <Compile Include="Methods\Friendship\CreateFriendshipCommand.cs" />
     <Compile Include="Methods\Friendship\TwitterFriendship.cs" />

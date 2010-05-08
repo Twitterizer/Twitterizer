@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DirectMessagesCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DirectMessagesSentOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,73 +29,50 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The Direct Messages Command class.</summary>
+// <summary>The direct messages sent options class.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
     using System;
-    using System.Globalization;
-    using Twitterizer;
-    using Twitterizer.Core;
 
     /// <summary>
-    /// The Direct Messages Command
+    /// The direct messages sent options class. Provides a payload for the <see cref="Twitterizer.Commands.DirectMessagesCommand"/> command.
     /// </summary>
-    internal sealed class DirectMessagesCommand : PagedCommand<TwitterDirectMessageCollection>
+    public sealed class DirectMessagesSentOptions : Core.OptionalProperties
     {
         /// <summary>
-        /// The base address to the API method.
+        /// Initializes a new instance of the <see cref="DirectMessagesSentOptions"/> class.
         /// </summary>
-        private const string Path = "direct_messages.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DirectMessagesCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="options">The options.</param>
-        public DirectMessagesCommand(OAuthTokens tokens, DirectMessagesOptions options)
-            : base("GET", Path, tokens, options)
+        public DirectMessagesSentOptions()
+            : base()
         {
-            if (tokens == null)
-            {
-                throw new ArgumentNullException("tokens");
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            DirectMessagesOptions options = this.OptionalProperties as DirectMessagesOptions;
-
-            if (options == null)
-            {
-                return;
-            }
-
-            if (options.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Count > 0)
-                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-            this.Page = options.Page;
-            this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
+            this.Page = 1;
         }
 
         /// <summary>
-        /// Validates this instance.
+        /// Gets or sets the minimum (earliest) status id to request.
         /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null;
-        }
+        /// <value>The since id.</value>
+        [CLSCompliant(false)]
+        public ulong SinceStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max (latest) status id to request.
+        /// </summary>
+        /// <value>The max id.</value>
+        [CLSCompliant(false)]
+        public ulong MaxStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of messages to request.
+        /// </summary>
+        /// <value>The number of messages to request.</value>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// Gets or sets the page number to request.
+        /// </summary>
+        /// <value>The page number.</value>
+        public int Page { get; set; }
     }
 }
