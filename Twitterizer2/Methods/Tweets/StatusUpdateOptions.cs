@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterObject.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="StatusUpdateOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,52 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for all data objects.</summary>
+// <summary>The status update options class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+
+namespace Twitterizer
 {
-    using System.Runtime.Serialization;
-    using Twitterizer;
+    using System;
 
     /// <summary>
-    /// The base object class
+    /// The Status Update Options class
     /// </summary>
-    [DataContract]
-    [System.Serializable]
-    public class TwitterObject : ITwitterObject
+    public sealed class StatusUpdateOptions : Core.OptionalProperties
     {
         /// <summary>
-        /// The format that all twitter dates are in.
+        /// Initializes a new instance of the <see cref="StatusUpdateOptions"/> class.
         /// </summary>
-        protected const string DateFormat = "ddd MMM dd HH:mm:ss zz00 yyyy";
-
-        /// <summary>
-        /// The format that all twitter search api dates are in.
-        /// </summary>
-        protected const string SearchDateFormat = "ddd, dd MMM yyyy HH:mm:ss +zz00";
-
-        /// <summary>
-        /// Gets or sets information about the user's rate usage.
-        /// </summary>
-        /// <value>The rate limiting object.</value>
-        public RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        public OAuthTokens Tokens { get; set; }
-
-        /// <summary>
-        /// Performs the command.
-        /// </summary>
-        /// <typeparam name="T">The type of object to be deserialized and returned.</typeparam>
-        /// <param name="command">The command.</param>
-        /// <returns>A objects representing the results of the command execution of type <typeparamref name="T"/></returns>
-        internal static T PerformCommand<T>(TwitterCommand<T> command)
-            where T : ITwitterObject
+        public StatusUpdateOptions()
+            : base()
         {
-            return Core.CommandPerformer<T>.PerformAction(command);
         }
+
+        /// <summary>
+        /// Gets or sets the in reply to status id.
+        /// </summary>
+        /// <value>The in reply to status id.</value>
+        [CLSCompliant(false)]
+        public ulong InReplyToStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the latitude.
+        /// </summary>
+        /// <value>The latitude.</value>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// Gets or sets the longitude.
+        /// </summary>
+        /// <value>The longitude.</value>
+        public double Longitude { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to put a pin on the exact coordinates a tweet has been sent from.
+        /// </summary>
+        /// <value><c>true</c> to put a pin on the exact coordinates; otherwise, <c>false</c>.</value>
+        public bool PlacePin { get; set; }
+
+        /// <summary>
+        /// Gets or sets a place in the world. These IDs can be retrieved from geo/reverse_geocode.
+        /// </summary>
+        /// <value>The place id.</value>
+        public string PlaceId { get; set; }
     }
 }

@@ -270,7 +270,6 @@ namespace Twitterizer
 
             parameters.AppendFormat("?oauth_token={0}", requestToken);
 
-
             return new Uri(parameters.ToString());
         }
 
@@ -296,11 +295,6 @@ namespace Twitterizer
             string token,
             string tokenSecret)
         {
-            // Usage stats collection is disabled due to performance issues.
-            // UsageStatsCollector.ReportCall(new Uri(baseUrl).AbsolutePath);
-            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.OAuthRequests);
-            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
-
             Dictionary<string, string> combinedParameters = new Dictionary<string, string>();
 
             if (parameters != null)
@@ -395,6 +389,7 @@ namespace Twitterizer
                     {
                         Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} = {1}\n", key, postRequest.Headers[key]));
                     }
+                    
                     Console.WriteLine("----- End Of Headers -----");
 #endif
 

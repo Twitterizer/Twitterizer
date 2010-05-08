@@ -89,7 +89,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-
             if (this.SinceStatusId > 0)
                 this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 

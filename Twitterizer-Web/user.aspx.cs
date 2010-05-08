@@ -50,7 +50,7 @@ public partial class user : System.Web.UI.Page
         if (!this.IsPostBack)
         {
             List<TwitterUser> dummyCollection = new List<TwitterUser>();
-            dummyCollection.Add(TwitterUser.GetUser(this.Master.Tokens, userId));
+            dummyCollection.Add(TwitterUser.Show(this.Master.Tokens, userId));
 
             this.UserDetailsView.DataSource = dummyCollection;
             this.UserDetailsView.DataBind();

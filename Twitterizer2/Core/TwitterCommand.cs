@@ -40,18 +40,10 @@ namespace Twitterizer.Core
     using System.Globalization;
     using System.IO;
     using System.Net;
-    using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Web;
     using System.Web.Caching;
     using Twitterizer;
-    using System.Web.Script.Serialization;
-
-    internal enum Serializer
-    {
-        DataContractJsonSerializer,
-        JavaScriptSerializer
-    }
 
     /// <summary>
     /// The base command class.
@@ -62,25 +54,14 @@ namespace Twitterizer.Core
         where T : ITwitterObject
     {
         /// <summary>
-        /// Gets or sets the selected serializer.
-        /// </summary>
-        /// <value>The selected serializer.</value>
-        public Serializer SelectedSerializer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the optional properties.
-        /// </summary>
-        /// <value>The optional properties.</value>
-        public OptionalProperties OptionalProperties { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
+        /// <param name="httpMethod">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        protected TwitterCommand(string method, Uri uri, OAuthTokens tokens)
-            : this(method, tokens)
+        [Obsolete("This constructor has been depreciated.")]
+        protected TwitterCommand(string httpMethod, Uri uri, OAuthTokens tokens)
+            : this(httpMethod, tokens)
         {
             if (uri == null)
             {
@@ -93,20 +74,47 @@ namespace Twitterizer.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
-        protected TwitterCommand(string method, OAuthTokens tokens)
+        /// <param name="optionalProperties">The optional properties.</param>
+        protected TwitterCommand(string httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
+            : this(httpMethod, tokens)
         {
-            if (string.IsNullOrEmpty(method))
+            this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
+
+            this.Uri = new Uri(string.Concat(this.OptionalProperties.APIBaseAddress, endPoint));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="httpMethod">The method.</param>
+        /// <param name="tokens">The tokens.</param>
+        protected TwitterCommand(string httpMethod, OAuthTokens tokens)
+        {
+            if (string.IsNullOrEmpty(httpMethod))
             {
                 throw new ArgumentNullException("method");
             }
 
             this.RequestParameters = new Dictionary<string, string>();
-            this.HttpMethod = method;
+            this.HttpMethod = httpMethod;
             this.Tokens = tokens;
             this.OptionalProperties = new OptionalProperties();
         }
+
+        /// <summary>
+        /// Gets or sets the selected serializer.
+        /// </summary>
+        /// <value>The selected serializer.</value>
+        public Serializer SelectedSerializer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the optional properties.
+        /// </summary>
+        /// <value>The optional properties.</value>
+        public OptionalProperties OptionalProperties { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.
@@ -174,11 +182,10 @@ namespace Twitterizer.Core
                 };
             }
 
-            //WebPermission permission = new WebPermission();
-            //permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
-            //permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            //permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            //permission.Demand();
+            WebPermission permission = new WebPermission();
+            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
+            permission.Demand();
 
             // Variables and objects needed for caching
             StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
@@ -197,9 +204,6 @@ namespace Twitterizer.Core
                 cacheKeyBuilder.AppendFormat("|{0}={1}", item.Key, item.Value);
             }
 
-            // Declare the variable to be returned
-            T resultObject = default(T);
-
             // Lookup the cached item and return it
             if (this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
             {
@@ -210,6 +214,9 @@ namespace Twitterizer.Core
                     return (T)cache[cacheKeyBuilder.ToString()];
                 }
             }
+            
+            // Declare the variable to be returned
+            T resultObject = default(T);
             
             try
             {
@@ -239,54 +246,12 @@ namespace Twitterizer.Core
                 // Set this back to the default so it doesn't affect other .net code.
                 System.Net.ServicePointManager.Expect100Continue = true;
 
-                // Get the response
-                using (Stream responseStream = webResponse.GetResponseStream())
-                {
-                    byte[] data = ConversionUtility.ReadStream(responseStream);
-#if DEBUG
-                    Debug.WriteLine("----------- RESPONSE -----------");
-                    Debug.WriteLine(Encoding.UTF8.GetString(data));
-                    Debug.WriteLine("----------- END -----------");
-#endif
+                resultObject = SerializationHelper<T>.Deserialize(
+                    webResponse, 
+                    this.SelectedSerializer, 
+                    this.ConvertJavaScriptSerializedObject);
 
-                    // Deserialize the results.
-                    switch (this.SelectedSerializer)
-                    {
-                        case Serializer.DataContractJsonSerializer:
-                            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
-                            resultObject = (T)ds.ReadObject(new MemoryStream(data));
-                            responseStream.Close();
-                            break;
-                        case Serializer.JavaScriptSerializer:
-                            JavaScriptSerializer jss = new JavaScriptSerializer();
-                            object result = jss.DeserializeObject(Encoding.UTF8.GetString(data));
-                            resultObject = this.ConvertJavaScriptSerializedObject(result);
-                            break;
-                    }
-
-                    Trace.Write(resultObject, "Twitterizer2");
-                }
-
-                // If caching is enabled, add the result to the cache.
-                if (this.OptionalProperties.CacheOutput)
-                {
-                    cache.Add(
-                        cacheKeyBuilder.ToString(), 
-                        resultObject, 
-                        null, 
-                        Cache.NoAbsoluteExpiration, 
-                        this.OptionalProperties.CacheTimespan, 
-                        CacheItemPriority.Normal, 
-                        null);
-
-                    Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
-                }
-
-                if (this.OptionalProperties.ReportToPerformanceMonitors)
-                {
-                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
-                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
-                }
+                this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
@@ -297,12 +262,6 @@ namespace Twitterizer.Core
             catch (WebException wex)
             {
                 Trace.TraceError(wex.Message);
-
-                if (this.OptionalProperties.ReportToPerformanceMonitors)
-                {
-                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
-                    PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
-                }
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
@@ -320,6 +279,16 @@ namespace Twitterizer.Core
             Trace.Write(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             return resultObject;
+        }
+
+        /// <summary>
+        /// Converts a weakly typed deserialized javascript object to a strongly typed object.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>A strongly typed representation of the JSON data of type <typeparamref name="T"/></returns>
+        public virtual T ConvertJavaScriptSerializedObject(object value)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -356,6 +325,30 @@ namespace Twitterizer.Core
                     .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
+
+        /// <summary>
+        /// Adds the result to cache.
+        /// </summary>
+        /// <param name="cacheKeyBuilder">The cache key builder.</param>
+        /// <param name="cache">The cache.</param>
+        /// <param name="resultObject">The result object.</param>
+        private void AddResultToCache(StringBuilder cacheKeyBuilder, Cache cache, T resultObject)
+        {
+            // If caching is enabled, add the result to the cache.
+            if (this.OptionalProperties.CacheOutput)
+            {
+                cache.Add(
+                    cacheKeyBuilder.ToString(),
+                    resultObject,
+                    null,
+                    Cache.NoAbsoluteExpiration,
+                    this.OptionalProperties.CacheTimespan,
+                    CacheItemPriority.Normal,
+                    null);
+
+                Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
+            }
+        }
         
         /// <summary>
         /// Builds the request.
@@ -370,14 +363,6 @@ namespace Twitterizer.Core
             if (this.OptionalProperties.UseSSL)
             {
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
-            }
-
-            // Usage stats collection is disabled due to performance issues.
-            // UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
-            if (this.OptionalProperties.ReportToPerformanceMonitors)
-            {
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
             }
 
             // Prepare and execute un-authorized query
@@ -457,16 +442,6 @@ namespace Twitterizer.Core
             }
 
             return (HttpWebResponse)request.GetResponse();
-        }
-
-        /// <summary>
-        /// Converts a weakly typed deserialized javascript object to a strongly typed object.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns><typeparamref name="T"/></returns>
-        public virtual T ConvertJavaScriptSerializedObject(object value)
-        {
-            throw new NotImplementedException();
         }
     }
 }

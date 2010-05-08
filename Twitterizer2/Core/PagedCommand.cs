@@ -50,6 +50,7 @@ namespace Twitterizer.Core
         /// <param name="method">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
+        [Obsolete("This constructor has been depreciated.")]
         protected PagedCommand(string method, Uri uri, OAuthTokens tokens)
             : base(method, uri, tokens)
         {
@@ -62,6 +63,18 @@ namespace Twitterizer.Core
         /// <param name="tokens">The tokens.</param>
         protected PagedCommand(string method, OAuthTokens tokens)
             : base(method, tokens)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="endPoint">The end point.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        protected PagedCommand(string httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
+            : base(httpMethod, endPoint, tokens, optionalProperties)
         {
         }
         #endregion

@@ -44,7 +44,7 @@ public partial class _Default : System.Web.UI.Page
         if (!this.IsPostBack)
         {
             this.Trace.Write("Start TwitterUser.GetHomeTimeline");
-            this.HomePageStatuses = TwitterUser.GetHomeTimeline(Master.Tokens);
+            this.HomePageStatuses = TwitterTimeline.HomeTimeline(Master.Tokens);
             this.Trace.Write("End TwitterUser.GetHomeTimeline");
             this.DataBind();
 
@@ -81,7 +81,7 @@ public partial class _Default : System.Web.UI.Page
         {
             StatusUpdateLabel.Text = "Your tweet has been posted successfully.<br/>";
 
-            this.HomePageStatuses = TwitterUser.GetHomeTimeline(Master.Tokens);
+            this.HomePageStatuses = TwitterTimeline.HomeTimeline(Master.Tokens);
             this.DataBind();
         }
         else

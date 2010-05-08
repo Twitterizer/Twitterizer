@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UpdateStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="HomeTimelineCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,53 +29,43 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to update the user's status. (a.k.a. post a new tweet)</summary>
+// <summary>The Home Timeline Command class</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
 
     /// <summary>
-    /// The command to update the user's status. (a.k.a. post a new tweet)
+    /// The Home Timeline Command
     /// </summary>
-    internal sealed class UpdateStatusCommand : Core.TwitterCommand<TwitterStatus>
+    [Serializable]
+    internal sealed class HomeTimelineCommand :
+        Core.PagedCommand<TwitterStatusCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "statuses/update.json";
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        /// <param name="text">The status text.</param>
-        public UpdateStatusCommand(OAuthTokens tokens, string text)
-            : base("POST", new Uri(Path), tokens)
+        /// <param name="optionalProperties">The optional properties.</param>
+        public HomeTimelineCommand(OAuthTokens tokens, HomeTimelineOptions optionalProperties)
+            : base("GET", "statuses/home_timeline.json", tokens, optionalProperties)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
             }
-
-            if (string.IsNullOrEmpty(text))
-            {
-                throw new ArgumentNullException("text");
-            }
-
-            this.Text = text;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
-        /// Gets or sets the status text.
+        /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
         /// </summary>
-        /// <value>The status text.</value>
-        public string Text { get; set; }
+        /// <param name="tokens">The tokens.</param>
+        public HomeTimelineCommand(OAuthTokens tokens)
+            : this(tokens, null)
+        {
+        }
         #endregion
 
         /// <summary>
@@ -83,19 +73,26 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("status", this.Text);
+            HomeTimelineOptions options = this.OptionalProperties as HomeTimelineOptions;
 
-            StatusUpdateOptions options = this.OptionalProperties as StatusUpdateOptions;
             if (options != null)
             {
-                if (options.InReplyToStatusId > 0)
-                    this.RequestParameters.Add("in_reply_to_status_id", options.InReplyToStatusId.ToString(CultureInfo.CurrentCulture));
+                if (options.Count > 0)
+                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
 
-                if (options.Latitude != 0)
-                    this.RequestParameters.Add("lat", options.Latitude.ToString());
+                if (options.SinceId > 0)
+                    this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
 
-                if (options.Longitude != 0)
-                    this.RequestParameters.Add("long", options.Longitude.ToString());
+                if (options.MaxId > 0)
+                    this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
+
+                this.Page = options.Page;
+                this.RequestParameters.Add(
+                    "page",
+                    this.Page.ToString(CultureInfo.InvariantCulture));
+
+                if (options.SkipUser)
+                    this.RequestParameters.Add("skip_user", "true");
             }
         }
 
@@ -104,8 +101,20 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            // TODO: Ricky - Add Latitude and Longitude value validation
-            this.IsValid = true;
+            this.IsValid = this.Tokens != null;
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>A cloned command object.</returns>
+        internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
+        {
+            return new HomeTimelineCommand(this.Tokens)
+            {
+                Page = this.Page,
+                OptionalProperties = this.OptionalProperties
+            };
         }
     }
 }

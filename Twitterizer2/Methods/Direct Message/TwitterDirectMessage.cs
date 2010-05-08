@@ -70,6 +70,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The direct message id.</value>
         [DataMember(Name = "id")]
+        [CLSCompliant(false)]
         public ulong Id { get; set; }
 
         /// <summary>
@@ -174,6 +175,7 @@ namespace Twitterizer
         /// <param name="maxStatusId">The max status id.</param>
         /// <param name="count">The count.</param>
         /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterDirectMessageCollection GetDirectMessages(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId, int count)
         {
             Commands.DirectMessagesCommand command = new Commands.DirectMessagesCommand(tokens)
@@ -221,6 +223,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
+        [CLSCompliant(false)]
         public static TwitterDirectMessageCollection GetDirectMessagesSent(OAuthTokens tokens, ulong sinceStatusId, ulong maxStatusId, int count, int page)
         {
             Commands.DirectMessagesSentCommand command = new Commands.DirectMessagesSentCommand(tokens)
@@ -253,6 +256,7 @@ namespace Twitterizer
         /// <param name="userId">The user id of the recipient user.</param>
         /// <param name="text">The text of your direct message.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
+        [CLSCompliant(false)]
         public static TwitterDirectMessage Send(OAuthTokens tokens, ulong userId, string text)
         {
             return Send(tokens, userId, string.Empty, text);

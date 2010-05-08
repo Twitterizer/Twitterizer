@@ -36,7 +36,6 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Configuration;
-    using System.Collections.Specialized;
     using System.Net;
 
     /// <summary>
@@ -53,49 +52,10 @@ namespace Twitterizer.Core
             // Set the default values for the properties
             this.UseSSL = false;
             this.CacheOutput = false;
-            this.ReportToPerformanceMonitors = false;
             this.APIBaseAddress = "http://api.twitter.com/1/";
             this.CacheTimespan = new TimeSpan(0, 5, 0);
 
-            ReadConfigurationSettings();
-        }
-
-        /// <summary>
-        /// Reads the configuration settings.
-        /// </summary>
-        private void ReadConfigurationSettings()
-        {
-            NameValueCollection appSettings = ConfigurationManager.AppSettings;
-
-            // Get the enable caching configuration setting
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnableCaching"]) && appSettings["Twitterizer2.EnableCaching"].ToLower().Trim() == "true")
-            {
-                this.CacheOutput = true;
-            }
-
-            // Get the cache timeout setting
-            string cacheTimeoutSetting = appSettings["Twitterizer2.CacheTimeout"];
-            long cacheTimeoutSeconds;
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.CacheTimeout"]) &&
-                long.TryParse(cacheTimeoutSetting, out cacheTimeoutSeconds))
-            {
-                // Convert the seconds value to ticks and instantiate a new timespan
-                this.CacheTimespan = new TimeSpan(cacheTimeoutSeconds * 10000000);
-            }
-
-            // Get the performance monitor configuration setting
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnablePerformanceMonitor"]) &&
-                appSettings["Twitterizer2.EnablePerformanceMonitor"].ToLower().Trim() == "true")
-            {
-                this.ReportToPerformanceMonitors = true;
-            }
-
-            // Get the SSL setting
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnableSSL"]) &&
-                appSettings["Twitterizer2.EnableSSL"].ToLower().Trim() == "true")
-            {
-                this.UseSSL = true;
-            }
+            this.ReadConfigurationSettings();
         }
 
         /// <summary>
@@ -129,11 +89,35 @@ namespace Twitterizer.Core
         public TimeSpan CacheTimespan { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the library should report to performance monitors.
+        /// Reads the configuration settings.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the library should report to performance monitors; otherwise, <c>false</c>.
-        /// </value>
-        public bool ReportToPerformanceMonitors { get; set; }
+        private void ReadConfigurationSettings()
+        {
+            System.Collections.Specialized.NameValueCollection appSettings = ConfigurationManager.AppSettings;
+
+            // Get the enable caching configuration setting
+            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnableCaching"]) &&
+                appSettings["Twitterizer2.EnableCaching"].ToLower().Trim() == "true")
+            {
+                this.CacheOutput = true;
+            }
+
+            // Get the cache timeout setting
+            string cacheTimeoutSetting = appSettings["Twitterizer2.CacheTimeout"];
+            long cacheTimeoutSeconds;
+            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.CacheTimeout"]) &&
+                long.TryParse(cacheTimeoutSetting, out cacheTimeoutSeconds))
+            {
+                // Convert the seconds value to ticks and instantiate a new timespan
+                this.CacheTimespan = new TimeSpan(cacheTimeoutSeconds * 10000000);
+            }
+
+            // Get the SSL setting
+            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnableSSL"]) &&
+                appSettings["Twitterizer2.EnableSSL"].ToLower().Trim() == "true")
+            {
+                this.UseSSL = true;
+            }
+        }
     }
 }

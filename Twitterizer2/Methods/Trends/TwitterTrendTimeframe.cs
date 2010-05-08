@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="StatusUpdateOptions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterTrendTimeframe.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,55 +29,73 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The status update options class</summary>
+// <summary>The twitter trend timeframe class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The Status Update Options class
+    /// The Twitter trend timeframe class.
     /// </summary>
-    public sealed class StatusUpdateOptions : Core.OptionalProperties
+    public class TwitterTrendTimeframe : TwitterObject
     {
         /// <summary>
-        /// Gets or sets the in reply to status id.
+        /// Gets or sets the effective date.
         /// </summary>
-        /// <value>The in reply to status id.</value>
-        public ulong InReplyToStatusId { get; set; }
+        /// <value>The effective date.</value>
+        public DateTime EffectiveDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the latitude.
+        /// Gets or sets the trends.
         /// </summary>
-        /// <value>The latitude.</value>
-        public double Latitude { get; set; }
+        /// <value>The trends.</value>
+        public Collection<TwitterTrend> Trends { get; set; }
 
         /// <summary>
-        /// Gets or sets the longitude.
+        /// Converts the weak trend object tree into a strongly typed object tree.
         /// </summary>
-        /// <value>The longitude.</value>
-        public double Longitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [place pin].
-        /// </summary>
-        /// <value><c>true</c> if [place pin]; otherwise, <c>false</c>.</value>
-        public bool PlacePin { get; set; }
-
-        /// <summary>
-        /// Gets or sets the place id.
-        /// </summary>
-        /// <value>The place id.</value>
-        public string PlaceId { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusUpdateOptions"/> class.
-        /// </summary>
-        public StatusUpdateOptions()
-            : base()
+        /// <param name="value">The value.</param>
+        /// <returns>A <see cref="TwitterTrendTimeframe"/></returns>
+        internal static TwitterTrendTimeframe ConvertWeakTrend(object value)
         {
+            Dictionary<string, object> valueDictionary = (Dictionary<string, object>)value;
+            DateTime date = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds((int)valueDictionary["as_of"]);
+            object[] trends = (object[])((Dictionary<string, object>)valueDictionary["trends"])[date.ToString("yyyy-MM-dd HH:mm:ss")];
 
+            TwitterTrendTimeframe convertedResult = new TwitterTrendTimeframe()
+            {
+                EffectiveDate = date,
+                Trends = new Collection<TwitterTrend>()
+            };
+
+            for (int i = 0; i < trends.Length; i++)
+            {
+                Dictionary<string, object> item = (Dictionary<string, object>)trends[i];
+
+                TwitterTrend trend = new TwitterTrend()
+                {
+                    Name = (string)item["name"]
+                };
+
+                if (item.ContainsKey("url"))
+                {
+                    trend.Address = (string)item["url"];
+                }
+
+                if (item.ContainsKey("query"))
+                {
+                    trend.SearchQuery = (string)item["query"];
+                }
+
+                convertedResult.Trends.Add(trend);
+            }
+
+            return convertedResult;
         }
     }
 }

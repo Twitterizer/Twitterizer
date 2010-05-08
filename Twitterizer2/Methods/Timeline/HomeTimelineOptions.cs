@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterTrendTimeframe.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="HomeTimelineOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,7 +29,7 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter trend timeframe class</summary>
+// <summary>The HomeTimelineOptions class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer
@@ -38,66 +38,49 @@ namespace Twitterizer
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.Runtime.Serialization;
-    using Twitterizer.Core;
-    using System.Collections.ObjectModel;
 
     /// <summary>
-    /// The Twitter trend timeframe class.
+    /// A payload for optional parameters of the <see cref="Twitterizer.Commands.HomeTimelineCommand"/> command.
     /// </summary>
-    public class TwitterTrendTimeframe : TwitterObject
+    public sealed class HomeTimelineOptions : Core.OptionalProperties
     {
         /// <summary>
-        /// Gets or sets the effective date.
+        /// Initializes a new instance of the <see cref="HomeTimelineOptions"/> class.
         /// </summary>
-        /// <value>The effective date.</value>
-        public DateTime EffectiveDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the trends.
-        /// </summary>
-        /// <value>The trends.</value>
-        public Collection<TwitterTrend> Trends { get; set; }
-
-        /// <summary>
-        /// Converts the weak trend object tree into a strongly typed object tree.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>A <see cref="TwitterTrendTimeframe"/></returns>
-        internal static TwitterTrendTimeframe ConvertWeakTrend(object value)
+        public HomeTimelineOptions()
+            : base()
         {
-            Dictionary<string, object> valueDictionary = (Dictionary<string, object>)value;
-            DateTime date = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds((int)valueDictionary["as_of"]);
-            object[] trends = (object[])((Dictionary<string, object>)valueDictionary["trends"])[date.ToString("yyyy-MM-dd HH:mm:ss")];
-
-            TwitterTrendTimeframe convertedResult = new TwitterTrendTimeframe()
-            {
-                EffectiveDate = date,
-                Trends = new Collection<TwitterTrend>()
-            };
-
-            for (int i = 0; i < trends.Length; i++)
-            {
-                Dictionary<string, object> item = (Dictionary<string, object>)trends[i];
-
-                TwitterTrend trend = new TwitterTrend()
-                {
-                    Name = (string)item["name"]
-                };
-
-                if (item.ContainsKey("url"))
-                {
-                    trend.Address = (string)item["url"];
-                }
-
-                if (item.ContainsKey("query"))
-                {
-                    trend.SearchQuery = (string)item["query"];
-                }
-
-                convertedResult.Trends.Add(trend);
-            }
-            return convertedResult;
+            this.Page = 1;
         }
+
+        /// <summary>
+        /// Gets or sets the count.
+        /// </summary>
+        /// <value>The count.</value>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// Gets or sets the page.
+        /// </summary>
+        /// <value>The page number.</value>
+        public int Page { get; set; }
+
+        /// <summary>
+        /// Gets or sets the since id.
+        /// </summary>
+        /// <value>The since id.</value>
+        public ulong SinceId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max id.
+        /// </summary>
+        /// <value>The max id.</value>
+        public ulong MaxId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [skip user].
+        /// </summary>
+        /// <value><c>true</c> if [skip user]; otherwise, <c>false</c>.</value>
+        public bool SkipUser { get; set; }
     }
 }
