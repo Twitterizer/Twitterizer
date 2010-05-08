@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="FriendsTimelineOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,42 +28,58 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
+// <author>Ricky Smith</author>
+// <summary>The friends timeline options class.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
+namespace Twitterizer
+{
+    using System;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("Twitterizer")]
-[assembly: AssemblyDescription("Twitter integration library (Revision 240)")]
+    /// <summary>
+    /// The direct messages options class. Provides a payload for the <see cref="Twitterizer.Commands.FriendsTimelineCommand"/> command.
+    /// </summary>
+    public sealed class FriendsTimelineOptions : Core.OptionalProperties
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FriendsTimelineOptions"/> class.
+        /// </summary>
+        public FriendsTimelineOptions()
+            : base()
+        {
+            this.Page = 1;
+        }
 
-#if DEBUG
-[assembly: AssemblyConfiguration("Debug")]
-#else
-[assembly: AssemblyConfiguration("Release")]
-#endif
+        /// <summary>
+        /// Gets or sets the minimum (earliest) status id to request.
+        /// </summary>
+        /// <value>The since id.</value>
+        [CLSCompliant(false)]
+        public ulong SinceStatusId { get; set; }
 
-[assembly: AssemblyCompany("Twitterizer Group (www.twitterizer.net)")]
-[assembly: AssemblyProduct("Twitterizer")]
-[assembly: AssemblyCopyright("Copyright ©2010 Patrick 'Ricky' Smith")]
-[assembly: AssemblyTrademark("")]
-[assembly: AllowPartiallyTrustedCallersAttribute()]
-[assembly: ReflectionPermission(SecurityAction.RequestMinimum)]
+        /// <summary>
+        /// Gets or sets the max (latest) status id to request.
+        /// </summary>
+        /// <value>The max id.</value>
+        [CLSCompliant(false)]
+        public ulong MaxStatusId { get; set; }
 
-[assembly: CLSCompliant(true)]
+        /// <summary>
+        /// Gets or sets the number of messages to request.
+        /// </summary>
+        /// <value>The number of messages to request.</value>
+        public int Count { get; set; }
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
+        /// <summary>
+        /// Gets or sets the page number to request.
+        /// </summary>
+        /// <value>The page number.</value>
+        public int Page { get; set; }
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
-
-[assembly: AssemblyVersion("2.0.1.240")]
-[assembly: AssemblyFileVersion("2.0.1.240")]
+        /// <summary>
+        /// Gets or sets a value indicating whether user objects should contain only Id values.
+        /// </summary>
+        /// <value><c>true</c> if user objects should contain only Id values; otherwise, <c>false</c>.</value>
+        public bool SkipUser { get; set; }
+    }
+}

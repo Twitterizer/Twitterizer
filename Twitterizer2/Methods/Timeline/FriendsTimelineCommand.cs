@@ -48,24 +48,11 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="FriendsTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public FriendsTimelineCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/friends_timeline.json"), tokens)
+        /// <param name="options">The options.</param>
+        public FriendsTimelineCommand(OAuthTokens tokens, FriendsTimelineOptions options)
+            : base("GET", "statuses/friends_timeline.json", tokens, options)
         {
         }
-        #endregion
-
-        #region API Properties
-        /// <summary>
-        /// Gets or sets the since status id.
-        /// </summary>
-        /// <value>The since status id.</value>
-        public ulong SinceStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max status id.
-        /// </summary>
-        /// <value>The max status id.</value>
-        public ulong MaxStatusId { get; set; }
         #endregion
 
         /// <summary>
@@ -73,11 +60,25 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+            FriendsTimelineOptions options = this.OptionalProperties as FriendsTimelineOptions;
 
-            if (this.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+            if (options == null)
+            {
+                this.Page = 1;
+                return;
+            }
+
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            this.Page = options.Page;
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -96,11 +97,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new FriendsTimelineCommand(this.Tokens)
-            {
-                SinceStatusId = this.SinceStatusId,
-                MaxStatusId = this.MaxStatusId
-            };
+            return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as FriendsTimelineOptions);
         }
     }
 }

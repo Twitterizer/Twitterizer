@@ -64,17 +64,5 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The oauth tokens.</value>
         public OAuthTokens Tokens { get; set; }
-
-        /// <summary>
-        /// Performs the command.
-        /// </summary>
-        /// <typeparam name="T">The type of object to be deserialized and returned.</typeparam>
-        /// <param name="command">The command.</param>
-        /// <returns>A objects representing the results of the command execution of type <typeparamref name="T"/></returns>
-        internal static T PerformCommand<T>(TwitterCommand<T> command)
-            where T : ITwitterObject
-        {
-            return Core.CommandPerformer<T>.PerformAction(command);
-        }
     }
 }

@@ -204,7 +204,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterStatus Update(OAuthTokens tokens, string text, StatusUpdateOptions options)
         {
-            return PerformCommand<TwitterStatus>(new Commands.UpdateStatusCommand(tokens, text, options));
+            return CommandPerformer<TwitterStatus>.PerformAction(new Commands.UpdateStatusCommand(tokens, text, options));
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Twitterizer
         {
             Commands.DeleteStatusCommand command = new Twitterizer.Commands.DeleteStatusCommand(tokens, id);
 
-            return PerformCommand<TwitterStatus>(command);
+            return CommandPerformer<TwitterStatus>.PerformAction(command);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace Twitterizer
         [CLSCompliant(false)]
         public static TwitterStatus Show(OAuthTokens tokens, ulong statusId)
         {
-            return PerformCommand<TwitterStatus>(new Commands.ShowStatusCommand(tokens, statusId));
+            return CommandPerformer<TwitterStatus>.PerformAction(new Commands.ShowStatusCommand(tokens, statusId));
         }
 
         /// <summary>
@@ -253,7 +253,8 @@ namespace Twitterizer
         [CLSCompliant(false)]
         public static TwitterStatus Retweet(OAuthTokens tokens, ulong statusId)
         {
-            return PerformCommand<TwitterStatus>(new Commands.RetweetCommand(tokens) { StatusId = statusId });
+            return CommandPerformer<TwitterStatus>.PerformAction(
+                new Commands.RetweetCommand(tokens) { StatusId = statusId });
         }
 
         /// <summary>
@@ -266,7 +267,8 @@ namespace Twitterizer
         [CLSCompliant(false)]
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId, int count)
         {
-            return PerformCommand<TwitterStatusCollection>(new Commands.RetweetsCommand(tokens, statusId) { Count = count });
+            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+                new Commands.RetweetsCommand(tokens, statusId) { Count = count });
         }
 
         /// <summary>

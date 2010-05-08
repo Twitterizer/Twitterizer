@@ -35,6 +35,7 @@
 namespace Twitterizer
 {
     using System;
+    using Twitterizer.Core;
 
     /// <summary>
     /// Provides interaction with timelines
@@ -155,6 +156,27 @@ namespace Twitterizer
             }
 
             return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-        } 
+        }
+
+        /// <summary>
+        /// Obtains the authorized user's friends timeline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        public static TwitterStatusCollection FriendTimeline(OAuthTokens tokens)
+        {
+            return FriendTimeline(tokens, null);
+        }
+
+        /// <summary>
+        /// Obtains the authorized user's friends timeline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        public static TwitterStatusCollection FriendTimeline(OAuthTokens tokens, FriendsTimelineOptions options)
+        {
+            return CommandPerformer<TwitterStatusCollection>.PerformAction(new Commands.FriendsTimelineCommand(tokens, options));
+        }
     }
 }

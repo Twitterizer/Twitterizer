@@ -177,7 +177,7 @@ namespace Twitterizer
         [CLSCompliant(false)]
         public static TwitterDirectMessageCollection DirectMessages(OAuthTokens tokens, DirectMessagesOptions options)
         {
-            return PerformCommand<TwitterDirectMessageCollection>(new Commands.DirectMessagesCommand(tokens, options));
+            return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesCommand(tokens, options));
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Twitterizer
         [CLSCompliant(false)]
         public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
         {
-            return PerformCommand<TwitterDirectMessageCollection>(new Commands.DirectMessagesSentCommand(tokens, options));
+            return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
         }
 
         /// <summary>
