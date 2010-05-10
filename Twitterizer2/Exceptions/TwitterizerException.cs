@@ -36,11 +36,10 @@ namespace Twitterizer
     using System.Globalization;
     using System.IO;
     using System.Net;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Json;
     using System.Security.Permissions;
     using System.Text;
     using Twitterizer.Core;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// The Twitterizer Exception
@@ -91,9 +90,8 @@ namespace Twitterizer
 
                 if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
                 {
-                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
                     webException.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
-                    this.ErrorDetails = ds.ReadObject(webException.Response.GetResponseStream()) as TwitterErrorDetails;
+                    this.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(response, Serializer.JSONdotNet, null);
                 }
                 else if (response.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
                 {

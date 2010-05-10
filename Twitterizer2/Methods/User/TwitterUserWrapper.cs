@@ -36,12 +36,13 @@ namespace Twitterizer
     using System;
     using System.Runtime.Serialization;
     using Twitterizer.Core;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The Twitter User Wrapper class.
     /// </summary>
     [Serializable]
-    [DataContract]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     internal class TwitterUserWrapper : TwitterObject
     {
         /// <summary>
@@ -53,7 +54,7 @@ namespace Twitterizer
         /// Gets or sets the users.
         /// </summary>
         /// <value>The users.</value>
-        [DataMember(Name = "users")]
+        [JsonProperty(PropertyName = "users")]
         public TwitterUserCollection Users
         {
             get
@@ -76,14 +77,14 @@ namespace Twitterizer
         /// Gets or sets the next cursor.
         /// </summary>
         /// <value>The next cursor.</value>
-        [DataMember(Name = "next_cursor")]
+        [JsonProperty(PropertyName = "next_cursor")]
         public long NextCursor { get; set; }
 
         /// <summary>
         /// Gets or sets the previous cursor.
         /// </summary>
         /// <value>The previous cursor.</value>
-        [DataMember(Name = "previous_cursor")]
+        [JsonProperty(PropertyName = "previous_cursor")]
         public long PreviousCursor { get; set; }
     }
 }

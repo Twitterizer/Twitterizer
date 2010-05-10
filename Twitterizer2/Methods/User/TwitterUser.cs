@@ -37,12 +37,12 @@ namespace Twitterizer
     using System.Diagnostics;
     using System.Drawing;
     using System.Globalization;
-    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
     
     /// <summary>
     /// The class that represents a twitter user account
     /// </summary>
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("TwitterUser = {ScreenName}")]
     [Serializable]
     public class TwitterUser : Core.TwitterObject
@@ -72,7 +72,7 @@ namespace Twitterizer
         /// Gets or sets the User ID.
         /// </summary>
         /// <value>The User ID.</value>
-        [DataMember(Name = "id")]
+        [JsonProperty(PropertyName = "id")]
         [CLSCompliant(false)]
         public ulong Id { get; set; }
 
@@ -80,81 +80,50 @@ namespace Twitterizer
         /// Gets or sets the name of the user.
         /// </summary>
         /// <value>The name of the user.</value>
-        [DataMember(Name = "name")]
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the location.
         /// </summary>
         /// <value>The location.</value>
-        [DataMember(Name = "location")]
+        [JsonProperty(PropertyName = "location")]
         public string Location { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        [DataMember(Name = "description")]
+        [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the status.
         /// </summary>
         /// <value>The status.</value>
-        [DataMember(Name = "status")]
+        [JsonProperty(PropertyName = "status")]
         public TwitterStatus Status { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created date.
-        /// </summary>
-        /// <value>The created date.</value>
-        [DataMember(Name = "created_at")]
-        public string CreatedDateString { get; set; }
 
         /// <summary>
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-#if !MONO_2_4
-        [IgnoreDataMember]
-#endif
-        public DateTime CreatedDate
-        {
-            get
-            {
-                DateTime parsedDate;
-
-                if (DateTime.TryParseExact(
-                       this.CreatedDateString,
-                       DateFormat,
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out parsedDate))
-                {
-                    return parsedDate;
-                }
-                else
-                {
-                    return new DateTime();
-                }
-            }
-#if MONO_2_4
-            set { }
-#endif
-        }
+        //[JsonProperty(PropertyName = "created_at")]
+        //[JsonConverter(typeof(Newtonsoft.Json.Converters.JavaScriptDateTimeConverter))]
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the time zone.
         /// </summary>
         /// <value>The time zone.</value>
-        [DataMember(Name = "time_zone")]
+        [JsonProperty(PropertyName = "time_zone")]
         public string TimeZone { get; set; }
 
         /// <summary>
         /// Gets or sets the number of followers.
         /// </summary>
         /// <value>The number of followers.</value>
-        [DataMember(Name = "followers_count")]
+        [JsonProperty(PropertyName = "followers_count")]
         [CLSCompliant(false)]
         public uint NumberOfFollowers { get; set; }
 
@@ -162,7 +131,7 @@ namespace Twitterizer
         /// Gets or sets the number of statuses.
         /// </summary>
         /// <value>The number of statuses.</value>
-        [DataMember(Name = "statuses_count")]
+        [JsonProperty(PropertyName = "statuses_count")]
         [CLSCompliant(false)]
         public uint NumberOfStatuses { get; set; }
 
@@ -170,7 +139,7 @@ namespace Twitterizer
         /// Gets or sets the number of friends.
         /// </summary>
         /// <value>The number of friends.</value>
-        [DataMember(Name = "friends_count")]
+        [JsonProperty(PropertyName = "friends_count")]
         [CLSCompliant(false)]
         public uint NumberOfFriends { get; set; }
 
@@ -178,14 +147,14 @@ namespace Twitterizer
         /// Gets or sets a value indicating whether the user has enabled contributors access to his or her account.
         /// </summary>
         /// <value>The is contributors enabled value.</value>
-        [DataMember(Name = "contributors_enabled")]
+        [JsonProperty(PropertyName = "contributors_enabled")]
         public bool IsContributorsEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets the language.
         /// </summary>
         /// <value>The language.</value>
-        [DataMember(Name = "lang")]
+        [JsonProperty(PropertyName = "lang")]
         public string Language { get; set; }
 
         /// <summary>
@@ -194,14 +163,14 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if the user receives notifications; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "notifications", IsRequired = false)]
+        [JsonProperty(PropertyName = "notifications")]
         public bool? DoesReceiveNotifications { get; set; }
 
         /// <summary>
         /// Gets or sets the screenname.
         /// </summary>
         /// <value>The screenname.</value>
-        [DataMember(Name = "screen_name")]
+        [JsonProperty(PropertyName = "screen_name")]
         public string ScreenName { get; set; }
 
         /// <summary>
@@ -210,14 +179,14 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if the authenticated user is following this user; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "following", IsRequired = false)]
+        [JsonProperty(PropertyName = "following")]
         public bool? IsFollowing { get; set; }
 
         /// <summary>
         /// Gets or sets the number of favorites.
         /// </summary>
         /// <value>The number of favorites.</value>
-        [DataMember(Name = "favourites_count")]
+        [JsonProperty(PropertyName = "favourites_count")]
         [CLSCompliant(false)]
         public uint NumberOfFavorites { get; set; }
 
@@ -227,7 +196,7 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this user is protected; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "protected")]
+        [JsonProperty(PropertyName = "protected")]
         public bool IsProtected { get; set; }
 
         /// <summary>
@@ -236,7 +205,7 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this user is geo enabled; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "geo_enabled", IsRequired = false)]
+        [JsonProperty(PropertyName = "geo_enabled")]
         public bool? IsGeoEnabled { get; set; }
 
         /// <summary>
@@ -244,14 +213,14 @@ namespace Twitterizer
         /// </summary>
         /// <value>The time zone offset.</value>
         /// <remarks>Also called the Coordinated Universal Time (UTC) offset.</remarks>
-        [DataMember(Name = "utc_offset")]
+        [JsonProperty(PropertyName = "utc_offset")]
         public double? TimeZoneOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the user's website.
         /// </summary>
         /// <value>The website address.</value>
-        [DataMember(Name = "url")]
+        [JsonProperty(PropertyName = "url")]
         public string Website { get; set; }
 
         #region Profile Layout Properties
@@ -259,25 +228,19 @@ namespace Twitterizer
         /// Gets or sets the color of the profile background.
         /// </summary>
         /// <value>The color of the profile background.</value>
-        [DataMember(Name = "profile_background_color")]
+        [JsonProperty(PropertyName = "profile_background_color")]
         public string ProfileBackgroundColorString { get; set; }
 
         /// <summary>
         /// Gets the color of the profile background.
         /// </summary>
         /// <value>The color of the profile background.</value>
-#if !MONO_2_4
-        [IgnoreDataMember]
-#endif
         public Color ProfileBackgroundColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileBackgroundColorString);
             }
-#if MONO_2_4
-            set { }
-#endif
         }
 
         /// <summary>
@@ -286,96 +249,78 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this user's profile background image is tiled; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "profile_background_tile", IsRequired = false)]
+        [JsonProperty(PropertyName = "profile_background_tile")]
         public bool? IsProfileBackgroundTiled { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the profile link.
         /// </summary>
         /// <value>The color of the profile link.</value>
-        [DataMember(Name = "profile_link_color")]
+        [JsonProperty(PropertyName = "profile_link_color")]
         public string ProfileLinkColorString { get; set; }
 
         /// <summary>
         /// Gets the color of the profile link.
         /// </summary>
         /// <value>The color of the profile link.</value>
-#if !MONO_2_4
-            [IgnoreDataMember]
-#endif
         public Color ProfileLinkColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileLinkColorString);
             }
-#if MONO_2_4
-            set { }
-#endif
         }
 
         /// <summary>
         /// Gets or sets the profile background image location.
         /// </summary>
         /// <value>The profile background image location.</value>
-        [DataMember(Name = "profile_background_image_url")]
+        [JsonProperty(PropertyName = "profile_background_image_url")]
         public string ProfileBackgroundImageLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the profile text.
         /// </summary>
         /// <value>The color of the profile text.</value>
-        [DataMember(Name = "profile_text_color")]
+        [JsonProperty(PropertyName = "profile_text_color")]
         public string ProfileTextColorString { get; set; }
 
         /// <summary>
         /// Gets the color of the profile text.
         /// </summary>
         /// <value>The color of the profile text.</value>
-#if !MONO_2_4
-            [IgnoreDataMember]
-#endif
         public Color ProfileTextColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileTextColorString);
             }
-#if MONO_2_4
-            set { }
-#endif
         }
         
         /// <summary>
         /// Gets or sets the profile image location.
         /// </summary>
         /// <value>The profile image location.</value>
-        [DataMember(Name = "profile_image_url")]
+        [JsonProperty(PropertyName = "profile_image_url")]
         public string ProfileImageLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the profile sidebar border.
         /// </summary>
         /// <value>The color of the profile sidebar border.</value>
-        [DataMember(Name = "profile_sidebar_border_color")]
+        [JsonProperty(PropertyName = "profile_sidebar_border_color")]
         public string ProfileSidebarBorderColorString { get; set; }
 
         /// <summary>
         /// Gets the color of the profile sidebar border.
         /// </summary>
         /// <value>The color of the profile sidebar border.</value>
-#if !MONO_2_4
-            [IgnoreDataMember]
-#endif
         public Color ProfileSidebarBorderColor
         {
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileSidebarBorderColorString);
             }
-#if MONO_2_4
-            set { }
-#endif
         }
         #endregion
 
@@ -437,20 +382,17 @@ namespace Twitterizer
         [CLSCompliant(false)]
         public static TwitterUser Show(OAuthTokens requestTokens, ulong id)
         {
-            Commands.ShowUserCommand command = new Commands.ShowUserCommand(requestTokens);
-            command.UserId = id;
-
-            command.Validate();
-            if (!command.IsValid)
+            try
             {
-                throw new CommandValidationException<TwitterUser>()
-                {
-                    Command = command,
-                    MethodName = "GetUser"
-                };
-            }
+                Commands.ShowUserCommand command = new Commands.ShowUserCommand(requestTokens);
+                command.UserId = id;
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+                return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>

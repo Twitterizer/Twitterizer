@@ -35,13 +35,14 @@ namespace Twitterizer
 {
     using System;
     using System.Globalization;
-    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
     using Twitterizer.Core;
 
     /// <summary>
     /// The Twitter Rate Limit Status class
     /// </summary>
-    [DataContract, Serializable]
+    [Serializable]
+    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
     public class TwitterRateLimitStatus : TwitterObject
     {
         #region Constructors
@@ -69,21 +70,21 @@ namespace Twitterizer
         /// Gets or sets the remaining hits.
         /// </summary>
         /// <value>The remaining hits.</value>
-        [DataMember(Name = "remaining_hits")]
+        [JsonProperty(PropertyName = "remaining_hits")]
         public int RemainingHits { get; set; }
 
         /// <summary>
         /// Gets or sets the hourly limit.
         /// </summary>
         /// <value>The hourly limit.</value>
-        [DataMember(Name = "hourly_limit")]
+        [JsonProperty(PropertyName = "hourly_limit")]
         public int HourlyLimit { get; set; }
 
         /// <summary>
         /// Gets or sets the UTC string value of the time rate limiting will reset.
         /// </summary>
         /// <value>The reset time string.</value>
-        [DataMember(Name = "reset_time")]
+        [JsonProperty(PropertyName = "reset_time")]
         public string ResetTimeString { get; set; }
         #endregion
 

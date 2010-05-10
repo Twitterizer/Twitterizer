@@ -36,102 +36,83 @@ namespace Twitterizer
 {
     using System;
     using System.Runtime.Serialization;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The Twitter Search Result class.
     /// </summary>
-    [DataContract, Serializable]
+    [Serializable]
+    [JsonObject(MemberSerialization= MemberSerialization.OptIn)]
     public class TwitterSearchResult : Core.TwitterObject
     {
         /// <summary>
         /// Gets or sets the profile image URL.
         /// </summary>
         /// <value>The profile image URL.</value>
-        [DataMember(Name = "profile_image_url")]
+        [JsonProperty(PropertyName = "profile_image_url")]
         public string ProfileImageLocation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created date string.
-        /// </summary>
-        /// <value>The created date string.</value>
-        [DataMember(Name = "created_at")]
-        public string CreatedDateString { get; set; }
 
         /// <summary>
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-        public DateTime CreatedDate
-        {
-            get
-            {
-                DateTime parsedDate;
-
-                if (DateTime.TryParse(this.CreatedDateString, out parsedDate))
-                {
-                    return parsedDate;
-                }
-                else
-                {
-                    return new DateTime();
-                }
-            }
-        }
+        [JsonProperty(PropertyName = "created_at")]
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the name of from user screen.
         /// </summary>
         /// <value>The name of from user screen.</value>
-        [DataMember(Name = "from_user")]
+        [JsonProperty(PropertyName = "from_user")]
         public string FromUserScreenName { get; set; }
 
         /// <summary>
         /// Gets or sets from user id.
         /// </summary>
         /// <value>From user id.</value>
-        [DataMember(Name = "from_user_id")]
+        [JsonProperty(PropertyName = "from_user_id")]
         public long? FromUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of to user screen.
         /// </summary>
         /// <value>The name of to user screen.</value>
-        [DataMember(Name = "to_user", IsRequired = false)]
+        [JsonProperty(PropertyName = "to_user")]
         public string ToUserScreenName { get; set; }
 
         /// <summary>
         /// Gets or sets to user id.
         /// </summary>
         /// <value>To user id.</value>
-        [DataMember(Name = "to_user_id")]
+        [JsonProperty(PropertyName = "to_user_id")]
         public long? ToUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status text.
         /// </summary>
         /// <value>The status text.</value>
-        [DataMember(Name = "text")]
+        [JsonProperty(PropertyName = "text")]
         public string Text { get; set; }
 
         /// <summary>
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        [DataMember(Name = "id")]
+        [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [DataMember(Name = "source")]
+        [JsonProperty(PropertyName = "source")]
         public string Source { get; set; }
 
         /// <summary>
         /// Gets or sets the language.
         /// </summary>
         /// <value>The language.</value>
-        [DataMember(Name = "iso_language_code")]
+        [JsonProperty(PropertyName = "iso_language_code")]
         public string Language { get; set; }
     }
 }

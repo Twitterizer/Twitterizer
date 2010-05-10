@@ -37,9 +37,9 @@ namespace Twitterizer.Core
     using System.Diagnostics;
     using System.IO;
     using System.Net;
-    using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Web.Script.Serialization;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Supported serialization schemes
@@ -47,9 +47,9 @@ namespace Twitterizer.Core
     internal enum Serializer
     {
         /// <summary>
-        /// Utilizes the WCF DataContract serialization for JSON data.
+        /// Utilizes the Newtonsoft.Json library for serialization
         /// </summary>
-        DataContractJsonSerializer,
+        JSONdotNet,
 
         /// <summary>
         /// Utilizes the AJAX JavaScript serialization classes for semi-manual JSON parsing.
@@ -80,27 +80,34 @@ namespace Twitterizer.Core
         /// <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T"/></returns>
         public static T Deserialize(WebResponse webResponse, Serializer serializer, JavascriptConversionDelegate javascriptConversionDeligate)
         {
-            T resultObject = default(T);
-
-            // Get the response
-            using (Stream responseStream = webResponse.GetResponseStream())
+            try
             {
-                byte[] data = ConversionUtility.ReadStream(responseStream);
+                T resultObject = default(T);
+
+                // Get the response
+                using (Stream responseStream = webResponse.GetResponseStream())
+                {
+                    byte[] data = ConversionUtility.ReadStream(responseStream);
 #if DEBUG
-                Debug.WriteLine("----------- RESPONSE -----------");
-                Debug.WriteLine(Encoding.UTF8.GetString(data));
-                Debug.WriteLine("----------- END -----------");
+                    Debug.WriteLine("----------- RESPONSE -----------");
+                    Debug.WriteLine(Encoding.UTF8.GetString(data));
+                    Debug.WriteLine("----------- END -----------");
 #endif
 
-                // Deserialize the results.
-                resultObject = Deserialize(serializer, javascriptConversionDeligate, data);
+                    // Deserialize the results.
+                    resultObject = Deserialize(serializer, javascriptConversionDeligate, data);
 
-                responseStream.Close();
+                    responseStream.Close();
 
-                Trace.Write(resultObject, "Twitterizer2");
+                    Trace.Write(resultObject, "Twitterizer2");
+                }
+
+                return resultObject;
             }
-
-            return resultObject;
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -116,14 +123,13 @@ namespace Twitterizer.Core
 
             switch (serializer)
             {
-                case Serializer.DataContractJsonSerializer:
-                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
-                    resultObject = (T)ds.ReadObject(new MemoryStream(data));
-                    break;
                 case Serializer.JavaScriptSerializer:
                     JavaScriptSerializer jss = new JavaScriptSerializer();
                     object result = jss.DeserializeObject(Encoding.UTF8.GetString(data));
                     resultObject = javascriptConversionDeligate(result);
+                    break;
+                case Serializer.JSONdotNet:
+                    resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(data));
                     break;
             }
 

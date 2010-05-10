@@ -125,7 +125,7 @@ namespace Twitterizer
                             try
                             {
                                 TwitterStatus resultObject = Core.SerializationHelper<TwitterStatus>.Deserialize(
-                                    Core.Serializer.DataContractJsonSerializer, 
+                                    Core.Serializer.JSONdotNet, 
                                     null, 
                                     Encoding.UTF8.GetBytes(reader.ReadLine()));
 

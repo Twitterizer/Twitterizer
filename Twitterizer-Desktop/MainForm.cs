@@ -124,7 +124,14 @@ Your last status was ""{3}"" on {4:D}
 
             ulong userId = ulong.Parse(ConfigurationManager.AppSettings["Twitterizer.Desktop.UserId"]);
 
-            this.user = TwitterUser.Show(this.oauthTokens, userId);
+            try
+            {
+                this.user = TwitterUser.Show(this.oauthTokens, userId);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>

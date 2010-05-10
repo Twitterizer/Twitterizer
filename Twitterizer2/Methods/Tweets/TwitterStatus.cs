@@ -35,13 +35,14 @@ namespace Twitterizer
 {
     using System;
     using System.Globalization;
-    using System.Runtime.Serialization;
     using Twitterizer.Core;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The TwitterStatus class.
     /// </summary>
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
     public class TwitterStatus : TwitterObject
     {
@@ -49,7 +50,7 @@ namespace Twitterizer
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStatus"/> class.
         /// </summary>
-        internal TwitterStatus() : base() 
+        public TwitterStatus() : base() 
         {
         }
 
@@ -69,7 +70,7 @@ namespace Twitterizer
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        [DataMember(Name = "id")]
+        [JsonProperty(PropertyName = "id")]
         [CLSCompliantAttribute(false)]
         public ulong Id { get; set; }
 
@@ -79,67 +80,36 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this status message is truncated; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "truncated", IsRequired = false)]
+        [JsonProperty(PropertyName = "truncated")]
         public bool? IsTruncated { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created date.
-        /// </summary>
-        /// <value>The created date.</value>
-        [DataMember(Name = "created_at")]
-        public string CreatedDateString { get; set; }
 
         /// <summary>
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-#if !MONO_2_4
-        [IgnoreDataMember]
-#endif
-        public DateTime CreatedDate
-        {
-            get
-            {
-                DateTime parsedDate;
-
-                if (DateTime.TryParseExact(
-                        this.CreatedDateString,
-                        DateFormat, 
-                        CultureInfo.InvariantCulture, 
-                        DateTimeStyles.None, 
-                        out parsedDate))
-                {
-                    return parsedDate;
-                }
-                else
-                {
-                    return new DateTime();
-                }
-            }
-#if MONO_2_4
-            set { }
-#endif
-        }
+        //[JsonProperty(PropertyName = "created_at")]
+        //[JsonConverter(typeof(JavaScriptDateTimeConverter))]
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [DataMember(Name = "source")]
+        [JsonProperty(PropertyName = "source")]
         public string Source { get; set; }
 
         /// <summary>
         /// Gets or sets the screenName the status is in reply to.
         /// </summary>
         /// <value>The screenName.</value>
-        [DataMember(Name = "in_reply_to_screen_name")]
+        [JsonProperty(PropertyName = "in_reply_to_screen_name")]
         public string InReplyToScreenName { get; set; }
 
         /// <summary>
         /// Gets or sets the user id the status is in reply to.
         /// </summary>
         /// <value>The user id.</value>
-        [DataMember(Name = "in_reply_to_user_id")]
+        [JsonProperty(PropertyName = "in_reply_to_user_id")]
         [CLSCompliant(false)]
         public ulong? InReplyToUserId { get; set; }
 
@@ -147,7 +117,7 @@ namespace Twitterizer
         /// Gets or sets the status id the status is in reply to.
         /// </summary>
         /// <value>The status id.</value>
-        [DataMember(Name = "in_reply_to_status_id")]
+        [JsonProperty(PropertyName = "in_reply_to_status_id")]
         [CLSCompliant(false)]
         public ulong? InReplyToStatusId { get; set; }
 
@@ -157,28 +127,28 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this instance is favorited; otherwise, <c>false</c>.
         /// </value>
-        [DataMember(Name = "favorited", IsRequired = false)]
+        [JsonProperty(PropertyName = "favorited")]
         public bool? IsFavorited { get; set; }
 
         /// <summary>
         /// Gets or sets the text of the status.
         /// </summary>
         /// <value>The status text.</value>
-        [DataMember(Name = "text")]
+        [JsonProperty(PropertyName = "text")]
         public string Text { get; set; }
 
         /// <summary>
         /// Gets or sets the user.
         /// </summary>
         /// <value>The user that posted this status.</value>
-        [DataMember(Name = "user")]
+        [JsonProperty(PropertyName = "user")]
         public TwitterUser User { get; set; }
 
         /// <summary>
         /// Gets or sets the retweeted status.
         /// </summary>
         /// <value>The retweeted status.</value>
-        [DataMember(Name = "retweeted_status")]
+        [JsonProperty(PropertyName = "retweeted_status")]
         public TwitterStatus RetweetedStatus { get; set; }
         #endregion
 

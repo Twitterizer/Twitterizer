@@ -217,7 +217,7 @@ namespace Twitterizer.Core
             
             // Declare the variable to be returned
             T resultObject = default(T);
-            
+
             try
             {
                 // This must be set for all twitter request.
@@ -247,8 +247,8 @@ namespace Twitterizer.Core
                 System.Net.ServicePointManager.Expect100Continue = true;
 
                 resultObject = SerializationHelper<T>.Deserialize(
-                    webResponse, 
-                    this.SelectedSerializer, 
+                    webResponse,
+                    this.SelectedSerializer,
                     this.ConvertJavaScriptSerializedObject);
 
                 this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
@@ -271,6 +271,10 @@ namespace Twitterizer.Core
                 }
 
                 return default(T);
+            }
+            catch (System.Exception)
+            {
+                throw;
             }
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.

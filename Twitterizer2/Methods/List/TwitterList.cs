@@ -36,15 +36,15 @@ namespace Twitterizer
 {
     using System;
     using System.Diagnostics;
-    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
     using Twitterizer.Core;
 
     /// <summary>
     /// The twitter list entity class
     /// </summary>
-    [DataContract,
-    DebuggerDisplay("TwitterList = {FullName}"),
-    Serializable]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    [DebuggerDisplay("TwitterList = {FullName}")]
+    [Serializable]
     public class TwitterList : TwitterObject
     {
         #region Constructors
@@ -72,70 +72,70 @@ namespace Twitterizer
         /// Gets or sets the id.
         /// </summary>
         /// <value>The list id.</value>
-        [DataMember(Name = "id")]
+        [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The list name.</value>
-        [DataMember(Name = "name")]
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
         /// <value>The full name.</value>
-        [DataMember(Name = "full_name")]
+        [JsonProperty(PropertyName = "full_name")]
         public string FullName { get; set; }
 
         /// <summary>
         /// Gets or sets the slug.
         /// </summary>
         /// <value>The list slug.</value>
-        [DataMember(Name = "slug")]
+        [JsonProperty(PropertyName = "slug")]
         public string Slug { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        [DataMember(Name = "description")]
+        [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the number of subscribers.
         /// </summary>
         /// <value>The number of subscribers.</value>
-        [DataMember(Name = "subscriber_count")]
+        [JsonProperty(PropertyName = "subscriber_count")]
         public int NumberOfSubscribers { get; set; }
 
         /// <summary>
         /// Gets or sets the number of members.
         /// </summary>
         /// <value>The number of members.</value>
-        [DataMember(Name = "member_count")]
+        [JsonProperty(PropertyName = "member_count")]
         public int NumberOfMembers { get; set; }
 
         /// <summary>
         /// Gets or sets the absolute path.
         /// </summary>
         /// <value>The absolute path.</value>
-        [DataMember(Name = "uri")]
+        [JsonProperty(PropertyName = "uri")]
         public string AbsolutePath { get; set; }
 
         /// <summary>
         /// Gets or sets the mode.
         /// </summary>
         /// <value>The list mode.</value>
-        [DataMember(Name = "mode")]
+        [JsonProperty(PropertyName = "mode")]
         public string Mode { get; set; }
 
         /// <summary>
         /// Gets or sets the user that owns the list.
         /// </summary>
         /// <value>The owning user.</value>
-        [DataMember(Name = "user")]
+        [JsonProperty(PropertyName = "user")]
         public TwitterUser User { get; set; }
         #endregion
 

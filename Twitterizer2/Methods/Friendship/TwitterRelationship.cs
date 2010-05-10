@@ -36,12 +36,13 @@ namespace Twitterizer
 {
     using System.Diagnostics;
     using System.Runtime.Serialization;
+    using Newtonsoft.Json;
     using Twitterizer.Core;
 
     /// <summary>
     /// The Twitter Relationship entity class
     /// </summary>
-    [DataContract]
+    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
     [DebuggerDisplay("TwitterRelationship = {Source} -> {Target}")]
     public class TwitterRelationship : TwitterObject
     {
@@ -79,7 +80,7 @@ namespace Twitterizer
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [DataMember(Name = "source")]
+        [JsonProperty(PropertyName = "source")]
         public TwitterUser Source
         {
             get
@@ -102,7 +103,7 @@ namespace Twitterizer
         /// Gets or sets the target.
         /// </summary>
         /// <value>The target.</value>
-        [DataMember(Name = "target")]
+        [JsonProperty(PropertyName = "target")]
         public TwitterUser Target
         {
             get
@@ -125,7 +126,7 @@ namespace Twitterizer
         /// Gets or sets the relationship.
         /// </summary>
         /// <value>The relationship.</value>
-        [DataMember(Name = "relationship")]
+        [JsonProperty(PropertyName = "relationship")]
         public TwitterRelationship Relationship
         {
             get
