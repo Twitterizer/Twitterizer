@@ -45,7 +45,8 @@ public partial class callback : System.Web.UI.Page
         OAuthTokenResponse tokens = OAuthUtility.GetAccessToken(
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
             ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
-            Request.QueryString["oauth_token"]);
+            Request.QueryString["oauth_token"],
+            Request.QueryString["oauth_verifier"]);
 
         this.AccessTokenLabel.Text = tokens.Token;
         this.AccessTokenSecretLabel.Text = tokens.TokenSecret;

@@ -36,23 +36,14 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Net;
-    using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Web;
     using System.Web.Caching;
     using Twitterizer;
-    using System.Web.Script.Serialization;
-
-    internal enum Serializer
-    {
-        DataContractJsonSerializer,
-        JavaScriptSerializer
-    }
 
     /// <summary>
     /// The base command class.
@@ -62,43 +53,62 @@ namespace Twitterizer.Core
     internal abstract class TwitterCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
-        public Serializer SelectedSerializer { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
+        /// <param name="httpMethod">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
-        protected TwitterCommand(string method, Uri uri, OAuthTokens tokens)
+        [Obsolete("This constructor has been depreciated.")]
+        protected TwitterCommand(string httpMethod, Uri uri, OAuthTokens tokens)
+            : this(httpMethod, tokens)
         {
-            if (string.IsNullOrEmpty(method))
-            {
-                throw new ArgumentNullException("method");
-            }
-
             if (uri == null)
             {
                 throw new ArgumentNullException("uri");
             }
 
-            this.RequestParameters = new Dictionary<string, string>();
             this.Uri = uri;
-            this.HttpMethod = method;
-            this.Tokens = tokens;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
-        protected TwitterCommand(string method, OAuthTokens tokens)
+        /// <param name="optionalProperties">The optional properties.</param>
+        protected TwitterCommand(string httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
+            : this(httpMethod, tokens)
         {
-            this.RequestParameters = new Dictionary<string, string>();
-            this.HttpMethod = method;
-            this.Tokens = tokens;
+            this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
+
+            this.Uri = new Uri(string.Concat(this.OptionalProperties.APIBaseAddress, endPoint));
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="httpMethod">The method.</param>
+        /// <param name="tokens">The tokens.</param>
+        protected TwitterCommand(string httpMethod, OAuthTokens tokens)
+        {
+            if (string.IsNullOrEmpty(httpMethod))
+            {
+                throw new ArgumentNullException("method");
+            }
+
+            this.RequestParameters = new Dictionary<string, string>();
+            this.HttpMethod = httpMethod;
+            this.Tokens = tokens;
+            this.OptionalProperties = new OptionalProperties();
+        }
+
+        /// <summary>
+        /// Gets or sets the optional properties.
+        /// </summary>
+        /// <value>The optional properties.</value>
+        public OptionalProperties OptionalProperties { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is valid.
@@ -123,6 +133,12 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The request parameters.</value>
         public Dictionary<string, string> RequestParameters { get; set; }
+
+         /// <summary>
+        /// Gets or sets the serialization delegate.
+        /// </summary>
+        /// <value>The serialization delegate.</value>
+        public SerializationHelper<T>.DeserializationHandler DeserializationHandler { get; set; }
 
         /// <summary>
         /// Gets the request tokens.
@@ -166,9 +182,12 @@ namespace Twitterizer.Core
                 };
             }
 
+            WebPermission permission = new WebPermission();
+            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
+            permission.Demand();
+
             // Variables and objects needed for caching
-            bool enableCaching = ConfigurationManager.AppSettings["Twitterizer2.EnableCaching"] != null &&
-                bool.Parse(ConfigurationManager.AppSettings["Twitterizer2.EnableCaching"]);
             StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
             if (this.Tokens != null)
             {
@@ -176,12 +195,6 @@ namespace Twitterizer.Core
             }
 
             Cache cache = HttpRuntime.Cache;
-
-            WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            permission.Demand();
 
             // Prepare the query parameters
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
@@ -191,11 +204,8 @@ namespace Twitterizer.Core
                 cacheKeyBuilder.AppendFormat("|{0}={1}", item.Key, item.Value);
             }
 
-            // Declare the variable to be returned
-            T resultObject = default(T);
-
             // Lookup the cached item and return it
-            if (enableCaching && cache[cacheKeyBuilder.ToString()] != null)
+            if (this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
@@ -205,6 +215,9 @@ namespace Twitterizer.Core
                 }
             }
             
+            // Declare the variable to be returned
+            T resultObject = default(T);
+
             try
             {
                 // This must be set for all twitter request.
@@ -233,66 +246,11 @@ namespace Twitterizer.Core
                 // Set this back to the default so it doesn't affect other .net code.
                 System.Net.ServicePointManager.Expect100Continue = true;
 
-                // Get the response
-                using (Stream responseStream = webResponse.GetResponseStream())
-                {
-                    byte[] data = ConversionUtility.ReadStream(responseStream);
-#if DEBUG
-                    Debug.WriteLine("----------- RESPONSE -----------");
-                    Debug.WriteLine(Encoding.UTF8.GetString(data));
-                    Debug.WriteLine("----------- END -----------");
-#endif
+                resultObject = SerializationHelper<T>.Deserialize(
+                    webResponse,
+                    this.DeserializationHandler);
 
-                    // Deserialize the results.
-                    switch (this.SelectedSerializer)
-                    {
-                        case Serializer.DataContractJsonSerializer:
-                            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
-                            resultObject = (T)ds.ReadObject(new MemoryStream(data));
-                            responseStream.Close();
-                            break;
-                        case Serializer.JavaScriptSerializer:
-                            JavaScriptSerializer jss = new JavaScriptSerializer();
-                            object result = jss.DeserializeObject(Encoding.UTF8.GetString(data));
-                            resultObject = this.ConvertJavaScriptSerializedObject(result);
-                            break;
-                    }
-
-                    Trace.Write(resultObject, "Twitterizer2");
-                }
-
-                // If caching is enabled, add the result to the cache.
-                if (enableCaching)
-                {
-                    // Default the timespan to 30 minutes.
-                    TimeSpan cacheTimeSpan = new TimeSpan(0, 30, 0);
-
-                    // See if a custom timeout value has been supplied
-                    string cacheTimeoutSetting = ConfigurationManager.AppSettings["Twitterizer2.CacheTimeout"];
-                    if (!string.IsNullOrEmpty(cacheTimeoutSetting))
-                    {
-                        long cacheTimeoutSeconds;
-                        if (long.TryParse(cacheTimeoutSetting, out cacheTimeoutSeconds))
-                        {
-                            // Convert the seconds value to ticks and instantiate a new timespan
-                            cacheTimeSpan = new TimeSpan(cacheTimeoutSeconds * 10000000);
-                        }
-                    }
-
-                    cache.Add(
-                        cacheKeyBuilder.ToString(), 
-                        resultObject, 
-                        null, 
-                        Cache.NoAbsoluteExpiration, 
-                        cacheTimeSpan, 
-                        CacheItemPriority.Normal, 
-                        null);
-
-                    Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
-                }
-
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalSuccessfulRequests);
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.SuccessfulRequestsPerSecond);
+                this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
@@ -304,9 +262,6 @@ namespace Twitterizer.Core
             {
                 Trace.TraceError(wex.Message);
 
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalFailedRequests);
-                PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.FailedRequestsPerSecond);
-
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse response = wex.Response as HttpWebResponse;
                 if (response == null || !RequestStatus.UpdateRequestStatus(response))
@@ -315,6 +270,10 @@ namespace Twitterizer.Core
                 }
 
                 return default(T);
+            }
+            catch (System.Exception)
+            {
+                throw;
             }
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
@@ -359,6 +318,30 @@ namespace Twitterizer.Core
                     .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
             }
         }
+
+        /// <summary>
+        /// Adds the result to cache.
+        /// </summary>
+        /// <param name="cacheKeyBuilder">The cache key builder.</param>
+        /// <param name="cache">The cache.</param>
+        /// <param name="resultObject">The result object.</param>
+        private void AddResultToCache(StringBuilder cacheKeyBuilder, Cache cache, T resultObject)
+        {
+            // If caching is enabled, add the result to the cache.
+            if (this.OptionalProperties.CacheOutput)
+            {
+                cache.Add(
+                    cacheKeyBuilder.ToString(),
+                    resultObject,
+                    null,
+                    Cache.NoAbsoluteExpiration,
+                    this.OptionalProperties.CacheTimespan,
+                    CacheItemPriority.Normal,
+                    null);
+
+                Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
+            }
+        }
         
         /// <summary>
         /// Builds the request.
@@ -370,15 +353,10 @@ namespace Twitterizer.Core
         private HttpWebResponse BuildRequestAndGetResponse(Dictionary<string, string> queryParameters)
         {
             // Check if the SSL configuration flag is set and modify the address accordingly
-            if (ConfigurationManager.AppSettings["Twitterizer2.EnableSSL"] == "true")
+            if (this.OptionalProperties.UseSSL)
             {
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
             }
-
-            // Usage stats collection is disabled due to performance issues.
-            // UsageStatsCollector.ReportCall(this.Uri.AbsolutePath);
-            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.AnonymousRequests);
-            PerformanceCounterUtility.ReportToCounter(TwitterizerCounter.TotalRequests);
 
             // Prepare and execute un-authorized query
             HttpWebRequest request;
@@ -409,6 +387,7 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
+                    request.Proxy = this.OptionalProperties.Proxy;
                     break;
                 case "POST":
                     request = (HttpWebRequest)WebRequest.Create(this.Uri);
@@ -418,6 +397,7 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
+                    request.Proxy = this.OptionalProperties.Proxy;
 
                     using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
                     {
@@ -448,22 +428,13 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
+                    request.Proxy = this.OptionalProperties.Proxy;
                     break;
                 default:
                     throw new NotImplementedException();
             }
 
             return (HttpWebResponse)request.GetResponse();
-        }
-
-        /// <summary>
-        /// Converts a weakly typed deserialized javascript object to a strongly typed object.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns><typeparamref name="T"/></returns>
-        public virtual T ConvertJavaScriptSerializedObject(object value)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -36,10 +36,9 @@ namespace Twitterizer
 {
     using System;
     using System.Net;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Xml.Serialization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// Describes the result status of a request
@@ -218,11 +217,10 @@ namespace Twitterizer
 
                 if (webResponse.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
                 {
-                    DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(TwitterErrorDetails));
-                    LastRequestStatus.ErrorDetails = ds.ReadObject(webResponse.GetResponseStream()) as TwitterErrorDetails;
+                    LastRequestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(webResponse);
                 }
             }
-            catch (SerializationException)
+            catch (System.Runtime.Serialization.SerializationException)
             {
                 // Do nothing. This is no-fail code.
             }

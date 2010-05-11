@@ -39,7 +39,6 @@ namespace Twitterizer.Core
     /// <summary>
     /// The base object class
     /// </summary>
-    [DataContract]
     [System.Serializable]
     public class TwitterObject : ITwitterObject
     {

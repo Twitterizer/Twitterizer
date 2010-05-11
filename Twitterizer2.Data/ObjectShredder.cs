@@ -44,36 +44,55 @@ namespace Twitterizer.Data
     /// <typeparam name="T">The type of the object to shred.</typeparam>
     internal class ObjectShredder<T>
     {
-        private System.Reflection.FieldInfo[] _fi;
-        private System.Reflection.PropertyInfo[] _pi;
-        private System.Collections.Generic.Dictionary<string, int> _ordinalMap;
-        private System.Type _type;
+        /// <summary>
+        /// The reflected fields
+        /// </summary>
+        private System.Reflection.FieldInfo[] fields;
 
-        // ObjectShredder constructor.
+        /// <summary>
+        /// The reflected properties
+        /// </summary>
+        private System.Reflection.PropertyInfo[] properties;
+
+        /// <summary>
+        /// The ordinal map
+        /// </summary>
+        private System.Collections.Generic.Dictionary<string, int> ordinalMap;
+
+        /// <summary>
+        /// The type of the relected object
+        /// </summary>
+        private System.Type type;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObjectShredder&lt;T&gt;"/> class.
+        /// </summary>
         public ObjectShredder()
         {
-            _type = typeof(T);
-            _fi = _type.GetFields();
-            _pi = _type.GetProperties();
-            _ordinalMap = new Dictionary<string, int>();
+            this.type = typeof(T);
+            this.fields = this.type.GetFields();
+            this.properties = this.type.GetProperties();
+            this.ordinalMap = new Dictionary<string, int>();
         }
 
         /// <summary>
         /// Loads a DataTable from a sequence of objects.
         /// </summary>
         /// <param name="source">The sequence of objects to load into the DataTable.</param>
-        /// <param name="table">The input table. The schema of the table must match that 
-        /// the type T.  If the table is null, a new table is created with a schema 
+        /// <param name="table">The input table. The schema of the table must match that
+        /// the type T.  If the table is null, a new table is created with a schema
         /// created from the public properties and fields of the type T.</param>
-        /// <param name="options">Specifies how values from the source sequence will be applied to 
+        /// <param name="options">Specifies how values from the source sequence will be applied to
         /// existing rows in the table.</param>
-        /// <returns>A DataTable created from the source sequence.</returns>
+        /// <returns>
+        /// A DataTable created from the source sequence.
+        /// </returns>
         public DataTable Shred(IEnumerable<T> source, DataTable table, LoadOption? options)
         {
             // Load the table from the scalar sequence if T is a primitive type.
             if (typeof(T).IsPrimitive)
             {
-                return ShredPrimitive(source, table, options);
+                return this.ShredPrimitive(source, table, options);
             }
 
             // Create a new table if the input table is null.
@@ -83,7 +102,7 @@ namespace Twitterizer.Data
             }
 
             // Initialize the ordinal map and extend the table schema based on type T.
-            table = ExtendTable(table, typeof(T));
+            table = this.ExtendTable(table, typeof(T));
 
             // Enumerate the source sequence and load the object values into rows.
             table.BeginLoadData();
@@ -93,11 +112,11 @@ namespace Twitterizer.Data
                 {
                     if (options != null)
                     {
-                        table.LoadDataRow(ShredObject(table, e.Current), (LoadOption)options);
+                        table.LoadDataRow(this.ShredObject(table, e.Current), (LoadOption)options);
                     }
                     else
                     {
-                        table.LoadDataRow(ShredObject(table, e.Current), true);
+                        table.LoadDataRow(this.ShredObject(table, e.Current), true);
                     }
                 }
             }
@@ -114,7 +133,7 @@ namespace Twitterizer.Data
         /// <param name="source">The source.</param>
         /// <param name="table">The table.</param>
         /// <param name="options">The options.</param>
-        /// <returns></returns>
+        /// <returns>A DataTable representing the data in <paramref name="source"/></returns>
         public DataTable ShredPrimitive(IEnumerable<T> source, DataTable table, LoadOption? options)
         {
             // Create a new table if the input table is null.
@@ -154,16 +173,22 @@ namespace Twitterizer.Data
             return table;
         }
 
+        /// <summary>
+        /// Shreds the object.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="instance">The instance.</param>
+        /// <returns>An array of objects representing the table.</returns>
         public object[] ShredObject(DataTable table, T instance)
         {
-            FieldInfo[] fi = _fi;
-            PropertyInfo[] pi = _pi;
+            FieldInfo[] fi = this.fields;
+            PropertyInfo[] pi = this.properties;
 
             if (instance.GetType() != typeof(T))
             {
                 // If the instance is derived from T, extend the table schema
                 // and get the properties and fields.
-                ExtendTable(table, instance.GetType());
+                this.ExtendTable(table, instance.GetType());
                 fi = instance.GetType().GetFields();
                 pi = instance.GetType().GetProperties();
             }
@@ -172,25 +197,31 @@ namespace Twitterizer.Data
             object[] values = new object[table.Columns.Count];
             foreach (FieldInfo f in fi)
             {
-                values[_ordinalMap[f.Name]] = f.GetValue(instance);
+                values[this.ordinalMap[f.Name]] = f.GetValue(instance);
             }
 
             foreach (PropertyInfo p in pi)
             {
-                values[_ordinalMap[p.Name]] = p.GetValue(instance, null);
+                values[this.ordinalMap[p.Name]] = p.GetValue(instance, null);
             }
 
             // Return the property and field values of the instance.
             return values;
         }
 
+        /// <summary>
+        /// Extends the table.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="type">The type of object to be stored in the table.</param>
+        /// <returns>A DataTable with columns added to facilitate the storage of a type</returns>
         public DataTable ExtendTable(DataTable table, Type type)
         {
             // Extend the table schema if the input table was null or if the value 
             // in the sequence is derived from type T.            
             foreach (FieldInfo f in type.GetFields())
             {
-                if (!_ordinalMap.ContainsKey(f.Name))
+                if (!this.ordinalMap.ContainsKey(f.Name))
                 {
                     // Add the field as a column in the table if it doesn't exist
                     // already.
@@ -198,13 +229,13 @@ namespace Twitterizer.Data
                         : table.Columns.Add(f.Name, f.FieldType);
 
                     // Add the field to the ordinal map.
-                    _ordinalMap.Add(f.Name, dc.Ordinal);
+                    this.ordinalMap.Add(f.Name, dc.Ordinal);
                 }
             }
 
             foreach (PropertyInfo p in type.GetProperties())
             {
-                if (!_ordinalMap.ContainsKey(p.Name))
+                if (!this.ordinalMap.ContainsKey(p.Name))
                 {
                     // Add the property as a column in the table if it doesn't exist
                     // already.
@@ -212,7 +243,7 @@ namespace Twitterizer.Data
                         : table.Columns.Add(p.Name, p.PropertyType);
 
                     // Add the property to the ordinal map.
-                    _ordinalMap.Add(p.Name, dc.Ordinal);
+                    this.ordinalMap.Add(p.Name, dc.Ordinal);
                 }
             }
 

@@ -61,7 +61,16 @@ namespace Twitterizer.Core
                 };
             }
 
-            T result = command.ExecuteCommand();
+            T result = default(T);
+
+            try
+            {
+                result = command.ExecuteCommand();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
 
             return result;
         }

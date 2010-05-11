@@ -44,14 +44,14 @@ public partial class followers : System.Web.UI.Page
     {
         if (!this.IsPostBack)
         {
-            ulong userId = 0;
-            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && ulong.TryParse(Request.QueryString["userid"], out userId))
+            decimal userId = 0;
+            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && decimal.TryParse(Request.QueryString["userid"], out userId))
             {
-                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens, userId);
+                this.FollowersCollection = TwitterFriendship.Followers(Master.Tokens, userId);
             }
             else
             {
-                this.FollowersCollection = TwitterUser.GetFollowers(Master.Tokens);
+                this.FollowersCollection = TwitterFriendship.Followers(Master.Tokens);
             }
             
             ViewState.Add("followers", this.FollowersCollection);

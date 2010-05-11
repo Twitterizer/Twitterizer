@@ -79,10 +79,10 @@ Your last status was ""{3}"" on {4:D}
  this.user.ScreenName,
  this.user.NumberOfFriends,
  this.user.NumberOfFollowers,
- this.user.Status.Text, 
+ this.user.Status.Text,
  this.user.Status.CreatedDate);
 
-            foreach (TwitterStatus status in TwitterStatus.GetHomeTimeline(this.oauthTokens))
+            foreach (TwitterStatus status in TwitterTimeline.HomeTimeline(this.oauthTokens))
             {
                 this.HomeTimelinePanel.Controls.Add(new TweetTimelineControl(status));
             }
@@ -122,9 +122,16 @@ Your last status was ""{3}"" on {4:D}
                 ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerSecret"]
             };
 
-            ulong userId = ulong.Parse(ConfigurationManager.AppSettings["Twitterizer.Desktop.UserId"]);
+            decimal userId = decimal.Parse(ConfigurationManager.AppSettings["Twitterizer.Desktop.UserId"]);
 
-            this.user = TwitterUser.GetUser(this.oauthTokens, userId);
+            try
+            {
+                this.user = TwitterUser.Show(this.oauthTokens, userId);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>

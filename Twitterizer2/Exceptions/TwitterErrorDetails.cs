@@ -34,22 +34,23 @@
 
 namespace Twitterizer
 {
-    using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using Newtonsoft.Json;
+    using Twitterizer.Core;
 
     /// <summary>
     /// Twitter Error Details class
     /// </summary>
     /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
-    [DataContract]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [XmlRoot("hash")]
-    public class TwitterErrorDetails
+    public class TwitterErrorDetails : ITwitterObject
     {
         /// <summary>
         /// Gets or sets the request path.
         /// </summary>
         /// <value>The request path.</value>
-        [DataMember(Name = "request")]
+        [JsonProperty(PropertyName = "request")]
         [XmlElement("request")]
         public string RequestPath { get; set; }
 
@@ -57,8 +58,46 @@ namespace Twitterizer
         /// Gets or sets the error message.
         /// </summary>
         /// <value>The error message.</value>
-        [DataMember(Name = "error")]
+        [JsonProperty(PropertyName = "error")]
         [XmlElement("error")]
         public string ErrorMessage { get; set; }
+
+        #region ITwitterObject Members
+
+        /// <summary>
+        /// Gets or sets information about the user's rate usage.
+        /// </summary>
+        /// <value>The rate limiting object.</value>
+        public RateLimiting RateLimiting
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the oauth tokens.
+        /// </summary>
+        /// <value>The oauth tokens.</value>
+        public OAuthTokens Tokens
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        #endregion
     }
 }

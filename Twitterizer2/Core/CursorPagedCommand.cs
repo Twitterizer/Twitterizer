@@ -50,8 +50,21 @@ namespace Twitterizer.Core
         /// <param name="method">The method.</param>
         /// <param name="uri">The URI for the API method.</param>
         /// <param name="tokens">The request tokens.</param>
+        [Obsolete]
         protected CursorPagedCommand(string method, Uri uri, OAuthTokens tokens)
             : base(method, uri, tokens)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="endPoint">The end point.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        protected CursorPagedCommand(string method, string endPoint, OAuthTokens tokens, OptionalProperties options)
+            : base(method, endPoint, tokens, options)
         {
         }
 
