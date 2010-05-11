@@ -63,13 +63,13 @@ namespace Twitterizer.Commands
         /// Gets or sets the since status id.
         /// </summary>
         /// <value>The since status id.</value>
-        public ulong SinceStatusId { get; set; }
+        public decimal SinceStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the max status id.
         /// </summary>
         /// <value>The max status id.</value>
-        public ulong MaxStatusId { get; set; }
+        public decimal MaxStatusId { get; set; }
         #endregion
 
         /// <summary>

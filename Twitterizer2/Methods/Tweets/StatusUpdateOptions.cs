@@ -53,8 +53,7 @@ namespace Twitterizer
         /// Gets or sets the in reply to status id.
         /// </summary>
         /// <value>The in reply to status id.</value>
-        [CLSCompliant(false)]
-        public ulong InReplyToStatusId { get; set; }
+        public decimal InReplyToStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the latitude.

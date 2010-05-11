@@ -217,7 +217,7 @@ namespace Twitterizer
 
                 if (webResponse.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
                 {
-                    LastRequestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(webResponse, Serializer.JSONdotNet, null);
+                    LastRequestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(webResponse);
                 }
             }
             catch (System.Runtime.Serialization.SerializationException)

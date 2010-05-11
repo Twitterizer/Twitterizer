@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="HomeTimelineOptions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterBoundingBox.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,60 +29,30 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The HomeTimelineOptions class.</summary>
+// <summary>The twitter bounding box class.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using Newtonsoft.Json;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// A payload for optional parameters of the <see cref="Twitterizer.Commands.HomeTimelineCommand"/> command.
+    /// The twitter bounding box class. Represents a series of latitude and longitude coordinates that represents an area.
     /// </summary>
-    public sealed class HomeTimelineOptions : Core.OptionalProperties
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    public class TwitterBoundingBox : TwitterObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HomeTimelineOptions"/> class.
+        /// Gets or sets the type.
         /// </summary>
-        public HomeTimelineOptions()
-            : base()
-        {
-            this.Page = 1;
-        }
+        /// <value>The type.</value>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the count.
+        /// Gets or sets the coordinates.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
-
-        /// <summary>
-        /// Gets or sets the since id.
-        /// </summary>
-        /// <value>The since id.</value>
-        [CLSCompliant(false)]
-        public ulong SinceId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max id.
-        /// </summary>
-        /// <value>The max id.</value>
-        [CLSCompliant(false)]
-        public ulong MaxId { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [skip user].
-        /// </summary>
-        /// <value><c>true</c> if [skip user]; otherwise, <c>false</c>.</value>
-        public bool SkipUser { get; set; }
+        /// <value>The coordinates.</value>
+        public double[,] Coordinates { get; set; }
     }
 }

@@ -59,10 +59,13 @@ namespace Twitterizer
         {
             get
             {
-                this.users.RateLimiting = this.RateLimiting;
-                this.users.Tokens = this.Tokens;
-                this.users.NextCursor = this.NextCursor;
-                this.users.PreviousCursor = this.PreviousCursor;
+                if (this.users != null)
+                {
+                    this.users.RateLimiting = this.RateLimiting;
+                    this.users.Tokens = this.Tokens;
+                    this.users.NextCursor = this.NextCursor;
+                    this.users.PreviousCursor = this.PreviousCursor;
+                }
 
                 return this.users;
             }

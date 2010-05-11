@@ -38,6 +38,8 @@ namespace Twitterizer
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Twitterizer.Core;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The Twitter trend timeframe class.
@@ -57,45 +59,43 @@ namespace Twitterizer
         public Collection<TwitterTrend> Trends { get; set; }
 
         /// <summary>
-        /// Converts the weak trend object tree into a strongly typed object tree.
+        /// Deserializes the json.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>A <see cref="TwitterTrendTimeframe"/></returns>
-        internal static TwitterTrendTimeframe ConvertWeakTrend(object value)
+        /// <returns></returns>
+        internal static TwitterTrendTimeframe DeserializeJson(Newtonsoft.Json.Linq.JObject value)
         {
-            Dictionary<string, object> valueDictionary = (Dictionary<string, object>)value;
-            DateTime date = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds((int)valueDictionary["as_of"]);
-            object[] trends = (object[])((Dictionary<string, object>)valueDictionary["trends"])[date.ToString("yyyy-MM-dd HH:mm:ss")];
+            TwitterTrendTimeframe result = new TwitterTrendTimeframe();
+            result.EffectiveDate = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds((int)value.SelectToken("as_of"));
+            result.Trends = new Collection<TwitterTrend>();
 
-            TwitterTrendTimeframe convertedResult = new TwitterTrendTimeframe()
+            JArray trendArray = (JArray)value.SelectToken(string.Format("trends.{0:yyyy-MM-dd HH:mm:ss}", result.EffectiveDate));
+
+            foreach (JObject item in trendArray)
             {
-                EffectiveDate = date,
-                Trends = new Collection<TwitterTrend>()
-            };
+                TwitterTrend newTrend = new TwitterTrend();
 
-            for (int i = 0; i < trends.Length; i++)
-            {
-                Dictionary<string, object> item = (Dictionary<string, object>)trends[i];
+                JToken token = null;
 
-                TwitterTrend trend = new TwitterTrend()
+                if (item.TryGetValue("query", out token))
                 {
-                    Name = (string)item["name"]
-                };
-
-                if (item.ContainsKey("url"))
-                {
-                    trend.Address = (string)item["url"];
+                    newTrend.SearchQuery = token.Value<string>();
                 }
 
-                if (item.ContainsKey("query"))
+                if (item.TryGetValue("name", out token))
                 {
-                    trend.SearchQuery = (string)item["query"];
+                    newTrend.Name = token.Value<string>();
                 }
 
-                convertedResult.Trends.Add(trend);
+                if (item.TryGetValue("url", out token))
+                {
+                    newTrend.Address = token.Value<string>();
+                }
+
+                result.Trends.Add(newTrend);
             }
 
-            return convertedResult;
+            return result;
         }
     }
 }

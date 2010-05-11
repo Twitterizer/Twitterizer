@@ -105,12 +105,6 @@ namespace Twitterizer.Core
         }
 
         /// <summary>
-        /// Gets or sets the selected serializer.
-        /// </summary>
-        /// <value>The selected serializer.</value>
-        public Serializer SelectedSerializer { get; set; }
-
-        /// <summary>
         /// Gets or sets the optional properties.
         /// </summary>
         /// <value>The optional properties.</value>
@@ -139,6 +133,12 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The request parameters.</value>
         public Dictionary<string, string> RequestParameters { get; set; }
+
+         /// <summary>
+        /// Gets or sets the serialization delegate.
+        /// </summary>
+        /// <value>The serialization delegate.</value>
+        public SerializationHelper<T>.DeserializationHandler DeserializationHandler { get; set; }
 
         /// <summary>
         /// Gets the request tokens.
@@ -248,8 +248,7 @@ namespace Twitterizer.Core
 
                 resultObject = SerializationHelper<T>.Deserialize(
                     webResponse,
-                    this.SelectedSerializer,
-                    this.ConvertJavaScriptSerializedObject);
+                    this.DeserializationHandler);
 
                 this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
 
@@ -283,16 +282,6 @@ namespace Twitterizer.Core
             Trace.Write(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             return resultObject;
-        }
-
-        /// <summary>
-        /// Converts a weakly typed deserialized javascript object to a strongly typed object.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>A strongly typed representation of the JSON data of type <typeparamref name="T"/></returns>
-        public virtual T ConvertJavaScriptSerializedObject(object value)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

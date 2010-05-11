@@ -42,14 +42,14 @@ namespace Twitterizer
     /// The Twitter Rate Limit Status class
     /// </summary>
     [Serializable]
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterRateLimitStatus : TwitterObject
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterRateLimitStatus"/> class.
         /// </summary>
-        protected TwitterRateLimitStatus()
+        public TwitterRateLimitStatus()
             : base()
         {
         }

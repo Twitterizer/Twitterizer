@@ -43,7 +43,7 @@ namespace Twitterizer
     /// The class that represents a twitter user account
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    [DebuggerDisplay("TwitterUser = {ScreenName}")]
+    [DebuggerDisplay("@{ScreenName}")]
     [Serializable]
     public class TwitterUser : Core.TwitterObject
     {
@@ -73,8 +73,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The User ID.</value>
         [JsonProperty(PropertyName = "id")]
-        [CLSCompliant(false)]
-        public ulong Id { get; set; }
+        public decimal Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.
@@ -108,9 +107,9 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-        //[JsonProperty(PropertyName = "created_at")]
-        //[JsonConverter(typeof(Newtonsoft.Json.Converters.JavaScriptDateTimeConverter))]
-        public DateTime CreatedDate { get; set; }
+        [JsonProperty(PropertyName = "created_at")]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
+        public DateTime? CreatedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the time zone.
@@ -124,24 +123,21 @@ namespace Twitterizer
         /// </summary>
         /// <value>The number of followers.</value>
         [JsonProperty(PropertyName = "followers_count")]
-        [CLSCompliant(false)]
-        public uint NumberOfFollowers { get; set; }
+        public long? NumberOfFollowers { get; set; }
 
         /// <summary>
         /// Gets or sets the number of statuses.
         /// </summary>
         /// <value>The number of statuses.</value>
         [JsonProperty(PropertyName = "statuses_count")]
-        [CLSCompliant(false)]
-        public uint NumberOfStatuses { get; set; }
+        public long NumberOfStatuses { get; set; }
 
         /// <summary>
         /// Gets or sets the number of friends.
         /// </summary>
         /// <value>The number of friends.</value>
         [JsonProperty(PropertyName = "friends_count")]
-        [CLSCompliant(false)]
-        public uint NumberOfFriends { get; set; }
+        public long NumberOfFriends { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the user has enabled contributors access to his or her account.
@@ -187,8 +183,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The number of favorites.</value>
         [JsonProperty(PropertyName = "favourites_count")]
-        [CLSCompliant(false)]
-        public uint NumberOfFavorites { get; set; }
+        public long NumberOfFavorites { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this user is protected.
@@ -331,8 +326,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="id">The user id.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        [CLSCompliant(false)]
-        public static TwitterUser Show(ulong id)
+        public static TwitterUser Show(decimal id)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
             command.UserId = id;
@@ -379,8 +373,7 @@ namespace Twitterizer
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="id">The user id.</param>
         /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        [CLSCompliant(false)]
-        public static TwitterUser Show(OAuthTokens requestTokens, ulong id)
+        public static TwitterUser Show(OAuthTokens requestTokens, decimal id)
         {
             try
             {

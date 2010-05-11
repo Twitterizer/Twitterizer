@@ -53,7 +53,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, ulong id)
+        public DeleteStatusCommand(OAuthTokens requestTokens, decimal id)
             : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
         {
             this.Id = id;
@@ -64,7 +64,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public ulong Id { get; set; }
+        public decimal Id { get; set; }
 
         /// <summary>
         /// Initializes the command.

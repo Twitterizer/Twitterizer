@@ -64,8 +64,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        [CLSCompliant(false)]
-        public static TwitterUserCollection Followers(OAuthTokens tokens, ulong userId)
+        public static TwitterUserCollection Followers(OAuthTokens tokens, decimal userId)
         {
             Commands.FollowersCommand command = new Commands.FollowersCommand(tokens)
             {
@@ -90,24 +89,13 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        [CLSCompliant(false)]
-        public static TwitterUserCollection Friends(OAuthTokens tokens, ulong userId, string screenName)
+        public static TwitterUserCollection Friends(OAuthTokens tokens, decimal userId, string screenName)
         {
             Commands.FriendsCommand command = new Commands.FriendsCommand(tokens)
             {
                 UserId = userId,
                 ScreenName = screenName
             };
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterUserWrapper>()
-                {
-                    Command = command,
-                    MethodName = "GetFriends"
-                };
-            }
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command).Users;
             result.CursorPagedCommand = command;
@@ -124,8 +112,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        [CLSCompliant(false)]
-        public static TwitterUserCollection Friends(OAuthTokens tokens, ulong userId)
+        public static TwitterUserCollection Friends(OAuthTokens tokens, decimal userId)
         {
             return Friends(tokens, userId, string.Empty);
         }
@@ -165,8 +152,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        [CLSCompliant(false)]
-        public static TwitterUser Delete(OAuthTokens tokens, ulong userId)
+        public static TwitterUser Delete(OAuthTokens tokens, decimal userId)
         {
             Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens)
             {
@@ -204,8 +190,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="userId">The user id.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterRelationship Show(OAuthTokens tokens, ulong userId)
+        public static TwitterRelationship Show(OAuthTokens tokens, decimal userId)
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens)
             {
@@ -223,8 +208,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRelationship"/> instance.
         /// </returns>
-        [CLSCompliant(false)]
-        public static TwitterRelationship Show(ulong userId1, ulong userId2)
+        public static TwitterRelationship Show(decimal userId1, decimal userId2)
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(null)
             {

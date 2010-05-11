@@ -57,6 +57,7 @@ namespace Twitterizer.Commands
             : base("GET", new Uri(Path), null)
         {
             this.ExcludeHashTags = excludeHashTags;
+            this.DeserializationHandler = TwitterTrendTimeframe.DeserializeJson;
         }
         #endregion
 
@@ -73,8 +74,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.SelectedSerializer = Serializer.JavaScriptSerializer;
-
             if (this.ExcludeHashTags)
             {
                 this.RequestParameters.Add("exclude", "hashtags");
@@ -87,16 +86,6 @@ namespace Twitterizer.Commands
         public override void Validate()
         {
             this.IsValid = true;
-        }
-
-        /// <summary>
-        /// Converts a weakly typed deserialized javascript object to a strongly typed object.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>A <typeparamref name="TwitterTrendTimeframe"/> instance.</returns>
-        public override TwitterTrendTimeframe ConvertJavaScriptSerializedObject(object value)
-        {
-            return TwitterTrendTimeframe.ConvertWeakTrend(value);
         }
     }
 }

@@ -122,7 +122,7 @@ Your last status was ""{3}"" on {4:D}
                 ConsumerSecret = ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerSecret"]
             };
 
-            ulong userId = ulong.Parse(ConfigurationManager.AppSettings["Twitterizer.Desktop.UserId"]);
+            decimal userId = decimal.Parse(ConfigurationManager.AppSettings["Twitterizer.Desktop.UserId"]);
 
             try
             {

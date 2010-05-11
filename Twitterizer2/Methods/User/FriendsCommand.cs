@@ -50,7 +50,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         public FriendsCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/friends.json"), tokens)
+            : base("GET", "statuses/friends.json", tokens, null)
         {
         }
         #endregion
@@ -60,7 +60,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the ID of the user for whom to request a list of followers. 
         /// </summary>
         /// <value>The user id.</value>
-        public ulong UserId { get; set; }
+        public decimal UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the screen name of the user for whom to request a list of followers. 

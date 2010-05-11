@@ -48,13 +48,15 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public UserTimelineCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/user_timeline.json"), tokens)
+        public UserTimelineCommand(OAuthTokens tokens, string idOrScreenName, decimal userId, string screenName, TimelineOptions options)
+            : base("GET", "statuses/user_timeline.json", tokens, options)
         {
+            this.IdOrScreenName = idOrScreenName;
+            this.ScreenName = screenName;
+            this.UserId = userId;
         }
         #endregion
 
-        #region API Parameters
         /// <summary>
         /// Gets or sets the ID or screen name of the user for whom to request a list of followers. 
         /// </summary>
@@ -65,7 +67,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the ID of the user for whom to request a list of followers. 
         /// </summary>
         /// <value>The user id.</value>
-        public ulong UserId { get; set; }
+        public decimal UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the screen name of the user for whom to request a list of followers. 
@@ -74,43 +76,35 @@ namespace Twitterizer.Commands
         public string ScreenName { get; set; }
 
         /// <summary>
-        /// Gets or sets the id of the status to obtain all statuses posted thereafter.
-        /// </summary>
-        /// <value>The status id.</value>
-        public ulong SinceId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max status id to obtain.
-        /// </summary>
-        /// <value>The max status id.</value>
-        public ulong MaxId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count of statuses to obtain.
-        /// </summary>
-        /// <value>The count of statuses to obtain.</value>
-        public int Count { get; set; }
-        #endregion
-
-        /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
             if (!string.IsNullOrEmpty(this.IdOrScreenName))
                 this.RequestParameters.Add("id", this.IdOrScreenName);
+
             if (this.UserId > 0)
                 this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
+
             if (!string.IsNullOrEmpty(this.ScreenName))
                 this.RequestParameters.Add("screen_name", this.ScreenName);
-            if (this.Count > 0)
-                this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
-            if (this.SinceId > 0)
-                this.RequestParameters.Add("since_id", this.SinceId.ToString(CultureInfo.InvariantCulture));
-            if (this.MaxId > 0)
-                this.RequestParameters.Add("max_id", this.MaxId.ToString(CultureInfo.InvariantCulture));
-            if (this.Page > 0)
-                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+
+
+            TimelineOptions options = this.OptionalProperties as TimelineOptions;
+            if (options != null)
+            {
+                if (options.Count > 0)
+                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+                if (options.SinceStatusId > 0)
+                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.MaxStatusId > 0)
+                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (this.Page > 0)
+                    this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            }
         }
 
         /// <summary>
@@ -130,16 +124,12 @@ namespace Twitterizer.Commands
         /// <returns>A cloned command object.</returns>
         internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new UserTimelineCommand(this.Tokens)
-            {
-                IdOrScreenName = this.IdOrScreenName,
-                ScreenName = this.ScreenName,
-                UserId = this.UserId,
-                Page = this.Page,
-                Count = this.Count,
-                MaxId = this.MaxId,
-                SinceId = this.SinceId
-            };
+            return new UserTimelineCommand(
+                this.Tokens, 
+                this.IdOrScreenName, 
+                this.UserId, 
+                this.ScreenName, 
+                this.OptionalProperties as TimelineOptions);
         }
     }
 }

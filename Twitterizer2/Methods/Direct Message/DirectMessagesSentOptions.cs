@@ -53,15 +53,13 @@ namespace Twitterizer
         /// Gets or sets the minimum (earliest) status id to request.
         /// </summary>
         /// <value>The since id.</value>
-        [CLSCompliant(false)]
-        public ulong SinceStatusId { get; set; }
+        public decimal SinceStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the max (latest) status id to request.
         /// </summary>
         /// <value>The max id.</value>
-        [CLSCompliant(false)]
-        public ulong MaxStatusId { get; set; }
+        public decimal MaxStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets the number of messages to request.

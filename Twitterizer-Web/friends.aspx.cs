@@ -43,9 +43,9 @@ public partial class friends : System.Web.UI.Page
     {
         if (!this.IsPostBack)
         {
-            ulong userId = 0;
+            decimal userId = 0;
 
-            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && ulong.TryParse(Request.QueryString["userid"], out userId))
+            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && decimal.TryParse(Request.QueryString["userid"], out userId))
             {
                 this.FriendsCollection = TwitterFriendship.Friends(Master.Tokens, userId);
             }

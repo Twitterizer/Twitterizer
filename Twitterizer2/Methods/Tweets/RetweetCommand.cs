@@ -67,7 +67,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public ulong StatusId { get; set; }
+        public decimal StatusId { get; set; }
 
         /// <summary>
         /// Initializes the command.

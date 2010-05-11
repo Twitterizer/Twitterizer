@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="statusId">The status id.</param>
-        public ShowStatusCommand(OAuthTokens requestTokens, ulong statusId)
+        public ShowStatusCommand(OAuthTokens requestTokens, decimal statusId)
             : base("GET", new Uri(string.Format(CultureInfo.InvariantCulture, Path, statusId)), requestTokens)
         {
             if (statusId <= 0)
@@ -71,7 +71,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public ulong StatusId { get; set; }
+        public decimal StatusId { get; set; }
         #endregion
 
         /// <summary>

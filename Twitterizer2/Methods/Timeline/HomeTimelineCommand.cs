@@ -49,7 +49,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="optionalProperties">The optional properties.</param>
-        public HomeTimelineCommand(OAuthTokens tokens, HomeTimelineOptions optionalProperties)
+        public HomeTimelineCommand(OAuthTokens tokens, TimelineOptions optionalProperties)
             : base("GET", "statuses/home_timeline.json", tokens, optionalProperties)
         {
             if (tokens == null)
@@ -73,18 +73,18 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            HomeTimelineOptions options = this.OptionalProperties as HomeTimelineOptions;
+            TimelineOptions options = this.OptionalProperties as TimelineOptions;
 
             if (options != null)
             {
                 if (options.Count > 0)
                     this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
 
-                if (options.SinceId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
+                if (options.SinceStatusId > 0)
+                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
-                if (options.MaxId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
+                if (options.MaxStatusId > 0)
+                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
 
                 this.Page = options.Page;
                 this.RequestParameters.Add(

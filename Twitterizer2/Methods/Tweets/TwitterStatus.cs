@@ -34,16 +34,16 @@
 namespace Twitterizer
 {
     using System;
-    using System.Globalization;
-    using Twitterizer.Core;
+    using System.Diagnostics;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The TwitterStatus class.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
+    [DebuggerDisplay("{User.ScreenName}/{Text}")]
     public class TwitterStatus : TwitterObject
     {
         #region Constructors
@@ -71,8 +71,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The status id.</value>
         [JsonProperty(PropertyName = "id")]
-        [CLSCompliantAttribute(false)]
-        public ulong Id { get; set; }
+        public decimal Id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this status message is truncated.
@@ -87,8 +86,8 @@ namespace Twitterizer
         /// Gets the created date.
         /// </summary>
         /// <value>The created date.</value>
-        //[JsonProperty(PropertyName = "created_at")]
-        //[JsonConverter(typeof(JavaScriptDateTimeConverter))]
+        [JsonProperty(PropertyName = "created_at")]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
@@ -110,16 +109,14 @@ namespace Twitterizer
         /// </summary>
         /// <value>The user id.</value>
         [JsonProperty(PropertyName = "in_reply_to_user_id")]
-        [CLSCompliant(false)]
-        public ulong? InReplyToUserId { get; set; }
+        public decimal? InReplyToUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status id the status is in reply to.
         /// </summary>
         /// <value>The status id.</value>
         [JsonProperty(PropertyName = "in_reply_to_status_id")]
-        [CLSCompliant(false)]
-        public ulong? InReplyToStatusId { get; set; }
+        public decimal? InReplyToStatusId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the authenticated user has favorited this status.
@@ -150,6 +147,13 @@ namespace Twitterizer
         /// <value>The retweeted status.</value>
         [JsonProperty(PropertyName = "retweeted_status")]
         public TwitterStatus RetweetedStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the place.
+        /// </summary>
+        /// <value>The place.</value>
+        [JsonProperty(PropertyName = "place")]
+        public TwitterPlace Place { get; set; }
         #endregion
 
         /// <summary>
@@ -183,8 +187,7 @@ namespace Twitterizer
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object of the deleted status.</returns>
-        [CLSCompliant(false)]
-        public static TwitterStatus Delete(OAuthTokens tokens, ulong id)
+        public static TwitterStatus Delete(OAuthTokens tokens, decimal id)
         {
             Commands.DeleteStatusCommand command = new Twitterizer.Commands.DeleteStatusCommand(tokens, id);
 
@@ -197,8 +200,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterStatus Show(OAuthTokens tokens, ulong statusId)
+        public static TwitterStatus Show(OAuthTokens tokens, decimal statusId)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(new Commands.ShowStatusCommand(tokens, statusId));
         }
@@ -208,8 +210,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterStatus Show(ulong statusId)
+        public static TwitterStatus Show(decimal statusId)
         {
             return Show(null, statusId);
         } 
@@ -220,8 +221,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterStatus Retweet(OAuthTokens tokens, ulong statusId)
+        public static TwitterStatus Retweet(OAuthTokens tokens, decimal statusId)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(
                 new Commands.RetweetCommand(tokens) { StatusId = statusId });
@@ -234,8 +234,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="count">The count.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId, int count)
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId, int count)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
                 new Commands.RetweetsCommand(tokens, statusId) { Count = count });
@@ -247,8 +246,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, ulong statusId)
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId)
         {
             return Retweets(tokens, statusId, -1);
         } 

@@ -38,24 +38,8 @@ namespace Twitterizer.Core
     using System.IO;
     using System.Net;
     using System.Text;
-    using System.Web.Script.Serialization;
     using Newtonsoft.Json;
-
-    /// <summary>
-    /// Supported serialization schemes
-    /// </summary>
-    internal enum Serializer
-    {
-        /// <summary>
-        /// Utilizes the Newtonsoft.Json library for serialization
-        /// </summary>
-        JSONdotNet,
-
-        /// <summary>
-        /// Utilizes the AJAX JavaScript serialization classes for semi-manual JSON parsing.
-        /// </summary>
-        JavaScriptSerializer
-    }
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The Serialization Helper class. Provides a simple interface for common serialization tasks.
@@ -69,16 +53,17 @@ namespace Twitterizer.Core
         /// </summary>
         /// <param name="value">Contains nested dictionary objects containing deserialized values for manual parsing.</param>
         /// <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T"/></returns>
-        public delegate T JavascriptConversionDelegate(object value);
+        public delegate T DeserializationHandler(JObject value);
 
         /// <summary>
         /// Deserializes the specified web response.
         /// </summary>
         /// <param name="webResponse">The web response.</param>
-        /// <param name="serializer">The serializer.</param>
         /// <param name="javascriptConversionDeligate">The javascript conversion deligate.</param>
-        /// <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T"/></returns>
-        public static T Deserialize(WebResponse webResponse, Serializer serializer, JavascriptConversionDelegate javascriptConversionDeligate)
+        /// <returns>
+        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+        /// </returns>
+        public static T Deserialize(WebResponse webResponse, DeserializationHandler deserializationHandler)
         {
             try
             {
@@ -95,7 +80,7 @@ namespace Twitterizer.Core
 #endif
 
                     // Deserialize the results.
-                    resultObject = Deserialize(serializer, javascriptConversionDeligate, data);
+                    resultObject = Deserialize(data, deserializationHandler);
 
                     responseStream.Close();
 
@@ -111,29 +96,51 @@ namespace Twitterizer.Core
         }
 
         /// <summary>
+        /// Deserializes the specified web response.
+        /// </summary>
+        /// <param name="webResponse">The web response.</param>
+        /// <returns>
+        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+        /// </returns>
+        public static T Deserialize(WebResponse webResponse)
+        {
+            return Deserialize(webResponse, null);
+        }
+
+        /// <summary>
         /// Deserializes the specified serializer.
         /// </summary>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="javascriptConversionDeligate">The javascript conversion deligate.</param>
         /// <param name="data">The data to be deserialized.</param>
-        /// <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T"/></returns>
-        public static T Deserialize(Serializer serializer, JavascriptConversionDelegate javascriptConversionDeligate, byte[] data)
+        /// <param name="javascriptConversionDeligate">The javascript conversion deligate.</param>
+        /// <returns>
+        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+        /// </returns>
+        public static T Deserialize(byte[] data, DeserializationHandler javascriptConversionDeligate)
         {
             T resultObject = default(T);
 
-            switch (serializer)
+            if (javascriptConversionDeligate == null)
             {
-                case Serializer.JavaScriptSerializer:
-                    JavaScriptSerializer jss = new JavaScriptSerializer();
-                    object result = jss.DeserializeObject(Encoding.UTF8.GetString(data));
-                    resultObject = javascriptConversionDeligate(result);
-                    break;
-                case Serializer.JSONdotNet:
-                    resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(data));
-                    break;
+                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(data));
+            }
+            else
+            {
+                resultObject = javascriptConversionDeligate((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data)));
             }
 
             return resultObject;
+        }
+
+        /// <summary>
+        /// Deserializes the specified serializer.
+        /// </summary>
+        /// <param name="data">The data to be deserialized.</param>
+        /// <returns>
+        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+        /// </returns>
+        public static T Deserialize(byte[] data)
+        {
+            return Deserialize(data, null);
         }
     }
 }

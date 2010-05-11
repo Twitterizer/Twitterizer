@@ -41,7 +41,7 @@ namespace Twitterizer
     /// <summary>
     /// The Direct Message Entity Class
     /// </summary>
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterDirectMessage : TwitterObject
     {
         #region Constructors
@@ -69,14 +69,12 @@ namespace Twitterizer
         /// </summary>
         /// <value>The direct message id.</value>
         [JsonProperty(PropertyName = "id")]
-        [CLSCompliant(false)]
-        public ulong Id { get; set; }
+        public decimal Id { get; set; }
 
         /// <summary>
         /// Gets or sets the sender id.
         /// </summary>
         /// <value>The sender id.</value>
-        [JsonProperty(PropertyName = "sender_id")]
         public long SenderId { get; set; }
 
         /// <summary>
@@ -94,10 +92,11 @@ namespace Twitterizer
         public long RecipientId { get; set; }
 
         /// <summary>
-        /// Gets the created date.
+        /// Gets or Sets the created date.
         /// </summary>
         /// <value>The created date.</value>
         [JsonProperty(PropertyName = "created_at")]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
@@ -147,7 +146,6 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        [CLSCompliant(false)]
         public static TwitterDirectMessageCollection DirectMessages(OAuthTokens tokens, DirectMessagesOptions options)
         {
             return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesCommand(tokens, options));
@@ -173,7 +171,6 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        [CLSCompliant(false)]
         public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
         {
             return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
@@ -186,8 +183,7 @@ namespace Twitterizer
         /// <param name="userId">The user id of the recipient user.</param>
         /// <param name="text">The text of your direct message.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        [CLSCompliant(false)]
-        public static TwitterDirectMessage Send(OAuthTokens tokens, ulong userId, string text)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text)
         {
             return Send(tokens, userId, string.Empty, text);
         }
@@ -235,7 +231,7 @@ namespace Twitterizer
         /// <param name="userName">Name of the user.</param>
         /// <param name="text">The text of your direct message.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, ulong userId, string userName, string text)
+        private static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string userName, string text)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text)
             {

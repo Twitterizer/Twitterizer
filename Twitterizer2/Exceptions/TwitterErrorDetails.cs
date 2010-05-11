@@ -64,24 +64,34 @@ namespace Twitterizer
 
         #region ITwitterObject Members
 
+        /// <summary>
+        /// Gets or sets information about the user's rate usage.
+        /// </summary>
+        /// <value>The rate limiting object.</value>
         public RateLimiting RateLimiting
         {
             get
             {
                 throw new System.NotImplementedException();
             }
+
             set
             {
                 throw new System.NotImplementedException();
             }
         }
 
+        /// <summary>
+        /// Gets or sets the oauth tokens.
+        /// </summary>
+        /// <value>The oauth tokens.</value>
         public OAuthTokens Tokens
         {
             get
             {
                 throw new System.NotImplementedException();
             }
+
             set
             {
                 throw new System.NotImplementedException();

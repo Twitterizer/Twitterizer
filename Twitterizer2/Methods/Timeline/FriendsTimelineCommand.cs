@@ -49,7 +49,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
-        public FriendsTimelineCommand(OAuthTokens tokens, FriendsTimelineOptions options)
+        public FriendsTimelineCommand(OAuthTokens tokens, TimelineOptions options)
             : base("GET", "statuses/friends_timeline.json", tokens, options)
         {
         }
@@ -60,7 +60,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            FriendsTimelineOptions options = this.OptionalProperties as FriendsTimelineOptions;
+            TimelineOptions options = this.OptionalProperties as TimelineOptions;
 
             if (options == null)
             {
@@ -97,7 +97,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as FriendsTimelineOptions);
+            return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
         }
     }
 }

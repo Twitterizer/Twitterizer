@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="FriendsTimelineOptions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterizerDateConverter.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,57 +29,71 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The friends timeline options class.</summary>
+// <summary>The date converter for Twitter API dates</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
-    /// The direct messages options class. Provides a payload for the <see cref="Twitterizer.Commands.FriendsTimelineCommand"/> command.
+    /// Converts date strings returned by the Twitter API into <see cref="System.DateTime"/>
     /// </summary>
-    public sealed class FriendsTimelineOptions : Core.OptionalProperties
+    internal class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FriendsTimelineOptions"/> class.
+        /// The date pattern for most dates returned by the API
         /// </summary>
-        public FriendsTimelineOptions()
-            : base()
+        protected const string DateFormat = "ddd MMM dd HH:mm:ss zz00 yyyy";
+
+        /// <summary>
+        /// Reads the json.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="existingValue">The existing value.</param>
+        /// <param name="serializer">The serializer.</param>
+        /// <returns></returns>
+        public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            this.Page = 1;
+            try
+            {
+                if (reader.Value == null || reader.Value.GetType() != typeof(string))
+                    return new DateTime();
+
+                DateTime parsedDate;
+
+                if (DateTime.TryParseExact(
+                       (string)reader.Value,
+                       DateFormat,
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None,
+                       out parsedDate))
+                {
+                    return parsedDate;
+                }
+                else
+                {
+                    return new DateTime();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
-        /// Gets or sets the minimum (earliest) status id to request.
+        /// Writes the json.
         /// </summary>
-        /// <value>The since id.</value>
-        [CLSCompliant(false)]
-        public ulong SinceStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max (latest) status id to request.
-        /// </summary>
-        /// <value>The max id.</value>
-        [CLSCompliant(false)]
-        public ulong MaxStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of messages to request.
-        /// </summary>
-        /// <value>The number of messages to request.</value>
-        public int Count { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number to request.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether user objects should contain only Id values.
-        /// </summary>
-        /// <value><c>true</c> if user objects should contain only Id values; otherwise, <c>false</c>.</value>
-        public bool SkipUser { get; set; }
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="serializer">The serializer.</param>
+        public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
