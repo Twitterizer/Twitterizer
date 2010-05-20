@@ -85,45 +85,21 @@ namespace Twitterizer
         /// </summary>
         /// <value>The reset time string.</value>
         [JsonProperty(PropertyName = "reset_time")]
-        public string ResetTimeString { get; set; }
+        [JsonConverter(typeof(TwitterizerDateConverter))]
+        public DateTime ResetTime { get; set; }
         #endregion
-
-        /// <summary>
-        /// Gets the time rate limiting will reset.
-        /// </summary>
-        /// <value>The reset time.</value>
-        public DateTime ResetTime
-        {
-            get
-            {
-                DateTime parsedDate;
-
-                if (DateTime.TryParseExact(
-                       this.ResetTimeString,
-                       DateFormat,
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out parsedDate))
-                {
-                    return parsedDate;
-                }
-                else
-                {
-                    return new DateTime();
-                }
-            }
-        }
 
         /// <summary>
         /// Gets the rate limiting status status for the authenticated user.
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens)
+        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens, OptionalProperties options)
         {
-            Commands.RateLimitStatusCommand command = new Twitterizer.Commands.RateLimitStatusCommand(tokens);
+            Commands.RateLimitStatusCommand command = new Twitterizer.Commands.RateLimitStatusCommand(tokens, options);
             command.Validate();
 
             if (!command.IsValid)
@@ -143,12 +119,24 @@ namespace Twitterizer
         /// <summary>
         /// Gets the rate limiting status status based on the application's IP address.
         /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterRateLimitStatus"/> instance.
+        /// </returns>
+        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens)
+        {
+            return GetStatus(tokens, null);
+        }
+
+        /// <summary>
+        /// Gets the rate limiting status status based on the application's IP address.
+        /// </summary>
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
         public static TwitterRateLimitStatus GetStatus()
         {
-            return GetStatus(null);
+            return GetStatus(null, null);
         }
     }
 }

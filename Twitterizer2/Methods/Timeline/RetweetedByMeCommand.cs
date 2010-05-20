@@ -48,8 +48,8 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="RetweetedByMeCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public RetweetedByMeCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/retweeted_by_me.json"), tokens)
+        public RetweetedByMeCommand(OAuthTokens tokens, TimelineOptions options)
+            : base("GET", "statuses/retweeted_by_me.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -58,30 +58,30 @@ namespace Twitterizer.Commands
         }
         #endregion
 
-        #region API Properties
-        /// <summary>
-        /// Gets or sets the since status id.
-        /// </summary>
-        /// <value>The since status id.</value>
-        public decimal SinceStatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max status id.
-        /// </summary>
-        /// <value>The max status id.</value>
-        public decimal MaxStatusId { get; set; }
-        #endregion
-
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", this.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+            this.RequestParameters.Add("page", "1");
 
-            if (this.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", this.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+            TimelineOptions options = this.OptionalProperties as TimelineOptions;
+            if (options == null)
+            {
+                return;
+            }
+
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Page > 0)
+                this.RequestParameters["page"] = options.Page.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -100,11 +100,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new RetweetedByMeCommand(this.Tokens)
-            {
-                SinceStatusId = this.SinceStatusId,
-                MaxStatusId = this.MaxStatusId
-            };
+            return new RetweetedByMeCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
         }
     }
 }

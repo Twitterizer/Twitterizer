@@ -177,36 +177,15 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Sends a new direct message to the specified user from the authenticating user.
-        /// </summary>
-        /// <param name="tokens">The OAuth tokens.</param>
-        /// <param name="userId">The user id of the recipient user.</param>
-        /// <param name="text">The text of your direct message.</param>
-        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text)
-        {
-            return Send(tokens, userId, string.Empty, text);
-        }
-
-        /// <summary>
-        /// Sends a new direct message to the specified user from the authenticating user.
-        /// </summary>
-        /// <param name="tokens">The OAuth tokens.</param>
-        /// <param name="username">The user nmae of the recipient user.</param>
-        /// <param name="text">The text of your direct message.</param>
-        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, string username, string text)
-        {
-            return Send(tokens, 0, username, text);
-        }
-
-        /// <summary>
         /// Deletes this direct message.
         /// </summary>
-        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        public TwitterDirectMessage Delete()
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        public TwitterDirectMessage Delete(OptionalProperties options)
         {
-            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id);
+            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id, options);
 
             command.Validate();
             if (!command.IsValid)
@@ -224,19 +203,31 @@ namespace Twitterizer
         }
 
         /// <summary>
+        /// Deletes this direct message.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        public TwitterDirectMessage Delete()
+        {
+            return Delete(null);
+        }
+
+        /// <summary>
         /// Sends a new direct message to the specified user from the authenticating user.
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
         /// <param name="userId">The user id.</param>
-        /// <param name="userName">Name of the user.</param>
         /// <param name="text">The text of your direct message.</param>
-        /// <returns>A <see cref="TwitterDirectMessage"/> instance.</returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string userName, string text)
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        private static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options)
         {
-            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text)
+            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
             {
-                RecipientUserId = userId,
-                RecipientUserName = userName
+                RecipientUserId = userId
             };
 
             command.Validate();
@@ -252,6 +243,62 @@ namespace Twitterizer
             TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 
             return result;
+        }
+
+        /// <summary>
+        /// Sends a new direct message to the specified user from the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="text">The text of your direct message.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        private static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text)
+        {
+            return Send(tokens, userId, text, null);
+        }
+
+        /// <summary>
+        /// Sends a new direct message to the specified user from the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="screenName">The user's screen name.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        private static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
+        {
+            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
+            {
+                RecipientUserName = screenName
+            };
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterDirectMessage>()
+                {
+                    Command = command,
+                    MethodName = "Send"
+                };
+            }
+
+            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sends a new direct message to the specified user from the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="screenName">The user's screen name.</param>
+        /// <param name="text">The text.</param>
+        /// <returns></returns>
+        private static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text)
+        {
+            return Send(tokens, screenName, text, null);
         }
     }
 }

@@ -42,21 +42,15 @@ namespace Twitterizer.Commands
     internal sealed class RateLimitStatusCommand : TwitterCommand<TwitterRateLimitStatus>
     {
         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/account/rate_limit_status.json";
-
-        #region Constructors
-        /// <summary>
         /// Initializes a new instance of the <see cref="RateLimitStatusCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        public RateLimitStatusCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="options">The options.</param>
+        public RateLimitStatusCommand(OAuthTokens requestTokens, OptionalProperties options)
+            : base("GET", "account/rate_limit_status.json", requestTokens, options)
         {
         }
-        #endregion
-
+        
         /// <summary>
         /// Initializes the command.
         /// </summary>

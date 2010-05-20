@@ -42,20 +42,21 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class DeleteDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/direct_messages/destroy/{0}.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteDirectMessageCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="id">The status id.</param>
-        public DeleteDirectMessageCommand(OAuthTokens tokens, decimal id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), tokens)
+        /// <param name="options">The options.</param>
+        public DeleteDirectMessageCommand(OAuthTokens tokens, decimal id, OptionalProperties options)
+            : base("POST", string.Format(CultureInfo.InvariantCulture, "direct_messages/destroy/{0}.json", id), tokens, options)
         {
+            if (id <= 0)
+            {
+                throw new ArgumentException("The message id is invalid", "id");
+            }
+
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");

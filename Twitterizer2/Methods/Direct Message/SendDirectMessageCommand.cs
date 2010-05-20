@@ -44,18 +44,13 @@ namespace Twitterizer.Commands
     internal sealed class SendDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/direct_messages/new.json";
-
-        #region Constructors
-        /// <summary>
         /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="text">The message text.</param>
-        public SendDirectMessageCommand(OAuthTokens tokens, string text)
-            : base("POST", new Uri(Path), tokens)
+        /// <param name="options">The options.</param>
+        public SendDirectMessageCommand(OAuthTokens tokens, string text, OptionalProperties options)
+            : base("POST", "direct_messages/new.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -69,8 +64,7 @@ namespace Twitterizer.Commands
 
             this.Text = text;
         }
-        #endregion
-
+        
         #region Properties
         /// <summary>
         /// Gets or sets the status text.

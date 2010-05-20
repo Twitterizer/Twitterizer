@@ -50,7 +50,8 @@ namespace Twitterizer
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStatus"/> class.
         /// </summary>
-        public TwitterStatus() : base() 
+        public TwitterStatus()
+            : base()
         {
         }
 
@@ -58,7 +59,7 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="TwitterStatus"/> class.
         /// </summary>
         /// <param name="tokens">OAuth access tokens.</param>
-        internal TwitterStatus(OAuthTokens tokens) 
+        internal TwitterStatus(OAuthTokens tokens)
             : base()
         {
             this.Tokens = tokens;
@@ -213,7 +214,7 @@ namespace Twitterizer
         public static TwitterStatus Show(decimal statusId)
         {
             return Show(null, statusId);
-        } 
+        }
 
         /// <summary>
         /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
@@ -249,6 +250,6 @@ namespace Twitterizer
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId)
         {
             return Retweets(tokens, statusId, -1);
-        } 
+        }
     }
 }

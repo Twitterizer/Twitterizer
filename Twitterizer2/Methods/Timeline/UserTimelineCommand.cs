@@ -48,6 +48,10 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
+        /// <param name="idOrScreenName">Name of the id or screen.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="screenName">Name of the screen.</param>
+        /// <param name="options">The options.</param>
         public UserTimelineCommand(OAuthTokens tokens, string idOrScreenName, decimal userId, string screenName, TimelineOptions options)
             : base("GET", "statuses/user_timeline.json", tokens, options)
         {

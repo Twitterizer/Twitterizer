@@ -105,6 +105,7 @@
     <Compile Include="Methods\Timeline\TimelineOptions.cs" />
     <Compile Include="Methods\Timeline\TwitterTimeline.cs" />
     <Compile Include="Methods\Tweets\DeleteStatusCommand.cs" />
+    <Compile Include="Methods\Tweets\RetweetsOfMeOptions.cs" />
     <Compile Include="Methods\User\FriendsCommand.cs" />
     <Compile Include="Methods\Timeline\FriendsTimelineCommand.cs" />
     <Compile Include="Methods\List\GetListCommand.cs" />
