@@ -90,6 +90,11 @@
     <Compile Include="Methods\Direct Message\DirectMessagesSentCommand.cs" />
     <Compile Include="Methods\Direct Message\DirectMessagesSentOptions.cs" />
     <Compile Include="Methods\Direct Message\SendDirectMessageCommand.cs" />
+    <Compile Include="Methods\Favorites\CreateFavoriteCommand.cs" />
+    <Compile Include="Methods\Favorites\DeleteFavoriteCommand.cs" />
+    <Compile Include="Methods\Favorites\ListFavoritesCommand.cs" />
+    <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
+    <Compile Include="Methods\Favorites\TwitterFavorite.cs" />
     <Compile Include="Methods\Friendship\CreateFriendshipCommand.cs" />
     <Compile Include="Methods\Friendship\TwitterFriendship.cs" />
     <Compile Include="Methods\Geo\ReverseGeocodeCommand.cs" />
@@ -189,7 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Methods\Block\" />
-    <Folder Include="Methods\Favorites\" />
     <Folder Include="Methods\Notification\" />
     <Folder Include="Methods\SavedSearches\" />
     <Folder Include="Methods\Spam\" />
