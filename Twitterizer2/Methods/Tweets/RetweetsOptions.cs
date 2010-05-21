@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ShowStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RetweetsOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,55 +29,20 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The Show Status Command class</summary>
+// <summary>The retweets options class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer;
-
     /// <summary>
-    /// The Show Status Command
+    /// The Retweets Options class. Provides a payload for optional parameters for the Retweets Command
     /// </summary>
-    internal sealed class ShowStatusCommand : Core.TwitterCommand<TwitterStatus>
+    public class RetweetsOptions : Core.OptionalProperties
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShowStatusCommand"/> class.
+        /// Gets or sets the count of statuses to return.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="statusId">The status id.</param>
-        /// <param name="options">The options.</param>
-        public ShowStatusCommand(OAuthTokens requestTokens, decimal statusId, Core.OptionalProperties options)
-            : base(
-                "GET", 
-                string.Format(CultureInfo.InvariantCulture, "statuses/show/{0}.json", statusId), 
-                requestTokens, 
-                options)
-        {
-            if (statusId <= 0)
-            {
-                throw new ArgumentNullException("statusId");
-            }
-        }
-        #endregion
-        
-        /// <summary>
-        /// Inits this instance.
-        /// </summary>
-        public override void Init()
-        {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
+        /// <value>The number of statuses to return.</value>
+        public int Count { get; set; }
     }
 }
-

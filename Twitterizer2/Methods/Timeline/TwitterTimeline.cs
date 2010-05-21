@@ -83,7 +83,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterStatusCollection UserTimeline(OAuthTokens tokens)
         {
-            return UserTimeline(tokens,null);
+            return UserTimeline(tokens, null);
         }
 
         /// <summary>
@@ -206,8 +206,9 @@ namespace Twitterizer
         /// Returns the 20 most recent tweets of the authenticated user that have been retweeted by others.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
         public static TwitterStatusCollection RetweetsOfMe(OAuthTokens tokens)
         {
             return RetweetsOfMe(tokens, null);
@@ -229,8 +230,9 @@ namespace Twitterizer
         /// Returns the 20 most recent retweets posted by the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
         public static TwitterStatusCollection RetweetedByMe(OAuthTokens tokens)
         {
             return RetweetedByMe(tokens, null);
@@ -252,11 +254,36 @@ namespace Twitterizer
         /// Returns the 20 most recent retweets posted by the authenticating user's friends.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
         public static TwitterStatusCollection RetweetedToMe(OAuthTokens tokens)
         {
             return RetweetedToMe(tokens, null);
+        }
+
+        /// <summary>
+        /// Returns the 20 most recent mentions (status containing @username) for the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
+        public static TwitterStatusCollection Mentions(OAuthTokens tokens, TimelineOptions options)
+        {
+            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+                new Commands.MentionsCommand(tokens, options));
+        }
+
+        /// <summary>
+        /// Returns the 20 most recent mentions (status containing @username) for the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection Mentions(OAuthTokens tokens)
+        {
+            return Mentions(tokens, null);
         }
     }
 }

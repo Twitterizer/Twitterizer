@@ -50,7 +50,7 @@ using System.Security.Permissions;
 
 [assembly: AssemblyCompany("Twitterizer Group (www.twitterizer.net)")]
 [assembly: AssemblyProduct("Twitterizer")]
-[assembly: AssemblyCopyright("Copyright ©2010 Patrick 'Ricky' Smith")]
+[assembly: AssemblyCopyright("2010 Patrick 'Ricky' Smith (www.ricky-dev.com)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AllowPartiallyTrustedCallersAttribute()]
 [assembly: ReflectionPermission(SecurityAction.RequestMinimum)]
@@ -65,5 +65,5 @@ using System.Security.Permissions;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
 
-[assembly: AssemblyVersion("2.1.0.0")]
-[assembly: AssemblyFileVersion("2.1.0.0")]
+[assembly: AssemblyVersion("2.1.0.*")]
+[assembly: AssemblyFileVersion("2.1")]

@@ -54,7 +54,7 @@ namespace Twitterizer
         /// <param name="objectType">Type of the object.</param>
         /// <param name="existingValue">The existing value.</param>
         /// <param name="serializer">The serializer.</param>
-        /// <returns></returns>
+        /// <returns>The parsed value as a DateTime, or null.</returns>
         public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             try
@@ -80,7 +80,6 @@ namespace Twitterizer
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

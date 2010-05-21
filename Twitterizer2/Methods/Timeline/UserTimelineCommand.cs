@@ -48,14 +48,14 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        /// <param name="idOrScreenName">Name of the id or screen.</param>
+        /// <param name="screenNameOrId">The screen name or id.</param>
         /// <param name="userId">The user id.</param>
         /// <param name="screenName">Name of the screen.</param>
         /// <param name="options">The options.</param>
-        public UserTimelineCommand(OAuthTokens tokens, string idOrScreenName, decimal userId, string screenName, TimelineOptions options)
+        public UserTimelineCommand(OAuthTokens tokens, string screenNameOrId, decimal userId, string screenName, TimelineOptions options)
             : base("GET", "statuses/user_timeline.json", tokens, options)
         {
-            this.IdOrScreenName = idOrScreenName;
+            this.IdOrScreenName = screenNameOrId;
             this.ScreenName = screenName;
             this.UserId = userId;
         }
@@ -92,7 +92,6 @@ namespace Twitterizer.Commands
 
             if (!string.IsNullOrEmpty(this.ScreenName))
                 this.RequestParameters.Add("screen_name", this.ScreenName);
-
 
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
             if (options != null)

@@ -338,7 +338,7 @@ namespace Twitterizer
 
             HttpWebResponse response;
 
-            if (!new string[] { "GET", "POST", "DELETE" }.Contains(httpMethod))
+            if (!new string[] { "GET", "POST", "DELETE" } .Contains(httpMethod))
             {
                 throw new ArgumentException("The HTTP method supplied is not supported.", "httpMethod");
             }

@@ -44,19 +44,15 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class SearchCommand : TwitterCommand<TwitterSearchResultWrapper>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://search.twitter.com/search.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="query">The query.</param>
-        public SearchCommand(OAuthTokens requestTokens, string query)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="options">The options.</param>
+        public SearchCommand(OAuthTokens requestTokens, string query, SearchOptions options)
+            : base("GET", "search.json", requestTokens, options)
         {
             if (string.IsNullOrEmpty(query))
             {
@@ -67,81 +63,11 @@ namespace Twitterizer.Commands
         }
         #endregion
 
-        #region API Properties
         /// <summary>
         /// Gets or sets the query.
         /// </summary>
         /// <value>The query.</value>
         public string Query { get; set; }
-
-        /// <summary>
-        /// Gets or sets the language.
-        /// </summary>
-        /// <value>The language.</value>
-        public string Language { get; set; }
-
-        /// <summary>
-        /// Gets or sets the locale.
-        /// </summary>
-        /// <value>The locale.</value>
-        public string Locale { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max id.
-        /// </summary>
-        /// <value>The max id.</value>
-        public long MaxId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number per page.
-        /// </summary>
-        /// <value>The number per page.</value>
-        public int NumberPerPage { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int PageNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets the since date.
-        /// </summary>
-        /// <value>The since date.</value>
-        public DateTime SinceDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the since id.
-        /// </summary>
-        /// <value>The since id.</value>
-        public long SinceId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the geo code.
-        /// </summary>
-        /// <value>The geo code.</value>
-        public string GeoCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to prefix the user name to the tweet.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> to prefix the user name to the tweet; otherwise, <c>false</c>.
-        /// </value>
-        public bool PrefixUsername { get; set; }
-
-        /// <summary>
-        /// Gets or sets the until date.
-        /// </summary>
-        /// <value>The until date.</value>
-        public DateTime UntilDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of the result.
-        /// </summary>
-        /// <value>The type of the result.</value>
-        public string ResultType { get; set; }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
@@ -152,59 +78,74 @@ namespace Twitterizer.Commands
 
             this.RequestParameters.Add("q", this.Query);
 
-            if (!string.IsNullOrEmpty(this.Language))
+            SearchOptions options = this.OptionalProperties as SearchOptions;
+
+            if (options == null)
             {
-                this.RequestParameters.Add("lang", this.Language);
+                return;
             }
 
-            if (!string.IsNullOrEmpty(this.Locale))
+            if (!string.IsNullOrEmpty(options.Language))
             {
-                this.RequestParameters.Add("locale", this.Locale);
+                this.RequestParameters.Add("lang", options.Language);
             }
 
-            if (this.MaxId > 0)
+            if (!string.IsNullOrEmpty(options.Locale))
             {
-                this.RequestParameters.Add("max_id", this.MaxId.ToString(unitedStatesEnglishCulture));
+                this.RequestParameters.Add("locale", options.Locale);
             }
 
-            if (this.NumberPerPage > 0)
+            if (options.MaxId > 0)
             {
-                this.RequestParameters.Add("rpp", this.NumberPerPage.ToString(unitedStatesEnglishCulture));
+                this.RequestParameters.Add("max_id", options.MaxId.ToString(unitedStatesEnglishCulture));
             }
 
-            if (this.PageNumber > 0)
+            if (options.NumberPerPage > 0)
             {
-                this.RequestParameters.Add("page", this.PageNumber.ToString(unitedStatesEnglishCulture));
+                this.RequestParameters.Add("rpp", options.NumberPerPage.ToString(unitedStatesEnglishCulture));
             }
 
-            if (this.SinceDate > new DateTime())
+            if (options.PageNumber > 0)
             {
-                this.RequestParameters.Add("since", this.SinceDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("page", options.PageNumber.ToString(unitedStatesEnglishCulture));
             }
 
-            if (this.SinceId > 0)
+            if (options.SinceDate > new DateTime())
             {
-                this.RequestParameters.Add("since_id", this.SinceId.ToString(unitedStatesEnglishCulture));
+                this.RequestParameters.Add("since", options.SinceDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
             }
 
-            if (!string.IsNullOrEmpty(this.GeoCode))
+            if (options.SinceId > 0)
             {
-                this.RequestParameters.Add("geocode", this.GeoCode);
+                this.RequestParameters.Add("since_id", options.SinceId.ToString(unitedStatesEnglishCulture));
             }
 
-            if (this.PrefixUsername)
+            if (!string.IsNullOrEmpty(options.GeoCode))
+            {
+                this.RequestParameters.Add("geocode", options.GeoCode);
+            }
+
+            if (options.PrefixUsername)
             {
                 this.RequestParameters.Add("show_user", "true");
             }
 
-            if (this.UntilDate > new DateTime())
+            if (options.UntilDate > new DateTime())
             {
-                this.RequestParameters.Add("until", this.UntilDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("until", options.UntilDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
             }
 
-            if (!string.IsNullOrEmpty(this.ResultType))
+            switch (options.ResultType)
             {
-                this.RequestParameters.Add("result_type", this.ResultType);
+                case SearchOptionsResultType.Mixed:
+                    this.RequestParameters.Add("result_type", "mixed");
+                    break;
+                case SearchOptionsResultType.Recent:
+                    this.RequestParameters.Add("result_type", "recent");
+                    break;
+                case SearchOptionsResultType.Popular:
+                    this.RequestParameters.Add("result_type", "popular");
+                    break;
             }
         }
 

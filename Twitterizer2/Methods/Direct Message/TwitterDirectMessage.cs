@@ -92,7 +92,7 @@ namespace Twitterizer
         public long RecipientId { get; set; }
 
         /// <summary>
-        /// Gets or Sets the created date.
+        /// Gets or sets the created date.
         /// </summary>
         /// <value>The created date.</value>
         [JsonProperty(PropertyName = "created_at")]
@@ -210,7 +210,7 @@ namespace Twitterizer
         /// </returns>
         public TwitterDirectMessage Delete()
         {
-            return Delete(null);
+            return this.Delete(null);
         }
 
         /// <summary>
@@ -264,9 +264,9 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
         /// <param name="screenName">The user's screen name.</param>
-        /// <param name="text">The text.</param>
+        /// <param name="text">The message text.</param>
         /// <param name="options">The options.</param>
-        /// <returns></returns>
+        /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
         private static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
@@ -294,8 +294,8 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
         /// <param name="screenName">The user's screen name.</param>
-        /// <param name="text">The text.</param>
-        /// <returns></returns>
+        /// <param name="text">The message text.</param>
+        /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
         private static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text)
         {
             return Send(tokens, screenName, text, null);

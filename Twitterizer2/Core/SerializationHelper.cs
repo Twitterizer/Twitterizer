@@ -59,7 +59,7 @@ namespace Twitterizer.Core
         /// Deserializes the specified web response.
         /// </summary>
         /// <param name="webResponse">The web response.</param>
-        /// <param name="javascriptConversionDeligate">The javascript conversion deligate.</param>
+        /// <param name="deserializationHandler">The deserialization handler.</param>
         /// <returns>
         /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
         /// </returns>

@@ -34,12 +34,11 @@
 
 namespace Twitterizer.Commands
 {
-    using Twitterizer.Core;
+    using System;
     using System.Globalization;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using System.Collections.ObjectModel;
-    using System;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The reverse geocode command class. Performs a reverse geocode lookup.
@@ -49,6 +48,8 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="ReverseGeocodeCommand"/> class.
         /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options.</param>
         public ReverseGeocodeCommand(double latitude, double longitude, OptionalProperties options)
             : base("GET", "geo/reverse_geocode.json", null, options)
@@ -87,6 +88,11 @@ namespace Twitterizer.Commands
             this.IsValid = this.Latitude != 0 && this.Longitude != 0;
         }
 
+        /// <summary>
+        /// Deserializes the place element value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>A <see cref="TwitterPlaceCollection"/> object or null.</returns>
         private static TwitterPlaceCollection Deserialize(JObject value)
         {
             TwitterPlaceCollection result = new TwitterPlaceCollection();

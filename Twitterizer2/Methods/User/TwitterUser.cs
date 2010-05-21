@@ -38,6 +38,7 @@ namespace Twitterizer
     using System.Drawing;
     using System.Globalization;
     using Newtonsoft.Json;
+using Twitterizer.Core;
     
     /// <summary>
     /// The class that represents a twitter user account
@@ -104,7 +105,7 @@ namespace Twitterizer
         public TwitterStatus Status { get; set; }
 
         /// <summary>
-        /// Gets the created date.
+        /// Gets or sets the created date.
         /// </summary>
         /// <value>The created date.</value>
         [JsonProperty(PropertyName = "created_at")]
@@ -322,98 +323,111 @@ namespace Twitterizer
         #endregion
 
         /// <summary>
-        /// Gets the user.
-        /// </summary>
-        /// <param name="id">The user id.</param>
-        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser Show(decimal id)
-        {
-            Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
-            command.UserId = id;
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterUser>()
-                {
-                    Command = command,
-                    MethodName = "GetUser"
-                };
-            }
-
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets the user.
-        /// </summary>
-        /// <param name="username">The username.</param>
-        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser Show(string username)
-        {
-            Commands.ShowUserCommand command = new Commands.ShowUserCommand(null);
-            command.Username = username;
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterUser>()
-                {
-                    Command = command,
-                    MethodName = "GetUser"
-                };
-            }
-
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets the user.
-        /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="id">The user id.</param>
-        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
-        public static TwitterUser Show(OAuthTokens requestTokens, decimal id)
-        {
-            try
-            {
-                Commands.ShowUserCommand command = new Commands.ShowUserCommand(requestTokens);
-                command.UserId = id;
-
-                return Core.CommandPerformer<TwitterUser>.PerformAction(command);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Gets the user.
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="id">The user id.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
         /// </returns>
-        public static TwitterUser Show(OAuthTokens tokens)
+        public static TwitterUser Show(OAuthTokens tokens, decimal id, OptionalProperties options)
         {
-            Commands.ShowUserCommand command = new Twitterizer.Commands.ShowUserCommand(tokens);
+            Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, id, string.Empty, options);
 
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
         /// <summary>
-        /// Gets the user.
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser Show(decimal id, OptionalProperties options)
+        {
+            return Show(null, id, options);
+        }
+
+        /// <summary>
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="id">The user id.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser Show(OAuthTokens tokens, decimal id)
+        {
+            return Show(tokens, id, null);
+        }
+
+        /// <summary>
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser Show(decimal id)
+        {
+            return Show(null, id, null);
+        }
+
+        /// <summary>
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <returns>A new instance of the <see cref="Twitterizer.TwitterUser"/> class.</returns>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser Show(OAuthTokens tokens, string username, OptionalProperties options)
+        {
+            Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, 0, username, options);
+            
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser Show(string username, OptionalProperties options)
+        {
+            return Show(null, username, options);
+        }
+
+        /// <summary>
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
         public static TwitterUser Show(OAuthTokens tokens, string username)
         {
-            Commands.ShowUserCommand command = new Twitterizer.Commands.ShowUserCommand(tokens);
-            command.Username = username;
+            return Show(tokens, username, null);
+        }
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        /// <summary>
+        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+        /// </returns>
+        public static TwitterUser Show(string username)
+        {
+            return Show(null, username, null);
         }
        
         /// <summary>
@@ -431,16 +445,6 @@ namespace Twitterizer
                 NumberPerPage = numberPerPage,
                 Query = query
             };
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterUserCollection>()
-                {
-                    Command = command,
-                    MethodName = "Search"
-                };
-            }
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
             result.PagedCommand = command;

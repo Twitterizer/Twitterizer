@@ -44,48 +44,45 @@ namespace Twitterizer.Commands
     internal sealed class FollowersCommand :
         Core.CursorPagedCommand<TwitterUserWrapper>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FollowersCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public FollowersCommand(OAuthTokens tokens)
-            : base("GET", new Uri("http://api.twitter.com/1/statuses/followers.json"), tokens)
+        /// <param name="options">The options.</param>
+        public FollowersCommand(OAuthTokens tokens, FollowersOptions options)
+            : base("GET", "statuses/followers.json", tokens, options)
         {
+            if (tokens == null && (options == null || (options.UserId <= 0 ^ string.IsNullOrEmpty(options.ScreenName))))
+            {
+                throw new ArgumentException("Either a user id or screen name (but not both) must be supplied (using the options parameter) when called unauthorized.");
+            }
         }
-        #endregion
-
-        #region API Parameters
-        /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The user id.</value>
-        public decimal UserId { get; set; }
         
-        /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
-        #endregion
-
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-
-            if (!string.IsNullOrEmpty(this.ScreenName))
-                this.RequestParameters.Add("screen_name", this.ScreenName);
-
             if (this.Cursor <= 0)
             {
                 this.Cursor = -1;
             }
 
             this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
+
+            // Handle optional parameters
+            FollowersOptions options = this.OptionalProperties as FollowersOptions;
+
+            if (options == null)
+            {
+                return;
+            }
+
+            if (options.UserId > 0)
+                this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.CurrentCulture));
+
+            if (!string.IsNullOrEmpty(options.ScreenName))
+                this.RequestParameters.Add("screen_name", options.ScreenName);
         }
 
         /// <summary>
@@ -93,10 +90,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = 
-                this.Tokens != null ||
-                this.UserId > 0 ||
-                !string.IsNullOrEmpty(this.ScreenName);
+            this.IsValid = true;
         }
 
         /// <summary>
@@ -105,10 +99,7 @@ namespace Twitterizer.Commands
         /// <returns>A cloned command object.</returns>
         internal override Twitterizer.Core.TwitterCommand<TwitterUserWrapper> Clone()
         {
-            FollowersCommand newCommand = new FollowersCommand(this.Tokens);
-
-            newCommand.ScreenName = this.ScreenName;
-            newCommand.UserId = this.UserId;
+            FollowersCommand newCommand = new FollowersCommand(this.Tokens, this.OptionalProperties as FollowersOptions);
             newCommand.Cursor = this.Cursor;
 
             return newCommand;

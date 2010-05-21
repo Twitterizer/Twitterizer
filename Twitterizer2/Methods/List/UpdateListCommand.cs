@@ -29,7 +29,7 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The create list command class</summary>
+// <summary>The update list command class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
@@ -40,24 +40,24 @@ namespace Twitterizer.Commands
     using Twitterizer.Core;
 
     /// <summary>
-    /// The create list command class
+    /// The update list command class
     /// </summary>
     internal sealed class UpdateListCommand : TwitterCommand<TwitterList>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/{1}.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateListCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="id">The list id.</param>
-        public UpdateListCommand(OAuthTokens requestTokens, string username, long id)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="options">The options.</param>
+        public UpdateListCommand(OAuthTokens tokens, string username, long id, UpdateListOptions options)
+            : base(
+                "GET", 
+                string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, id), 
+                tokens, 
+                options)
         {
             if (Tokens == null)
             {
@@ -73,29 +73,7 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("id");
             }
-
-            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username, id));
         }
-        #endregion
-
-        #region API Properties
-        /// <summary>
-        /// Gets or sets the name of the list.
-        /// </summary>
-        /// <value>The name of the list.</value>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is public.
-        /// </summary>
-        /// <value><c>true</c> if this instance is public; otherwise, <c>false</c>.</value>
-        public bool IsPublic { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>The description.</value>
-        public string Description { get; set; }
         #endregion
 
         /// <summary>
@@ -103,12 +81,26 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("name", this.Name);
-            this.RequestParameters.Add("mode", this.IsPublic ? "public" : "private");
+            UpdateListOptions options = this.OptionalProperties as UpdateListOptions;
 
-            if (!string.IsNullOrEmpty(this.Description))
+            if (options == null)
             {
-                this.RequestParameters.Add("description", this.Description);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(options.Name))
+            {
+                this.RequestParameters.Add("name", options.Name);
+            }
+
+            if (options.IsPublic != null)
+            {
+                this.RequestParameters.Add("mode", options.IsPublic.Value ? "public" : "private");
+            }
+
+            if (!string.IsNullOrEmpty(options.Description))
+            {
+                this.RequestParameters.Add("description", options.Description);
             }
         }
 
@@ -117,7 +109,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = !string.IsNullOrEmpty(this.Name);
+            this.IsValid = true;
         }
     }
 }

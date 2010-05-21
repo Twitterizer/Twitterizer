@@ -42,19 +42,19 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class DeleteStatusCommand : Core.TwitterCommand<TwitterStatus>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/destroy/{0}.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteStatusCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="id">The status id.</param>
-        public DeleteStatusCommand(OAuthTokens requestTokens, decimal id)
-            : base("POST", new Uri(string.Format(CultureInfo.InvariantCulture, Path, id)), requestTokens)
+        /// <param name="options">The options.</param>
+        public DeleteStatusCommand(OAuthTokens tokens, decimal id, Core.OptionalProperties options)
+            : base(
+                "POST", 
+                string.Format(CultureInfo.InvariantCulture, "statuses/destroy/{0}.json", id), 
+                tokens, 
+                options)
         {
             this.Id = id;
         }

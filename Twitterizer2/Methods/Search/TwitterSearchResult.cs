@@ -42,7 +42,7 @@ namespace Twitterizer
     /// The Twitter Search Result class.
     /// </summary>
     [Serializable]
-    [JsonObject(MemberSerialization= MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterSearchResult : Core.TwitterObject
     {
         /// <summary>
@@ -53,7 +53,7 @@ namespace Twitterizer
         public string ProfileImageLocation { get; set; }
 
         /// <summary>
-        /// Gets the created date.
+        /// Gets or sets the created date.
         /// </summary>
         /// <value>The created date.</value>
         [JsonProperty(PropertyName = "created_at")]

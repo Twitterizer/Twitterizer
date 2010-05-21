@@ -41,34 +41,30 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Show User Command
     /// </summary>
-    /// <remarks>http://apiwiki.twitter.com/Twitter-REST-API-Method:-users%C2%A0show</remarks>
+    /// <remarks>http://dev.twitter.com/doc/get/users/show</remarks>
     internal sealed class ShowUserCommand : Core.TwitterCommand<TwitterUser>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/users/show.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
         /// </summary>
-        public ShowUserCommand()
-            : this(null)
-        {
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
-        /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public ShowUserCommand(OAuthTokens tokens)
-            : base("GET", new Uri(Path), tokens)
+        /// <param name="userId">The user id.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        public ShowUserCommand(OAuthTokens tokens, decimal userId, string username, Core.OptionalProperties options)
+            : base("GET", "users/show.json", tokens, options)
         {
+            if ((userId <= 0 && string.IsNullOrEmpty(username)) || (userId > 0 && !string.IsNullOrEmpty(username)))
+            {
+                throw new ArgumentException("Either userId or username must be supplied, but not both.");
+            }
+
+            this.UserId = userId;
+            this.Username = username;
         }
         #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the user ID.
         /// </summary>
@@ -80,7 +76,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The name of the user.</value>
         public string Username { get; set; }
-        #endregion
 
         /// <summary>
         /// Inits this instance.
@@ -99,8 +94,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.UserId > 0 || 
-                !string.IsNullOrEmpty(this.Username);
+            this.IsValid = true;
         }
     }
 }

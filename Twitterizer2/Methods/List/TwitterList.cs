@@ -180,18 +180,11 @@ namespace Twitterizer
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
-        /// <param name="name">The list name.</param>
-        /// <param name="isPublic">if set to <c>true</c> creates a public list.</param>
-        /// <param name="description">The description.</param>
+        /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterList"/> instance.</returns>
-        public static TwitterList Update(OAuthTokens tokens, string username, long listId, string name, bool isPublic, string description)
+        public static TwitterList Update(OAuthTokens tokens, string username, long listId, UpdateListOptions options)
         {
-            Commands.UpdateListCommand command = new Twitterizer.Commands.UpdateListCommand(tokens, username, listId)
-            {
-                Name = name,
-                IsPublic = isPublic,
-                Description = description
-            };
+            Commands.UpdateListCommand command = new Twitterizer.Commands.UpdateListCommand(tokens, username, listId, options);
 
             return Core.CommandPerformer<TwitterList>.PerformAction(command);
         }

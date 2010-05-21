@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ShowStatusCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CurrentTrendsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,46 +29,47 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The Show Status Command class</summary>
+// <summary>The current trends command class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Globalization;
     using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The Show Status Command
+    /// The create list command class
     /// </summary>
-    internal sealed class ShowStatusCommand : Core.TwitterCommand<TwitterStatus>
+    internal sealed class CurrentTrendsCommand : TwitterCommand<TwitterTrendTimeframe>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShowStatusCommand"/> class.
+        /// Initializes a new instance of the <see cref="CurrentTrendsCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
-        public ShowStatusCommand(OAuthTokens requestTokens, decimal statusId, Core.OptionalProperties options)
-            : base(
-                "GET", 
-                string.Format(CultureInfo.InvariantCulture, "statuses/show/{0}.json", statusId), 
-                requestTokens, 
-                options)
+        public CurrentTrendsCommand(CurrentTrendsOptions options)
+            : base("GET", "trends/current.json", null, options)
         {
-            if (statusId <= 0)
-            {
-                throw new ArgumentNullException("statusId");
-            }
+            this.DeserializationHandler = TwitterTrendTimeframe.DeserializeJson;
         }
         #endregion
-        
+
         /// <summary>
-        /// Inits this instance.
+        /// Initializes the command.
         /// </summary>
         public override void Init()
         {
+            CurrentTrendsOptions options = this.OptionalProperties as CurrentTrendsOptions;
+            if (options == null)
+            {
+                return;
+            }
+
+            if (options.ExcludeHashTags)
+            {
+                this.RequestParameters.Add("exclude", "hashtags");
+            }
         }
 
         /// <summary>
@@ -80,4 +81,3 @@ namespace Twitterizer.Commands
         }
     }
 }
-

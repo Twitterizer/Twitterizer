@@ -34,14 +34,13 @@
 
 namespace Twitterizer
 {
-    using System.Runtime.Serialization;
-    using Twitterizer.Core;
     using Newtonsoft.Json;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Twitter search result wrapper class
     /// </summary>
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     internal class TwitterSearchResultWrapper : TwitterObject
     {
         /// <summary>

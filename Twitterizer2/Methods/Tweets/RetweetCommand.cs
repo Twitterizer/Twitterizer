@@ -46,16 +46,27 @@ namespace Twitterizer.Commands
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/retweet/{0}.json";
+        private const string Path = "statuses/retweet/{0}.json";
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="RetweetCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public RetweetCommand(OAuthTokens tokens)
-            : base("POST", tokens)
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        public RetweetCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+            : base(
+                "POST",
+                string.Format(CultureInfo.InvariantCulture, Path, statusId),
+                tokens,
+                options)
         {
+            if (statusId <= 0)
+            {
+                throw new ArgumentException("Status ID is invalid", "statusId");
+            }
+
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
@@ -64,18 +75,10 @@ namespace Twitterizer.Commands
         #endregion
 
         /// <summary>
-        /// Gets or sets the status id.
-        /// </summary>
-        /// <value>The status id.</value>
-        public decimal StatusId { get; set; }
-
-        /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            this.Uri = new Uri(
-                string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
         }
 
         /// <summary>
@@ -83,7 +86,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.StatusId > 0;
         }
     }
 }

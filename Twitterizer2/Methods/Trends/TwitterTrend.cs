@@ -65,13 +65,26 @@ namespace Twitterizer
         /// <summary>
         /// Gets the current trends.
         /// </summary>
-        /// <param name="excludeHashTags">if set to <c>true</c> [exclude hash tags].</param>
-        /// <returns>A <see cref="TwitterTrendTimeframe"/> instance.</returns>
-        public static TwitterTrendTimeframe Current(bool excludeHashTags)
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterTrendTimeframe"/> instance.
+        /// </returns>
+        public static TwitterTrendTimeframe Current(CurrentTrendsOptions options)
         {
-            Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(excludeHashTags);
+            Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(options);
 
             return Core.CommandPerformer<TwitterTrendTimeframe>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Gets the current trends.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterTrendTimeframe"/> instance.
+        /// </returns>
+        public static TwitterTrendTimeframe Current()
+        {
+            return Current(null);
         }
     }
 }

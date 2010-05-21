@@ -43,22 +43,19 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class RetweetsCommand : TwitterCommand<TwitterStatusCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/statuses/retweets/{0}.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="RetweetsCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="statusId">The status id.</param>
-        public RetweetsCommand(OAuthTokens tokens, decimal statusId)
+        /// <param name="options">The options.</param>
+        public RetweetsCommand(OAuthTokens tokens, decimal statusId, RetweetsOptions options)
             : base(
                 "GET",
-                new Uri(string.Format(CultureInfo.InvariantCulture, Path, statusId)),
-                tokens)
+                string.Format(CultureInfo.InvariantCulture, "statuses/retweets/{0}.json", statusId),
+                tokens,
+                options)
         {
             if (tokens == null)
             {
@@ -69,32 +66,18 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("statusId");
             }
-
-            this.StatusId = statusId;
         }
         #endregion
-
-        /// <summary>
-        /// Gets or sets the status id.
-        /// </summary>
-        /// <value>The status id.</value>
-        public decimal StatusId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the count.
-        /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            this.Uri = new Uri(string.Format(CultureInfo.InvariantCulture, Path, this.StatusId));
+            RetweetsOptions options = this.OptionalProperties as RetweetsOptions;
 
-            if (this.Count > 0)
-                this.RequestParameters.Add("count", this.Count.ToString(CultureInfo.InvariantCulture));
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

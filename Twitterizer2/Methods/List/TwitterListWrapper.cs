@@ -34,14 +34,13 @@
 
 namespace Twitterizer
 {
-    using System.Runtime.Serialization;
-    using Twitterizer.Core;
     using Newtonsoft.Json;
+    using Twitterizer.Core;
 
     /// <summary>
     /// A wrapper class for the lists collection (Twitter has their data structure wierd for this one)
     /// </summary>
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     internal class TwitterListWrapper : TwitterObject
     {
         /// <summary>

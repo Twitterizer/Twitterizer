@@ -79,11 +79,19 @@ namespace Twitterizer.Core
         /// <param name="tokens">The tokens.</param>
         /// <param name="optionalProperties">The optional properties.</param>
         protected TwitterCommand(string httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
-            : this(httpMethod, tokens)
+            : this(httpMethod, tokens, optionalProperties)
         {
-            this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
+            this.SetCommandUri(endPoint);
+        }
 
-            this.Uri = new Uri(string.Concat(this.OptionalProperties.APIBaseAddress, endPoint));
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="tokens">The tokens.</param>
+        protected TwitterCommand(string httpMethod, OAuthTokens tokens)
+            : this(httpMethod, tokens, new OptionalProperties())
+        {
         }
 
         /// <summary>
@@ -91,7 +99,8 @@ namespace Twitterizer.Core
         /// </summary>
         /// <param name="httpMethod">The method.</param>
         /// <param name="tokens">The tokens.</param>
-        protected TwitterCommand(string httpMethod, OAuthTokens tokens)
+        /// <param name="optionalProperties">The optional properties.</param>
+        protected TwitterCommand(string httpMethod, OAuthTokens tokens, OptionalProperties optionalProperties)
         {
             if (string.IsNullOrEmpty(httpMethod))
             {
@@ -101,7 +110,7 @@ namespace Twitterizer.Core
             this.RequestParameters = new Dictionary<string, string>();
             this.HttpMethod = httpMethod;
             this.Tokens = tokens;
-            this.OptionalProperties = new OptionalProperties();
+            this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
         }
 
         /// <summary>
@@ -291,6 +300,15 @@ namespace Twitterizer.Core
         internal virtual TwitterCommand<T> Clone()
         {
             return default(TwitterCommand<T>);
+        }
+
+        /// <summary>
+        /// Sets the command URI.
+        /// </summary>
+        /// <param name="endPoint">The end point.</param>
+        protected void SetCommandUri(string endPoint)
+        {
+            this.Uri = new Uri(string.Concat(this.OptionalProperties.APIBaseAddress, endPoint));
         }
 
         /// <summary>

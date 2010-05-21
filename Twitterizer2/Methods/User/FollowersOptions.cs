@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CurrentTrendsCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="FollowersOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,63 +29,25 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The current trends command class</summary>
+// <summary>The follower options class</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
-    using System;
-    using Twitterizer;
-    using Twitterizer.Core;
-
     /// <summary>
-    /// The create list command class
+    /// The followers options class. Provides a payload for optional parameters of the FollowersCommand class.
     /// </summary>
-    internal sealed class CurrentTrendsCommand : TwitterCommand<TwitterTrendTimeframe>
+    public class FollowersOptions : Core.OptionalProperties
     {
         /// <summary>
-        /// The base address to the API method.
+        /// Gets or sets the ID of the user for whom to request a list of followers. 
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/trends/current.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CurrentTrendsCommand"/> class.
-        /// </summary>
-        /// <param name="excludeHashTags">if set to <c>true</c> [exclude hash tags].</param>
-        public CurrentTrendsCommand(bool excludeHashTags)
-            : base("GET", new Uri(Path), null)
-        {
-            this.ExcludeHashTags = excludeHashTags;
-            this.DeserializationHandler = TwitterTrendTimeframe.DeserializeJson;
-        }
-        #endregion
-
-        #region API Properties
-        /// <summary>
-        /// Gets or sets a value indicating whether [exclude hash tags].
-        /// </summary>
-        /// <value><c>true</c> if [exclude hash tags]; otherwise, <c>false</c>.</value>
-        public bool ExcludeHashTags { get; set; }        
-        #endregion
+        /// <value>The user id.</value>
+        public decimal UserId { get; set; }
 
         /// <summary>
-        /// Initializes the command.
+        /// Gets or sets the screen name of the user for whom to request a list of followers. 
         /// </summary>
-        public override void Init()
-        {
-            if (this.ExcludeHashTags)
-            {
-                this.RequestParameters.Add("exclude", "hashtags");
-            }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
+        /// <value>The name of the screen.</value>
+        public string ScreenName { get; set; }
     }
 }

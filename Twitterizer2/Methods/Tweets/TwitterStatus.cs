@@ -84,7 +84,7 @@ namespace Twitterizer
         public bool? IsTruncated { get; set; }
 
         /// <summary>
-        /// Gets the created date.
+        /// Gets or sets the created date.
         /// </summary>
         /// <value>The created date.</value>
         [JsonProperty(PropertyName = "created_at")]
@@ -187,12 +187,38 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatus"/> object of the deleted status.
+        /// </returns>
+        public static TwitterStatus Delete(OAuthTokens tokens, decimal id, OptionalProperties options)
+        {
+            Commands.DeleteStatusCommand command = new Twitterizer.Commands.DeleteStatusCommand(tokens, id, options);
+
+            return CommandPerformer<TwitterStatus>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Deletes the specified tokens.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <param name="id">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object of the deleted status.</returns>
         public static TwitterStatus Delete(OAuthTokens tokens, decimal id)
         {
-            Commands.DeleteStatusCommand command = new Twitterizer.Commands.DeleteStatusCommand(tokens, id);
+            return Delete(tokens, id, null);
+        }
 
-            return CommandPerformer<TwitterStatus>.PerformAction(command);
+        /// <summary>
+        /// Returns a single status, with user information, specified by the id parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
+        public static TwitterStatus Show(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+        {
+            return CommandPerformer<TwitterStatus>.PerformAction(new Commands.ShowStatusCommand(tokens, statusId, options));
         }
 
         /// <summary>
@@ -203,7 +229,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
         public static TwitterStatus Show(OAuthTokens tokens, decimal statusId)
         {
-            return CommandPerformer<TwitterStatus>.PerformAction(new Commands.ShowStatusCommand(tokens, statusId));
+            return Show(tokens, statusId, null);
         }
 
         /// <summary>
@@ -221,11 +247,23 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
-        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus Retweet(OAuthTokens tokens, decimal statusId)
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
+        public static TwitterStatus Retweet(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(
-                new Commands.RetweetCommand(tokens) { StatusId = statusId });
+                new Commands.RetweetCommand(tokens, statusId, options));
+        }
+
+        /// <summary>
+        /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
+        public static TwitterStatus Retweet(OAuthTokens tokens, decimal statusId)
+        {
+            return Retweet(tokens, statusId, null);
         }
 
         /// <summary>
@@ -233,12 +271,14 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
-        /// <param name="count">The count.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId, int count)
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId, RetweetsOptions options)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
-                new Commands.RetweetsCommand(tokens, statusId) { Count = count });
+                new Commands.RetweetsCommand(tokens, statusId, options));
         }
 
         /// <summary>
@@ -249,7 +289,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId)
         {
-            return Retweets(tokens, statusId, -1);
+            return Retweets(tokens, statusId, null);
         }
     }
 }

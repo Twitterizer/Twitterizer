@@ -38,6 +38,7 @@ namespace Twitterizer
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+using Twitterizer.Core;
 
     /// <summary>
     /// Provides interaction with the Twitter API to obtain and manage relationships between users.
@@ -45,31 +46,16 @@ namespace Twitterizer
     public static class TwitterFriendship
     {
         /// <summary>
-        /// Gets the followers.
+        /// Returns the authenticating user's followers, each with current status inline.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterUserCollection Followers(OAuthTokens tokens)
+        public static TwitterUserCollection Followers(OAuthTokens tokens, FollowersOptions options)
         {
-            return Followers(tokens, 0);
-        }
-
-        /// <summary>
-        /// Gets the followers.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="userId">The user id.</param>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/> instance.
-        /// </returns>
-        public static TwitterUserCollection Followers(OAuthTokens tokens, decimal userId)
-        {
-            Commands.FollowersCommand command = new Commands.FollowersCommand(tokens)
-            {
-                UserId = userId
-            };
+            Commands.FollowersCommand command = new Commands.FollowersCommand(tokens, options);
 
             TwitterUserWrapper resultWrapper = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command);
             TwitterUserCollection result = resultWrapper.Users;
@@ -77,6 +63,30 @@ namespace Twitterizer
             result.CursorPagedCommand = command;
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns the authenticating user's followers, each with current status inline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterUserCollection Followers(OAuthTokens tokens)
+        {
+            return Followers(tokens, null);
+        }
+
+        /// <summary>
+        /// Returns the authenticating user's followers, each with current status inline.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterUserCollection Followers(FollowersOptions options)
+        {
+            return Followers(null, options);
         }
 
         /// <summary>

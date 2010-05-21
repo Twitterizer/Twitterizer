@@ -42,7 +42,7 @@ namespace Twitterizer
     /// <summary>
     /// The Twitter Relationship entity class
     /// </summary>
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [DebuggerDisplay("TwitterRelationship = {Source} -> {Target}")]
     public class TwitterRelationship : TwitterObject
     {

@@ -45,7 +45,7 @@ namespace Twitterizer
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
-        /// <value>The type.</value>
+        /// <value>The type of bounding box.</value>
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 

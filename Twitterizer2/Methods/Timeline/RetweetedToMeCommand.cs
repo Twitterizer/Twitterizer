@@ -48,6 +48,7 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="RetweetedToMeCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
+        /// <param name="options">The options.</param>
         public RetweetedToMeCommand(OAuthTokens tokens, TimelineOptions options)
             : base("GET", "statuses/retweeted_to_me.json", tokens, options)
         {

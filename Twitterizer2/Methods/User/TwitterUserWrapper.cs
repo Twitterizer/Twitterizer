@@ -34,9 +34,8 @@
 namespace Twitterizer
 {
     using System;
-    using System.Runtime.Serialization;
-    using Twitterizer.Core;
     using Newtonsoft.Json;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Twitter User Wrapper class.

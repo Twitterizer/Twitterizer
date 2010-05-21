@@ -36,7 +36,6 @@ namespace Twitterizer
 {
     using Newtonsoft.Json;
     using Twitterizer.Core;
-    using System.Collections.ObjectModel;
 
     /// <summary>
     /// The twitter place class. Represents a place or area.
@@ -87,16 +86,16 @@ namespace Twitterizer
         public string FullName { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the name of the place.
         /// </summary>
-        /// <value>The name.</value>
+        /// <value>The name of the place.</value>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets or sets the place id.
         /// </summary>
-        /// <value>The id.</value>
+        /// <value>The place id.</value>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -113,7 +112,7 @@ namespace Twitterizer
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options.</param>
-        /// <returns></returns>
+        /// <returns>A <see cref="TwitterPlaceCollection"/> object or null.</returns>
         public static TwitterPlaceCollection Lookup(double latitude, double longitude, OptionalProperties options)
         {
             Commands.ReverseGeocodeCommand command = new Twitterizer.Commands.ReverseGeocodeCommand(latitude, longitude, options);

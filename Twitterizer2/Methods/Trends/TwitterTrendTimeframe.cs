@@ -35,11 +35,9 @@
 namespace Twitterizer
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using Twitterizer.Core;
     using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Twitter trend timeframe class.
@@ -62,7 +60,7 @@ namespace Twitterizer
         /// Deserializes the json.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>A <see cref="TwitterTrendTimeframe"/> object.</returns>
         internal static TwitterTrendTimeframe DeserializeJson(Newtonsoft.Json.Linq.JObject value)
         {
             TwitterTrendTimeframe result = new TwitterTrendTimeframe();
