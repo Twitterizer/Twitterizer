@@ -44,11 +44,6 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class ListStatusesCommand : PagedCommand<TwitterStatusCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/{1}/statuses.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ListStatusesCommand"/> class.
@@ -56,8 +51,9 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
-        public ListStatusesCommand(OAuthTokens requestTokens, string username, long listId)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="options">The options.</param>
+        public ListStatusesCommand(OAuthTokens requestTokens, string username, long listId, ListStatusesOptions options)
+            : base("GET", "{0}/lists/{1}/statuses.json", requestTokens, options)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -71,7 +67,6 @@ namespace Twitterizer.Commands
 
             this.Username = username;
             this.ListId = listId;
-            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username, listId));
         }
         #endregion
 
@@ -87,24 +82,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The list id.</value>
         public long ListId { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the since id.
-        /// </summary>
-        /// <value>The since id.</value>
-        public long SinceId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max id.
-        /// </summary>
-        /// <value>The max id.</value>
-        public long MaxId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of items per page to request.
-        /// </summary>
-        /// <value>The number of items per page.</value>
-        public int ItemsPerPage { get; set; }
         #endregion
 
         /// <summary>
@@ -112,24 +89,31 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.SinceId > 0)
-            {
-                this.RequestParameters.Add("since_id", this.SinceId.ToString(CultureInfo.InvariantCulture));
+            ListStatusesOptions options = this.OptionalProperties as ListStatusesOptions;
+
+            if (options == null)
+            { 
+                return; 
             }
 
-            if (this.MaxId > 0)
+            if (options.SinceId > 0)
             {
-                this.RequestParameters.Add("max_id", this.MaxId.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (this.ItemsPerPage > 0)
+            if (options.MaxId > 0)
             {
-                this.RequestParameters.Add("per_page", this.ItemsPerPage.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (this.Page > 0)
+            if (options.ItemsPerPage > 0)
             {
-                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("per_page", options.ItemsPerPage.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (options.Page > 0)
+            {
+                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -149,13 +133,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new ListStatusesCommand(this.Tokens, this.Username, this.ListId)
-            {
-                MaxId = this.MaxId,
-                SinceId = this.SinceId,
-                ItemsPerPage = this.ItemsPerPage,
-                Page = this.Page,
-            };
+            return new ListStatusesCommand(this.Tokens, this.Username, this.ListId, this.OptionalProperties as ListStatusesOptions);
         }
     }
 }

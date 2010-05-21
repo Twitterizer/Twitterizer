@@ -45,24 +45,32 @@ namespace Twitterizer.Commands
     internal sealed class GetListSubscriptionsCommand : CursorPagedCommand<TwitterListWrapper>
     {
         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/user/lists/subscriptions.json";
-
-        #region Constructors
-        /// <summary>
         /// Initializes a new instance of the <see cref="GetListSubscriptionsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        public GetListSubscriptionsCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        public GetListSubscriptionsCommand(OAuthTokens requestTokens, string username, OptionalProperties options)
+            : base("GET", "{0}/lists/subscriptions.json", requestTokens, options)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username");
+            }
+
             if (requestTokens == null)
             {
                 throw new ArgumentNullException("requestTokens");
             }
+
+            this.Username = username;
         }
-        #endregion
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string Username { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -83,6 +91,20 @@ namespace Twitterizer.Commands
         public override void Validate()
         {
             this.IsValid = true;
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
+        /// </returns>
+        internal override TwitterCommand<TwitterListWrapper> Clone()
+        {
+            return new GetListSubscriptionsCommand(this.Tokens, this.Username, this.OptionalProperties)
+            {
+                Cursor = this.Cursor
+            };
         }
     }
 }

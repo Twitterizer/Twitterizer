@@ -44,25 +44,35 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/memberships.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        public ListMembershipsCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        public ListMembershipsCommand(OAuthTokens requestTokens, string username, OptionalProperties options)
+            : base("GET", string.Format("{0}/lists/memberships.json", username), requestTokens, options)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username");
+            }
+
             if (Tokens == null)
             {
                 throw new ArgumentNullException("requestTokens");
             }
+
+            this.Username = username;
         }
         #endregion
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string Username { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -93,7 +103,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterListWrapper> Clone()
         {
-            return new ListMembershipsCommand(this.Tokens)
+            return new ListMembershipsCommand(this.Tokens, this.Username, this.OptionalProperties)
             {
                 Cursor = this.Cursor
             };

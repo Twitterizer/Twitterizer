@@ -43,14 +43,14 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class UserSearchCommand : PagedCommand<TwitterUserCollection>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UserSearchCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="query">The query.</param>
-        public UserSearchCommand(OAuthTokens tokens, string query)
-            : base("GET", new Uri("http://api.twitter.com/1/users/search.json"), tokens)
+        /// <param name="options">The options.</param>
+        public UserSearchCommand(OAuthTokens tokens, string query, UserSearchOptions options)
+            : base("GET", "users/search.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -64,9 +64,7 @@ namespace Twitterizer.Commands
 
             this.Query = query;
         }
-        #endregion
 
-        #region API Properties
         /// <summary>
         /// Gets or sets the query.
         /// </summary>
@@ -74,27 +72,10 @@ namespace Twitterizer.Commands
         public string Query { get; set; }
 
         /// <summary>
-        /// Gets or sets the number per page. Cannot be greater than 20.
-        /// </summary>
-        /// <value>The number per page.</value>
-        public int NumberPerPage { get; set; }
-        #endregion
-
-        /// <summary>
         /// Validates this instance.
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = false;
-
-            if (this.Page > 0 && this.NumberPerPage > 0)
-            {
-                if (this.NumberPerPage * this.Page > 1000)
-                {
-                    return;
-                }
-            }
-
             this.IsValid = true;
         }
 
@@ -105,11 +86,18 @@ namespace Twitterizer.Commands
         {
             this.RequestParameters.Add("q", this.Query);
 
-            if (this.NumberPerPage > 0)
-                this.RequestParameters.Add("per_page", this.NumberPerPage.ToString(CultureInfo.InvariantCulture));
+            UserSearchOptions options = this.OptionalProperties as UserSearchOptions;
 
-            if (this.Page > 0)
-                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            if (options == null)
+            {
+                return;
+            }
+
+            if (options.NumberPerPage > 0)
+                this.RequestParameters.Add("per_page", options.NumberPerPage.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Page > 0)
+                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -120,11 +108,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterUserCollection> Clone()
         {
-            return new UserSearchCommand(this.Tokens, this.Query)
-            {
-                NumberPerPage = this.NumberPerPage,
-                Page = this.Page
-            };
+            return new UserSearchCommand(this.Tokens, this.Query, this.OptionalProperties as UserSearchOptions);
         }
     }
 }

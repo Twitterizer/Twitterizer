@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="followers.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="UserSearchOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,55 +29,26 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The followers example page.</summary>
+// <summary>The user search options class</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Web.UI.WebControls;
-using Twitterizer;
-
-public partial class followers : System.Web.UI.Page
+namespace Twitterizer
 {
-    public TwitterUserCollection FollowersCollection { get; set; }
-
-    protected void Page_Load(object sender, EventArgs e)
+    /// <summary>
+    /// The user search options class. Provides a payload for optional parameters of the UserSearchCommand class.
+    /// </summary>
+    public class UserSearchOptions : Core.OptionalProperties
     {
-        if (!this.IsPostBack)
-        {
-            decimal userId = 0;
-            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && decimal.TryParse(Request.QueryString["userid"], out userId))
-            {
-                this.FollowersCollection = TwitterFriendship.Followers(Master.Tokens, new FollowersOptions() { UserId = userId });
-            }
-            else
-            {
-                this.FollowersCollection = TwitterFriendship.Followers(Master.Tokens);
-            }
-            
-            ViewState.Add("followers", this.FollowersCollection);
-            this.DataBind();
-        }
-        else
-        {
-            this.FollowersCollection = ViewState["followers"] as TwitterUserCollection;
-        }
-    }
+        /// <summary>
+        /// Gets or sets the number per page. Cannot be greater than 20.
+        /// </summary>
+        /// <value>The number per page.</value>
+        public int NumberPerPage { get; set; }
 
-    protected string SafeBooleanText(bool? value)
-    {
-        if (value == null)
-        {
-            return "No (Null)";
-        }
-
-        return value == true ? "Yes" : "No";
-    }
-
-    protected void NextPageLinkButton_Click(object sender, EventArgs e)
-    {
-        this.FollowersCollection = this.FollowersCollection.NextPage();
-        this.DataBind();
-
-        ViewState["followers"] = this.FollowersCollection;
+        /// <summary>
+        /// Gets or sets the page of results to retrieve.
+        /// </summary>
+        /// <value>The page of results to retrieve.</value>
+        public int Page { get; set; }
     }
 }

@@ -256,56 +256,78 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the statuses for all the members of a list.
+        /// Show tweet timeline for members of the specified list.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, long listId)
-        {
-            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listId);
-
-            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets the lists the specified user has been added to.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        public static TwitterListCollection GetMemberships(OAuthTokens tokens)
-        {
-            Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens);
-
-            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
-        }
-
-        /// <summary>
-        /// Gets the subscriptions.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens)
-        {
-            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens);
-
-            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
-        }
-        #endregion
-
-        #region Non-static methods
-        /// <summary>
-        /// Gets the statuses for all the members of a list.
-        /// </summary>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public TwitterStatusCollection GetStatuses()
+        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, long listId, ListStatusesOptions options)
         {
-            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(this.Tokens, this.User.ScreenName, this.Id);
+            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listId, options);
 
             return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// List the lists the specified user has been added to.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetMemberships(OAuthTokens tokens, string username, OptionalProperties options)
+        {
+            Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, username, options);
+
+            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+        }
+
+        /// <summary>
+        /// List the lists the specified user has been added to.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetMemberships(OAuthTokens tokens, string username)
+        {
+            return GetMemberships(tokens, username, null);
+        }
+
+        /// <summary>
+        /// List the lists the specified user follows.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, string username, OptionalProperties options)
+        {
+            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens, username, options);
+
+            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+        }
+
+        /// <summary>
+        /// List the lists the specified user follows.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, string username)
+        {
+            return GetSubscriptions(tokens, username, null);
         }
         #endregion
     }

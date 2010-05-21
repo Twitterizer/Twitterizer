@@ -100,6 +100,7 @@
     <Compile Include="Methods\Friendship\DeleteFriendshipCommand.cs" />
     <Compile Include="Methods\List\DeleteListCommand.cs" />
     <Compile Include="Methods\List\GetListSubscriptionsCommand.cs" />
+    <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />
     <Compile Include="Methods\Search\SearchOptions.cs" />
     <Compile Include="Methods\Trends\CurrentTrendsCommand.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Exceptions\CommandValidationException.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />
     <Compile Include="Information.cs" />
+    <Compile Include="Methods\User\UserSearchOptions.cs" />
     <Compile Include="OAuth\OAuthTokenResponse.cs" />
     <Compile Include="OAuth\OAuthUtility.cs" />
     <Compile Include="OAuth\OAuthTokens.cs" />

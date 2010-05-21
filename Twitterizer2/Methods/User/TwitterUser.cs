@@ -429,22 +429,20 @@ using Twitterizer.Core;
         {
             return Show(null, username, null);
         }
-       
+
         /// <summary>
         /// Searches the specified tokens.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="query">The query.</param>
-        /// <param name="numberPerPage">The number per page.</param>
-        /// <returns>A <see cref="TwitterUserCollection"/> instance.</returns>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterUserCollection"/> instance.
+        /// </returns>
         /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
-        public static TwitterUserCollection Search(OAuthTokens tokens, string query, int numberPerPage)
+        public static TwitterUserCollection Search(OAuthTokens tokens, string query, UserSearchOptions options)
         {
-            Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query)
-            {
-                NumberPerPage = numberPerPage,
-                Query = query
-            };
+            Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
             result.PagedCommand = command;
@@ -463,7 +461,7 @@ using Twitterizer.Core;
         /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
         public static TwitterUserCollection Search(OAuthTokens tokens, string query)
         {
-            return Search(tokens, query, -1);
+            return Search(tokens, query, null);
         } 
     }
 }

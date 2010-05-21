@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="followers.aspx.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ListStatusesOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,55 +29,38 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The followers example page.</summary>
+// <summary>The list statuses options class.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Web.UI.WebControls;
-using Twitterizer;
-
-public partial class followers : System.Web.UI.Page
+namespace Twitterizer
 {
-    public TwitterUserCollection FollowersCollection { get; set; }
-
-    protected void Page_Load(object sender, EventArgs e)
+    /// <summary>
+    /// The list statuses options class. Provides a payload for the ListStatusesCommand class.
+    /// </summary>
+    public sealed class ListStatusesOptions : Core.OptionalProperties
     {
-        if (!this.IsPostBack)
-        {
-            decimal userId = 0;
-            if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && decimal.TryParse(Request.QueryString["userid"], out userId))
-            {
-                this.FollowersCollection = TwitterFriendship.Followers(Master.Tokens, new FollowersOptions() { UserId = userId });
-            }
-            else
-            {
-                this.FollowersCollection = TwitterFriendship.Followers(Master.Tokens);
-            }
-            
-            ViewState.Add("followers", this.FollowersCollection);
-            this.DataBind();
-        }
-        else
-        {
-            this.FollowersCollection = ViewState["followers"] as TwitterUserCollection;
-        }
-    }
+        /// <summary>
+        /// Gets or sets the since id.
+        /// </summary>
+        /// <value>The since id.</value>
+        public long SinceId { get; set; }
 
-    protected string SafeBooleanText(bool? value)
-    {
-        if (value == null)
-        {
-            return "No (Null)";
-        }
+        /// <summary>
+        /// Gets or sets the max id.
+        /// </summary>
+        /// <value>The max id.</value>
+        public long MaxId { get; set; }
 
-        return value == true ? "Yes" : "No";
-    }
+        /// <summary>
+        /// Gets or sets the number of items per page to request.
+        /// </summary>
+        /// <value>The number of items per page.</value>
+        public int ItemsPerPage { get; set; }
 
-    protected void NextPageLinkButton_Click(object sender, EventArgs e)
-    {
-        this.FollowersCollection = this.FollowersCollection.NextPage();
-        this.DataBind();
-
-        ViewState["followers"] = this.FollowersCollection;
+        /// <summary>
+        /// Gets or sets the page.
+        /// </summary>
+        /// <value>The page number.</value>
+        public int Page { get; set; }
     }
 }
