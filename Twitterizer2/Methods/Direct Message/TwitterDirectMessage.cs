@@ -223,7 +223,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessage"/> instance.
         /// </returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
             {
@@ -254,7 +254,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessage"/> instance.
         /// </returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text)
         {
             return Send(tokens, userId, text, null);
         }
@@ -267,7 +267,7 @@ namespace Twitterizer
         /// <param name="text">The message text.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
             {
@@ -296,7 +296,7 @@ namespace Twitterizer
         /// <param name="screenName">The user's screen name.</param>
         /// <param name="text">The message text.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
-        private static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text)
+        public static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text)
         {
             return Send(tokens, screenName, text, null);
         }
