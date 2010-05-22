@@ -42,26 +42,58 @@ namespace Twitterizer.Commands
     /// <summary>
     /// Creates a friendship between the authenticated user and another user
     /// </summary>
-    internal sealed class CreateFriendshipCommand : TwitterCommand<TwitterUser>
+    internal sealed class CreateFriendshipCommand : Core.TwitterCommand<TwitterUser>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/friendships/create.json";
+        private const string Path = "friendships/create.json";
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateFriendshipCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public CreateFriendshipCommand(OAuthTokens tokens)
-            : base("POST", new Uri(Path), tokens)
+        /// <param name="userId">The userid.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        public CreateFriendshipCommand(OAuthTokens tokens, decimal userId, CreateFriendshipOptions optionalProperties)
+            : base("POST", Path, tokens, optionalProperties)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
             }
+
+            if (userId <= 0)
+            {
+                throw new ArgumentException("userId");
+            }
+
+            this.UserId = userId;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateFriendshipCommand"/> class.
+        /// </summary>
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        public CreateFriendshipCommand(OAuthTokens tokens, string userName, CreateFriendshipOptions optionalProperties)
+            : base("POST", Path, tokens, optionalProperties)
+        {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
+
+            this.UserName = userName;
+        }
+        
         #endregion
 
         #region API Properties
@@ -76,12 +108,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The username.</value>
         public string UserName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to enable delivery of statuses from this user to the authenticated user's device
-        /// </summary>
-        /// <value><c>true</c> if follow; otherwise, <c>false</c>.</value>
-        public bool Follow { get; set; }
         #endregion
 
         /// <summary>
@@ -98,8 +124,12 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("screen_name", this.UserName);
             }
 
-            if (this.Follow)
-                this.RequestParameters.Add("follow", "true");
+            CreateFriendshipOptions options = this.OptionalProperties as CreateFriendshipOptions;
+            if (options != null)
+            {
+                if (options.Follow)
+                    this.RequestParameters.Add("follow", "true");
+            }
         }
 
         /// <summary>

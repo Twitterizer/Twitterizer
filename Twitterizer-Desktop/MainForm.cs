@@ -70,6 +70,10 @@ namespace Twitterizer_Desktop
         {
             this.AuthorizeAndGetUser();
 
+            TwitterStatus myLastStatus = TwitterStatus.Show(14472143589);
+
+            return;
+
             this.WelcomeLabel.Text = string.Format(
 @"Welcome {0},
 You have {1} friends and {2} followers.

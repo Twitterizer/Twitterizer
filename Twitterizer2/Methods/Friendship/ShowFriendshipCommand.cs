@@ -41,20 +41,21 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The show friendship command class.
     /// </summary>
-    internal sealed class ShowFriendshipCommand : TwitterCommand<TwitterRelationship>
+    internal sealed class ShowFriendshipCommand : Core.TwitterCommand<TwitterRelationship>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/friendships/show.json";
+        private const string Path = "friendships/show.json";
 
-         #region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowFriendshipCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public ShowFriendshipCommand(OAuthTokens requestTokens)
-            : base("GET", new Uri(Path), requestTokens)
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        public ShowFriendshipCommand(OAuthTokens tokens, OptionalProperties optionalProperties)
+            : base("GET", Path, tokens, optionalProperties)
         {
         }
         #endregion
@@ -94,9 +95,7 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("source_id", this.SourceId.ToString(CultureInfo.InvariantCulture));
             }
-
-            // Only add the screen name if the id is not given.
-            if (!string.IsNullOrEmpty(this.SourceScreenName) && this.SourceId <= 0)
+            else if (!string.IsNullOrEmpty(this.SourceScreenName))
             {
                 this.RequestParameters.Add("source_screen_name", this.SourceScreenName);
             }
@@ -105,9 +104,7 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("target_id", this.TargetId.ToString(CultureInfo.InvariantCulture));
             }
-
-            // Only add the screen name if the id is not given.
-            if (!string.IsNullOrEmpty(this.TargetScreenName) && this.TargetId <= 0)
+            else if (!string.IsNullOrEmpty(this.TargetScreenName))
             {
                 this.RequestParameters.Add("target_screen_name", this.TargetScreenName);
             }

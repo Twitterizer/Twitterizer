@@ -41,25 +41,56 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The delete friendship command class.
     /// </summary>
-    internal sealed class DeleteFriendshipCommand : TwitterCommand<TwitterUser>
+    internal sealed class DeleteFriendshipCommand : Core.TwitterCommand<TwitterUser>
     {
         /// <summary>
         /// The base address to the API method.
         /// </summary>
-        private const string Path = "http://api.twitter.com/1/friendships/destroy.json";
+        private const string Path = "friendships/destroy.json";
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteFriendshipCommand"/> class.
         /// </summary>
-        /// <param name="requestTokens">The request tokens.</param>
-        public DeleteFriendshipCommand(OAuthTokens requestTokens)
-            : base("POST", new Uri(Path), requestTokens)
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="userId">The userid.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        public DeleteFriendshipCommand(OAuthTokens tokens, decimal userId, OptionalProperties optionalProperties)
+            : base("POST", Path, tokens, optionalProperties)
         {
-            if (requestTokens == null)
+            if (tokens == null)
             {
-                throw new ArgumentNullException("requestTokens");
+                throw new ArgumentNullException("tokens");
             }
+
+            if (userId <= 0)
+            {
+                throw new ArgumentException("userId");
+            }
+
+            this.UserId = userId;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteFriendshipCommand"/> class.
+        /// </summary>
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        public DeleteFriendshipCommand(OAuthTokens tokens, string userName, OptionalProperties optionalProperties)
+            : base("POST", Path, tokens, optionalProperties)
+        {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
+
+            this.UserName = userName;
         }
         #endregion
 
@@ -73,7 +104,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the username.
         /// </summary>
         /// <value>The username.</value>
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -84,10 +115,9 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
             }
-
-            if (this.UserId <= 0 && !string.IsNullOrEmpty(this.Username))
+            else if (!string.IsNullOrEmpty(this.UserName))
             {
-                this.RequestParameters.Add("screen_name", this.Username);
+                this.RequestParameters.Add("screen_name", this.UserName);
             }
         }
 
@@ -96,7 +126,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Validate()
         {
-            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.Username);
+            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.UserName);
         }
     }
 }

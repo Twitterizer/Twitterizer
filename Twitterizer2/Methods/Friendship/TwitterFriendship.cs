@@ -38,13 +38,14 @@ namespace Twitterizer
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-using Twitterizer.Core;
+    using Twitterizer.Core;
 
     /// <summary>
     /// Provides interaction with the Twitter API to obtain and manage relationships between users.
     /// </summary>
     public static class TwitterFriendship
     {
+        #region Followers
         /// <summary>
         /// Returns the authenticating user's followers, each with current status inline.
         /// </summary>
@@ -88,6 +89,9 @@ using Twitterizer.Core;
         {
             return Followers(null, options);
         }
+        #endregion
+
+        #region Friends
 
         /// <summary>
         /// Returns a user's friends, each with current status inline. They are ordered by the order in which the user followed them, most recently followed first, 100 at a time.
@@ -154,6 +158,70 @@ using Twitterizer.Core;
             return Friends(tokens, 0, string.Empty);
         }
 
+        #endregion
+
+        #region Create Friendship
+
+        /// <summary>
+        /// Allows the authenticating users to follow the user specified in the userID parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>        
+        /// <returns>
+        /// Returns the followed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser Create(OAuthTokens tokens, decimal userId)
+        {
+            return Create(tokens, userId, null);
+        }
+
+        /// <summary>
+        /// Allows the authenticating users to follow the user specified in the userID parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// Returns the followed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser Create(OAuthTokens tokens, decimal userId, CreateFriendshipOptions options)
+        {
+            Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(tokens, userId, options);
+            return CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Allows the authenticating users to follow the user specified in the userName parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userName">The user name.</param>
+        /// <returns>
+        /// Returns the followed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser Create(OAuthTokens tokens, string userName)
+        {
+            return Create(tokens, userName, null);
+        }
+
+        /// <summary>
+        /// Allows the authenticating users to follow the user specified in the userName parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// Returns the followed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser Create(OAuthTokens tokens, string userName, CreateFriendshipOptions options)
+        {
+            Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(tokens, userName, options);
+            return CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        #endregion
+
+        #region Delete Friendship
+
         /// <summary>
         /// Allows the authenticating users to unfollow the user specified in the ID parameter.
         /// </summary>
@@ -164,88 +232,189 @@ using Twitterizer.Core;
         /// </returns>
         public static TwitterUser Delete(OAuthTokens tokens, decimal userId)
         {
-            Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens)
-            {
-                UserId = userId
-            };
-
-            TwitterUser result = Core.CommandPerformer<TwitterUser>.PerformAction(command);
-
-            return result;
+           return Delete(tokens, userId, null);
         }
 
         /// <summary>
         /// Allows the authenticating users to unfollow the user specified in the ID parameter.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Delete(OAuthTokens tokens, string username)
+        public static TwitterUser Delete(OAuthTokens tokens, decimal userId, OptionalProperties options)
         {
-            Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens)
-            {
-                Username = username
-            };
-
-            TwitterUser result = Core.CommandPerformer<TwitterUser>.PerformAction(command);
-
-            return result;
+            Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens, userId, options);
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
         /// <summary>
-        /// Gets the friendship.
+        /// Allows the authenticating users to unfollow the user specified in the ID parameter.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="userId">The user id.</param>
+        /// <param name="userName">The username.</param>
+        /// <returns>
+        /// Returns the unfollowed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser Delete(OAuthTokens tokens, string userName)
+        {
+            return Delete(tokens, userName, null);
+        }
+
+        /// <summary>
+        /// Allows the authenticating users to unfollow the user specified in the ID parameter.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userName">The username.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// Returns the unfollowed user in the requested format when successful.
+        /// </returns>
+        public static TwitterUser Delete(OAuthTokens tokens, string userName, OptionalProperties options)
+        {
+            Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens, userName, options);
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+        #endregion
+
+        #region Show Friendship
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="targetUserId">The target user id.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, decimal userId)
+        public static TwitterRelationship Show(OAuthTokens tokens, decimal targetUserId)
         {
-            Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens)
+            return Show(tokens, targetUserId, null);
+        }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="targetUserId">The target user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, decimal targetUserId, OptionalProperties options)
+        {
+            return Show(tokens, 0, targetUserId, options);
+        }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sourceUseId">The source user id.</param>
+        /// <param name="targetUserId">The target user id.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, decimal sourceUseId, decimal targetUserId)
+        {
+            return Show(tokens, sourceUseId, targetUserId, null);
+        }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sourceUseId">The source user id.</param>
+        /// <param name="targetUserId">The target user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, decimal sourceUseId, decimal targetUserId, OptionalProperties options)
+        {
+            Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens, options)
             {
-                TargetId = userId
+                SourceId = sourceUseId,
+                TargetId = targetUserId
             };
 
             return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
         }
 
         /// <summary>
-        /// Gets the friendship between two users.
+        /// Returns detailed information about the relationship between two users.
         /// </summary>
-        /// <param name="userId1">The first user id.</param>
-        /// <param name="userId2">The second user id.</param>
-        /// <returns>
-        /// A <see cref="TwitterRelationship"/> instance.
-        /// </returns>
-        public static TwitterRelationship Show(decimal userId1, decimal userId2)
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="targetUserName">The target user name.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, string targetUserName)
         {
-            Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(null)
+            return Show(tokens, string.Empty, targetUserName, null);
+        }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="targetUserName">The target user name.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, string targetUserName, OptionalProperties options)
+        {
+            return Show(tokens, string.Empty, targetUserName, options);
+        }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sourceUserName">The source user name.</param>
+        /// <param name="targetUserName">The target user name.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, string sourceUserName, string targetUserName)
+        {
+            return Show(tokens, sourceUserName, targetUserName, null);
+        }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="sourceUserName">The source user name.</param>
+        /// <param name="targetUserName">The target user name.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
+        public static TwitterRelationship Show(OAuthTokens tokens, string sourceUserName, string targetUserName, OptionalProperties options)
+        {
+            Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens, options)
             {
-                SourceId = userId1,
-                TargetId = userId2
+                SourceScreenName = sourceUserName,
+                TargetScreenName = targetUserName
             };
 
             return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
         }
 
         /// <summary>
-        /// Gets the friendship between two users.
+        /// Returns detailed information about the relationship between two users.
         /// </summary>
-        /// <param name="username1">The first username.</param>
-        /// <param name="username2">The second username.</param>
+        /// <param name="sourceUseId">The first user id.</param>
+        /// <param name="targetUserId">The second user id.</param>
         /// <returns>
         /// A <see cref="TwitterRelationship"/> instance.
         /// </returns>
-        public static TwitterRelationship Show(string username1, string username2)
+        public static TwitterRelationship Show(decimal sourceUseId, decimal targetUserId)
         {
-            Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(null)
-            {
-                SourceScreenName = username1,
-                TargetScreenName = username2
-            };
+            return Show(null, sourceUseId, targetUserId, null);
+        }
 
-            return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
-        } 
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="sourceUserName">The first username.</param>
+        /// <param name="targetUserName">The second username.</param>
+        /// <returns>
+        /// A <see cref="TwitterRelationship"/> instance.
+        /// </returns>
+        public static TwitterRelationship Show(string sourceUserName, string targetUserName)
+        {
+            return Show(null, sourceUserName, targetUserName, null);
+        }
+
+        #endregion
     }
 }

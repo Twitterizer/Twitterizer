@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="OAuthTokenResponse.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="CreateFriendshipOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,46 +28,30 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The OAuth token response class. Represents tokens returned by the service.</summary>
+// <author>Ronak Patel</author>
+// <summary>The create friendship options class.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer
 {
+    using System;
+
     /// <summary>
-    /// Values returned by Twitter when getting a request token or an access token.
+    /// The Create Friendship Options class
     /// </summary>
-    public class OAuthTokenResponse
+    public sealed class CreateFriendshipOptions : Core.OptionalProperties
     {
-        /// <summary>
-        /// Gets or sets the token.
+         /// <summary>
+        /// Initializes a new instance of the <see cref="CreateFriendshipOptions"/> class.
         /// </summary>
-        /// <value>The token.</value>
-        public string Token { get; set; }
+        public CreateFriendshipOptions()
+            : base()
+        {
+        }
 
         /// <summary>
-        /// Gets or sets the token secret.
+        /// Gets or sets a value indicating whether to enable delivery of statuses from this user to the authenticated user's device
         /// </summary>
-        /// <value>The token secret.</value>
-        public string TokenSecret { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user ID.
-        /// </summary>
-        /// <value>The user ID.</value>
-        public decimal UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the screenname.
-        /// </summary>
-        /// <value>The screenname.</value>
-        public string ScreenName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the verification string.
-        /// This is required when overriding the application's callback url.
-        /// </summary>
-        /// <value>The verification string.</value>
-        public string VerificationString { get; set; }
+        /// <value><c>true</c> if follow; otherwise, <c>false</c>.</value>
+        public bool Follow { get; set; }
     }
 }

@@ -96,6 +96,7 @@
     <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
     <Compile Include="Methods\Favorites\TwitterFavorite.cs" />
     <Compile Include="Methods\Friendship\CreateFriendshipCommand.cs" />
+    <Compile Include="Methods\Friendship\CreateFriendshipOptions.cs" />
     <Compile Include="Methods\Friendship\TwitterFriendship.cs" />
     <Compile Include="Methods\Geo\ReverseGeocodeCommand.cs" />
     <Compile Include="Methods\Geo\TwitterBoundingBox.cs" />
