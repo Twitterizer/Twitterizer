@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The UpdateListOptions class. Provides a payload for optional parameters for the UpdaetListCommand class.
     /// </summary>
-    public class UpdateListOptions : Core.OptionalProperties
+    public class UpdateListOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets the name of the list.

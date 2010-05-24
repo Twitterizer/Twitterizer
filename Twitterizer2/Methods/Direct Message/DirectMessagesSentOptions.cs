@@ -38,7 +38,7 @@ namespace Twitterizer
     /// <summary>
     /// The direct messages sent options class. Provides a payload for the <see cref="Twitterizer.Commands.DirectMessagesCommand"/> command.
     /// </summary>
-    public sealed class DirectMessagesSentOptions : Core.OptionalProperties
+    public sealed class DirectMessagesSentOptions : OptionalProperties
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectMessagesSentOptions"/> class.

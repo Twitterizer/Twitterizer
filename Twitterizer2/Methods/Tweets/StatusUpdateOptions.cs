@@ -39,7 +39,7 @@ namespace Twitterizer
     /// <summary>
     /// The Status Update Options class
     /// </summary>
-    public sealed class StatusUpdateOptions : Core.OptionalProperties
+    public sealed class StatusUpdateOptions : OptionalProperties
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StatusUpdateOptions"/> class.

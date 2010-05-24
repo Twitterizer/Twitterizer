@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The user search options class. Provides a payload for optional parameters of the UserSearchCommand class.
     /// </summary>
-    public class UserSearchOptions : Core.OptionalProperties
+    public class UserSearchOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets the number per page. Cannot be greater than 20.

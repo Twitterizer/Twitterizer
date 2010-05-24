@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TwitterUser>
+  <TwitterUser>
+    <summary>
+      The <c>TwitterUser</c> class represents a twitter user account and provides methods for interacting with user-centric API methods.
+    </summary>
+  </TwitterUser>
+  
+  <Show name="Common">
+    <summary>
+      Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
+    </summary>
+    <returns>
+      A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
+    </returns>
+    <remarks>
+      This method interacts with the users/show API endpoint. Documentation can be found here: <a href="http://dev.twitter.com/doc/get/users/show">http://dev.twitter.com/doc/get/users/show</a>
+    </remarks>
+    <exception cref="System.ArgumentNullException">Indicates that a required argument was not supplied.</exception>
+    <exception cref="System.ArgumentException">Indicates that an argument supplied was not valid.</exception>
+    <exception cref="Twitterizer.CommandValidationException{T}">Indicates that a command failed pre-execution validation.</exception>
+  </Show>
+  
+  <Show name="ByIDWithTokensAndOptions">
+    <param name="tokens">The tokens.</param>
+    <param name="id">The user id.</param>
+    <param name="options">The options.</param>
+    <example>
+      <code>
+        // Declare the user's id variable
+        decimal userId = 1;
+        
+        // Declare the options object for configuration settings
+        OptionalProperties options = new OptionalProperties();
+
+        // Declare our user variable and fetch the user's details
+        TwitterUser user = TwitterUser.Show(tokens, userId, options);
+      </code>
+      <seealso cref="Twitterizer.OAuthTokens" />
+      <seealso cref="Twitterizer.OptionalProperties" />
+    </example>
+  </Show>
+  
+  <Show name="ByIDWithOptions">
+    <param name="id">The user id.</param>
+    <param name="options">The options.</param>
+    <example>
+      <code>
+        // Declare the user's id variable
+        decimal userId = 1;
+        
+        // Declare the options object for configuration settings
+        OptionalProperties options = new OptionalProperties();
+
+        // Declare our user variable and fetch the user's details
+        TwitterUser user = TwitterUser.Show(userId, options);
+      </code>
+    </example>
+    <seealso cref="Twitterizer.OptionalProperties" />
+  </Show>
+
+  <Show name="ByIDWithTokens">
+    <param name="tokens">The tokens.</param>
+    <param name="id">The user id.</param>
+    <example>
+      <code>
+        // Declare the user's id variable
+        decimal userId = 1;
+
+        // Declare our user variable and fetch the user's details
+        TwitterUser user = TwitterUser.Show(tokens, userId);
+      </code>
+    </example>
+    <seealso cref="Twitterizer.OAuthTokens" />
+  </Show>
+
+  <Show name="ByID">
+    <param name="id">The user id.</param>
+    <example>
+      <code>
+        // Declare the user's id variable
+        decimal userId = 1;
+
+        // Declare our user variable and fetch the user's details
+        TwitterUser user = TwitterUser.Show(userId);
+      </code>
+    </example>
+    <seealso cref="Twitterizer.OAuthTokens" />
+  </Show>
+</TwitterUser>

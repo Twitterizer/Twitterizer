@@ -32,7 +32,7 @@
 // <summary>The base class for optional property classes</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer
 {
     using System;
     using System.Configuration;

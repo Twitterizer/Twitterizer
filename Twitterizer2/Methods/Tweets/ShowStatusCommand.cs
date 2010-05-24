@@ -50,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
-        public ShowStatusCommand(OAuthTokens requestTokens, decimal statusId, Core.OptionalProperties options)
+        public ShowStatusCommand(OAuthTokens requestTokens, decimal statusId, OptionalProperties options)
             : base(
                 "GET", 
                 string.Format(CultureInfo.InvariantCulture, "statuses/show/{0}.json", statusId), 

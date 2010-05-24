@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The list favorites options class. Provides a payload for optional parameters of the ListFavoritesCommand class.
     /// </summary>
-    public class ListFavoritesOptions : Core.OptionalProperties
+    public class ListFavoritesOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets the user name or id of the user for whom to return results for.

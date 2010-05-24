@@ -32,7 +32,7 @@
 // <summary>The twitter favorite class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Methods.Favorites
+namespace Twitterizer
 {
     using Twitterizer.Core;
 

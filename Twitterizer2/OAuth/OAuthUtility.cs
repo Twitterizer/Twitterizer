@@ -46,9 +46,7 @@ namespace Twitterizer
     using System.Text.RegularExpressions;
     using System.Web;
 
-    /// <summary>
-    /// A utility for handling the oauth protocol.
-    /// </summary>
+    /// <include file='..\XML Documentation\OAuthUtility.xml' path='OAuthUtility/OAuthUtility/*'/>
     public static class OAuthUtility
     {
         /// <summary>
@@ -125,20 +123,6 @@ namespace Twitterizer
             }
 
             return response;
-        }
-
-        /// <summary>
-        /// Gets an access token.
-        /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="requestToken">The request token.</param>
-        /// <returns>
-        /// A <see cref="Twitterizer.OAuthTokenResponse"/> containing the requested tokens.
-        /// </returns>
-        public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken)
-        {
-            return GetAccessToken(consumerKey, consumerSecret, requestToken, string.Empty);
         }
 
         /// <summary>

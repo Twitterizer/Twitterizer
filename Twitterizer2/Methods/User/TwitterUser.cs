@@ -38,27 +38,15 @@ namespace Twitterizer
     using System.Drawing;
     using System.Globalization;
     using Newtonsoft.Json;
-using Twitterizer.Core;
-    
-    /// <summary>
-    /// The class that represents a twitter user account
-    /// </summary>
+    using Twitterizer.Core;
+
+    /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/TwitterUser/*'/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("@{ScreenName}")]
     [Serializable]
     public class TwitterUser : Core.TwitterObject
     {
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterUser"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        public TwitterUser(OAuthTokens tokens) 
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterUser"/> class.
         /// </summary>
@@ -321,16 +309,8 @@ using Twitterizer.Core;
         #endregion
 
         #endregion
-
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="id">The user id.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokensAndOptions"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, decimal id, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, id, string.Empty, options);
@@ -338,27 +318,15 @@ using Twitterizer.Core;
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="id">The user id.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithOptions"]/*'/>
         public static TwitterUser Show(decimal id, OptionalProperties options)
         {
             return Show(null, id, options);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="id">The user id.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokens"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, decimal id)
         {
             return Show(tokens, id, null);

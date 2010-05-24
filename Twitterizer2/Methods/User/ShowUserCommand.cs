@@ -52,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="userId">The user id.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
-        public ShowUserCommand(OAuthTokens tokens, decimal userId, string username, Core.OptionalProperties options)
+        public ShowUserCommand(OAuthTokens tokens, decimal userId, string username, OptionalProperties options)
             : base("GET", "users/show.json", tokens, options)
         {
             if ((userId <= 0 && string.IsNullOrEmpty(username)) || (userId > 0 && !string.IsNullOrEmpty(username)))

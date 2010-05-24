@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The list statuses options class. Provides a payload for the ListStatusesCommand class.
     /// </summary>
-    public sealed class ListStatusesOptions : Core.OptionalProperties
+    public sealed class ListStatusesOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets the since id.

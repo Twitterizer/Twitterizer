@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The current trends options class. Provides a payload for optional parameters for the CurrentTrendsCommand class.
     /// </summary>
-    public class CurrentTrendsOptions : Core.OptionalProperties
+    public class CurrentTrendsOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets a value indicating whether [exclude hash tags].

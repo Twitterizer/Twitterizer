@@ -18,6 +18,7 @@
     <HtmlHelpName>twitterizer2</HtmlHelpName>
     <HelpTitle>Twitterizer 2 Documentation</HelpTitle>
     <DocumentationSources>
+      <DocumentationSource sourceFile="XML Documentation\AdditionalPages.xml" />
       <DocumentationSource sourceFile="Twitterizer2\Twitterizer2.csproj" />
     </DocumentationSources>
     <PresentationStyle>Prototype</PresentationStyle>
@@ -25,19 +26,51 @@
     <FeedbackEMailLinkText>Mailing List</FeedbackEMailLinkText>
     <Preliminary>False</Preliminary>
     <PlugInConfigurations>
-      <PlugInConfig id="Hierarchical Table of Contents" enabled="True" xmlns="">
+      <PlugInConfig id="Hierarchical Table of Contents" enabled="True">
+        <configuration />
+      </PlugInConfig>
+      <PlugInConfig id="Table of Contents Exclusion" enabled="True">
         <configuration />
       </PlugInConfig>
     </PlugInConfigurations>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="Twitterizer.Core" isDocumented="True" />
+      <NamespaceSummaryItem name="Twitterizer.Core" isDocumented="False" />
     </NamespaceSummaries>
     <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
-    <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="Twitterizer.Core" isExposed="False" />
     </ApiFilter>
     <SdkLinkTarget>Blank</SdkLinkTarget>
+    <HelpFileFormat>Website</HelpFileFormat>
+    <FrameworkVersion>3.5</FrameworkVersion>
+    <ComponentConfigurations>
+      <ComponentConfig id="Cached MSDN URL References" enabled="True" xmlns="">
+        <component id="Cached MSDN URL References" type="SandcastleBuilder.Components.CachedResolveReferenceLinksComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll" locale="{@Locale}" linkTarget="{@SdkLinkTarget}">
+          <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
+          <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@SDKLinks}" />
+          <targets files="reflection.xml" type="{@ProjectLinks}" />
+        </component>
+      </ComponentConfig>
+      <ComponentConfig id="Cached Reflection Index Data" enabled="True" xmlns="">
+        <component id="Cached Reflection Index Data" type="SandcastleBuilder.Components.CachedCopyFromIndexComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <index name="reflection" value="/reflection/apis/api" key="@id" cache="10">
+            <cache base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" cacheFile="{@LocalDataFolder}Cache\Reflection.cache" />
+            <data files="reflection.xml" />
+          </index>
+          <copy name="reflection" source="*" target="/document/reference" />
+        </component>
+      </ComponentConfig>
+      <ComponentConfig id="Code Block Component" enabled="True" xmlns="">
+        <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <basePath value="{@HtmlEncProjectFolder}" />
+          <languageFilter value="true" />
+          <allowMissingSource value="false" />
+          <removeRegionMarkers value="false" />
+          <colorizer syntaxFile="{@SHFBFolder}Colorizer\highlight.xml" styleFile="{@SHFBFolder}Colorizer\highlight.xsl" copyImageUrl="../icons/CopyCode.gif" language="cs" tabSize="0" numberLines="true" outlining="false" keepSeeTags="false" defaultTitle="true" />
+        </component>
+      </ComponentConfig>
+    </ComponentConfigurations>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

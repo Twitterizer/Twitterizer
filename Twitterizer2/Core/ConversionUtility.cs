@@ -41,6 +41,7 @@ namespace Twitterizer
     /// <summary>
     /// Provides common color converstion methods
     /// </summary>
+    /// <tocexclude />
     internal static class ConversionUtility
     {
         /// <summary>

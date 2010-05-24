@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The timeline options class. Provides optional parameters for timeline methods.
     /// </summary>
-    public class TimelineOptions : Core.OptionalProperties
+    public class TimelineOptions : OptionalProperties
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TimelineOptions"/> class.

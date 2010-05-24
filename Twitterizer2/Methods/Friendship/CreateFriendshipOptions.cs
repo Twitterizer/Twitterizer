@@ -38,7 +38,7 @@ namespace Twitterizer
     /// <summary>
     /// The Create Friendship Options class
     /// </summary>
-    public sealed class CreateFriendshipOptions : Core.OptionalProperties
+    public sealed class CreateFriendshipOptions : OptionalProperties
     {
          /// <summary>
         /// Initializes a new instance of the <see cref="CreateFriendshipOptions"/> class.

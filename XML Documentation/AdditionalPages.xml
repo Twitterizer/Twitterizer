@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Twitterizer2</name>
+    </assembly>
+	<members>
+		<member name="Welcome">
+		</member>
+	</members>
+</doc>

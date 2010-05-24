@@ -49,7 +49,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The tokens.</param>
         /// <param name="id">The status id.</param>
         /// <param name="options">The options.</param>
-        public DeleteStatusCommand(OAuthTokens tokens, decimal id, Core.OptionalProperties options)
+        public DeleteStatusCommand(OAuthTokens tokens, decimal id, OptionalProperties options)
             : base(
                 "POST", 
                 string.Format(CultureInfo.InvariantCulture, "statuses/destroy/{0}.json", id), 

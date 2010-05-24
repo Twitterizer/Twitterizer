@@ -34,9 +34,7 @@
 
 namespace Twitterizer
 {
-    /// <summary>
-    /// Request Parameters needed by requests authenticated with OAuth
-    /// </summary>
+    /// <include file='..\XML Documentation\OAuthTokens.xml' path='OAuthTokens/OAuthTokens/*'/>
     [System.Serializable]
     public class OAuthTokens
     {

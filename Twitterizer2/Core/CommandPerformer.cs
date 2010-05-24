@@ -38,6 +38,7 @@ namespace Twitterizer.Core
     /// The Command Performer Class
     /// </summary>
     /// <typeparam name="T">The business object the performer should return.</typeparam>
+    /// <tocexclude />
     internal static class CommandPerformer<T>
         where T : ITwitterObject
     {

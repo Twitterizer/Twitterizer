@@ -37,7 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The Retweets Options class. Provides a payload for optional parameters for the Retweets Command
     /// </summary>
-    public class RetweetsOptions : Core.OptionalProperties
+    public class RetweetsOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets the count of statuses to return.

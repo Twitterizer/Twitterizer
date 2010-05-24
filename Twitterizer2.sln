@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2", "Twitterizer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterizerDesktop", "Twitterizer-Desktop\TwitterizerDesktop.csproj", "{83EB84AC-89B8-449F-9060-C197A60DB764}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web\", "{A202C98F-EFD6-422A-8C03-BCD069377FA9}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web", "{A202C98F-EFD6-422A-8C03-BCD069377FA9}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
 		ProjectReferences = "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}|Twitterizer.dll;"
@@ -36,6 +36,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Data", "Twitterizer2.Data\Twitterizer2.Data.csproj", "{4ACED651-D888-4E46-A38B-13291C00FABF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterizerStream", "Twitterizer-Stream\TwitterizerStream.csproj", "{1A6E1F13-3B23-4D6B-B997-1CB595AE8B0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0069E24B-470C-43E4-A6D0-536D3A6A1E6F}"
+	ProjectSection(SolutionItems) = preProject
+		XML Documentation\OAuthTokens.xml = XML Documentation\OAuthTokens.xml
+		XML Documentation\OAuthUtility.xml = XML Documentation\OAuthUtility.xml
+		XML Documentation\TwitterUser.xml = XML Documentation\TwitterUser.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

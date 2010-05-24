@@ -39,6 +39,7 @@ namespace Twitterizer.Core
     /// The ICommand interface.
     /// </summary>
     /// <typeparam name="T">The Type of the BaseObject that the command returns</typeparam>
+    /// <tocexclude />
     public interface ICommand<T>
         where T : ITwitterObject
     {

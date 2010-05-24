@@ -64,7 +64,7 @@ namespace Twitterizer
     /// <summary>
     /// The search options class. Provides a payload for optional parameters for the SearchCommand class.
     /// </summary>
-    public class SearchOptions : Core.OptionalProperties
+    public class SearchOptions : OptionalProperties
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchOptions"/> class.

@@ -37,6 +37,7 @@ namespace Twitterizer.Core
     /// <summary>
     /// The ITwitterObject interface.
     /// </summary>
+    /// <tocexclude />
     public interface ITwitterObject
     {
         /// <summary>

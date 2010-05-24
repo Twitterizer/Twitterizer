@@ -36,7 +36,7 @@ namespace Twitterizer
     /// <summary>
     /// The followers options class. Provides a payload for optional parameters of the FollowersCommand class.
     /// </summary>
-    public class FollowersOptions : Core.OptionalProperties
+    public class FollowersOptions : OptionalProperties
     {
         /// <summary>
         /// Gets or sets the ID of the user for whom to request a list of followers. 
