@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2", "Twitterizer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterizerDesktop", "Twitterizer-Desktop\TwitterizerDesktop.csproj", "{83EB84AC-89B8-449F-9060-C197A60DB764}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web", "{A202C98F-EFD6-422A-8C03-BCD069377FA9}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web\", "{A202C98F-EFD6-422A-8C03-BCD069377FA9}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
 		ProjectReferences = "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}|Twitterizer.dll;"

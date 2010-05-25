@@ -309,6 +309,7 @@ namespace Twitterizer
         #endregion
 
         #endregion
+
         /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokensAndOptions"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, decimal id, OptionalProperties options)
@@ -332,27 +333,15 @@ namespace Twitterizer
             return Show(tokens, id, null);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="id">The user id.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByID"]/*'/>
         public static TwitterUser Show(decimal id)
         {
             return Show(null, id, null);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokensAndOptions"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, string username, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, 0, username, options);
@@ -360,54 +349,29 @@ namespace Twitterizer
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithOptions"]/*'/>
         public static TwitterUser Show(string username, OptionalProperties options)
         {
             return Show(null, username, options);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokens"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, string username)
         {
             return Show(tokens, username, null);
         }
 
-        /// <summary>
-        /// Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
-        /// </summary>
-        /// <param name="username">The username.</param>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.TwitterUser"/> class.
-        /// </returns>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsername"]/*'/>
         public static TwitterUser Show(string username)
         {
             return Show(null, username, null);
         }
 
-        /// <summary>
-        /// Searches the specified tokens.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterUserCollection"/> instance.
-        /// </returns>
-        /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="WithTokensAndOptions"]/*'/>
         public static TwitterUserCollection Search(OAuthTokens tokens, string query, UserSearchOptions options)
         {
             Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
@@ -418,15 +382,8 @@ namespace Twitterizer
             return result;
         }
 
-        /// <summary>
-        /// Searches the specified tokens.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="query">The query.</param>
-        /// <returns>
-        /// A <see cref="TwitterUserCollection"/> instance.
-        /// </returns>
-        /// <remarks>For more information, see: http://help.twitter.com/forums/31935/entries/60660</remarks>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
+        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="WithTokens"]/*'/>
         public static TwitterUserCollection Search(OAuthTokens tokens, string query)
         {
             return Search(tokens, query, null);

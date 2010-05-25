@@ -164,56 +164,6 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterDirectMessageCollection"/> instance.
-        /// </returns>
-        public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
-        {
-            return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
-        }
-
-        /// <summary>
-        /// Deletes this direct message.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterDirectMessage"/> instance.
-        /// </returns>
-        public TwitterDirectMessage Delete(OptionalProperties options)
-        {
-            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id, options);
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterDirectMessage>()
-                {
-                    Command = command,
-                    MethodName = "Delete"
-                };
-            }
-
-            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Deletes this direct message.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="TwitterDirectMessage"/> instance.
-        /// </returns>
-        public TwitterDirectMessage Delete()
-        {
-            return this.Delete(null);
-        }
-
-        /// <summary>
         /// Sends a new direct message to the specified user from the authenticating user.
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
@@ -299,6 +249,56 @@ namespace Twitterizer
         public static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text)
         {
             return Send(tokens, screenName, text, null);
+        }
+
+        /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent by the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessageCollection"/> instance.
+        /// </returns>
+        public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
+        {
+            return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
+        }
+
+        /// <summary>
+        /// Deletes this direct message.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        public TwitterDirectMessage Delete()
+        {
+            return this.Delete(null);
+        }
+
+        /// <summary>
+        /// Deletes this direct message.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        public TwitterDirectMessage Delete(OptionalProperties options)
+        {
+            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id, options);
+
+            command.Validate();
+            if (!command.IsValid)
+            {
+                throw new CommandValidationException<TwitterDirectMessage>()
+                {
+                    Command = command,
+                    MethodName = "Delete"
+                };
+            }
+
+            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+
+            return result;
         }
     }
 }

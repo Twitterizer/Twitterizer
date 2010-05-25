@@ -7,14 +7,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9223c5ca-4b52-49ce-a51c-ae1252eaff5b}</ProjectGuid>
-    <SHFBSchemaVersion>1.8.0.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>1.8.0.3</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <OutputPath>.\Help\</OutputPath>
+    <OutputPath>.\XML Documentation\Output\</OutputPath>
     <HtmlHelpName>twitterizer2</HtmlHelpName>
     <HelpTitle>Twitterizer 2 Documentation</HelpTitle>
     <DocumentationSources>
@@ -26,9 +26,6 @@
     <FeedbackEMailLinkText>Mailing List</FeedbackEMailLinkText>
     <Preliminary>False</Preliminary>
     <PlugInConfigurations>
-      <PlugInConfig id="Hierarchical Table of Contents" enabled="True">
-        <configuration />
-      </PlugInConfig>
       <PlugInConfig id="Table of Contents Exclusion" enabled="True">
         <configuration />
       </PlugInConfig>
@@ -42,7 +39,7 @@
       <Filter entryType="Namespace" fullName="Twitterizer.Core" isExposed="False" />
     </ApiFilter>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <HelpFileFormat>Website</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <FrameworkVersion>3.5</FrameworkVersion>
     <ComponentConfigurations>
       <ComponentConfig id="Cached MSDN URL References" enabled="True" xmlns="">
@@ -80,6 +77,23 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="XML Documentation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentLayout Include="XML Documentation\Twitterizer2.content" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="XML Documentation\Desktop Authorization.aml" />
+    <None Include="XML Documentation\Web Authorization.aml" />
+    <None Include="XML Documentation\OAuth.aml" />
+    <None Include="XML Documentation\WelcomeTopic.aml" />
+  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
 </Project>
