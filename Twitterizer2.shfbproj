@@ -39,7 +39,7 @@
       <Filter entryType="Namespace" fullName="Twitterizer.Core" isExposed="False" />
     </ApiFilter>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <HelpFileFormat>Website</HelpFileFormat>
     <FrameworkVersion>3.5</FrameworkVersion>
     <ComponentConfigurations>
       <ComponentConfig id="Cached MSDN URL References" enabled="True" xmlns="">
@@ -70,6 +70,8 @@
     </ComponentConfigurations>
     <NamingMethod>MemberName</NamingMethod>
     <BinaryTOC>False</BinaryTOC>
+    <FooterText>&amp;lt%3bscript type=&amp;quot%3btext/javascript&amp;quot%3b&amp;gt%3bvar _gaq = _gaq || []%3b_gaq.push%28[%27_setAccount%27, %27UA-185836-25%27]%29%3b_gaq.push%28[%27_trackPageview%27]%29%3b%28function%28%29 {{ var ga = document.createElement%28%27script%27%29%3b ga.type = %27text/javascript%27%3b ga.async = true%3b ga.src = %28%27https:%27 == document.location.protocol %3f %27https://ssl%27 : %27http://www%27%29 + %27.google-analytics.com/ga.js%27%3b var s = document.getElementsByTagName%28%27script%27%29[0]%3b s.parentNode.insertBefore%28ga, s%29%3b }}%29%28%29%3b&amp;lt%3b/script&amp;gt%3b</FooterText>
+    <CollectionTocStyle>Hierarchical</CollectionTocStyle>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

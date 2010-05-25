@@ -38,16 +38,14 @@ namespace Twitterizer
     using System.Configuration;
     using System.Net;
 
-    /// <summary>
-    /// The base class for optional property classes
-    /// </summary>
+    /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/OptionalProperties/*'/>
     [Serializable]
     public class OptionalProperties
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionalProperties"/> class.
         /// </summary>
-        internal OptionalProperties()
+        public OptionalProperties()
         {
             // Set the default values for the properties
             this.UseSSL = false;
@@ -58,34 +56,19 @@ namespace Twitterizer
             this.ReadConfigurationSettings();
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the library should use SSL.
-        /// </summary>
-        /// <value><c>true</c> if [use SSL]; otherwise, <c>false</c>.</value>
+        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="UseSSL"]/*'/>
         public bool UseSSL { get; set; }
 
-        /// <summary>
-        /// Gets or sets the API end point.
-        /// </summary>
-        /// <value>The API end point.</value>
+        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="APIBaseAddress"]/*'/>
         public string APIBaseAddress { get; set; }
 
-        /// <summary>
-        /// Gets or sets the proxy.
-        /// </summary>
-        /// <value>The proxy.</value>
+        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
         public WebProxy Proxy { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [cache output].
-        /// </summary>
-        /// <value><c>true</c> if [cache output]; otherwise, <c>false</c>.</value>
+        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
         public bool CacheOutput { get; set; }
 
-        /// <summary>
-        /// Gets or sets the cache timespan.
-        /// </summary>
-        /// <value>The cache timespan.</value>
+        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
         public TimeSpan CacheTimespan { get; set; }
 
         /// <summary>

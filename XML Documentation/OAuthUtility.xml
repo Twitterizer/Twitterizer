@@ -13,7 +13,7 @@
     </remarks>
     <example>
       First, you must obtain a request token from the API.
-      <code>
+      <code lang="cs">
         string consumerKey = "XXX";
         string consumerSecret = "XXX";
 
@@ -23,10 +23,20 @@
         // Direct or instruct the user to the following address:
         Uri authorizationUri = OAuthUtility.BuildAuthorizationUri(requestToken.Token);
       </code>
+      <code lang="vb">
+        Dim consumerKey As String = "XXX"
+        Dim consumerSecret As String = "XXX"
 
+        '-- Obtain a request token
+        Dim requestToken As OAuthTokenResponse = OAuthUtility.GetRequestToken(consumerKey, consumerSecret)
+
+        '-- Direct or instruct the user to the following address:
+        Dim authorizationUri As Uri = OAuthUtility.BuildAuthorizationUri(requestToken.Token)
+      </code>
+      
       After the user has returned, you must obtain or reuse the request token and obtain the verifier value. For web applications, both values will be provided on the querystring to the callback url as oauth_token and oauth_verifier, respectively. For desktop and mobile applications, the verifier will be a numeric PIN supplied to the user.
       
-      <code>
+      <code lang="cs">
         string consumerKey = "XXX";
         string consumerSecret = "XXX";
         string requestToken = "XXX";
@@ -36,6 +46,17 @@
         OAuthTokenResponse accessToken = OAuthUtility.GetAccessToken(consumerKey, consumerSecret, requestToken, verifier);
         
         // TODO: Save the access token to a database, session, xml file, or whereever my user data is stored.
+      </code>
+      <code lang="vb">
+        Dim consumerKey As String = "XXX"
+        Dim consumerSecret As String = "XXX"
+        Dim requestToken As String = "XXX"
+        Dim verifier As String = "XXX"
+
+        '-- Obtain the access token for this user.
+        Dim accessToken As OAuthTokenResponse = OAuthUtility.GetAccessToken(consumerKey, consumerSecret, requestToken, verifier)
+
+        '-- TODO: Save the access token to a database, session, xml file, or whereever my user data is stored.
       </code>
     </example>
     <seealso cref="Twitterizer.OAuthTokenResponse" />

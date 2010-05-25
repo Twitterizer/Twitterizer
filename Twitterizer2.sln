@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		XML Documentation\OAuthTokens.xml = XML Documentation\OAuthTokens.xml
 		XML Documentation\OAuthUtility.xml = XML Documentation\OAuthUtility.xml
+		XML Documentation\OptionalProperties.xml = XML Documentation\OptionalProperties.xml
 		XML Documentation\TwitterUser.xml = XML Documentation\TwitterUser.xml
 	EndProjectSection
 EndProject
