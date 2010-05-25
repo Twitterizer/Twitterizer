@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetListSubscriptionsCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -50,27 +50,14 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
-        public GetListSubscriptionsCommand(OAuthTokens requestTokens, string username, OptionalProperties options)
-            : base("GET", "{0}/lists/subscriptions.json", requestTokens, options)
+        public GetListSubscriptionsCommand(OAuthTokens requestTokens, OptionalProperties options)
+            : base(HTTPVerb.GET, "{0}/lists/subscriptions.json", requestTokens, options)
         {
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentNullException("username");
-            }
-
             if (requestTokens == null)
             {
                 throw new ArgumentNullException("requestTokens");
             }
-
-            this.Username = username;
         }
-
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -86,14 +73,6 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>
@@ -101,7 +80,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterListWrapper> Clone()
         {
-            return new GetListSubscriptionsCommand(this.Tokens, this.Username, this.OptionalProperties)
+            return new GetListSubscriptionsCommand(this.Tokens, this.OptionalProperties)
             {
                 Cursor = this.Cursor
             };

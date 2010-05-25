@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="friends.aspx.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -47,7 +47,9 @@ public partial class friends : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(Request.QueryString["userid"]) && decimal.TryParse(Request.QueryString["userid"], out userId))
             {
-                this.FriendsCollection = TwitterFriendship.Friends(Master.Tokens, userId);
+                FriendsOptions friendsOptions = new FriendsOptions();
+                friendsOptions.UserId = userId;
+                this.FriendsCollection = TwitterFriendship.Friends(Master.Tokens, friendsOptions);
             }
             else
             {

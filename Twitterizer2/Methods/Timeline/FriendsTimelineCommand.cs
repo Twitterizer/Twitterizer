@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="FriendsTimelineCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -50,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
         public FriendsTimelineCommand(OAuthTokens tokens, TimelineOptions options)
-            : base("GET", "statuses/friends_timeline.json", tokens, options)
+            : base(HTTPVerb.GET, "statuses/friends_timeline.json", tokens, options)
         {
         }
         #endregion
@@ -79,14 +79,6 @@ namespace Twitterizer.Commands
 
             this.Page = options.Page;
             this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null;
         }
 
         /// <summary>

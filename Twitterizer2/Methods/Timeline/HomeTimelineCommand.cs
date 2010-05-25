@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="HomeTimelineCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -35,6 +35,7 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Home Timeline Command
@@ -43,30 +44,19 @@ namespace Twitterizer.Commands
     internal sealed class HomeTimelineCommand :
         Core.PagedCommand<TwitterStatusCollection>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="optionalProperties">The optional properties.</param>
         public HomeTimelineCommand(OAuthTokens tokens, TimelineOptions optionalProperties)
-            : base("GET", "statuses/home_timeline.json", tokens, optionalProperties)
+            : base(HTTPVerb.GET, "statuses/home_timeline.json", tokens, optionalProperties)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
             }
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        public HomeTimelineCommand(OAuthTokens tokens)
-            : this(tokens, null)
-        {
-        }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
@@ -97,24 +87,12 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null;
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
         internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new HomeTimelineCommand(this.Tokens)
-            {
-                Page = this.Page,
-                OptionalProperties = this.OptionalProperties
-            };
+            return new HomeTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
         }
     }
 }

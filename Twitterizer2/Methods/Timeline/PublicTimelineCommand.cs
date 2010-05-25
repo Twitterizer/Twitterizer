@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -48,7 +48,7 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         public PublicTimelineCommand(OAuthTokens tokens)
-            : base("GET", "statuses/public_timeline.json", tokens, null)
+            : base(HTTPVerb.GET, "statuses/public_timeline.json", tokens, null)
         {
         }
         #endregion
@@ -58,14 +58,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
 
         /// <summary>

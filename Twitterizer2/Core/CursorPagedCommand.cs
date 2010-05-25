@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CursorPagedCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -49,33 +49,11 @@ namespace Twitterizer.Core
         /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="method">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
-        /// <param name="tokens">The request tokens.</param>
-        [Obsolete]
-        protected CursorPagedCommand(string method, Uri uri, OAuthTokens tokens)
-            : base(method, uri, tokens)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
         /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
-        protected CursorPagedCommand(string method, string endPoint, OAuthTokens tokens, OptionalProperties options)
+        protected CursorPagedCommand(HTTPVerb method, string endPoint, OAuthTokens tokens, OptionalProperties options)
             : base(method, endPoint, tokens, options)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="tokens">The tokens.</param>
-        protected CursorPagedCommand(string method, OAuthTokens tokens)
-            : base(method, tokens)
         {
         }
         #endregion

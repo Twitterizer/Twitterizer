@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="UpdateListCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="options">The options.</param>
         public UpdateListCommand(OAuthTokens tokens, string username, long id, UpdateListOptions options)
             : base(
-                "GET", 
+                HTTPVerb.GET, 
                 string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, id), 
                 tokens, 
                 options)
@@ -102,14 +102,6 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("description", options.Description);
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

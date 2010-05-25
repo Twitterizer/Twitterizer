@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterPlaceCollection.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -34,11 +34,13 @@
 
 namespace Twitterizer
 {
+    using System;
     using Twitterizer.Core;
 
     /// <summary>
     /// The Twitter Place Collection class. A collection of <see cref="TwitterPlace"/> objects.
     /// </summary>
+    [Serializable]
     public class TwitterPlaceCollection : TwitterCollection<TwitterPlace>
     {
     }

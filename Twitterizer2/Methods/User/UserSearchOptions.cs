@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="UserSearchOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -37,6 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The user search options class. Provides a payload for optional parameters of the UserSearchCommand class.
     /// </summary>
+    [System.Serializable]
     public class UserSearchOptions : OptionalProperties
     {
         /// <summary>

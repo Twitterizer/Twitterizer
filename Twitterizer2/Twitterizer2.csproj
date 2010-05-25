@@ -33,8 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Release\Twitterizer2.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono-Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -109,6 +108,7 @@
     <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />
     <Compile Include="Methods\Search\SearchOptions.cs" />
+    <Compile Include="Methods\Timeline\UserTimelineOptions.cs" />
     <Compile Include="Methods\Trends\CurrentTrendsCommand.cs" />
     <Compile Include="Methods\Trends\CurrentTrendsOptions.cs" />
     <Compile Include="Methods\Search\SearchCommand.cs" />
@@ -138,6 +138,7 @@
     <Compile Include="Methods\List\UpdateListCommand.cs" />
     <Compile Include="Methods\Tweets\UpdateStatusCommand.cs" />
     <Compile Include="Methods\User\FollowersCommand.cs" />
+    <Compile Include="Methods\User\FriendsOptions.cs" />
     <Compile Include="Methods\User\UserSearchCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineCommand.cs" />
     <Compile Include="Core\SerializationHelper.cs" />
@@ -194,6 +195,17 @@
     <None Include="Twitterizer2Inheritance.cd" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Methods\Tweets\TwitterStatus.xml" />
+    <None Include="Methods\User\TwitterUser.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OAuth\OAuthTokens.xml" />
+    <None Include="OAuth\OAuthUtility.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core\OptionalProperties.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Methods\Block\" />
     <Folder Include="Methods\Notification\" />
     <Folder Include="Methods\SavedSearches\" />
@@ -208,7 +220,9 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(SolutionDir)*.license.txt $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>copy $(SolutionDir)*.license.txt $(TargetDir)
+copy $(TargetDir)*.* $(SolutionDir)Release\
+del $(SolutionDir)Release\*.tmp</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>

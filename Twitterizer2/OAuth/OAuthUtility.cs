@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="OAuthUtility.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -45,8 +45,9 @@ namespace Twitterizer
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Web;
+    using Twitterizer.Core;
 
-    /// <include file='..\XML Documentation\OAuthUtility.xml' path='OAuthUtility/OAuthUtility/*'/>
+    /// <include file='OAuthUtility.xml' path='OAuthUtility/OAuthUtility/*'/>
     public static class OAuthUtility
     {
         /// <summary>
@@ -103,7 +104,7 @@ namespace Twitterizer
                 HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
                     "https://api.twitter.com/oauth/request_token",
                     parameters,
-                    "POST",
+                    HTTPVerb.POST,
                     consumerKey,
                     consumerSecret,
                     null,
@@ -166,7 +167,7 @@ namespace Twitterizer
                 HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
                     "https://api.twitter.com/oauth/access_token",
                     parameters,
-                    "POST",
+                    HTTPVerb.POST,
                     consumerKey,
                     consumerSecret,
                     requestToken,
@@ -261,7 +262,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="verb">The verb.</param>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="token">The access or request token.</param>
@@ -272,7 +273,7 @@ namespace Twitterizer
         internal static HttpWebResponse BuildOAuthRequestAndGetResponse(
             string baseUrl,
             Dictionary<string, string> parameters,
-            string httpMethod,
+            Core.HTTPVerb verb,
             string consumerKey,
             string consumerSecret,
             string token,
@@ -310,7 +311,7 @@ namespace Twitterizer
             AddSignatureToParameters(
                 new Uri(baseUrl),
                 combinedParameters,
-                httpMethod,
+                verb,
                 consumerSecret,
                 tokenSecret);
 
@@ -322,12 +323,7 @@ namespace Twitterizer
 
             HttpWebResponse response;
 
-            if (!new string[] { "GET", "POST", "DELETE" } .Contains(httpMethod))
-            {
-                throw new ArgumentException("The HTTP method supplied is not supported.", "httpMethod");
-            }
-
-            if (httpMethod == "POST")
+            if (verb == HTTPVerb.POST)
             {
                 StringBuilder requestParametersBuilder = new StringBuilder();
 
@@ -356,11 +352,11 @@ namespace Twitterizer
             }
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
-            request.Method = httpMethod;
+            request.Method = verb.ToString();
             request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
             request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
 
-            if (httpMethod == "POST")
+            if (verb == HTTPVerb.POST)
             {
                 request.ContentType = "application/x-www-form-urlencoded";
             }
@@ -469,13 +465,13 @@ namespace Twitterizer
         /// </summary>
         /// <param name="url">The base URL.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="verb">The verb.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="tokenSecret">The token secret.</param>
         private static void AddSignatureToParameters(
             Uri url, 
             Dictionary<string, string> parameters,
-            string httpMethod,
+            Core.HTTPVerb verb,
             string consumerSecret,
             string tokenSecret)
         {
@@ -492,7 +488,7 @@ namespace Twitterizer
             string signatureBase = string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}&{1}&{2}",
-                httpMethod.ToUpper(CultureInfo.InvariantCulture),
+                verb.ToString().ToUpper(CultureInfo.InvariantCulture),
                 EncodeForUrl(normalizedUrl),
                 UrlEncode(baseStringParameters));
 
@@ -516,7 +512,7 @@ namespace Twitterizer
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("----------- OAUTH SIGNATURE GENERATION -----------");
             System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "url.PathAndQuery = \"{0}\"", url.PathAndQuery));
-            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "httpMethod = \"{0}\"", httpMethod));
+            System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "httpMethod = \"{0}\"", verb.ToString()));
             System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "consumerSecret = \"{0}\"", consumerSecret));
             System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "tokenSecret = \"{0}\"", tokenSecret));
             System.Diagnostics.Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "normalizedUrl = \"{0}\"", normalizedUrl));

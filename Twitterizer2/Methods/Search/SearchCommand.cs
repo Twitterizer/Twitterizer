@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="SearchCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -52,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="query">The query.</param>
         /// <param name="options">The options.</param>
         public SearchCommand(OAuthTokens requestTokens, string query, SearchOptions options)
-            : base("GET", "search.json", requestTokens, options)
+            : base(HTTPVerb.GET, "search.json", requestTokens, options)
         {
             if (string.IsNullOrEmpty(query))
             {
@@ -147,14 +147,6 @@ namespace Twitterizer.Commands
                     this.RequestParameters.Add("result_type", "popular");
                     break;
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

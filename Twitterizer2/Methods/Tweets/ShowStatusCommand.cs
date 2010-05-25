@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ShowStatusCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -37,11 +37,12 @@ namespace Twitterizer.Commands
     using System;
     using System.Globalization;
     using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Show Status Command
     /// </summary>
-    internal sealed class ShowStatusCommand : Core.TwitterCommand<TwitterStatus>
+    internal sealed class ShowStatusCommand : TwitterCommand<TwitterStatus>
     {
         #region Constructors
         /// <summary>
@@ -52,7 +53,7 @@ namespace Twitterizer.Commands
         /// <param name="options">The options.</param>
         public ShowStatusCommand(OAuthTokens requestTokens, decimal statusId, OptionalProperties options)
             : base(
-                "GET", 
+                HTTPVerb.GET, 
                 string.Format(CultureInfo.InvariantCulture, "statuses/show/{0}.json", statusId), 
                 requestTokens, 
                 options)
@@ -69,14 +70,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

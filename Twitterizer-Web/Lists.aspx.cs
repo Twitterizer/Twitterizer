@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Lists.aspx.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -38,26 +38,17 @@ using Twitterizer;
 
 public partial class Lists : System.Web.UI.Page
 {
-    public TwitterListCollection ListCollection { get; set; }
-
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!this.IsPostBack)
         {
-            this.ListCollection = TwitterList.GetLists(Master.Tokens, "DigitallyBorn");
+            YourListsGridView.DataSource = TwitterList.GetLists(Master.Tokens, Master.ScreenName);
+            SubscribedListsGridView.DataSource = TwitterList.GetSubscriptions(Master.Tokens);
             this.DataBind();
-
-            ViewState.Add("lists", this.ListCollection);
         }
         else
         {
-            this.ListCollection = ViewState["lists"] as TwitterListCollection;
+            
         }
-    }
-
-    protected void NextPageLinkButton_Click(object sender, EventArgs e)
-    {
-        this.ListCollection = this.ListCollection.NextPage();
-        this.DataBind();
     }
 }

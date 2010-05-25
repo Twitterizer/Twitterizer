@@ -19,7 +19,10 @@
         |
         <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/followers.aspx"
             Text="Followers" />
-        | Lists |
+        |
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/Lists.aspx"
+            Text="Lists" />
+        |
         <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/search.aspx"
             Text="Search" />
         | Logout

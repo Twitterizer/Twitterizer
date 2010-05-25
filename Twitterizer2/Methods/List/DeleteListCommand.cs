@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DeleteListCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -44,11 +44,6 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class DeleteListCommand : TwitterCommand<TwitterList>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/{1}.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteListCommand"/> class.
@@ -56,8 +51,13 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="listIdOrSlug">The list id or slug.</param>
-        public DeleteListCommand(OAuthTokens requestTokens, string username, string listIdOrSlug)
-            : base("DELETE", requestTokens)
+        /// <param name="options">The options.</param>
+        public DeleteListCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, OptionalProperties options)
+            : base(
+                HTTPVerb.DELETE, 
+                string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, listIdOrSlug), 
+                requestTokens, 
+                options)
         {
             if (Tokens == null)
             {
@@ -73,8 +73,6 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("listIdOrSlug");
             }
-
-            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username, listIdOrSlug));
         }
         #endregion
 
@@ -83,14 +81,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

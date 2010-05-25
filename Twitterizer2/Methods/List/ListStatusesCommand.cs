@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ListStatusesCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -53,7 +53,7 @@ namespace Twitterizer.Commands
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
         public ListStatusesCommand(OAuthTokens requestTokens, string username, long listId, ListStatusesOptions options)
-            : base("GET", "{0}/lists/{1}/statuses.json", requestTokens, options)
+            : base(HTTPVerb.GET, "{0}/lists/{1}/statuses.json", requestTokens, options)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -115,14 +115,6 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
 
         /// <summary>

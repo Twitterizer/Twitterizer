@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterList.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -162,10 +162,11 @@ namespace Twitterizer
         /// <param name="name">The list name.</param>
         /// <param name="isPublic">if set to <c>true</c> creates a public list.</param>
         /// <param name="description">The description.</param>
+        /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterList"/> instance.</returns>
-        public static TwitterList New(OAuthTokens tokens, string username, string name, bool isPublic, string description)
+        public static TwitterList New(OAuthTokens tokens, string username, string name, bool isPublic, string description, OptionalProperties options)
         {
-            Commands.CreateListCommand command = new Twitterizer.Commands.CreateListCommand(tokens, name, username)
+            Commands.CreateListCommand command = new Twitterizer.Commands.CreateListCommand(tokens, name, username, options)
             {
                 IsPublic = isPublic,
                 Description = description
@@ -190,14 +191,17 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the lists.
+        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        public static TwitterListCollection GetLists(OAuthTokens tokens, string username)
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetLists(OAuthTokens tokens, string username, OptionalProperties options)
         {
-            Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, username);
+            Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, username, options);
             TwitterListWrapper resultWrapper = Core.CommandPerformer<TwitterListWrapper>.PerformAction(command);
 
             TwitterListCollection results = resultWrapper.Lists;
@@ -206,37 +210,56 @@ namespace Twitterizer
         }
 
         /// <summary>
+        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetLists(OAuthTokens tokens, string username)
+        {
+            return GetLists(tokens, username, null);
+        }
+
+        /// <summary>
+        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetLists(string username, OptionalProperties options)
+        {
+            return GetLists(null, username, options);
+        }
+
+        /// <summary>
+        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterListCollection GetLists(string username)
+        {
+            return GetLists(null, username, null);
+        }
+
+        /// <summary>
         /// Gets a single list by id number.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="listId">The list id.</param>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        public static TwitterListCollection GetList(OAuthTokens tokens, string username, long listId)
-        {
-            Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username)
-            {
-                ListId = listId
-            };
-
-            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets a single list by slug (name).
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="slug">The list slug.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterListCollection GetList(OAuthTokens tokens, string username, string slug)
+        public static TwitterListCollection GetList(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
         {
-            Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username)
-            {
-                Slug = slug
-            };
+            Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username, listIdOrSlug, options);
 
             return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
         }
@@ -247,10 +270,11 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterList"/> instance.</returns>
-        public static TwitterList Delete(OAuthTokens tokens, string username, string listIdOrSlug)
+        public static TwitterList Delete(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
         {
-            Commands.DeleteListCommand command = new Twitterizer.Commands.DeleteListCommand(tokens, username, listIdOrSlug);
+            Commands.DeleteListCommand command = new Twitterizer.Commands.DeleteListCommand(tokens, username, listIdOrSlug, options);
 
             return Core.CommandPerformer<TwitterList>.PerformAction(command);
         }
@@ -305,14 +329,13 @@ namespace Twitterizer
         /// List the lists the specified user follows.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, string username, OptionalProperties options)
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, OptionalProperties options)
         {
-            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens, username, options);
+            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens, options);
 
             return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
         }
@@ -321,13 +344,12 @@ namespace Twitterizer
         /// List the lists the specified user follows.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, string username)
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens)
         {
-            return GetSubscriptions(tokens, username, null);
+            return GetSubscriptions(tokens, null);
         }
         #endregion
     }

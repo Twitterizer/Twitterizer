@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterRateLimitStatus.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -100,17 +100,6 @@ namespace Twitterizer
         public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens, OptionalProperties options)
         {
             Commands.RateLimitStatusCommand command = new Twitterizer.Commands.RateLimitStatusCommand(tokens, options);
-            command.Validate();
-
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterRateLimitStatus>()
-                {
-                    Command = command,
-                    MethodName = "GetStatus"
-                };
-            }
-
             TwitterRateLimitStatus result = Core.CommandPerformer<TwitterRateLimitStatus>.PerformAction(command);
 
             return result;

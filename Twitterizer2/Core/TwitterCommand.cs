@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterCommand.cs" company="Patrick Ricky Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -46,6 +46,27 @@ namespace Twitterizer.Core
     using Twitterizer;
 
     /// <summary>
+    /// Enumeration of the supported HTTP verbs supported by the <see cref="Twitterizer.Core.CommandPerformer{T}"/>
+    /// </summary>
+    internal enum HTTPVerb
+    {
+        /// <summary>
+        /// The HTTP GET method is used to retrieve data.
+        /// </summary>
+        GET,
+
+        /// <summary>
+        /// The HTTP POST method is used to transmit data.
+        /// </summary>
+        POST,
+
+        /// <summary>
+        /// The HTTP DELETE method is used to indicate that a resource should be deleted.
+        /// </summary>
+        DELETE
+    }
+
+    /// <summary>
     /// The base command class.
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
@@ -56,61 +77,18 @@ namespace Twitterizer.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
         /// </summary>
-        /// <param name="httpMethod">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
-        /// <param name="tokens">The request tokens.</param>
-        [Obsolete("This constructor has been depreciated.")]
-        protected TwitterCommand(string httpMethod, Uri uri, OAuthTokens tokens)
-            : this(httpMethod, tokens)
-        {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
-
-            this.Uri = uri;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="method">The method.</param>
         /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
         /// <param name="optionalProperties">The optional properties.</param>
-        protected TwitterCommand(string httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
-            : this(httpMethod, tokens, optionalProperties)
+        protected TwitterCommand(HTTPVerb method, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
         {
-            this.SetCommandUri(endPoint);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="httpMethod">The HTTP method.</param>
-        /// <param name="tokens">The tokens.</param>
-        protected TwitterCommand(string httpMethod, OAuthTokens tokens)
-            : this(httpMethod, tokens, new OptionalProperties())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="httpMethod">The method.</param>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="optionalProperties">The optional properties.</param>
-        protected TwitterCommand(string httpMethod, OAuthTokens tokens, OptionalProperties optionalProperties)
-        {
-            if (string.IsNullOrEmpty(httpMethod))
-            {
-                throw new ArgumentNullException("method");
-            }
-
             this.RequestParameters = new Dictionary<string, string>();
-            this.HttpMethod = httpMethod;
+            this.Verb = method;
             this.Tokens = tokens;
             this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
+
+            this.SetCommandUri(endPoint);
         }
 
         /// <summary>
@@ -118,12 +96,6 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The optional properties.</value>
         public OptionalProperties OptionalProperties { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is valid.
-        /// </summary>
-        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
-        public bool IsValid { get; set; }
 
         /// <summary>
         /// Gets or sets the API method URI.
@@ -135,7 +107,7 @@ namespace Twitterizer.Core
         /// Gets or sets the method.
         /// </summary>
         /// <value>The method.</value>
-        public string HttpMethod { get; set; }
+        public HTTPVerb Verb { get; set; }
 
         /// <summary>
         /// Gets or sets the request parameters.
@@ -161,11 +133,6 @@ namespace Twitterizer.Core
         public abstract void Init();
 
         /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public abstract void Validate();
-
-        /// <summary>
         /// Executes the command.
         /// </summary>
         /// <returns>The results of the command.</returns>
@@ -181,14 +148,6 @@ namespace Twitterizer.Core
                 {
                     throw new TwitterizerException("You are being rate limited.");
                 }
-            }
-
-            if (!this.IsValid)
-            {
-                throw new CommandValidationException<T>()
-                {
-                    Command = this
-                };
             }
 
             WebPermission permission = new WebPermission();
@@ -240,7 +199,7 @@ namespace Twitterizer.Core
                     webResponse = OAuthUtility.BuildOAuthRequestAndGetResponse(
                         this.Uri.AbsoluteUri,
                         queryParameters,
-                        this.HttpMethod,
+                        this.Verb,
                         this.Tokens.ConsumerKey,
                         this.Tokens.ConsumerSecret,
                         this.Tokens.AccessToken,
@@ -388,9 +347,9 @@ namespace Twitterizer.Core
                 queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
             }
 
-            switch (this.HttpMethod.ToUpper(CultureInfo.InvariantCulture))
+            switch (this.Verb)
             {
-                case "GET":
+                case HTTPVerb.GET:
                     string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine(
@@ -407,7 +366,7 @@ namespace Twitterizer.Core
                         Information.AssemblyVersion());
                     request.Proxy = this.OptionalProperties.Proxy;
                     break;
-                case "POST":
+                case HTTPVerb.POST:
                     request = (HttpWebRequest)WebRequest.Create(this.Uri);
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
@@ -432,7 +391,7 @@ namespace Twitterizer.Core
                             queryStringBuilder.ToString()));
 #endif
                     break;
-                case "DELETE":
+                case HTTPVerb.DELETE:
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine(
                         string.Format(

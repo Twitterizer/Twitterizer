@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="UpdateStatusCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -36,18 +36,13 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The command to update the user's status. (a.k.a. post a new tweet)
     /// </summary>
-    internal sealed class UpdateStatusCommand : Core.TwitterCommand<TwitterStatus>
+    internal sealed class UpdateStatusCommand : TwitterCommand<TwitterStatus>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "statuses/update.json";
-
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateStatusCommand"/> class.
         /// </summary>
@@ -55,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="text">The status text.</param>
         /// <param name="optionalProperties">The optional properties.</param>
         public UpdateStatusCommand(OAuthTokens tokens, string text, StatusUpdateOptions optionalProperties)
-            : base("POST", Path, tokens, optionalProperties)
+            : base(HTTPVerb.POST, "statuses/update.json", tokens, optionalProperties)
         {
             if (tokens == null)
             {
@@ -69,7 +64,6 @@ namespace Twitterizer.Commands
 
             this.Text = text;
         }
-        #endregion
 
         #region Properties
         /// <summary>
@@ -104,15 +98,6 @@ namespace Twitterizer.Commands
                 if (options.PlacePin)
                     this.RequestParameters.Add("display_coordinates", "true");
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            // TODO: Ricky - Add Latitude and Longitude value validation
-            this.IsValid = true;
         }
     }
 }

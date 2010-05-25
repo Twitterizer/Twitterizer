@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="UserTimelineCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -36,89 +36,57 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The user timeline command.
     /// </summary>
     internal sealed class UserTimelineCommand :
-        Core.PagedCommand<TwitterStatusCollection>
+        PagedCommand<TwitterStatusCollection>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        /// <param name="screenNameOrId">The screen name or id.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="screenName">Name of the screen.</param>
         /// <param name="options">The options.</param>
-        public UserTimelineCommand(OAuthTokens tokens, string screenNameOrId, decimal userId, string screenName, TimelineOptions options)
-            : base("GET", "statuses/user_timeline.json", tokens, options)
+        public UserTimelineCommand(OAuthTokens tokens, TimelineOptions options)
+            : base(HTTPVerb.GET, "statuses/user_timeline.json", tokens, options)
         {
-            this.IdOrScreenName = screenNameOrId;
-            this.ScreenName = screenName;
-            this.UserId = userId;
+            if (tokens == null && options == null)
+            {
+                throw new ArgumentException("You must supply either OAuth tokens or identify a user in the TimelineOptions class.");
+            }
         }
-        #endregion
-
-        /// <summary>
-        /// Gets or sets the ID or screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the id or screen.</value>
-        public string IdOrScreenName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The user id.</value>
-        public decimal UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (!string.IsNullOrEmpty(this.IdOrScreenName))
-                this.RequestParameters.Add("id", this.IdOrScreenName);
+            UserTimelineOptions options = this.OptionalProperties as UserTimelineOptions;
 
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
-
-            if (!string.IsNullOrEmpty(this.ScreenName))
-                this.RequestParameters.Add("screen_name", this.ScreenName);
-
-            TimelineOptions options = this.OptionalProperties as TimelineOptions;
-            if (options != null)
+            if (options == null)
             {
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page > 0)
-                    this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+                return;
             }
-        }
 
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.UserId > 0 ||
-                !string.IsNullOrEmpty(this.IdOrScreenName) ||
-                !string.IsNullOrEmpty(this.ScreenName) ||
-                this.Tokens != null;
+            if (options.UserId > 0)
+                this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.InvariantCulture));
+
+            if (!string.IsNullOrEmpty(options.ScreenName))
+                this.RequestParameters.Add("screen_name", options.ScreenName);
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (this.Page > 0)
+                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -129,10 +97,7 @@ namespace Twitterizer.Commands
         {
             return new UserTimelineCommand(
                 this.Tokens, 
-                this.IdOrScreenName, 
-                this.UserId, 
-                this.ScreenName, 
-                this.OptionalProperties as TimelineOptions);
+                this.OptionalProperties as UserTimelineOptions);
         }
     }
 }

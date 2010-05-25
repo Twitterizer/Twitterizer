@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CreateFriendshipCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -49,7 +49,6 @@ namespace Twitterizer.Commands
         /// </summary>
         private const string Path = "friendships/create.json";
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateFriendshipCommand"/> class.
         /// </summary>
@@ -57,7 +56,7 @@ namespace Twitterizer.Commands
         /// <param name="userId">The userid.</param>
         /// <param name="optionalProperties">The optional properties.</param>
         public CreateFriendshipCommand(OAuthTokens tokens, decimal userId, CreateFriendshipOptions optionalProperties)
-            : base("POST", Path, tokens, optionalProperties)
+            : base(HTTPVerb.POST, Path, tokens, optionalProperties)
         {
             if (tokens == null)
             {
@@ -79,7 +78,7 @@ namespace Twitterizer.Commands
         /// <param name="userName">Name of the user.</param>
         /// <param name="optionalProperties">The optional properties.</param>
         public CreateFriendshipCommand(OAuthTokens tokens, string userName, CreateFriendshipOptions optionalProperties)
-            : base("POST", Path, tokens, optionalProperties)
+            : base(HTTPVerb.POST, Path, tokens, optionalProperties)
         {
             if (tokens == null)
             {
@@ -94,9 +93,6 @@ namespace Twitterizer.Commands
             this.UserName = userName;
         }
         
-        #endregion
-
-        #region API Properties
         /// <summary>
         /// Gets or sets the user id.
         /// </summary>
@@ -108,7 +104,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The username.</value>
         public string UserName { get; set; }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
@@ -130,14 +125,6 @@ namespace Twitterizer.Commands
                 if (options.Follow)
                     this.RequestParameters.Add("follow", "true");
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.UserName);
         }
     }
 }

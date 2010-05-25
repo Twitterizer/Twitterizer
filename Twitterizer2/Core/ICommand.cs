@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ICommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -50,20 +50,9 @@ namespace Twitterizer.Core
         Dictionary<string, string> RequestParameters { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is valid.
-        /// </summary>
-        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
-        bool IsValid { get; set; }
-
-        /// <summary>
         /// Initializes the command.
         /// </summary>
         void Init();
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        void Validate();
 
         /// <summary>
         /// Executes the command.

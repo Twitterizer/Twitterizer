@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterDirectMessage.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -175,20 +175,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options)
         {
-            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
-            {
-                RecipientUserId = userId
-            };
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterDirectMessage>()
-                {
-                    Command = command,
-                    MethodName = "Send"
-                };
-            }
+            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, userId, options);
 
             TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 
@@ -219,20 +206,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
         public static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
         {
-            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, options)
-            {
-                RecipientUserName = screenName
-            };
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterDirectMessage>()
-                {
-                    Command = command,
-                    MethodName = "Send"
-                };
-            }
+            Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, screenName, options);
 
             TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 
@@ -285,16 +259,6 @@ namespace Twitterizer
         public TwitterDirectMessage Delete(OptionalProperties options)
         {
             Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id, options);
-
-            command.Validate();
-            if (!command.IsValid)
-            {
-                throw new CommandValidationException<TwitterDirectMessage>()
-                {
-                    Command = command,
-                    MethodName = "Delete"
-                };
-            }
 
             TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -44,7 +44,6 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
         /// </summary>
@@ -52,7 +51,11 @@ namespace Twitterizer.Commands
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
         public ListMembershipsCommand(OAuthTokens requestTokens, string username, OptionalProperties options)
-            : base("GET", string.Format("{0}/lists/memberships.json", username), requestTokens, options)
+            : base(
+                HTTPVerb.GET, 
+                string.Format("{0}/lists/memberships.json", username), 
+                requestTokens, 
+                options)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -66,7 +69,6 @@ namespace Twitterizer.Commands
 
             this.Username = username;
         }
-        #endregion
 
         /// <summary>
         /// Gets or sets the username.
@@ -85,14 +87,6 @@ namespace Twitterizer.Commands
             }
 
             this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
 
         /// <summary>

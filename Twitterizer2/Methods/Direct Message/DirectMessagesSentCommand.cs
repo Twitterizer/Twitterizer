@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DirectMessagesSentCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -45,17 +45,12 @@ namespace Twitterizer.Commands
     internal sealed class DirectMessagesSentCommand : PagedCommand<TwitterDirectMessageCollection>
     {
         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/direct_messages/sent.json";
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DirectMessagesSentCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
         public DirectMessagesSentCommand(OAuthTokens tokens, DirectMessagesSentOptions options)
-            : base("GET", Path, tokens, options)
+            : base(HTTPVerb.GET, "direct_messages/sent.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -86,14 +81,6 @@ namespace Twitterizer.Commands
 
             this.Page = options.Page;
             this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InstalledUICulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null;
         }
 
         /// <summary>

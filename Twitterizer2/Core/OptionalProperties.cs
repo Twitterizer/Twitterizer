@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="OptionalProperties.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -38,7 +38,7 @@ namespace Twitterizer
     using System.Configuration;
     using System.Net;
 
-    /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/OptionalProperties/*'/>
+    /// <include file='OptionalProperties.xml' path='OptionalProperties/OptionalProperties/*'/>
     [Serializable]
     public class OptionalProperties
     {
@@ -56,19 +56,22 @@ namespace Twitterizer
             this.ReadConfigurationSettings();
         }
 
-        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="UseSSL"]/*'/>
+        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="UseSSL"]/*'/>
+        /// <summary>
+        ///  Allows configuration of the base address for API method requests for support for 3rd party 'twitter-like' APIs.
+        /// </summary>
         public bool UseSSL { get; set; }
 
-        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="APIBaseAddress"]/*'/>
+        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="APIBaseAddress"]/*'/>
         public string APIBaseAddress { get; set; }
 
-        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
+        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
         public WebProxy Proxy { get; set; }
 
-        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
+        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
         public bool CacheOutput { get; set; }
 
-        /// <include file='..\Xml Documentation\OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
+        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
         public TimeSpan CacheTimespan { get; set; }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CreateListCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -44,20 +44,15 @@ namespace Twitterizer.Commands
     /// </summary>
     internal sealed class CreateListCommand : TwitterCommand<TwitterList>
     {
-         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists.json";
-
-         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateListCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="name">The name of the list.</param>
         /// <param name="username">The username.</param>
-        public CreateListCommand(OAuthTokens requestTokens, string name, string username)
-            : base("POST", requestTokens)
+        /// <param name="options">The options.</param>
+        public CreateListCommand(OAuthTokens requestTokens, string name, string username, OptionalProperties options)
+            : base(HTTPVerb.POST, string.Format(CultureInfo.CurrentCulture, "{0}/lists.json", username), requestTokens, options)
         {
             if (Tokens == null)
             {
@@ -75,10 +70,8 @@ namespace Twitterizer.Commands
             }
 
             this.Name = name;
-            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username));
         }
-        #endregion
-
+        
         #region API Properties
         /// <summary>
         /// Gets or sets the name of the list.
@@ -111,14 +104,6 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("description", this.Description);
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

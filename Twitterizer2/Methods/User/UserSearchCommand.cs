@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="UserSearchCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -50,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="query">The query.</param>
         /// <param name="options">The options.</param>
         public UserSearchCommand(OAuthTokens tokens, string query, UserSearchOptions options)
-            : base("GET", "users/search.json", tokens, options)
+            : base(HTTPVerb.GET, "users/search.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -70,14 +70,6 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <value>The query.</value>
         public string Query { get; set; }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
 
         /// <summary>
         /// Initializes the command.

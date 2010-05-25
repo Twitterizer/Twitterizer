@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DeleteFriendshipCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -48,63 +48,41 @@ namespace Twitterizer.Commands
         /// </summary>
         private const string Path = "friendships/destroy.json";
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteFriendshipCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        /// <param name="userId">The userid.</param>
-        /// <param name="optionalProperties">The optional properties.</param>
-        public DeleteFriendshipCommand(OAuthTokens tokens, decimal userId, OptionalProperties optionalProperties)
-            : base("POST", Path, tokens, optionalProperties)
-        {
-            if (tokens == null)
-            {
-                throw new ArgumentNullException("tokens");
-            }
-
-            if (userId <= 0)
-            {
-                throw new ArgumentException("userId");
-            }
-
-            this.UserId = userId;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteFriendshipCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
+        /// <param name="userId">The user id.</param>
         /// <param name="userName">The user name.</param>
         /// <param name="optionalProperties">The optional properties.</param>
-        public DeleteFriendshipCommand(OAuthTokens tokens, string userName, OptionalProperties optionalProperties)
-            : base("POST", Path, tokens, optionalProperties)
+        public DeleteFriendshipCommand(OAuthTokens tokens, decimal userId, string userName, OptionalProperties optionalProperties)
+            : base(HTTPVerb.POST, Path, tokens, optionalProperties)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
             }
 
-            if (string.IsNullOrEmpty(userName))
+            if (userId <= 0 || string.IsNullOrEmpty(userName))
             {
-                throw new ArgumentNullException("userName");
+                throw new ArgumentException("User ID or screen name is required.");
             }
 
             this.UserName = userName;
+            this.UserId = userId;
         }
-        #endregion
 
         /// <summary>
         /// Gets or sets the user id.
         /// </summary>
         /// <value>The user id.</value>
-        public decimal UserId { get; set; }
+        public decimal UserId { get; internal set; }
 
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
         /// <value>The username.</value>
-        public string UserName { get; set; }
+        public string UserName { get; internal set; }
 
         /// <summary>
         /// Initializes the command.
@@ -119,14 +97,6 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("screen_name", this.UserName);
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.UserId > 0 || !string.IsNullOrEmpty(this.UserName);
         }
     }
 }

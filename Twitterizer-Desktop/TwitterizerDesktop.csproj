@@ -65,6 +65,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Twitterizer2, Version=2.1.0.21170, Culture=neutral, PublicKeyToken=69d1469eac671567, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Release\Twitterizer2.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate.cs">
@@ -115,12 +119,6 @@
     <Compile Include="TweetTimelineControl.Designer.cs">
       <DependentUpon>TweetTimelineControl.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">
-      <Project>{2FDC3492-6B9E-4771-9755-7892C9CB1E96}</Project>
-      <Name>Twitterizer2</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

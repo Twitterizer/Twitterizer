@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetListCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -45,18 +45,18 @@ namespace Twitterizer.Commands
     internal sealed class GetListCommand : TwitterCommand<TwitterListCollection>
     {
         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists/{1}.json";
-
-        #region Constructors
-        /// <summary>
         /// Initializes a new instance of the <see cref="GetListCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
-        public GetListCommand(OAuthTokens requestTokens, string username)
-            : base("GET", requestTokens)
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <param name="options">The options.</param>
+        public GetListCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, OptionalProperties options)
+            : base(
+                HTTPVerb.GET, 
+                string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, listIdOrSlug), 
+                requestTokens, 
+                options)
         {
             if (Tokens == null)
             {
@@ -68,59 +68,17 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("username");
             }
 
-            this.Username = username;
+            if (string.IsNullOrEmpty(listIdOrSlug))
+            {
+                throw new ArgumentNullException("listIdOrSlug");
+            }
         }
-        #endregion
-
-        #region API Properties
-        /// <summary>
-        /// Gets or sets the list id.
-        /// </summary>
-        /// <value>The list id.</value>
-        public long ListId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the slug.
-        /// </summary>
-        /// <value>The list slug.</value>
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; set; }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.ListId > 0)
-            {
-                this.Uri = new Uri(string.Format(
-                    CultureInfo.CurrentCulture, 
-                    Path, 
-                    this.Username, 
-                    this.ListId.ToString(CultureInfo.InvariantCulture)));
-            }
-            else if (!string.IsNullOrEmpty(this.Slug))
-            {
-                this.Uri = new Uri(string.Format(
-                    CultureInfo.CurrentCulture, 
-                    Path, 
-                    this.Username, 
-                    this.Slug));
-            }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.ListId > 0 || !string.IsNullOrEmpty(this.Slug);
         }
     }
 }

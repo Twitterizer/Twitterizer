@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="RateLimitStatusCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -47,7 +47,7 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="options">The options.</param>
         public RateLimitStatusCommand(OAuthTokens requestTokens, OptionalProperties options)
-            : base("GET", "account/rate_limit_status.json", requestTokens, options)
+            : base(HTTPVerb.GET, "account/rate_limit_status.json", requestTokens, options)
         {
         }
         
@@ -56,14 +56,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

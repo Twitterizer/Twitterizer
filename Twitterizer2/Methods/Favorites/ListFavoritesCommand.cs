@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ListFavoritesCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -36,11 +36,12 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The ListFavoritesCommand class. Returns the 20 most recent favorite statuses for the authenticating user or user specified by the ID parameter in the requested format.
     /// </summary>
-    internal sealed class ListFavoritesCommand : Core.TwitterCommand<TwitterStatusCollection>
+    internal sealed class ListFavoritesCommand : TwitterCommand<TwitterStatusCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ListFavoritesCommand"/> class.
@@ -48,7 +49,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         public ListFavoritesCommand(OAuthTokens tokens, ListFavoritesOptions options)
-            : base("GET", "favorites.json", tokens, options)
+            : base(HTTPVerb.GET, "favorites.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -77,14 +78,6 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

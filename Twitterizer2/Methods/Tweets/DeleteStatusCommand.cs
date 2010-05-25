@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DeleteStatusCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -36,11 +36,12 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The command class to delete a status update.
     /// </summary>
-    internal sealed class DeleteStatusCommand : Core.TwitterCommand<TwitterStatus>
+    internal sealed class DeleteStatusCommand : TwitterCommand<TwitterStatus>
     {
         #region Constructors
         /// <summary>
@@ -51,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="options">The options.</param>
         public DeleteStatusCommand(OAuthTokens tokens, decimal id, OptionalProperties options)
             : base(
-                "POST", 
+                HTTPVerb.POST, 
                 string.Format(CultureInfo.InvariantCulture, "statuses/destroy/{0}.json", id), 
                 tokens, 
                 options)
@@ -71,14 +72,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Id > 0;
         }
     }
 }

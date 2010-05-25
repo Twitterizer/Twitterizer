@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TimelineOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -37,6 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The timeline options class. Provides optional parameters for timeline methods.
     /// </summary>
+    [System.Serializable]
     public class TimelineOptions : OptionalProperties
     {
         /// <summary>

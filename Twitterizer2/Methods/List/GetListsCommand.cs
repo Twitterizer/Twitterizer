@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetListsCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -46,18 +46,13 @@ namespace Twitterizer.Commands
     internal sealed class GetListsCommand : CursorPagedCommand<TwitterListWrapper>
     {
         /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "http://api.twitter.com/1/{0}/lists.json";
-
-        #region Constructors
-        /// <summary>
         /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
-        public GetListsCommand(OAuthTokens requestTokens, string username)
-            : base("GET", requestTokens)
+        /// <param name="options">The options.</param>
+        public GetListsCommand(OAuthTokens requestTokens, string username, OptionalProperties options)
+            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/lists.json", username), requestTokens, options)
         {
             if (requestTokens == null)
             {
@@ -70,18 +65,13 @@ namespace Twitterizer.Commands
             }
 
             this.Username = username;
-
-            this.Uri = new Uri(string.Format(CultureInfo.CurrentCulture, Path, username));
         }
-        #endregion
 
-        #region API Properties
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
         /// <value>The username.</value>
         public string Username { get; set; }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
@@ -97,14 +87,6 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>
@@ -112,7 +94,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterListWrapper> Clone()
         {
-            return new GetListsCommand(this.Tokens, this.Username)
+            return new GetListsCommand(this.Tokens, this.Username, this.OptionalProperties)
             {
                 Cursor = this.Cursor
             };

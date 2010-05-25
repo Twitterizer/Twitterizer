@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CurrentTrendsOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -37,6 +37,7 @@ namespace Twitterizer
     /// <summary>
     /// The current trends options class. Provides a payload for optional parameters for the CurrentTrendsCommand class.
     /// </summary>
+    [System.Serializable]
     public class CurrentTrendsOptions : OptionalProperties
     {
         /// <summary>

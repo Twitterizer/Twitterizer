@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DeleteDirectMessageCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -50,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="id">The status id.</param>
         /// <param name="options">The options.</param>
         public DeleteDirectMessageCommand(OAuthTokens tokens, decimal id, OptionalProperties options)
-            : base("POST", string.Format(CultureInfo.InvariantCulture, "direct_messages/destroy/{0}.json", id), tokens, options)
+            : base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture, "direct_messages/destroy/{0}.json", id), tokens, options)
         {
             if (id <= 0)
             {
@@ -77,14 +77,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Id > 0;
         }
     }
 }

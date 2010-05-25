@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="MasterPage.master.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -54,6 +54,36 @@ public partial class MasterPage : System.Web.UI.MasterPage
             }
 
             return tokens;
+        }
+    }
+
+    /// <summary>
+    /// Gets the user id.
+    /// </summary>
+    /// <value>The user id.</value>
+    public decimal UserId
+    {
+        get
+        {
+            if (Session["UserId"] != null)
+                return (decimal)Session["UserId"];
+
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// Gets the user's screen name
+    /// </summary>
+    /// <value>The screen name.</value>
+    public string ScreenName
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(Session["Username"] as string))
+                return (string)Session["Username"];
+
+            return string.Empty;
         }
     }
 

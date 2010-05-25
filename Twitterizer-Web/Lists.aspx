@@ -3,6 +3,9 @@
 <%@ MasterType TypeName="MasterPage" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="PageBodyContentPlaceHolder">
-    <asp:GridView ID="ListGridView" runat="server" DataSource='<%# ListCollection %>' EnableViewState="false" />
-    <asp:LinkButton ID="NextPageLinkButton" runat="server" Text="Next Page" OnClick="NextPageLinkButton_Click" EnableViewState="false" />
+    <h2>Your lists</h2>
+    <asp:GridView runat="server" ID="YourListsGridView" />
+    
+    <h2>Lists you are subscibed to</h2>
+    <asp:GridView ID="SubscribedListsGridView" runat="server" EnableViewState="false" />
 </asp:Content>

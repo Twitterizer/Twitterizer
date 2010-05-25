@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="PagedCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -43,29 +43,6 @@ namespace Twitterizer.Core
     internal abstract class PagedCommand<T> : TwitterCommand<T>
         where T : ITwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="uri">The URI for the API method.</param>
-        /// <param name="tokens">The request tokens.</param>
-        [Obsolete("This constructor has been depreciated.")]
-        protected PagedCommand(string method, Uri uri, OAuthTokens tokens)
-            : base(method, uri, tokens)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="tokens">The tokens.</param>
-        protected PagedCommand(string method, OAuthTokens tokens)
-            : base(method, tokens)
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
         /// </summary>
@@ -73,12 +50,11 @@ namespace Twitterizer.Core
         /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
         /// <param name="optionalProperties">The optional properties.</param>
-        protected PagedCommand(string httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
+        protected PagedCommand(HTTPVerb httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
             : base(httpMethod, endPoint, tokens, optionalProperties)
         {
         }
-        #endregion
-
+        
         /// <summary>
         /// Gets or sets the page number to obtain.
         /// </summary>

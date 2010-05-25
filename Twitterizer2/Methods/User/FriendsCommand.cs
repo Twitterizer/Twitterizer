@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="FriendsCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -36,51 +36,44 @@ namespace Twitterizer.Commands
     using System;
     using System.Globalization;
     using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The command to obtain followers of a user.
     /// </summary>
     [Serializable]
-    internal sealed class FriendsCommand :
-        Core.CursorPagedCommand<TwitterUserWrapper>
+    internal sealed class FriendsCommand : CursorPagedCommand<TwitterUserWrapper>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendsCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        public FriendsCommand(OAuthTokens tokens)
-            : base("GET", "statuses/friends.json", tokens, null)
+        /// <param name="options">The options.</param>
+        public FriendsCommand(OAuthTokens tokens, FriendsOptions options)
+            : base(HTTPVerb.GET, "statuses/friends.json", tokens, options)
         {
         }
-        #endregion
-
-        #region API Parameters
-        /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The user id.</value>
-        public decimal UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
-        #endregion
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
-            
-            if (!string.IsNullOrEmpty(this.ScreenName))
-                this.RequestParameters.Add("screen_name", this.ScreenName);
+            FriendsOptions options = this.OptionalProperties as FriendsOptions;
 
-            if (this.Cursor <= 0)
+            if (options != null)
+            {
+                if (options.UserId > 0)
+                    this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.CurrentCulture));
+
+                if (!string.IsNullOrEmpty(options.ScreenName))
+                    this.RequestParameters.Add("screen_name", options.ScreenName);
+
+                if (options.Cursor != 0)
+                    this.Cursor = options.Cursor;
+            }
+
+            if (this.Cursor == 0)
             {
                 this.Cursor = -1;
             }
@@ -89,25 +82,12 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null ||
-                this.UserId > 0 ||
-                !string.IsNullOrEmpty(this.ScreenName);
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
         internal override Twitterizer.Core.TwitterCommand<TwitterUserWrapper> Clone()
         {
-            FriendsCommand newCommand = new FriendsCommand(this.Tokens);
-
-            newCommand.ScreenName = this.ScreenName;
-            newCommand.UserId = this.UserId;
+            FriendsCommand newCommand = new FriendsCommand(this.Tokens, this.OptionalProperties as FriendsOptions);
             newCommand.Cursor = this.Cursor;
 
             return newCommand;

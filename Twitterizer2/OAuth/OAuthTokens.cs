@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="OAuthTokens.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -34,7 +34,7 @@
 
 namespace Twitterizer
 {
-    /// <include file='..\XML Documentation\OAuthTokens.xml' path='OAuthTokens/OAuthTokens/*'/>
+    /// <include file='OAuthTokens.xml' path='OAuthTokens/OAuthTokens/*'/>
     [System.Serializable]
     public class OAuthTokens
     {

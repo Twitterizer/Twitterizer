@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ReverseGeocodeCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -52,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options.</param>
         public ReverseGeocodeCommand(double latitude, double longitude, OptionalProperties options)
-            : base("GET", "geo/reverse_geocode.json", null, options)
+            : base(HTTPVerb.GET, "geo/reverse_geocode.json", null, options)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;
@@ -78,14 +78,6 @@ namespace Twitterizer.Commands
             this.DeserializationHandler = Deserialize;
             this.RequestParameters.Add("lat", this.Latitude.ToString(CultureInfo.InvariantCulture));
             this.RequestParameters.Add("long", this.Longitude.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Latitude != 0 && this.Longitude != 0;
         }
 
         /// <summary>

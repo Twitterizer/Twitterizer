@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="XAuthUtility.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -40,6 +40,7 @@ namespace Twitterizer
     using System.IO;
     using System.Net;
     using System.Text.RegularExpressions;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The XAuthUtility class.
@@ -89,7 +90,7 @@ namespace Twitterizer
                 HttpWebResponse webResponse = OAuthUtility.BuildOAuthRequestAndGetResponse(
                     "https://api.twitter.com/oauth/access_token",
                     parameters,
-                    "POST",
+                    HTTPVerb.POST,
                     consumerKey,
                     consumerSecret,
                     string.Empty,

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ShowUserCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -37,14 +37,14 @@ namespace Twitterizer.Commands
     using System;
     using System.Globalization;
     using Twitterizer;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The Show User Command
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/get/users/show</remarks>
-    internal sealed class ShowUserCommand : Core.TwitterCommand<TwitterUser>
+    internal sealed class ShowUserCommand : TwitterCommand<TwitterUser>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
         /// </summary>
@@ -53,7 +53,7 @@ namespace Twitterizer.Commands
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
         public ShowUserCommand(OAuthTokens tokens, decimal userId, string username, OptionalProperties options)
-            : base("GET", "users/show.json", tokens, options)
+            : base(HTTPVerb.GET, "users/show.json", tokens, options)
         {
             if ((userId <= 0 && string.IsNullOrEmpty(username)) || (userId > 0 && !string.IsNullOrEmpty(username)))
             {
@@ -63,7 +63,6 @@ namespace Twitterizer.Commands
             this.UserId = userId;
             this.Username = username;
         }
-        #endregion
 
         /// <summary>
         /// Gets or sets the user ID.
@@ -87,14 +86,6 @@ namespace Twitterizer.Commands
             
             if (!string.IsNullOrEmpty(this.Username))
                 this.RequestParameters.Add("screen_name", this.Username);
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ShowFriendshipCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -48,18 +48,40 @@ namespace Twitterizer.Commands
         /// </summary>
         private const string Path = "friendships/show.json";
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowFriendshipCommand"/> class.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="sourceUserId">The source user id.</param>
+        /// <param name="sourceUserName">Name of the source user.</param>
+        /// <param name="targetUserId">The target user id.</param>
+        /// <param name="targetScreenName">Name of the target screen.</param>
         /// <param name="optionalProperties">The optional properties.</param>
-        public ShowFriendshipCommand(OAuthTokens tokens, OptionalProperties optionalProperties)
-            : base("GET", Path, tokens, optionalProperties)
+        public ShowFriendshipCommand(OAuthTokens tokens, decimal sourceUserId, string sourceUserName, decimal targetUserId, string targetScreenName, OptionalProperties optionalProperties)
+            : base(HTTPVerb.GET, Path, tokens, optionalProperties)
         {
-        }
-        #endregion
+            // If the request is unauthorized
+            if (tokens == null)
+            {
+                // Source information is required
+                if (sourceUserId <= 0 && string.IsNullOrEmpty(sourceUserName))
+                {
+                    throw new ArgumentException("For unauthorized show friendship requests, a source and target are required.");
+                }
+            }
 
+            // Target information is always required (one of the variables)
+            if (targetUserId <= 0 && string.IsNullOrEmpty(targetScreenName))
+            {
+                throw new ArgumentException("A target user id or screen name is required.");
+            }
+
+            this.SourceId = sourceUserId;
+            this.SourceScreenName = sourceUserName;
+            this.TargetId = targetUserId;
+            this.TargetScreenName = targetScreenName;
+        }
+        
         #region API Parameters
         /// <summary>
         /// Gets or sets the id of the source user.
@@ -108,26 +130,6 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("target_screen_name", this.TargetScreenName);
             }
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            // If the request is unauthorized
-            if (this.Tokens == null)
-            {
-                // Source information is required
-                if (this.SourceId <= 0 && string.IsNullOrEmpty(this.SourceScreenName))
-                {
-                    this.IsValid = false;
-                    return;
-                }
-            }
-
-            // Target information is always required (one of the variables)
-            this.IsValid = this.TargetId > 0 || !string.IsNullOrEmpty(this.TargetScreenName);
         }
     }
 }

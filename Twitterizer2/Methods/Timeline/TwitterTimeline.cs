@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterTimeline.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -42,19 +42,9 @@ namespace Twitterizer
     /// </summary>
     public static class TwitterTimeline
     {
-        /// <summary>
-        /// Gets the home timeline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection HomeTimeline(OAuthTokens tokens)
-        {
-            return HomeTimeline(tokens, null);
-        }
-
-        /// <summary>
-        /// Gets the home timeline.
-        /// </summary>
+        /// <overloads>
+        /// Returns the 20 most recent statuses, including retweets, posted by the authenticating user and that user's friends. This is the equivalent of /timeline/home on the Web.
+        /// </overloads>
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>
@@ -74,31 +64,18 @@ namespace Twitterizer
             return result;
         }
 
-        /// <summary>
-        /// Gets the user time line.
-        /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/> instance.
-        /// </returns>
-        public static TwitterStatusCollection UserTimeline(OAuthTokens tokens)
+        /// <returns></returns>
+        public static TwitterStatusCollection HomeTimeline(OAuthTokens tokens)
         {
-            return UserTimeline(tokens, null);
+            return HomeTimeline(tokens, null);
         }
 
-        /// <summary>
-        /// Gets the user time line.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/> instance.
-        /// </returns>
-        public static TwitterStatusCollection UserTimeline(
-            OAuthTokens tokens,
-            TimelineOptions options)
+        /// <returns></returns>
+        public static TwitterStatusCollection HomeTimeline(TimelineOptions options)
         {
-            return UserTimeline(tokens, 0, string.Empty, string.Empty, options);
+            return HomeTimeline(null, options);
         }
 
         /// <summary>
@@ -106,39 +83,16 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="userId">The user id.</param>
-        /// <param name="screenName">Name of the screen.</param>
-        /// <param name="userIdOrScreenName">Name of the user id or screen.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
         public static TwitterStatusCollection UserTimeline(
             OAuthTokens tokens,
             decimal userId,
-            string screenName,
-            string userIdOrScreenName)
-        {
-            return UserTimeline(tokens, userId, screenName, userIdOrScreenName, null);
-        }
-
-        /// <summary>
-        /// Gets the user time line.
-        /// </summary>
-        /// <param name="tokens">The oauth tokens.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="screenName">Name of the screen.</param>
-        /// <param name="userIdOrScreenName">Name of the user id or screen.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/> instance.
-        /// </returns>
-        public static TwitterStatusCollection UserTimeline(
-            OAuthTokens tokens, 
-            decimal userId,
-            string screenName,
-            string userIdOrScreenName,
             TimelineOptions options)
         {
-            Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, userIdOrScreenName, userId, screenName, options);
+            Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, options);
             
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
             result.Command = command;

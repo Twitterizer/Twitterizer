@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CreateFavoriteCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -35,6 +35,7 @@
 namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
     using Twitterizer.Core;
 
     /// <summary>
@@ -49,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         public CreateFavoriteCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options) :
-            base("POST", string.Format("/favorites/{0}/create.json", statusId), tokens, options)
+            base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture.NumberFormat, "/favorites/{0}/create.json", statusId), tokens, options)
         {
             if (tokens == null)
             {
@@ -67,14 +68,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

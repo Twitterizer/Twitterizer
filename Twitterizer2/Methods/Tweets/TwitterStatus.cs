@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterStatus.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -38,15 +38,12 @@ namespace Twitterizer
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
-    /// <summary>
-    /// The TwitterStatus class.
-    /// </summary>
+    /// <include file='TwitterStatus.xml' path='TwitterStatus/TwitterStatus/*'/>
     [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
     [DebuggerDisplay("{User.ScreenName}/{Text}")]
     public class TwitterStatus : TwitterObject
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStatus"/> class.
         /// </summary>
@@ -54,17 +51,6 @@ namespace Twitterizer
             : base()
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterStatus"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        internal TwitterStatus(OAuthTokens tokens)
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-        #endregion
 
         #region Properties
         /// <summary>

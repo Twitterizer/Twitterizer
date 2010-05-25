@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="RetweetedByMeCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -50,7 +50,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
         public RetweetedByMeCommand(OAuthTokens tokens, TimelineOptions options)
-            : base("GET", "statuses/retweeted_by_me.json", tokens, options)
+            : base(HTTPVerb.GET, "statuses/retweeted_by_me.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -83,14 +83,6 @@ namespace Twitterizer.Commands
 
             if (options.Page > 0)
                 this.RequestParameters["page"] = options.Page.ToString(CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.Tokens != null;
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterUser.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -40,21 +40,19 @@ namespace Twitterizer
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
-    /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/TwitterUser/*'/>
+    /// <include file='TwitterUser.xml' path='TwitterUser/TwitterUser/*'/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("@{ScreenName}")]
     [Serializable]
     public class TwitterUser : Core.TwitterObject
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterUser"/> class.
         /// </summary>
-        internal TwitterUser()
+        public TwitterUser()
             : base()
         {
         }
-        #endregion
 
         #region Properties
         /// <summary>
@@ -310,8 +308,8 @@ namespace Twitterizer
 
         #endregion
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokensAndOptions"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokensAndOptions"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, decimal id, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, id, string.Empty, options);
@@ -319,29 +317,29 @@ namespace Twitterizer
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithOptions"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithOptions"]/*'/>
         public static TwitterUser Show(decimal id, OptionalProperties options)
         {
             return Show(null, id, options);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokens"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokens"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, decimal id)
         {
             return Show(tokens, id, null);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByID"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByID"]/*'/>
         public static TwitterUser Show(decimal id)
         {
             return Show(null, id, null);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokensAndOptions"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokensAndOptions"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, string username, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, 0, username, options);
@@ -349,29 +347,29 @@ namespace Twitterizer
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithOptions"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithOptions"]/*'/>
         public static TwitterUser Show(string username, OptionalProperties options)
         {
             return Show(null, username, options);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokens"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokens"]/*'/>
         public static TwitterUser Show(OAuthTokens tokens, string username)
         {
             return Show(tokens, username, null);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Show[@name="ByUsername"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsername"]/*'/>
         public static TwitterUser Show(string username)
         {
             return Show(null, username, null);
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="WithTokensAndOptions"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="WithTokensAndOptions"]/*'/>
         public static TwitterUserCollection Search(OAuthTokens tokens, string query, UserSearchOptions options)
         {
             Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
@@ -382,8 +380,8 @@ namespace Twitterizer
             return result;
         }
 
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
-        /// <include file='..\XML Documentation\TwitterUser.xml' path='TwitterUser/Search[@name="WithTokens"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
+        /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="WithTokens"]/*'/>
         public static TwitterUserCollection Search(OAuthTokens tokens, string query)
         {
             return Search(tokens, query, null);

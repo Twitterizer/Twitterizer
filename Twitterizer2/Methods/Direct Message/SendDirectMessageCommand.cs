@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="SendDirectMessageCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -46,11 +46,11 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
         /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="text">The message text.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="text">The text.</param>
         /// <param name="options">The options.</param>
-        public SendDirectMessageCommand(OAuthTokens tokens, string text, OptionalProperties options)
-            : base("POST", "direct_messages/new.json", tokens, options)
+        private SendDirectMessageCommand(OAuthTokens tokens, string text, OptionalProperties options)
+            : base(HTTPVerb.POST, "direct_messages/new.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -63,6 +63,35 @@ namespace Twitterizer.Commands
             }
 
             this.Text = text;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
+        /// </summary>
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="text">The message text.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        public SendDirectMessageCommand(OAuthTokens tokens, string text, decimal userId, OptionalProperties options)
+            : this(tokens, text, options)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentException("User Id must be supplied", "userId");
+            }
+
+            this.RecipientUserId = userId;
+        }
+
+        public SendDirectMessageCommand(OAuthTokens tokens, string text, string userName, OptionalProperties options)
+            : this(tokens, text, options)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
+
+            this.RecipientUserName = userName;
         }
         
         #region Properties
@@ -97,14 +126,6 @@ namespace Twitterizer.Commands
 
             if (!string.IsNullOrEmpty(this.RecipientUserName) && this.RecipientUserId <= 0)
                 this.RequestParameters.Add("screen_name", this.RecipientUserName);
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = this.RecipientUserId > 0 || !string.IsNullOrEmpty(this.RecipientUserName);
         }
     }
 }

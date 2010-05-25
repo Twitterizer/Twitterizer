@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DeleteFavoriteCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -36,13 +36,14 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The delete favoriate command class. 
     /// Un-favorites the status specified in the ID parameter as the authenticating user. 
     /// Returns the un-favorited status in the requested format when successful.
     /// </summary>
-    internal sealed class DeleteFavoriteCommand : Core.TwitterCommand<TwitterStatus>
+    internal sealed class DeleteFavoriteCommand : TwitterCommand<TwitterStatus>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteFavoriteCommand"/> class.
@@ -51,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         public DeleteFavoriteCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options)
-            : base("POST", "/favorites/destroy.json", tokens, options)
+            : base(HTTPVerb.POST, "/favorites/destroy.json", tokens, options)
         {
             if (statusId <= 0)
             {
@@ -62,13 +63,15 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("tokens");
             }
+
+            this.StatusId = statusId;
         }
 
         /// <summary>
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        public int StatusId { get; set; }
+        public decimal StatusId { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -76,14 +79,6 @@ namespace Twitterizer.Commands
         public override void Init()
         {
             this.RequestParameters.Add("id", this.StatusId.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }

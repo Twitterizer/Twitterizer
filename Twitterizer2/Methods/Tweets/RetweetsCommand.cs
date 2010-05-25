@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="RetweetsCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://code.google.com/p/twitterizer/)
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -52,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="options">The options.</param>
         public RetweetsCommand(OAuthTokens tokens, decimal statusId, RetweetsOptions options)
             : base(
-                "GET",
+                HTTPVerb.GET,
                 string.Format(CultureInfo.InvariantCulture, "statuses/retweets/{0}.json", statusId),
                 tokens,
                 options)
@@ -78,14 +78,6 @@ namespace Twitterizer.Commands
 
             if (options.Count > 0)
                 this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public override void Validate()
-        {
-            this.IsValid = true;
         }
     }
 }
