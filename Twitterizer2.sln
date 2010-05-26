@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		XML Documentation\WelcomeTopic.aml = XML Documentation\WelcomeTopic.aml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.TestCases", "Twitterizer2.TestCases\Twitterizer2.TestCases.csproj", "{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,18 @@ Global
 		{4ACED651-D888-4E46-A38B-13291C00FABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ACED651-D888-4E46-A38B-13291C00FABF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4ACED651-D888-4E46-A38B-13291C00FABF}.Release|x86-Only.ActiveCfg = Release|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Release|x86-Only.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

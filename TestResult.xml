@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Projects\twitterizer\Twitterizer2.nunit" total="11" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-05-26" time="17:47:15">
+  <environment nunit-version="2.5.2.9222" clr-version="2.0.50727.4927" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug" machine-name="SMITHRICKY" user="patricks" user-domain="INFINITY" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="C:\Projects\twitterizer\Twitterizer2.nunit" executed="True" success="True" time="5.464" asserts="0">
+    <results>
+      <test-suite name="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" executed="True" success="True" time="5.460" asserts="0">
+        <results>
+          <test-suite name="Twitterizer2" executed="True" success="True" time="5.458" asserts="0">
+            <results>
+              <test-suite name="TestCases" executed="True" success="True" time="5.456" asserts="0">
+                <results>
+                  <test-suite name="TwitterGeoTests" executed="True" success="True" time="1.171" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterGeoTests.LookupPlaces" executed="True" success="True" time="1.166" asserts="3" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="TwitterStatusTests" executed="True" success="True" time="0.743" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterStatusTests.Show" executed="True" success="True" time="0.743" asserts="3" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="TwitterTimelineTests" executed="True" success="True" time="2.644" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.FriendTimeline" executed="True" success="True" time="0.364" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.Mentions" executed="True" success="True" time="0.289" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.PublicTimeline" executed="True" success="True" time="0.217" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetedByMe" executed="True" success="True" time="0.709" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetedToMe" executed="True" success="True" time="0.782" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetsOfMe" executed="True" success="True" time="0.270" asserts="3" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="TwitterTrendTests" executed="True" success="True" time="0.236" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterTrendTests.CurrentTrends" executed="True" success="True" time="0.236" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="TwitterUserTests" executed="True" success="True" time="0.638" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterUserTests.Search" executed="True" success="True" time="0.294" asserts="2" />
+                      <test-case name="Twitterizer2.TestCases.TwitterUserTests.Show" executed="True" success="True" time="0.341" asserts="4" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

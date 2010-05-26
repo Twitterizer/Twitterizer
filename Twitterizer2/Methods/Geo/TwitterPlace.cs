@@ -43,6 +43,7 @@ namespace Twitterizer
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [Serializable]
+    [System.Diagnostics.DebuggerDisplay("{FullName} ({Id})")]
     public sealed class TwitterPlace : TwitterObject
     {
         /// <summary>
@@ -115,11 +116,22 @@ namespace Twitterizer
         /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterPlaceCollection"/> object or null.</returns>
-        public static TwitterPlaceCollection Lookup(double latitude, double longitude, OptionalProperties options)
+        public static TwitterPlaceCollection Lookup(double latitude, double longitude, TwitterPlaceLookupOptions options)
         {
             Commands.ReverseGeocodeCommand command = new Twitterizer.Commands.ReverseGeocodeCommand(latitude, longitude, options);
 
             return CommandPerformer<TwitterPlaceCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Lookups the specified latitude.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <returns></returns>
+        public static TwitterPlaceCollection Lookup(double latitude, double longitude)
+        {
+            return Lookup(latitude, longitude, null);
         }
     }
 }

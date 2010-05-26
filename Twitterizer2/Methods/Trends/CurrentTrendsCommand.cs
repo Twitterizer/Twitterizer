@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
-    internal sealed class CurrentTrendsCommand : TwitterCommand<TwitterTrendTimeframe>
+    internal sealed class CurrentTrendsCommand : TwitterCommand<TwitterTrendCollection>
     {
         #region Constructors
         /// <summary>
@@ -51,7 +51,6 @@ namespace Twitterizer.Commands
         public CurrentTrendsCommand(CurrentTrendsOptions options)
             : base(HTTPVerb.GET, "trends/current.json", null, options)
         {
-            this.DeserializationHandler = TwitterTrendTimeframe.DeserializeJson;
         }
         #endregion
 

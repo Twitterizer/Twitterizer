@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterTrendTimeframe.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="TwitterGeo.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,71 +29,60 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter trend timeframe class</summary>
+// <summary>The geo location class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer
 {
     using System;
+    using Newtonsoft.Json;
     using System.Collections.ObjectModel;
-    using Newtonsoft.Json.Linq;
-    using Twitterizer.Core;
 
     /// <summary>
-    /// The Twitter trend timeframe class.
+    /// Lists the possible types of geographic boundaries.
     /// </summary>
-    public class TwitterTrendTimeframe : TwitterObject
+    public enum TwitterGeoShapeType
     {
         /// <summary>
-        /// Gets or sets the effective date.
+        /// A single point. Expect one coordinate.
         /// </summary>
-        /// <value>The effective date.</value>
-        public DateTime EffectiveDate { get; set; }
+        Point,
 
         /// <summary>
-        /// Gets or sets the trends.
+        /// A line, or multiple lines joined end-to-end.
         /// </summary>
-        /// <value>The trends.</value>
-        public Collection<TwitterTrend> Trends { get; set; }
+        LineString,
 
         /// <summary>
-        /// Deserializes the json.
+        /// A polygon
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>A <see cref="TwitterTrendTimeframe"/> object.</returns>
-        internal static TwitterTrendTimeframe DeserializeJson(Newtonsoft.Json.Linq.JObject value)
-        {
-            TwitterTrendTimeframe result = new TwitterTrendTimeframe();
-            result.EffectiveDate = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds((int)value.SelectToken("as_of"));
-            result.Trends = new Collection<TwitterTrend>();
+        Polygon,
 
-            JArray trendArray = (JArray)value.SelectToken(string.Format("trends.{0:yyyy-MM-dd HH:mm:ss}", result.EffectiveDate));
+        /// <summary>
+        /// A circle represented by a single point (the center) and the radius
+        /// </summary>
+        CircleByCenterPoint
+    }
 
-            foreach (JObject item in trendArray)
-            {
-                TwitterTrend newTrend = new TwitterTrend();
+    /// <summary>
+    /// Represents a geological area
+    /// </summary>
+    [Serializable]
+    public class TwitterGeo
+    {
+        /// <summary>
+        /// Gets or sets the type of the shape.
+        /// </summary>
+        /// <value>The type of the shape.</value>
+        [JsonProperty(PropertyName = "type")]
+        public TwitterGeoShapeType ShapeType { get; set; }
 
-                JToken token = null;
-
-                if (item.TryGetValue("query", out token))
-                {
-                    newTrend.SearchQuery = token.Value<string>();
-                }
-
-                if (item.TryGetValue("name", out token))
-                {
-                    newTrend.Name = token.Value<string>();
-                }
-
-                if (item.TryGetValue("url", out token))
-                {
-                    newTrend.Address = token.Value<string>();
-                }
-
-                result.Trends.Add(newTrend);
-            }
-
-            return result;
-        }
+        /// <summary>
+        /// Gets or sets the coordinates.
+        /// </summary>
+        /// <value>The coordinates.</value>
+        [JsonProperty(PropertyName = "coordinates")]
+        [JsonConverter(typeof(Coordinate.Converter))]
+        public Collection<Coordinate> Coordinates { get; set; }
     }
 }

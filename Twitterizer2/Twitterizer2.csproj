@@ -97,10 +97,13 @@
     <Compile Include="Methods\Friendship\CreateFriendshipCommand.cs" />
     <Compile Include="Methods\Friendship\CreateFriendshipOptions.cs" />
     <Compile Include="Methods\Friendship\TwitterFriendship.cs" />
+    <Compile Include="Methods\Geo\Coordinate.cs" />
     <Compile Include="Methods\Geo\ReverseGeocodeCommand.cs" />
     <Compile Include="Methods\Geo\TwitterBoundingBox.cs" />
+    <Compile Include="Methods\Geo\TwitterGeo.cs" />
     <Compile Include="Methods\Geo\TwitterPlace.cs" />
     <Compile Include="Methods\Geo\TwitterPlaceCollection.cs" />
+    <Compile Include="Methods\Geo\TwitterPlaceLookupOptions.cs" />
     <Compile Include="Methods\List\CreateListCommand.cs" />
     <Compile Include="Methods\Friendship\DeleteFriendshipCommand.cs" />
     <Compile Include="Methods\List\DeleteListCommand.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="Methods\Search\SearchCommand.cs" />
     <Compile Include="Methods\Timeline\TimelineOptions.cs" />
     <Compile Include="Methods\Timeline\TwitterTimeline.cs" />
+    <Compile Include="Methods\Trends\TwitterTrendCollection.cs" />
     <Compile Include="Methods\Tweets\DeleteStatusCommand.cs" />
     <Compile Include="Methods\Tweets\RetweetsOfMeOptions.cs" />
     <Compile Include="Methods\Tweets\RetweetsOptions.cs" />
@@ -183,7 +187,6 @@
     <Compile Include="Methods\Tweets\TwitterStatus.cs" />
     <Compile Include="Methods\Tweets\TwitterStatusCollection.cs" />
     <Compile Include="Methods\Trends\TwitterTrend.cs" />
-    <Compile Include="Methods\Trends\TwitterTrendTimeframe.cs" />
     <Compile Include="Methods\User\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="Methods\User\TwitterUser.cs" />

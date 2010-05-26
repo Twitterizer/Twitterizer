@@ -35,13 +35,57 @@
 namespace Twitterizer
 {
     using System;
+    using Newtonsoft.Json;
     using Twitterizer.Core;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The Twitter Place Collection class. A collection of <see cref="TwitterPlace"/> objects.
     /// </summary>
     [Serializable]
+    [JsonConverter(typeof(TwitterPlaceCollection.Converter))]
+    [JsonObject]
     public class TwitterPlaceCollection : TwitterCollection<TwitterPlace>
     {
+        internal class Converter : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(TwitterPlaceCollection);
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                TwitterPlaceCollection result = new TwitterPlaceCollection();
+
+                reader.Read();
+                reader.Read();
+
+                bool hasReachedTheQuery = false;
+
+                while (reader.Read())
+                {
+                    if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "query")
+                    {
+                        hasReachedTheQuery = true;
+                    }
+
+                    if (hasReachedTheQuery)
+                        continue;
+
+                    if (reader.TokenType == JsonToken.StartObject)
+                    {
+                        result.Add(serializer.Deserialize<TwitterPlace>(reader));
+                    }
+                }
+
+                return result;
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

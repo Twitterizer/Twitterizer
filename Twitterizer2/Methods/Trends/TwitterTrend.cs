@@ -67,22 +67,22 @@ namespace Twitterizer
         /// </summary>
         /// <param name="options">The options.</param>
         /// <returns>
-        /// A <see cref="TwitterTrendTimeframe"/> instance.
+        /// A collection of <see cref="Twitterizer.TwitterTrend"/> objects.
         /// </returns>
-        public static TwitterTrendTimeframe Current(CurrentTrendsOptions options)
+        public static TwitterTrendCollection Current(CurrentTrendsOptions options)
         {
             Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(options);
 
-            return Core.CommandPerformer<TwitterTrendTimeframe>.PerformAction(command);
+            return Core.CommandPerformer<TwitterTrendCollection>.PerformAction(command);
         }
 
         /// <summary>
         /// Gets the current trends.
         /// </summary>
         /// <returns>
-        /// A <see cref="TwitterTrendTimeframe"/> instance.
+        /// A collection of <see cref="Twitterizer.TwitterTrend"/> objects.
         /// </returns>
-        public static TwitterTrendTimeframe Current()
+        public static TwitterTrendCollection Current()
         {
             return Current(null);
         }

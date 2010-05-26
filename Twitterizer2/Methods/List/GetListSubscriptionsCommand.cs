@@ -48,7 +48,6 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="GetListSubscriptionsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
         public GetListSubscriptionsCommand(OAuthTokens requestTokens, OptionalProperties options)
             : base(HTTPVerb.GET, "{0}/lists/subscriptions.json", requestTokens, options)

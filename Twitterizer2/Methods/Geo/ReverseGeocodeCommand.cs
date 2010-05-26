@@ -39,6 +39,7 @@ namespace Twitterizer.Commands
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Twitterizer.Core;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The reverse geocode command class. Performs a reverse geocode lookup.
@@ -51,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options.</param>
-        public ReverseGeocodeCommand(double latitude, double longitude, OptionalProperties options)
+        public ReverseGeocodeCommand(double latitude, double longitude, TwitterPlaceLookupOptions options)
             : base(HTTPVerb.GET, "geo/reverse_geocode.json", null, options)
         {
             this.Latitude = latitude;
@@ -75,50 +76,29 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.DeserializationHandler = Deserialize;
-            this.RequestParameters.Add("lat", this.Latitude.ToString(CultureInfo.InvariantCulture));
-            this.RequestParameters.Add("long", this.Longitude.ToString(CultureInfo.InvariantCulture));
-        }
+            NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
 
-        /// <summary>
-        /// Deserializes the place element value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>A <see cref="TwitterPlaceCollection"/> object or null.</returns>
-        private static TwitterPlaceCollection Deserialize(JObject value)
-        {
-            TwitterPlaceCollection result = new TwitterPlaceCollection();
+            this.RequestParameters.Add("lat", this.Latitude.ToString(nfi));
+            this.RequestParameters.Add("long", this.Longitude.ToString(nfi));
 
-            foreach (JObject item in (JArray)value.SelectToken("result.places"))
+            TwitterPlaceLookupOptions options = this.OptionalProperties as TwitterPlaceLookupOptions;
+            if (options == null)
+                return;
+
+            if (!string.IsNullOrEmpty(options.Accuracy))
             {
-                TwitterPlace place = JsonConvert.DeserializeObject<TwitterPlace>(item.ToString());
-                JToken boundingBox = item.SelectToken("bounding_box");
-
-                if (boundingBox == null || boundingBox.Type == JTokenType.Null)
-                    continue;
-
-                place.BoundingBox = new TwitterBoundingBox();
-                place.BoundingBox.Type = (string)((JValue)boundingBox.SelectToken("type")).Value;
-                place.BoundingBox.Coordinates = new double[0, 2];
-
-                foreach (JToken coordinate in (JArray)boundingBox.SelectToken("coordinates").First)
-                {
-                    int rowNumber = place.BoundingBox.Coordinates.GetUpperBound(0) + 1;
-
-                    double[,] coordinateArray = new double[rowNumber + 1, 2];
-
-                    Array.Copy(place.BoundingBox.Coordinates, coordinateArray, place.BoundingBox.Coordinates.Length);
-
-                    coordinateArray[rowNumber, 0] = (double)((JValue)coordinate.First).Value;
-                    coordinateArray[rowNumber, 1] = (double)((JValue)coordinate.Last).Value;
-
-                    place.BoundingBox.Coordinates = coordinateArray;
-                }
-
-                result.Add(place);
+                this.RequestParameters.Add("accuracy", options.Accuracy);
             }
 
-            return result;
+            if (!string.IsNullOrEmpty(options.Granularity))
+            {
+                this.RequestParameters.Add("granularity", options.Granularity);
+            }
+
+            if (options.MaxResults != null)
+            {
+                this.RequestParameters.Add("max_results", options.MaxResults.Value.ToString(nfi));
+            }
         }
     }
 }

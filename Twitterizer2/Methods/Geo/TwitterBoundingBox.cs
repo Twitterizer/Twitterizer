@@ -34,6 +34,7 @@
 namespace Twitterizer
 {
     using System;
+    using System.Collections.ObjectModel;
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
@@ -55,6 +56,8 @@ namespace Twitterizer
         /// Gets or sets the coordinates.
         /// </summary>
         /// <value>The coordinates.</value>
-        public double[,] Coordinates { get; set; }
+        [JsonProperty(PropertyName = "coordinates")]
+        [JsonConverter(typeof(Coordinate.Converter))]
+        public Collection<Coordinate> Coordinates { get; set; }
     }
 }

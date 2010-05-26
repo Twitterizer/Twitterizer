@@ -47,6 +47,21 @@
       <Namespaces>
        <Namespace Name="Twitterizer">
         <Types>
+         <Type Name="ListFavoritesOptions">
+          <Members>
+           <Member Name="#UserNameOrId">
+            <Messages>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>UserName</Item>
+               <Item>'ListFavoritesOptions.UserNameOrId'</Item>
+               <Item>Username</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="OAuthTokenResponse">
           <Messages>
            <Message Id="OAuth" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-03 18:10:14Z">
@@ -97,6 +112,13 @@
           <Members>
            <Member Name="#EncodeForUrl(System.String)">
             <Messages>
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'string.ToUpper()'</Item>
+               <Item>'OAuthUtility.EncodeForUrl(string)'</Item>
+               <Item>'string.ToUpper(CultureInfo)'</Item>
+              </Issue>
+             </Message>
              <Message TypeName="UriReturnValuesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1055" Status="Excluded" Created="2010-03-03 18:35:54Z">
               <Issue>
                <Item>'OAuthUtility.EncodeForUrl(string)'</Item>
@@ -106,6 +128,86 @@
                 <Note Id="0" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OptionalProperties">
+          <Members>
+           <Member Name="#APIBaseAddress">
+            <Messages>
+             <Message Id="API" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-05-25 15:10:09Z">
+              <Issue Name="Member">
+               <Item>API</Item>
+               <Item>'OptionalProperties.APIBaseAddress'</Item>
+               <Item>Api</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CacheTimespan">
+            <Messages>
+             <Message Id="Timespan" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-05-25 15:10:09Z">
+              <Issue Name="Member">
+               <Item>Timespan</Item>
+               <Item>'OptionalProperties.CacheTimespan'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ReadConfigurationSettings()">
+            <Messages>
+             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'string.ToLower()'</Item>
+               <Item>'OptionalProperties.ReadConfigurationSettings()'</Item>
+               <Item>'string.ToLower(CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'string.ToLower()'</Item>
+               <Item>'OptionalProperties.ReadConfigurationSettings()'</Item>
+               <Item>'string.ToLower(CultureInfo)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UseSSL">
+            <Messages>
+             <Message Id="SSL" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-05-25 15:10:09Z">
+              <Issue Name="Member">
+               <Item>SSL</Item>
+               <Item>'OptionalProperties.UseSSL'</Item>
+               <Item>Ssl</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TwitterBoundingBox">
+          <Members>
+           <Member Name="#Coordinates">
+            <Messages>
+             <Message Id="Member" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'TwitterBoundingBox.Coordinates'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'TwitterBoundingBox.Coordinates'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Type">
+            <Messages>
+             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2010-05-25 15:10:09Z" FixCategory="NonBreaking">
+              <Issue Name="BaseType">
+               <Item>'TwitterBoundingBox.Type'</Item>
+               <Item>'object.GetType()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -132,144 +234,163 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="TwitterizerCounter">
+         <Type Name="TwitterErrorDetails">
           <Members>
-           <Member Name="#OAuthRequests">
-            <Messages>
-             <Message Id="OAuth" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-04-03 06:01:24Z">
-              <Issue Name="MemberShouldBeDiscreteTerm">
-               <Item>OAuth</Item>
-               <Item>'TwitterizerCounter.OAuthRequests'</Item>
-               <Item>Oauth</Item>
-              </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="8" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
+           <Member Name="#RateLimiting">
+            <Accessors>
+             <Accessor Name="#get_RateLimiting()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2010-05-25 15:10:09Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'TwitterErrorDetails.RateLimiting.get()'</Item>
+                 <Item>'NotImplementedException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Tokens">
+            <Accessors>
+             <Accessor Name="#get_Tokens()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2010-05-25 15:10:09Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'TwitterErrorDetails.Tokens.get()'</Item>
+                 <Item>'NotImplementedException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
            </Member>
           </Members>
          </Type>
-         <Type Name="TwitterList">
+         <Type Name="TwitterFriendship">
           <Members>
-           <Member Name="#Delete(Twitterizer.OAuthTokens,System.String,System.String)">
+           <Member Name="#Create(Twitterizer.OAuthTokens,System.String)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.Delete(OAuthTokens, string, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
+             <Message Id="userName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Create(OAuthTokens, string)'</Item>
                <Item>userName</Item>
+               <Item>'userName'</Item>
+               <Item>username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="5" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetList(Twitterizer.OAuthTokens,System.String,System.Int64)">
+           <Member Name="#Create(Twitterizer.OAuthTokens,System.String,Twitterizer.CreateFriendshipOptions)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.GetList(OAuthTokens, string, long)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
+             <Message Id="userName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Create(OAuthTokens, string, CreateFriendshipOptions)'</Item>
                <Item>userName</Item>
+               <Item>'userName'</Item>
+               <Item>username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="5" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetList(Twitterizer.OAuthTokens,System.String,System.String)">
+           <Member Name="#Delete(Twitterizer.OAuthTokens,System.String)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.GetList(OAuthTokens, string, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
+             <Message Id="userName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Delete(OAuthTokens, string)'</Item>
                <Item>userName</Item>
+               <Item>'userName'</Item>
+               <Item>username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="5" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetLists(Twitterizer.OAuthTokens,System.String)">
+           <Member Name="#Delete(Twitterizer.OAuthTokens,System.String,Twitterizer.OptionalProperties)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.GetLists(OAuthTokens, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
+             <Message Id="userName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Delete(OAuthTokens, string, OptionalProperties)'</Item>
                <Item>userName</Item>
+               <Item>'userName'</Item>
+               <Item>username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="5" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetStatuses(Twitterizer.OAuthTokens,System.String,System.Int64)">
+           <Member Name="#Show(System.String,System.String)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-20 18:57:19Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.GetStatuses(OAuthTokens, string, long)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
-               <Item>userName</Item>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(string, string)'</Item>
+               <Item>UserName</Item>
+               <Item>'sourceUserName'</Item>
+               <Item>Username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="5" />
-               </User>
-              </Notes>
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(string, string)'</Item>
+               <Item>UserName</Item>
+               <Item>'targetUserName'</Item>
+               <Item>Username</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#New(Twitterizer.OAuthTokens,System.String,System.String,System.Boolean,System.String)">
+           <Member Name="#Show(Twitterizer.OAuthTokens,System.String)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-10 04:03:23Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.New(OAuthTokens, string, string, bool, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
-               <Item>userName</Item>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(OAuthTokens, string)'</Item>
+               <Item>UserName</Item>
+               <Item>'targetUserName'</Item>
+               <Item>Username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="3" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Update(Twitterizer.OAuthTokens,System.String,System.Int64,System.String,System.Boolean,System.String)">
+           <Member Name="#Show(Twitterizer.OAuthTokens,System.String,System.String)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-10 04:22:34Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterList.Update(OAuthTokens, string, long, string, bool, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
-               <Item>userName</Item>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(OAuthTokens, string, string)'</Item>
+               <Item>UserName</Item>
+               <Item>'sourceUserName'</Item>
+               <Item>Username</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="4" />
-               </User>
-              </Notes>
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(OAuthTokens, string, string)'</Item>
+               <Item>UserName</Item>
+               <Item>'targetUserName'</Item>
+               <Item>Username</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Show(Twitterizer.OAuthTokens,System.String,System.String,Twitterizer.OptionalProperties)">
+            <Messages>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(OAuthTokens, string, string, OptionalProperties)'</Item>
+               <Item>UserName</Item>
+               <Item>'sourceUserName'</Item>
+               <Item>Username</Item>
+              </Issue>
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(OAuthTokens, string, string, OptionalProperties)'</Item>
+               <Item>UserName</Item>
+               <Item>'targetUserName'</Item>
+               <Item>Username</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Show(Twitterizer.OAuthTokens,System.String,Twitterizer.OptionalProperties)">
+            <Messages>
+             <Message Id="UserName" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'TwitterFriendship.Show(OAuthTokens, string, OptionalProperties)'</Item>
+               <Item>UserName</Item>
+               <Item>'targetUserName'</Item>
+               <Item>Username</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -303,79 +424,117 @@
            </Message>
           </Messages>
          </Type>
-         <Type Name="TwitterUser">
+         <Type Name="TwitterStream">
+          <Messages>
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2010-05-25 15:10:09Z">
+            <Issue Name="TypeNoAlternate">
+             <Item>'TwitterStream'</Item>
+             <Item>Stream</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Created="2010-05-25 15:10:09Z">
+            <Issue Name="ProvideDisposeBool">
+             <Item>'TwitterStream'</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
-           <Member Name="#DeleteFriendship(Twitterizer.OAuthTokens,System.String)">
+           <Member Name="#Dispose()">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-09 05:59:02Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterUser.DeleteFriendship(OAuthTokens, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
-               <Item>userName</Item>
+             <Message TypeName="CallGCSuppressFinalizeCorrectly" Category="Microsoft.Usage" CheckId="CA1816" Created="2010-05-25 15:10:09Z">
+              <Issue Name="NotCalled">
+               <Item>'TwitterStream.Dispose()'</Item>
+               <Item>'GC.SuppressFinalize(object)'</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="2" />
-               </User>
-              </Notes>
+             </Message>
+             <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Created="2010-05-25 15:10:09Z">
+              <Issue Name="DisposeImplementation">
+               <Item>'TwitterStream.Dispose()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetFriendship(System.String,System.String)">
+           <Member Name="#StartStream()">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-09 05:56:46Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterUser.GetFriendship(string, string)'</Item>
-               <Item>username</Item>
-               <Item>'username1'</Item>
-               <Item>userName</Item>
+             <Message TypeName="PassSystemUriObjectsInsteadOfStrings" Category="Microsoft.Usage" CheckId="CA2234" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'TwitterStream.StartStream()'</Item>
+               <Item>'WebRequest.Create(Uri)'</Item>
+               <Item>'WebRequest.Create(string)'</Item>
               </Issue>
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterUser.GetFriendship(string, string)'</Item>
-               <Item>username</Item>
-               <Item>'username2'</Item>
-               <Item>userName</Item>
+              <Issue>
+               <Item>'TwitterStream.StartStream()'</Item>
+               <Item>'WebRequest.Create(Uri)'</Item>
+               <Item>'WebRequest.Create(string)'</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="1" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetUser(System.String)">
+           <Member Name="#OnStatus" Kind="Event">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-06 17:53:00Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterUser.GetUser(string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
-               <Item>userName</Item>
+             <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Created="2010-05-25 15:10:09Z">
+              <Issue Name="First">
+               <Item>'TwitterStatusReceivedHandler'</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="0" />
-               </User>
-              </Notes>
+              <Issue Name="Second">
+               <Item>'TwitterStatusReceivedHandler'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'TwitterStatusReceivedHandler'</Item>
+               <Item>EventHandler</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetUser(Twitterizer.OAuthTokens,System.String)">
+          </Members>
+         </Type>
+         <Type Name="TwitterTimeline">
+          <Members>
+           <Member Name="#RetweetedToMe(Twitterizer.OAuthTokens)">
             <Messages>
-             <Message Id="username" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2010-03-06 17:53:00Z">
-              <Issue Name="MemberParameterShouldBeCompoundWord">
-               <Item>'TwitterUser.GetUser(OAuthTokens, string)'</Item>
-               <Item>username</Item>
-               <Item>'username'</Item>
-               <Item>userName</Item>
+             <Message Id="ToMe" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>ToMe</Item>
+               <Item>'TwitterTimeline.RetweetedToMe(OAuthTokens)'</Item>
+               <Item>Tome</Item>
               </Issue>
-              <Notes>
-               <User Name="Ricky">
-                <Note Id="0" />
-               </User>
-              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RetweetedToMe(Twitterizer.OAuthTokens,Twitterizer.TimelineOptions)">
+            <Messages>
+             <Message Id="ToMe" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-05-25 15:10:09Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>ToMe</Item>
+               <Item>'TwitterTimeline.RetweetedToMe(OAuthTokens, TimelineOptions)'</Item>
+               <Item>Tome</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TwitterTrendTimeframe">
+          <Members>
+           <Member Name="#DeserializeJson(Newtonsoft.Json.Linq.JObject)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'TwitterTrendTimeframe.DeserializeJson(JObject)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Trends">
+            <Messages>
+             <Message TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'TwitterTrendTimeframe.Trends'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -395,13 +554,104 @@
            </Message>
           </Messages>
          </Type>
-         <Type Name="UsageStatsCollector">
+        </Types>
+       </Namespace>
+       <Namespace Name="Twitterizer.Commands">
+        <Types>
+         <Type Name="CreateFavoriteCommand">
           <Members>
-           <Member Name="#ReportCallAsync(System.String)">
+           <Member Name="#.ctor(Twitterizer.OAuthTokens,System.Decimal,Twitterizer.OptionalProperties)">
             <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-04-13 20:54:16Z">
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-05-25 15:10:09Z">
               <Issue>
-               <Item>'UsageStatsCollector.ReportCallAsync(string)'</Item>
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'CreateFavoriteCommand.CreateFavoriteCommand(OAuthTokens, decimal, OptionalProperties)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CreateFriendshipCommand">
+          <Members>
+           <Member Name="#.ctor(Twitterizer.OAuthTokens,System.Decimal,Twitterizer.CreateFriendshipOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-05-25 15:10:09Z">
+              <Issue Name="IncorrectMessage">
+               <Item>'CreateFriendshipCommand.CreateFriendshipCommand(OAuthTokens, decimal, CreateFriendshipOptions)'</Item>
+               <Item>userId</Item>
+               <Item>'message'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ListMembershipsCommand">
+          <Members>
+           <Member Name="#.ctor(Twitterizer.OAuthTokens,System.String,Twitterizer.OptionalProperties)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'ListMembershipsCommand.ListMembershipsCommand(OAuthTokens, string, OptionalProperties)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ReverseGeocodeCommand">
+          <Members>
+           <Member Name="#Deserialize(Newtonsoft.Json.Linq.JObject)">
+            <Messages>
+             <Message Id="Body" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2010-05-25 15:10:09Z">
+              <Issue Name="Body">
+               <Item>'ReverseGeocodeCommand.Deserialize(JObject)'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+              <Issue Name="Body">
+               <Item>'ReverseGeocodeCommand.Deserialize(JObject)'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UpdateListCommand">
+          <Members>
+           <Member Name="#.ctor(Twitterizer.OAuthTokens,System.String,System.Int64,Twitterizer.UpdateListOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-05-25 15:10:09Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'UpdateListCommand.UpdateListCommand(OAuthTokens, string, long, UpdateListOptions)'</Item>
+               <Item>requestTokens</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UpdateStatusCommand">
+          <Members>
+           <Member Name="#Init()">
+            <Messages>
+             <Message Id="System.Double.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-05-25 15:10:09Z">
+              <Issue>
+               <Item>'double.ToString()'</Item>
+               <Item>'UpdateStatusCommand.Init()'</Item>
+               <Item>'double.ToString(IFormatProvider)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'double.ToString()'</Item>
+               <Item>'UpdateStatusCommand.Init()'</Item>
+               <Item>'double.ToString(IFormatProvider)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -421,27 +671,71 @@
    </User>
    <User Name="Ricky">
     <Note Id="0" Modified="2010-03-09 04:12:23Z">For our project, "username" will be the standard naming convention.</Note>
-    <Note Id="1" Modified="2010-03-09 05:58:30Z">For our project, "username" will be the standard naming convention.</Note>
-    <Note Id="2" Modified="2010-03-09 05:59:19Z">For our project, "username" will be the standard naming convention.</Note>
-    <Note Id="3" Modified="2010-03-10 04:04:27Z">For our project, "username" will be the standard naming convention.</Note>
-    <Note Id="4" Modified="2010-03-10 04:22:49Z">For our project, "username" will be the standard naming convention.</Note>
-    <Note Id="5" Modified="2010-03-20 19:04:27Z">"username" is correct for our project.</Note>
     <Note Id="6" Modified="2010-03-20 19:04:59Z">Wrapper classes are instantiated by the deserializer, so do not show up in the assembly.</Note>
     <Note Id="7" Modified="2010-04-03 06:02:46Z">Wrapper classes are instantiated by the deserializer, so do not show up in the assembly.</Note>
-    <Note Id="8" Modified="2010-04-03 06:03:13Z">OAuth is a proper noun.</Note>
    </User>
   </Notes>
   <Rules>
-   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
-    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
-   </Rule>
    <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
     <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
    </Rule>
+   <Rule TypeName="CallGCSuppressFinalizeCorrectly" Category="Microsoft.Usage" CheckId="CA1816">
+    <Resolution Name="NotCalled">Change {0} to call {1}. This will prevent unnecessary finalization of the object once it has been disposed and it has fallen out of scope.</Resolution>
+   </Rule>
+   <Rule TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227">
+    <Resolution Name="Default">Change {0} to be read-only by removing the property setter.</Resolution>
+   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
+    <Resolution Name="MemberParameterShouldBeDiscreteTerm">In member {0}, the compound word '{1}' in parameter name {2} exists as a discrete term. If your usage is intended to be single word, case it as '{3}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009">
+    <Resolution Name="First">Declare the first parameter of {0} as an object named 'sender'.</Resolution>
+    <Resolution Name="Second">Declare the second parameter of {0} as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065">
+    <Resolution Name="PropertyGetter">{0} creates an exception of type {1}, an exception type that should not be raised in a property. If this exception instance might be raised, use a different exception type, convert this property into a method, or change this property's logic so that it no longer raises an exception.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
+    <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711">
+    <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063">
+    <Resolution Name="DisposeImplementation">Modify {0} so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Resolution>
+    <Resolution Name="ProvideDisposeBool">Provide an overridable implementation of Dispose(bool) on {0} or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Resolution>
+   </Rule>
+   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="IncorrectMessage">Method {0} passes parameter name '{1}' as the {2} argument to a {3} constructor. Replace this argument with a descriptive message and pass the parameter name in the correct position.</Resolution>
+    <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
+   </Rule>
+   <Rule TypeName="PassSystemUriObjectsInsteadOfStrings" Category="Microsoft.Usage" CheckId="CA2234">
+    <Resolution Name="Default">Modify {0} to call {1} instead of {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814">
+    <Resolution Name="Body">{0} uses a multidimensional array of {1}. Replace it with a jagged array if possible.</Resolution>
+    <Resolution Name="Default">{0} is a multidimensional array. Replace it with a jagged array if possible.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
+    <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721">
+    <Resolution Name="BaseType">The property name {0} is confusing given the existence of inherited method {1}. Rename or remove this property.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304">
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'CultureInfo' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
    </Rule>
    <Rule TypeName="UriReturnValuesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1055">
     <Resolution Name="Default">Change the return type of {0} from string to System.Uri.</Resolution>

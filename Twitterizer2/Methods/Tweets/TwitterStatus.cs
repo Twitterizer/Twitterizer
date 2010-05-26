@@ -141,6 +141,13 @@ namespace Twitterizer
         /// <value>The place.</value>
         [JsonProperty(PropertyName = "place")]
         public TwitterPlace Place { get; set; }
+
+        /// <summary>
+        /// Gets or sets the geo.
+        /// </summary>
+        /// <value>The geo.</value>
+        [JsonProperty(PropertyName = "geo")]
+        public TwitterGeo Geo { get; set; }
         #endregion
 
         /// <summary>
