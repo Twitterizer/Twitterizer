@@ -18,7 +18,6 @@
     <HtmlHelpName>twitterizer2</HtmlHelpName>
     <HelpTitle>Twitterizer 2 Documentation</HelpTitle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="XML Documentation\AdditionalPages.xml" />
       <DocumentationSource sourceFile="Twitterizer2\Twitterizer2.csproj" />
     </DocumentationSources>
     <PresentationStyle>Prototype</PresentationStyle>
