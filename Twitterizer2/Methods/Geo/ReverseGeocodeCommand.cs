@@ -34,12 +34,8 @@
 
 namespace Twitterizer.Commands
 {
-    using System;
     using System.Globalization;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Twitterizer.Core;
-    using System.Collections.Generic;
 
     /// <summary>
     /// The reverse geocode command class. Performs a reverse geocode lookup.

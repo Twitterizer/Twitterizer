@@ -295,17 +295,15 @@
             </overloads>
             <param name="tokens">The tokens.</param>
             <param name="options">The options.</param>
-            <returns>
-            A <see cref="T:Twitterizer.TwitterStatusCollection"/> object.
-            </returns>
+            <returns>A collection of <see cref="T:Twitterizer.TwitterStatus"/> items.</returns>
         </member>
         <member name="M:Twitterizer.TwitterTimeline.HomeTimeline(Twitterizer.OAuthTokens)">
             <param name="tokens">The tokens.</param>
-            <returns></returns>
+            <returns>A collection of <see cref="T:Twitterizer.TwitterStatus"/> items.</returns>
         </member>
         <member name="M:Twitterizer.TwitterTimeline.HomeTimeline(Twitterizer.TimelineOptions)">
             <param name="options">The options.</param>
-            <returns></returns>
+            <returns>A collection of <see cref="T:Twitterizer.TwitterStatus"/> items.</returns>
         </member>
         <member name="M:Twitterizer.TwitterTimeline.UserTimeline(Twitterizer.OAuthTokens,System.Decimal,Twitterizer.TimelineOptions)">
             <summary>
@@ -428,7 +426,7 @@
             <param name="latitude">The latitude.</param>
             <param name="longitude">The longitude.</param>
             <param name="options">The options.</param>
-            <returns>A <see cref="T:Twitterizer.TwitterPlaceCollection"/> object or null.</returns>
+            <returns>A collection of matched <see cref="T:Twitterizer.TwitterPlace"/> items.</returns>
         </member>
         <member name="M:Twitterizer.TwitterPlace.Lookup(System.Double,System.Double)">
             <summary>
@@ -436,7 +434,7 @@
             </summary>
             <param name="latitude">The latitude.</param>
             <param name="longitude">The longitude.</param>
-            <returns></returns>
+            <returns>A collection of matched <see cref="T:Twitterizer.TwitterPlace"/> items.</returns>
         </member>
         <member name="P:Twitterizer.TwitterPlace.CountryCode">
             <summary>
@@ -667,6 +665,12 @@
             </summary>
             <value><c>true</c> if user objects should contain only Id values; otherwise, <c>false</c>.</value>
         </member>
+        <member name="P:Twitterizer.TimelineOptions.IncludeRetweets">
+            <summary>
+            Gets or sets a value indicating whether [include retweets].
+            </summary>
+            <value><c>true</c> if [include retweets]; otherwise, <c>false</c>.</value>
+        </member>
         <member name="T:Twitterizer.DirectMessagesOptions">
             <summary>
             The direct messages options class. Provides a payload for the <see cref="T:Twitterizer.Commands.DirectMessagesCommand"/> command.
@@ -862,7 +866,7 @@
             </summary>
             <param name="objectType">Type of the object.</param>
             <returns>
-            	<c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+            <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:Twitterizer.Coordinate.Converter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
@@ -873,7 +877,7 @@
             <param name="objectType">Type of the object.</param>
             <param name="existingValue">The existing value.</param>
             <param name="serializer">The serializer.</param>
-            <returns></returns>
+            <returns>A deserialized <see cref="T:System.Collections.ObjectModel.Collection`1"/></returns>
         </member>
         <member name="M:Twitterizer.Coordinate.Converter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
             <summary>
@@ -1143,12 +1147,12 @@
         </member>
         <member name="F:Twitterizer.TwitterGeoShapeType.Polygon">
             <summary>
-            A polygon
+            A polygon-shaped area.
             </summary>
         </member>
         <member name="F:Twitterizer.TwitterGeoShapeType.CircleByCenterPoint">
             <summary>
-            A circle represented by a single point (the center) and the radius
+            A circle represented by a single point (the center) and the radius.
             </summary>
         </member>
         <member name="T:Twitterizer.TwitterGeo">
@@ -1415,7 +1419,7 @@
             </summary>
             <param name="objectType">Type of the object.</param>
             <returns>
-            	<c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+            <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:Twitterizer.TwitterTrendCollection.Converter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
@@ -1426,7 +1430,7 @@
             <param name="objectType">Type of the object.</param>
             <param name="existingValue">The existing value.</param>
             <param name="serializer">The serializer.</param>
-            <returns></returns>
+            <returns>A collection of <see cref="T:Twitterizer.TwitterTrend"/> items.</returns>
         </member>
         <member name="M:Twitterizer.TwitterTrendCollection.Converter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
             <summary>
@@ -2894,6 +2898,38 @@
             The Twitter Place Collection class. A collection of <see cref="T:Twitterizer.TwitterPlace"/> objects.
             </summary>
         </member>
+        <member name="T:Twitterizer.TwitterPlaceCollection.Converter">
+            <summary>
+            Converts json data to a <see cref="T:Twitterizer.TwitterPlaceCollection"/>.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.TwitterPlaceCollection.Converter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+            <param name="objectType">Type of the object.</param>
+            <returns>
+            <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Twitterizer.TwitterPlaceCollection.Converter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+            <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader"/> to read from.</param>
+            <param name="objectType">Type of the object.</param>
+            <param name="existingValue">The existing value of object being read.</param>
+            <param name="serializer">The calling serializer.</param>
+            <returns>The object value.</returns>
+        </member>
+        <member name="M:Twitterizer.TwitterPlaceCollection.Converter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+            <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter"/> to write to.</param>
+            <param name="value">The value.</param>
+            <param name="serializer">The calling serializer.</param>
+        </member>
         <member name="T:Twitterizer.TwitterStatusCollection">
             <summary>
             The TwitterStatusCollection class.
@@ -3798,7 +3834,7 @@
             </summary>
             <param name="baseUrl">The base URL.</param>
             <param name="parameters">The parameters.</param>
-            <param name="verb">The verb.</param>
+            <param name="verb">The HTTP verb to perform.</param>
             <param name="consumerKey">The consumer key.</param>
             <param name="consumerSecret">The consumer secret.</param>
             <param name="token">The access or request token.</param>
@@ -3841,7 +3877,7 @@
             </summary>
             <param name="url">The base URL.</param>
             <param name="parameters">The parameters.</param>
-            <param name="verb">The verb.</param>
+            <param name="verb">The HTTP verb to perform.</param>
             <param name="consumerSecret">The consumer secret.</param>
             <param name="tokenSecret">The token secret.</param>
         </member>
@@ -4132,9 +4168,9 @@
         </member>
         <member name="P:Twitterizer.TwitterStatus.Geo">
             <summary>
-            Gets or sets the geo.
+            Gets or sets the geo location data.
             </summary>
-            <value>The geo.</value>
+            <value>The geo location data.</value>
         </member>
         <member name="P:Twitterizer.TwitterStatus.Entities">
             <summary>
@@ -4639,14 +4675,6 @@
             The Send Direct Message Command class
             </summary>
         </member>
-        <member name="M:Twitterizer.Commands.SendDirectMessageCommand.#ctor(Twitterizer.OAuthTokens,System.String,Twitterizer.OptionalProperties)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Twitterizer.Commands.SendDirectMessageCommand"/> class.
-            </summary>
-            <param name="tokens">The tokens.</param>
-            <param name="text">The text.</param>
-            <param name="options">The options.</param>
-        </member>
         <member name="M:Twitterizer.Commands.SendDirectMessageCommand.#ctor(Twitterizer.OAuthTokens,System.String,System.Decimal,Twitterizer.OptionalProperties)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.Commands.SendDirectMessageCommand"/> class.
@@ -4654,6 +4682,23 @@
             <param name="tokens">The request tokens.</param>
             <param name="text">The message text.</param>
             <param name="userId">The user id.</param>
+            <param name="options">The options.</param>
+        </member>
+        <member name="M:Twitterizer.Commands.SendDirectMessageCommand.#ctor(Twitterizer.OAuthTokens,System.String,System.String,Twitterizer.OptionalProperties)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Commands.SendDirectMessageCommand"/> class.
+            </summary>
+            <param name="tokens">The tokens.</param>
+            <param name="text">The message text.</param>
+            <param name="userName">Name of the user.</param>
+            <param name="options">The options.</param>
+        </member>
+        <member name="M:Twitterizer.Commands.SendDirectMessageCommand.#ctor(Twitterizer.OAuthTokens,System.String,Twitterizer.OptionalProperties)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Commands.SendDirectMessageCommand"/> class.
+            </summary>
+            <param name="tokens">The tokens.</param>
+            <param name="text">The message text.</param>
             <param name="options">The options.</param>
         </member>
         <member name="M:Twitterizer.Commands.SendDirectMessageCommand.Init">
@@ -4899,33 +4944,116 @@
             A new instance of the <see cref="T:Twitterizer.Core.PagedCommand`1"/> interface.
             </returns>
         </member>
+        <member name="T:Twitterizer.Entities.TwitterEntity">
+            <summary>
+            The base class for twitter entities that describe tweet text. 
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Entities.TwitterEntity.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Entities.TwitterEntity"/> class.
+            </summary>
+        </member>
+        <member name="P:Twitterizer.Entities.TwitterEntity.StartIndex">
+            <summary>
+            Gets or sets the start index.
+            </summary>
+            <value>The start index.</value>
+        </member>
+        <member name="P:Twitterizer.Entities.TwitterEntity.EndIndex">
+            <summary>
+            Gets or sets the end index.
+            </summary>
+            <value>The end index.</value>
+        </member>
+        <member name="T:Twitterizer.Entities.TwitterEntityCollection">
+            <summary>
+            Represents multiple <see cref="T:Twitterizer.Entities.TwitterEntity"/> objects.
+            </summary>
+        </member>
+        <member name="T:Twitterizer.Entities.TwitterEntityCollection.Converter">
+            <summary>
+            The Json converter for <see cref="T:Twitterizer.Entities.TwitterEntityCollection"/> data.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Entities.TwitterEntityCollection.Converter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+            <param name="objectType">Type of the object.</param>
+            <returns>
+            <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Twitterizer.Entities.TwitterEntityCollection.Converter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+            <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader"/> to read from.</param>
+            <param name="objectType">Type of the object.</param>
+            <param name="existingValue">The existing value of object being read.</param>
+            <param name="serializer">The calling serializer.</param>
+            <returns>The object value.</returns>
+        </member>
+        <member name="T:Twitterizer.Entities.TwitterHashTagEntity">
+            <summary>
+            Represents a pre-parsed hash tag in a <see cref="P:Twitterizer.TwitterStatus.Text"/> value.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Entities.TwitterHashTagEntity.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Entities.TwitterHashTagEntity"/> class.
+            </summary>
+        </member>
+        <member name="P:Twitterizer.Entities.TwitterHashTagEntity.Text">
+            <summary>
+            Gets or sets the hash tag text.
+            </summary>
+            <value>The hash tag text.</value>
+        </member>
         <member name="T:Twitterizer.Entities.TwitterMentionEntity">
             <summary>
-            Represents a 
+            Represents mention of a user within a <see cref="P:Twitterizer.TwitterStatus.Text"/> value.
             </summary>
         </member>
         <member name="M:Twitterizer.Entities.TwitterMentionEntity.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="!:TwitterMention"/> class.
+            Initializes a new instance of the <see cref="T:Twitterizer.Entities.TwitterMentionEntity"/> class.
             </summary>
         </member>
         <member name="P:Twitterizer.Entities.TwitterMentionEntity.ScreenName">
             <summary>
-            Gets or sets the name of the screen.
+            Gets or sets the user's screen name.
             </summary>
-            <value>The name of the screen.</value>
+            <value>The user's screen name.</value>
         </member>
         <member name="P:Twitterizer.Entities.TwitterMentionEntity.Name">
             <summary>
-            Gets or sets the name.
+            Gets or sets the user's name.
             </summary>
-            <value>The name.</value>
+            <value>The user's name.</value>
         </member>
         <member name="P:Twitterizer.Entities.TwitterMentionEntity.UserId">
             <summary>
             Gets or sets the user id.
             </summary>
             <value>The user id.</value>
+        </member>
+        <member name="T:Twitterizer.Entities.TwitterUrlEntity">
+            <summary>
+            Represents a pre-parsed url located within the body of a <see cref="P:Twitterizer.TwitterStatus.Text"/>.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Entities.TwitterUrlEntity.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Entities.TwitterUrlEntity"/> class.
+            </summary>
+        </member>
+        <member name="P:Twitterizer.Entities.TwitterUrlEntity.Url">
+            <summary>
+            Gets or sets the URL parsed from the tweet text.
+            </summary>
+            <value>The parsed URL.</value>
         </member>
     </members>
 </doc>

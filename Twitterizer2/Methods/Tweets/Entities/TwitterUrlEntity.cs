@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserTimelineOptions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterUrl.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,26 +29,27 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter timeline options class.</summary>
+// <summary>The twitter url entity class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer
+namespace Twitterizer.Entities
 {
     /// <summary>
-    /// The UserTimelineOptions class. Provides a payload for optional parameters of the <see cref="Twitterizer.Commands.UserTimelineCommand"/> class.
+    /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
     /// </summary>
-    public class UserTimelineOptions : TimelineOptions
+    public class TwitterUrlEntity : TwitterEntity
     {
         /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers.
+        /// Initializes a new instance of the <see cref="TwitterUrlEntity"/> class.
         /// </summary>
-        /// <value>The user id.</value>
-        public decimal UserId { get; set; }
+        internal TwitterUrlEntity()
+        {
+        }
 
         /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
+        /// Gets or sets the URL parsed from the tweet text.
         /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
+        /// <value>The parsed URL.</value>
+        public string Url { get; set; }
     }
 }

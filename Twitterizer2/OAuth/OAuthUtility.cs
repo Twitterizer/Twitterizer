@@ -262,7 +262,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <param name="verb">The verb.</param>
+        /// <param name="verb">The HTTP verb to perform.</param>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="token">The access or request token.</param>
@@ -465,7 +465,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="url">The base URL.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <param name="verb">The verb.</param>
+        /// <param name="verb">The HTTP verb to perform.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="tokenSecret">The token secret.</param>
         private static void AddSignatureToParameters(

@@ -88,8 +88,11 @@ namespace Twitterizer.Commands
             if (options.MaxStatusId > 0)
                 this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
 
-            if (this.Page > 0)
-                this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            if (options.Page > 0)
+                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
+
+            if (options.IncludeRetweets)
+                this.RequestParameters.Add("include_rts", "true");
         }
 
         /// <summary>

@@ -78,5 +78,11 @@ namespace Twitterizer
         /// </summary>
         /// <value><c>true</c> if user objects should contain only Id values; otherwise, <c>false</c>.</value>
         public bool SkipUser { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [include retweets].
+        /// </summary>
+        /// <value><c>true</c> if [include retweets]; otherwise, <c>false</c>.</value>
+        public bool IncludeRetweets { get; set; }
     }
 }

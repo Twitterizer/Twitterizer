@@ -53,7 +53,7 @@ namespace Twitterizer
             /// </summary>
             /// <param name="objectType">Type of the object.</param>
             /// <returns>
-            /// 	<c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+            /// <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
             /// </returns>
             public override bool CanConvert(Type objectType)
             {
@@ -67,7 +67,7 @@ namespace Twitterizer
             /// <param name="objectType">Type of the object.</param>
             /// <param name="existingValue">The existing value.</param>
             /// <param name="serializer">The serializer.</param>
-            /// <returns></returns>
+            /// <returns>A collection of <see cref="TwitterTrend"/> items.</returns>
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
                 TwitterTrendCollection result = existingValue as TwitterTrendCollection;

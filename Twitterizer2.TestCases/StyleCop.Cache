@@ -1,8 +1,5 @@
 <stylecopresultscache>
   <version>10</version>
-  <project key="-134457980">
-    <configuration>DEBUG;TRACE</configuration>
-  </project>
   <sourcecode name="Configuration.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>05/26/2010 17:42:19</timestamp>
@@ -66,4 +63,16 @@
     <milliseconds>527</milliseconds>
     <violations />
   </sourcecode>
+  <sourcecode name="TwitterSearchTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
+    </settings>
+    <timestamp>05/27/2010 15:17:05</timestamp>
+    <milliseconds>895</milliseconds>
+    <violations />
+  </sourcecode>
+  <project key="-134457980">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
 </stylecopresultscache>

@@ -46,8 +46,44 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
         /// </summary>
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="text">The message text.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        public SendDirectMessageCommand(OAuthTokens tokens, string text, decimal userId, OptionalProperties options)
+            : this(tokens, text, options)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentException("User Id must be supplied", "userId");
+            }
+
+            this.RecipientUserId = userId;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
+        /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="text">The text.</param>
+        /// <param name="text">The message text.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="options">The options.</param>
+        public SendDirectMessageCommand(OAuthTokens tokens, string text, string userName, OptionalProperties options)
+            : this(tokens, text, options)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
+
+            this.RecipientUserName = userName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="text">The message text.</param>
         /// <param name="options">The options.</param>
         private SendDirectMessageCommand(OAuthTokens tokens, string text, OptionalProperties options)
             : base(HTTPVerb.POST, "direct_messages/new.json", tokens, options)
@@ -65,35 +101,6 @@ namespace Twitterizer.Commands
             this.Text = text;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SendDirectMessageCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="text">The message text.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="options">The options.</param>
-        public SendDirectMessageCommand(OAuthTokens tokens, string text, decimal userId, OptionalProperties options)
-            : this(tokens, text, options)
-        {
-            if (userId <= 0)
-            {
-                throw new ArgumentException("User Id must be supplied", "userId");
-            }
-
-            this.RecipientUserId = userId;
-        }
-
-        public SendDirectMessageCommand(OAuthTokens tokens, string text, string userName, OptionalProperties options)
-            : this(tokens, text, options)
-        {
-            if (string.IsNullOrEmpty(userName))
-            {
-                throw new ArgumentNullException("userName");
-            }
-
-            this.RecipientUserName = userName;
-        }
-        
         #region Properties
         /// <summary>
         /// Gets or sets the status text.

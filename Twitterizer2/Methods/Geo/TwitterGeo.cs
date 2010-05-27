@@ -35,8 +35,8 @@
 namespace Twitterizer
 {
     using System;
-    using Newtonsoft.Json;
     using System.Collections.ObjectModel;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Lists the possible types of geographic boundaries.
@@ -54,12 +54,12 @@ namespace Twitterizer
         LineString,
 
         /// <summary>
-        /// A polygon
+        /// A polygon-shaped area.
         /// </summary>
         Polygon,
 
         /// <summary>
-        /// A circle represented by a single point (the center) and the radius
+        /// A circle represented by a single point (the center) and the radius.
         /// </summary>
         CircleByCenterPoint
     }

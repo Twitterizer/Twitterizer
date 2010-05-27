@@ -82,6 +82,9 @@ namespace Twitterizer.Commands
 
             this.Page = options.Page;
             this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+
+            if (options.IncludeRetweets)
+                this.RequestParameters.Add("include_rts", "true");
         }
 
         /// <summary>

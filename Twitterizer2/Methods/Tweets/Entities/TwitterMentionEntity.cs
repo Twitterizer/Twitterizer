@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserTimelineOptions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterMentionEntity.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,26 +29,42 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter timeline options class.</summary>
+// <summary>The twitter metions entity class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer
+namespace Twitterizer.Entities
 {
+    using System;
+
     /// <summary>
-    /// The UserTimelineOptions class. Provides a payload for optional parameters of the <see cref="Twitterizer.Commands.UserTimelineCommand"/> class.
+    /// Represents mention of a user within a <see cref="TwitterStatus.Text"/> value.
     /// </summary>
-    public class UserTimelineOptions : TimelineOptions
+    [Serializable]
+    public class TwitterMentionEntity : TwitterEntity
     {
         /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers.
+        /// Initializes a new instance of the <see cref="TwitterMentionEntity"/> class.
+        /// </summary>
+        internal TwitterMentionEntity()
+        {
+        }
+
+        /// <summary>
+        /// Gets or sets the user's screen name.
+        /// </summary>
+        /// <value>The user's screen name.</value>
+        public string ScreenName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's name.
+        /// </summary>
+        /// <value>The user's name.</value>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user id.
         /// </summary>
         /// <value>The user id.</value>
         public decimal UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
-        /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
     }
 }

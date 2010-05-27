@@ -47,9 +47,7 @@ namespace Twitterizer
         /// </overloads>
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/> object.
-        /// </returns>
+        /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
         public static TwitterStatusCollection HomeTimeline(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens, options);
@@ -65,14 +63,14 @@ namespace Twitterizer
         }
 
         /// <param name="tokens">The tokens.</param>
-        /// <returns></returns>
+        /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
         public static TwitterStatusCollection HomeTimeline(OAuthTokens tokens)
         {
             return HomeTimeline(tokens, null);
         }
 
         /// <param name="options">The options.</param>
-        /// <returns></returns>
+        /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
         public static TwitterStatusCollection HomeTimeline(TimelineOptions options)
         {
             return HomeTimeline(null, options);

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserTimelineOptions.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterHashTagEntity.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,26 +29,30 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter timeline options class.</summary>
+// <summary>The twitter hash tag entity class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer
+namespace Twitterizer.Entities
 {
+    using System;
+
     /// <summary>
-    /// The UserTimelineOptions class. Provides a payload for optional parameters of the <see cref="Twitterizer.Commands.UserTimelineCommand"/> class.
+    /// Represents a pre-parsed hash tag in a <see cref="Twitterizer.TwitterStatus.Text"/> value.
     /// </summary>
-    public class UserTimelineOptions : TimelineOptions
+    [Serializable]
+    public class TwitterHashTagEntity : TwitterEntity
     {
         /// <summary>
-        /// Gets or sets the ID of the user for whom to request a list of followers.
+        /// Initializes a new instance of the <see cref="TwitterHashTagEntity"/> class.
         /// </summary>
-        /// <value>The user id.</value>
-        public decimal UserId { get; set; }
+        internal TwitterHashTagEntity()
+        { 
+        }
 
         /// <summary>
-        /// Gets or sets the screen name of the user for whom to request a list of followers. 
+        /// Gets or sets the hash tag text.
         /// </summary>
-        /// <value>The name of the screen.</value>
-        public string ScreenName { get; set; }
+        /// <value>The hash tag text.</value>
+        public string Text { get; set; }
     }
 }
