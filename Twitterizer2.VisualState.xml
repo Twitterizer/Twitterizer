@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
   <TopNode>[0-1000]C:\Projects\twitterizer\Twitterizer2.nunit</TopNode>
-  <SelectedNode>[0-1019]Twitterizer2.TestCases</SelectedNode>
+  <SelectedNode>[0-1003]Twitterizer2.TestCases.TwitterTimelineTests</SelectedNode>
   <ExcludeCategories>false</ExcludeCategories>
   <Nodes>
     <Node UniqueName="[0-1000]C:\Projects\twitterizer\Twitterizer2.nunit" Expanded="true" />
-    <Node UniqueName="[0-1017]C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" Expanded="true" />
-    <Node UniqueName="[0-1018]Twitterizer2" Expanded="true" />
-    <Node UniqueName="[0-1019]Twitterizer2.TestCases" Expanded="true" />
-    <Node UniqueName="[0-1015]Twitterizer2.TestCases.TwitterGeoTests" Expanded="true" />
-    <Node UniqueName="[0-1004]Twitterizer2.TestCases.TwitterStatusTests" Expanded="true" />
-    <Node UniqueName="[0-1006]Twitterizer2.TestCases.TwitterTimelineTests" Expanded="true" />
-    <Node UniqueName="[0-1013]Twitterizer2.TestCases.TwitterTrendTests" Expanded="true" />
-    <Node UniqueName="[0-1001]Twitterizer2.TestCases.TwitterUserTests" Expanded="true" />
+    <Node UniqueName="[0-1019]C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" Expanded="true" />
+    <Node UniqueName="[0-1020]Twitterizer2" Expanded="true" />
+    <Node UniqueName="[0-1021]Twitterizer2.TestCases" Expanded="true" />
+    <Node UniqueName="[0-1017]Twitterizer2.TestCases.TwitterGeoTests" Expanded="true" />
+    <Node UniqueName="[0-1001]Twitterizer2.TestCases.TwitterSearchTests" Expanded="true" />
+    <Node UniqueName="[0-1010]Twitterizer2.TestCases.TwitterStatusTests" Expanded="true" />
+    <Node UniqueName="[0-1003]Twitterizer2.TestCases.TwitterTimelineTests" Expanded="true" />
+    <Node UniqueName="[0-1015]Twitterizer2.TestCases.TwitterTrendTests" Expanded="true" />
+    <Node UniqueName="[0-1012]Twitterizer2.TestCases.TwitterUserTests" Expanded="true" />
   </Nodes>
 </VisualState>

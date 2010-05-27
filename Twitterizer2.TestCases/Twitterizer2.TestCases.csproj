@@ -54,6 +54,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterGeoTests.cs" />
+    <Compile Include="TwitterSearchTests.cs" />
     <Compile Include="TwitterStatusTests.cs" />
     <Compile Include="TwitterTimelineTests.cs" />
     <Compile Include="TwitterTrendTests.cs" />

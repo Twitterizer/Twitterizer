@@ -58,6 +58,8 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            // Enable opt-in beta for entities
+            this.RequestParameters.Add("include_entities", "true");
         }
 
         /// <summary>

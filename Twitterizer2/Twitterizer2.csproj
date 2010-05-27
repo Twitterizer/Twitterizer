@@ -119,6 +119,11 @@
     <Compile Include="Methods\Timeline\TwitterTimeline.cs" />
     <Compile Include="Methods\Trends\TwitterTrendCollection.cs" />
     <Compile Include="Methods\Tweets\DeleteStatusCommand.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterEntity.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterEntityCollection.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterHashTag.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterMention.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterUrl.cs" />
     <Compile Include="Methods\Tweets\RetweetsOfMeOptions.cs" />
     <Compile Include="Methods\Tweets\RetweetsOptions.cs" />
     <Compile Include="Methods\User\FollowersOptions.cs" />

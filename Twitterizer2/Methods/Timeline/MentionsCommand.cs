@@ -64,6 +64,9 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            // Enable opt-in beta for entities
+            this.RequestParameters.Add("include_entities", "true");
+
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
 
             if (options == null)

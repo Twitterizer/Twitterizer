@@ -148,6 +148,14 @@ namespace Twitterizer
         /// <value>The geo.</value>
         [JsonProperty(PropertyName = "geo")]
         public TwitterGeo Geo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entities.
+        /// </summary>
+        /// <value>The entities.</value>
+        [JsonProperty(PropertyName  = "entities")]
+        [JsonConverter(typeof(Entities.TwitterEntityCollection.Converter))]
+        public Entities.TwitterEntityCollection Entities { get; set; }
         #endregion
 
         /// <summary>
