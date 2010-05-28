@@ -38,7 +38,7 @@
       <Filter entryType="Namespace" fullName="Twitterizer.Core" isExposed="False" />
     </ApiFilter>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <HelpFileFormat>Website</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <FrameworkVersion>3.5</FrameworkVersion>
     <ComponentConfigurations>
       <ComponentConfig id="Cached MSDN URL References" enabled="True" xmlns="">
