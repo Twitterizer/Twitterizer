@@ -375,7 +375,9 @@ namespace Twitterizer
             Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
 
             TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            result.PagedCommand = command;
+
+            if (result != null)
+                result.PagedCommand = command;
 
             return result;
         }

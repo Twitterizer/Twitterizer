@@ -223,31 +223,6 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
-        /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterListCollection"/> instance.
-        /// </returns>
-        public static TwitterListCollection GetLists(string username, OptionalProperties options)
-        {
-            return GetLists(null, username, options);
-        }
-
-        /// <summary>
-        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
-        /// </summary>
-        /// <param name="username">The username.</param>
-        /// <returns>
-        /// A <see cref="TwitterListCollection"/> instance.
-        /// </returns>
-        public static TwitterListCollection GetLists(string username)
-        {
-            return GetLists(null, username, null);
-        }
-
-        /// <summary>
         /// Gets a single list by id number.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
@@ -289,7 +264,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, long listId, ListStatusesOptions options)
+        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, decimal listId, ListStatusesOptions options)
         {
             Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listId, options);
 

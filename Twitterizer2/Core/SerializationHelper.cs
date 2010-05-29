@@ -58,34 +58,33 @@ namespace Twitterizer.Core
         /// <summary>
         /// Deserializes the specified web response.
         /// </summary>
-        /// <param name="webResponse">The web response.</param>
+        /// <param name="webResponseData">The web response data.</param>
         /// <param name="deserializationHandler">The deserialization handler.</param>
         /// <returns>
         /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
         /// </returns>
-        public static T Deserialize(WebResponse webResponse, DeserializationHandler deserializationHandler)
+        public static T Deserialize(byte[] webResponseData, DeserializationHandler deserializationHandler)
         {
             try
             {
                 T resultObject = default(T);
-
-                // Get the response
-                using (Stream responseStream = webResponse.GetResponseStream())
-                {
-                    byte[] data = ConversionUtility.ReadStream(responseStream);
 #if DEBUG
-                    Debug.WriteLine("----------- RESPONSE -----------");
-                    Debug.WriteLine(Encoding.UTF8.GetString(data));
-                    Debug.WriteLine("----------- END -----------");
+                Debug.WriteLine("----------- RESPONSE -----------");
+                Debug.WriteLine(Encoding.UTF8.GetString(webResponseData));
+                Debug.WriteLine("----------- END -----------");
 #endif
 
-                    // Deserialize the results.
-                    resultObject = Deserialize(data, deserializationHandler);
-
-                    responseStream.Close();
-
-                    Trace.Write(resultObject, "Twitterizer2");
+                // Deserialize the results.
+                if (deserializationHandler == null)
+                {
+                    resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData));
                 }
+                else
+                {
+                    resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData)));
+                }
+
+                Trace.Write(resultObject, "Twitterizer2");
 
                 return resultObject;
             }
@@ -98,49 +97,13 @@ namespace Twitterizer.Core
         /// <summary>
         /// Deserializes the specified web response.
         /// </summary>
-        /// <param name="webResponse">The web response.</param>
+        /// <param name="webResponseData">The web response data.</param>
         /// <returns>
         /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
         /// </returns>
-        public static T Deserialize(WebResponse webResponse)
+        public static T Deserialize(byte[] webResponseData)
         {
-            return Deserialize(webResponse, null);
-        }
-
-        /// <summary>
-        /// Deserializes the specified serializer.
-        /// </summary>
-        /// <param name="data">The data to be deserialized.</param>
-        /// <param name="javascriptConversionDeligate">The javascript conversion deligate.</param>
-        /// <returns>
-        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
-        /// </returns>
-        public static T Deserialize(byte[] data, DeserializationHandler javascriptConversionDeligate)
-        {
-            T resultObject = default(T);
-
-            if (javascriptConversionDeligate == null)
-            {
-                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(data));
-            }
-            else
-            {
-                resultObject = javascriptConversionDeligate((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data)));
-            }
-
-            return resultObject;
-        }
-
-        /// <summary>
-        /// Deserializes the specified serializer.
-        /// </summary>
-        /// <param name="data">The data to be deserialized.</param>
-        /// <returns>
-        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
-        /// </returns>
-        public static T Deserialize(byte[] data)
-        {
-            return Deserialize(data, null);
+            return Deserialize(webResponseData, null);
         }
     }
 }

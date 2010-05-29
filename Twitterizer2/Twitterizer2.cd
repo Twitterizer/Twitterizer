@@ -3,8 +3,8 @@
   <Class Name="Twitterizer.TwitterDirectMessage">
     <Position X="0.5" Y="2.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAACAAAQACABgIAAAEAAAAAAABEBAAACAgAACAAIAAA=</HashCode>
-      <FileName>TwitterEntities\TwitterDirectMessage.cs</FileName>
+      <HashCode>AAACAAAQACAAgAAAAEAAAAAAAAEBAgACAgAACAAIAAA=</HashCode>
+      <FileName>Methods\Direct Message\TwitterDirectMessage.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Sender" />
@@ -14,8 +14,8 @@
   <Class Name="Twitterizer.TwitterRateLimitStatus">
     <Position X="12.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAQAAAAAAAAIEAAAAAAEAAAQAAAAAAAA=</HashCode>
-      <FileName>TwitterEntities\TwitterRateLimitStatus.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAIEAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Methods\Account\TwitterRateLimitStatus.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Twitterizer.TwitterStatus">
@@ -25,66 +25,154 @@
         <Position X="-0.348" Y="0.383" Height="0.182" Width="1.379" />
       </MemberNameLabel>
     </AssociationLine>
+    <AssociationLine Name="Geo" Type="Twitterizer.TwitterGeo" FixedToPoint="true">
+      <Path>
+        <Point X="11.75" Y="4.875" />
+        <Point X="13.75" Y="4.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Place" Type="Twitterizer.TwitterPlace" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.312" Y="6.184" />
+        <Point X="11.312" Y="6.559" />
+        <Point X="12.25" Y="6.559" />
+        <Point X="12.25" Y="7.25" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AQQDAAQAAgABAAAAICAAAAAEQAEAAAAIAgAACAApAAA=</HashCode>
-      <FileName>TwitterEntities\TwitterStatus.cs</FileName>
+      <HashCode>AQQDAAQAAgAAAABAAAAAAAAAQAEEAAAIAkEACAApAAA=</HashCode>
+      <FileName>Methods\Tweets\TwitterStatus.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="User" />
       <Property Name="RetweetedStatus" />
+      <Property Name="Geo" />
+      <Property Name="Place" />
     </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Entities" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Twitterizer.TwitterUser">
     <Position X="5.25" Y="0.5" Width="2.5" />
-    <AssociationLine Name="Followers" Type="Twitterizer.TwitterUser" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="7.75" Y="1.236" />
-        <Point X="8.125" Y="1.236" />
-        <Point X="8.125" Y="0.125" />
-        <Point X="6.812" Y="0.125" />
-        <Point X="6.812" Y="0.5" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.044" Y="0.1" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="Friends" Type="Twitterizer.TwitterUser" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="5.25" Y="1.175" />
-        <Point X="4.875" Y="1.175" />
-        <Point X="4.875" Y="0.125" />
-        <Point X="6.125" Y="0.125" />
-        <Point X="6.125" Y="0.5" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AEATUAQkDAIxwBBoZAIZIiQBABEAEAICEqAwBABgAAA=</HashCode>
-      <FileName>TwitterEntities\TwitterUser.cs</FileName>
+      <HashCode>AEASQAAkCAIwwAAAZAIJACQAABAEEAACAiAgAABgAAA=</HashCode>
+      <FileName>Methods\User\TwitterUser.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Status" />
     </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="Followers" />
-      <Property Name="Friends" />
-      <Property Name="Timeline" />
-      <Property Name="FriendsTimeline" />
-      <Property Name="Mentions" />
-      <Property Name="Retweets" />
-      <Property Name="Retweeted" />
-      <Property Name="DirectMessagesReceived" />
-      <Property Name="DirectMessagesSent" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Twitterizer.TwitterList">
     <Position X="1" Y="6.5" Width="2" />
     <TypeIdentifier>
       <HashCode>QAQDQAAAAIAgAKAABgAAAAQAACEACAAQAQAAAAQAAAI=</HashCode>
-      <FileName>TwitterEntities\TwitterList.cs</FileName>
+      <FileName>Methods\List\TwitterList.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="User" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="Twitterizer.Coordinate">
+    <Position X="14" Y="6.75" Width="1.5" />
+    <NestedTypes>
+      <Class Name="Twitterizer.Coordinate.Converter" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Methods\Geo\Coordinate.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Methods\Geo\Coordinate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.TwitterPlace">
+    <Position X="11.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACACAAAAAAAACIAAAAAAIAQAACIAAAAIAAAAAAAAABA=</HashCode>
+      <FileName>Methods\Geo\TwitterPlace.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="BoundingBox" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Twitterizer.TwitterBoundingBox">
+    <Position X="14.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Methods\Geo\TwitterBoundingBox.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Coordinates" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Twitterizer.Entities.TwitterEntity">
+    <Position X="8.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Methods\Tweets\Entities\TwitterEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.Entities.TwitterUrlEntity">
+    <Position X="9.75" Y="9.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="Twitterizer.Entities.TwitterEntity" FixedToPoint="true">
+      <Path>
+        <Point X="9" Y="8.997" />
+        <Point X="9" Y="9.875" />
+        <Point X="9.75" Y="9.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Methods\Tweets\Entities\TwitterUrlEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.Entities.TwitterHashTagEntity">
+    <Position X="6.75" Y="9.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="Twitterizer.Entities.TwitterEntity" FixedToPoint="true">
+      <Path>
+        <Point X="9" Y="8.997" />
+        <Point X="9" Y="9.875" />
+        <Point X="8.25" Y="9.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Methods\Tweets\Entities\TwitterHashTagEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.Entities.TwitterMentionEntity">
+    <Position X="8.25" Y="11" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="Twitterizer.Entities.TwitterEntity" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9" Y="8.997" />
+        <Point X="9" Y="11" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Methods\Tweets\Entities\TwitterMentionEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Twitterizer.TwitterGeo">
+    <Position X="13.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Methods\Geo\TwitterGeo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Coordinates" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

@@ -162,25 +162,20 @@ namespace Twitterizer
         /// <summary>
         /// Updates the request status.
         /// </summary>
-        /// <param name="webResponse">The web response.</param>
-        /// <returns><c>true</c> if the status was updated successfully, otherwise <c>false</c></returns>
-        public static bool UpdateRequestStatus(HttpWebResponse webResponse)
+        /// <param name="responseData">The response data.</param>
+        /// <param name="absoluteUri">The absolute URI.</param>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>
+        /// 	<c>true</c> if the status was updated successfully, otherwise <c>false</c>
+        /// </returns>
+        internal static bool UpdateRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType)
         {
-            if (webResponse == null)
-            {
-                return false;
-            }
+            LastRequestStatus.ResponseBody = Encoding.UTF8.GetString(responseData);
+            LastRequestStatus.FullPath = absoluteUri;
 
-            System.IO.Stream responseStream = webResponse.GetResponseStream();
-
-            if (responseStream != null && responseStream.CanRead)
-            {
-                LastRequestStatus.ResponseBody = Encoding.UTF8.GetString(ConversionUtility.ReadStream(responseStream));
-            }
-
-            LastRequestStatus.FullPath = webResponse.ResponseUri.AbsolutePath;
-
-            switch (webResponse.StatusCode)
+            // Lookup the status code and set the status accordingly
+            switch (statusCode)
             {
                 case HttpStatusCode.OK:
                     LastRequestStatus.Status = RequestResult.Success;
@@ -207,26 +202,24 @@ namespace Twitterizer
                     return false;
             }
 
+            // Attempt to parse the error details returned by the API
             try
             {
-                if (webResponse.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
+                if (contentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
                 {
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(TwitterErrorDetails));
-                    LastRequestStatus.ErrorDetails = xmlSerializer.Deserialize(webResponse.GetResponseStream()) as TwitterErrorDetails;
+                    LastRequestStatus.ErrorDetails = xmlSerializer.Deserialize(new System.IO.MemoryStream(responseData)) as TwitterErrorDetails;
                 }
 
-                if (webResponse.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+                if (contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
                 {
-                    LastRequestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(webResponse);
+                    LastRequestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
+
                 }
             }
-            catch (System.Runtime.Serialization.SerializationException)
+            catch (Exception)
             {
-                // Do nothing. This is no-fail code.
-            }
-            catch (InvalidOperationException)
-            {
-                // Do nothing. This is no-fail code.
+                // Do nothing.
             }
 
             return true;

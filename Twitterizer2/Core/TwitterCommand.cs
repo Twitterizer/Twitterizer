@@ -182,16 +182,18 @@ namespace Twitterizer.Core
                     return (T)cache[cacheKeyBuilder.ToString()];
                 }
             }
-            
+
             // Declare the variable to be returned
             T resultObject = default(T);
 
+            // This must be set for all twitter request.
+            System.Net.ServicePointManager.Expect100Continue = false;
+
+            byte[] responseData = null;
+            
             try
             {
-                // This must be set for all twitter request.
-                System.Net.ServicePointManager.Expect100Continue = false;
-
-                WebResponse webResponse;
+                HttpWebResponse webResponse;
 
                 // If we have OAuth tokens, then build and execute an OAuth request.
                 if (this.Tokens != null)
@@ -211,41 +213,54 @@ namespace Twitterizer.Core
                     webResponse = this.BuildRequestAndGetResponse(queryParameters);
                 }
 
-                // Set this back to the default so it doesn't affect other .net code.
-                System.Net.ServicePointManager.Expect100Continue = true;
+                responseData = ConversionUtility.ReadStream(webResponse.GetResponseStream());
 
-                resultObject = SerializationHelper<T>.Deserialize(
-                    webResponse,
-                    this.DeserializationHandler);
-
-                this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
+                // Update the last status
+                RequestStatus.UpdateRequestStatus(
+                    responseData, 
+                    webResponse.ResponseUri.AbsoluteUri, 
+                    webResponse.StatusCode, 
+                    webResponse.ContentType);
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
-
-                // Update the last status
-                RequestStatus.UpdateRequestStatus(webResponse as HttpWebResponse);
             }
             catch (WebException wex)
             {
                 Trace.TraceError(wex.Message);
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
-                HttpWebResponse response = wex.Response as HttpWebResponse;
-                if (response == null || !RequestStatus.UpdateRequestStatus(response))
+                HttpWebResponse exceptionResponse = wex.Response as HttpWebResponse;
+                
+                responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
+
+                if (exceptionResponse == null || 
+                    !RequestStatus.UpdateRequestStatus(
+                        responseData, 
+                        exceptionResponse.ResponseUri.AbsoluteUri, 
+                        exceptionResponse.StatusCode, 
+                        exceptionResponse.ContentType))
                 {
                     throw;
                 }
 
                 return default(T);
             }
-            catch (System.Exception)
+            finally
             {
-                throw;
+                // Set this back to the default so it doesn't affect other .net code.
+                System.Net.ServicePointManager.Expect100Continue = true;
             }
 
+            resultObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
+
+            this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
+
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
-            resultObject.Tokens = this.Tokens;
+            if (resultObject != null)
+            {
+                resultObject.Tokens = this.Tokens;
+            }
 
             Trace.Write(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
@@ -277,6 +292,11 @@ namespace Twitterizer.Core
         /// <param name="webResponse">The web response.</param>
         private static void ParseRateLimitHeaders(T resultObject, WebResponse webResponse)
         {
+            if (resultObject == null)
+            {
+                return;
+            }
+
             resultObject.RateLimiting = new RateLimiting();
 
             if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Limit")))

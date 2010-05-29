@@ -41,9 +41,8 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Mentions Command class
     /// </summary>
-    internal sealed class MentionsCommand : PagedCommand<TwitterStatusCollection>
+    internal sealed class MentionsCommand : PagedTimelineCommand<TwitterStatusCollection>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MentionsCommand"/> class.
         /// </summary>
@@ -57,39 +56,7 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("tokens");
             }
         }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
-
-            TimelineOptions options = this.OptionalProperties as TimelineOptions;
-
-            if (options == null)
-            {
-                return;
-            }
-
-            if (options.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Count > 0)
-                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Page > 0)
-                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
-
-            if (options.IncludeRetweets)
-                this.RequestParameters.Add("include_rts", "true");
-        }
-
+        
         /// <summary>
         /// Clones this instance.
         /// </summary>
@@ -98,7 +65,10 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new MentionsCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
+            return new MentionsCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
+            {
+                Page = this.Page
+            };
         }
     }
 }

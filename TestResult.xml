@@ -1,24 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!--This file represents the results of running a test suite-->
-<test-results name="C:\Projects\twitterizer\Twitterizer2.nunit" total="6" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-05-27" time="15:27:27">
+<test-results name="C:\Projects\twitterizer\Twitterizer2.nunit" total="1" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-05-29" time="11:18:42">
   <environment nunit-version="2.5.2.9222" clr-version="2.0.50727.4927" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug" machine-name="SMITHRICKY" user="patricks" user-domain="INFINITY" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite name="C:\Projects\twitterizer\Twitterizer2.nunit" executed="True" success="True" time="9.526" asserts="0">
+  <test-suite name="C:\Projects\twitterizer\Twitterizer2.nunit" executed="True" success="True" time="18.084" asserts="0">
     <results>
-      <test-suite name="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" executed="True" success="True" time="9.522" asserts="0">
+      <test-suite name="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" executed="True" success="True" time="18.080" asserts="0">
         <results>
-          <test-suite name="Twitterizer2" executed="True" success="True" time="9.521" asserts="0">
+          <test-suite name="Twitterizer2" executed="True" success="True" time="18.076" asserts="0">
             <results>
-              <test-suite name="TestCases" executed="True" success="True" time="9.518" asserts="0">
+              <test-suite name="TestCases" executed="True" success="True" time="18.073" asserts="0">
                 <results>
-                  <test-suite name="TwitterTimelineTests" executed="True" success="True" time="9.517" asserts="0">
+                  <test-suite name="TwitterListTests" executed="True" success="True" time="18.064" asserts="0">
                     <results>
-                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.FriendTimeline" executed="True" success="True" time="2.277" asserts="3" />
-                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.Mentions" executed="True" success="True" time="1.047" asserts="3" />
-                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.PublicTimeline" executed="True" success="True" time="1.703" asserts="3" />
-                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetedByMe" executed="True" success="True" time="2.124" asserts="3" />
-                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetedToMe" executed="True" success="True" time="1.391" asserts="3" />
-                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetsOfMe" executed="True" success="True" time="0.954" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.TwitterListTests.GetStatuses" executed="True" success="True" time="18.059" asserts="3" />
                     </results>
                   </test-suite>
                 </results>

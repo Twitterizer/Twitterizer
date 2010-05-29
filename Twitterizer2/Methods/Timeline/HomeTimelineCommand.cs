@@ -41,8 +41,7 @@ namespace Twitterizer.Commands
     /// The Home Timeline Command
     /// </summary>
     [Serializable]
-    internal sealed class HomeTimelineCommand :
-        Core.PagedCommand<TwitterStatusCollection>
+    internal sealed class HomeTimelineCommand : PagedTimelineCommand<TwitterStatusCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
@@ -59,43 +58,15 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
-
-            TimelineOptions options = this.OptionalProperties as TimelineOptions;
-
-            if (options != null)
-            {
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                this.Page = options.Page;
-                this.RequestParameters.Add(
-                    "page",
-                    this.Page.ToString(CultureInfo.InvariantCulture));
-
-                if (options.SkipUser)
-                    this.RequestParameters.Add("skip_user", "true");
-            }
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
         internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new HomeTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
+            return new HomeTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
+            {
+                Page = this.Page
+            };
         }
     }
 }

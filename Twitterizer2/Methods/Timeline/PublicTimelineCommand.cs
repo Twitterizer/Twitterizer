@@ -40,7 +40,7 @@ namespace Twitterizer.Commands
     /// The Public Timeline Command class
     /// </summary>
     internal sealed class PublicTimelineCommand :
-        Core.PagedCommand<TwitterStatusCollection>
+        Core.TwitterCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -60,17 +60,6 @@ namespace Twitterizer.Commands
         {
             // Enable opt-in beta for entities
             this.RequestParameters.Add("include_entities", "true");
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            throw new NotImplementedException();
         }
     }
 }

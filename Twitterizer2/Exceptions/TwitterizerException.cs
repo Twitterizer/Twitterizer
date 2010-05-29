@@ -75,11 +75,11 @@ namespace Twitterizer
         {
             if (innerException.GetType() == typeof(WebException))
             {
-                WebException webException = (WebException)innerException;
+                HttpWebResponse response = (HttpWebResponse)((WebException)innerException).Response;
 
-                HttpWebResponse response = (HttpWebResponse)webException.Response;
+                byte[] responseData = ConversionUtility.ReadStream(response.GetResponseStream());
 
-                this.ResponseBody = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                this.ResponseBody = Encoding.UTF8.GetString(responseData);
 
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
@@ -90,8 +90,7 @@ namespace Twitterizer
 
                 if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
                 {
-                    webException.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
-                    this.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(response, null);
+                    this.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData, null);
                 }
                 else if (response.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
                 {
@@ -99,8 +98,7 @@ namespace Twitterizer
                     System.Xml.Serialization.XmlSerializer ds =
                         new System.Xml.Serialization.XmlSerializer(typeof(TwitterErrorDetails));
 
-                    webException.Response.GetResponseStream().Seek(0, SeekOrigin.Begin);
-                    this.ErrorDetails = ds.Deserialize(webException.Response.GetResponseStream()) as TwitterErrorDetails;
+                    this.ErrorDetails = ds.Deserialize(new MemoryStream(responseData)) as TwitterErrorDetails;
                 }
             }
         }

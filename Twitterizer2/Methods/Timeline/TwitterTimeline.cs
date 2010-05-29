@@ -117,8 +117,9 @@ namespace Twitterizer
         public static TwitterStatusCollection PublicTimeline(OAuthTokens tokens)
         {
             Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens);
+            TwitterStatusCollection result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
-            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            return result;
         }
 
         /// <summary>
@@ -139,7 +140,13 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
         public static TwitterStatusCollection FriendTimeline(OAuthTokens tokens, TimelineOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(new Commands.FriendsTimelineCommand(tokens, options));
+            Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(tokens, options);
+            TwitterStatusCollection result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+
+            if (result != null)
+                result.Command = command;
+
+            return result;
         }
 
         /// <summary>
@@ -222,8 +229,13 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterStatusCollection Mentions(OAuthTokens tokens, TimelineOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(
-                new Commands.MentionsCommand(tokens, options));
+            Commands.MentionsCommand command = new Commands.MentionsCommand(tokens, options);
+            TwitterStatusCollection results = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+
+            if (results != null)
+                results.Command = command;
+
+            return results;
         }
 
         /// <summary>

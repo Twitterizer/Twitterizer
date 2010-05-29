@@ -111,6 +111,7 @@
     <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />
     <Compile Include="Methods\Search\SearchOptions.cs" />
+    <Compile Include="Methods\Timeline\PagedTimelineCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineOptions.cs" />
     <Compile Include="Methods\Trends\CurrentTrendsCommand.cs" />
     <Compile Include="Methods\Trends\CurrentTrendsOptions.cs" />

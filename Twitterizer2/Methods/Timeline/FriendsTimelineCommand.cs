@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Friends Timeline Command class
     /// </summary>
-    internal sealed class FriendsTimelineCommand : PagedCommand<TwitterStatusCollection>
+    internal sealed class FriendsTimelineCommand : PagedTimelineCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -56,38 +56,6 @@ namespace Twitterizer.Commands
         #endregion
 
         /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
-
-            TimelineOptions options = this.OptionalProperties as TimelineOptions;
-
-            if (options == null)
-            {
-                this.Page = 1;
-                return;
-            }
-
-            if (options.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Count > 0)
-                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-            this.Page = options.Page;
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-
-            if (options.IncludeRetweets)
-                this.RequestParameters.Add("include_rts", "true");
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>
@@ -95,7 +63,10 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
+            return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
+            {
+                Page = this.Page
+            };
         }
     }
 }

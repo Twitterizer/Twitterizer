@@ -75,7 +75,7 @@ namespace Twitterizer
         /// Gets or sets the sender id.
         /// </summary>
         /// <value>The sender id.</value>
-        public long SenderId { get; set; }
+        public decimal SenderId { get; set; }
 
         /// <summary>
         /// Gets or sets the direct message text.
@@ -89,7 +89,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The recipient id.</value>
         [JsonProperty(PropertyName = "recipient_id")]
-        public long RecipientId { get; set; }
+        public decimal RecipientId { get; set; }
 
         /// <summary>
         /// Gets or sets the created date.

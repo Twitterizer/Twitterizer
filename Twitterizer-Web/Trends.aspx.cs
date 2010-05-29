@@ -39,7 +39,7 @@ public partial class Trends : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        this.TrendsGridView.DataSource = TwitterTrend.Current().Trends;
+        this.TrendsGridView.DataSource = TwitterTrend.Current();
         this.TrendsGridView.DataBind();
     }
 }

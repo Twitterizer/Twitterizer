@@ -52,8 +52,8 @@ namespace Twitterizer.Commands
         /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
-        public ListStatusesCommand(OAuthTokens requestTokens, string username, long listId, ListStatusesOptions options)
-            : base(HTTPVerb.GET, "{0}/lists/{1}/statuses.json", requestTokens, options)
+        public ListStatusesCommand(OAuthTokens requestTokens, string username, decimal listId, ListStatusesOptions options)
+            : base(HTTPVerb.GET, string.Format("{0}/lists/{1}/statuses.json", username, listId), requestTokens, options)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -81,7 +81,7 @@ namespace Twitterizer.Commands
         /// Gets the list id.
         /// </summary>
         /// <value>The list id.</value>
-        public long ListId { get; private set; }
+        public decimal ListId { get; private set; }
         #endregion
 
         /// <summary>
