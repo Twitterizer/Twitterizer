@@ -63,7 +63,7 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("tokens");
             }
 
-            if (userId <= 0 || string.IsNullOrEmpty(userName))
+            if (userId <= 0 && string.IsNullOrEmpty(userName))
             {
                 throw new ArgumentException("User ID or screen name is required.");
             }

@@ -184,7 +184,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Deletes the specified tokens.
+        /// Deletes the specified status.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
@@ -200,7 +200,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Deletes the specified tokens.
+        /// Deletes the specified status.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
@@ -291,6 +291,57 @@ namespace Twitterizer
         public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId)
         {
             return Retweets(tokens, statusId, null);
+        }
+
+        /// <summary>
+        /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatus"/> representing the newly created tweet.
+        /// </returns>
+        public TwitterStatus Retweet(OAuthTokens tokens, OptionalProperties options)
+        {
+            return Retweet(tokens, this.Id, options);
+        }
+
+        /// <summary>
+        /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatus"/> representing the newly created tweet.
+        /// </returns>
+        public TwitterStatus Retweet(OAuthTokens tokens)
+        {
+            return Retweet(tokens, this.Id, null);
+        }
+
+        /// <summary>
+        /// Deletes the status.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatus"/> object of the deleted status.
+        /// </returns>
+        public TwitterStatus Delete(OAuthTokens tokens, OptionalProperties options)
+        {
+            return Delete(tokens, this.Id, options);
+        }
+
+        /// <summary>
+        /// Deletes the status.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatus"/> object of the deleted status.
+        /// </returns>
+        public TwitterStatus Delete(OAuthTokens tokens)
+        {
+            return Delete(tokens, this.Id, null);
         }
     }
 }

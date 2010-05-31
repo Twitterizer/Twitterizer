@@ -1,19 +1,170 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!--This file represents the results of running a test suite-->
-<test-results name="C:\Projects\twitterizer\Twitterizer2.nunit" total="1" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-05-29" time="11:18:42">
-  <environment nunit-version="2.5.2.9222" clr-version="2.0.50727.4927" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug" machine-name="SMITHRICKY" user="patricks" user-domain="INFINITY" />
+<test-results name="C:\ProjectFiles\twitterizer\Twitterizer2.nunit" total="18" errors="2" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-05-31" time="16:04:28">
+  <environment nunit-version="2.5.5.10112" clr-version="2.0.50727.4927" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="C:\ProjectFiles\twitterizer\Twitterizer2.TestCases\bin\Debug" machine-name="RICKY-PC" user="Ricky" user-domain="Ricky-PC" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite name="C:\Projects\twitterizer\Twitterizer2.nunit" executed="True" success="True" time="18.084" asserts="0">
+  <test-suite type="Project" name="C:\ProjectFiles\twitterizer\Twitterizer2.nunit" executed="True" result="Failure" success="False" time="13.218" asserts="0">
     <results>
-      <test-suite name="C:\Projects\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" executed="True" success="True" time="18.080" asserts="0">
+      <test-suite type="Assembly" name="C:\ProjectFiles\twitterizer\Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" executed="True" result="Failure" success="False" time="13.211" asserts="0">
         <results>
-          <test-suite name="Twitterizer2" executed="True" success="True" time="18.076" asserts="0">
+          <test-suite type="Namespace" name="Twitterizer2" executed="True" result="Failure" success="False" time="13.205" asserts="0">
             <results>
-              <test-suite name="TestCases" executed="True" success="True" time="18.073" asserts="0">
+              <test-suite type="Namespace" name="TestCases" executed="True" result="Failure" success="False" time="13.203" asserts="0">
                 <results>
-                  <test-suite name="TwitterListTests" executed="True" success="True" time="18.064" asserts="0">
+                  <test-suite type="TestFixture" name="PagingTests" executed="True" result="Failure" success="False" time="4.858" asserts="0">
                     <results>
-                      <test-case name="Twitterizer2.TestCases.TwitterListTests.GetStatuses" executed="True" success="True" time="18.059" asserts="3" />
+                      <test-case name="Twitterizer2.TestCases.PagingTests.Friends" executed="True" result="Error" success="False" time="1.174" asserts="1">
+                        <categories>
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                          <category name="Paging" />
+                        </categories>
+                        <failure>
+                          <message><![CDATA[System.NullReferenceException : Object reference not set to an instance of an object.]]></message>
+                          <stack-trace><![CDATA[at Twitterizer.TwitterStatusCollection.NextPage() in C:\ProjectFiles\twitterizer\Twitterizer2\Methods\Tweets\TwitterStatusCollection.cs:line 68
+at Twitterizer2.TestCases.PagingTests.Friends() in C:\ProjectFiles\twitterizer\Twitterizer2.TestCases\PagingTests.cs:line 85
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.PagingTests.Home" executed="True" result="Error" success="False" time="0.982" asserts="1">
+                        <categories>
+                          <category name="Read-Only" />
+                          <category name="Paging" />
+                          <category name="REST" />
+                        </categories>
+                        <failure>
+                          <message><![CDATA[System.NullReferenceException : Object reference not set to an instance of an object.]]></message>
+                          <stack-trace><![CDATA[at Twitterizer.TwitterStatusCollection.NextPage() in C:\ProjectFiles\twitterizer\Twitterizer2\Methods\Tweets\TwitterStatusCollection.cs:line 68
+at Twitterizer2.TestCases.PagingTests.Home() in C:\ProjectFiles\twitterizer\Twitterizer2.TestCases\PagingTests.cs:line 113
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.PagingTests.Mentions" executed="True" result="Success" success="True" time="1.243" asserts="4">
+                        <categories>
+                          <category name="Paging" />
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.PagingTests.UserTimeline" executed="True" result="Success" success="True" time="1.318" asserts="4">
+                        <categories>
+                          <category name="Paging" />
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterGeoTests" executed="True" result="Success" success="True" time="0.328" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterGeoTests.LookupPlaces" executed="True" result="Success" success="True" time="0.321" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterListTests" executed="True" result="Success" success="True" time="1.056" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterListTests.GetStatuses" executed="True" result="Success" success="True" time="1.056" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterSearchTests" executed="True" result="Success" success="True" time="0.467" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterSearchTests.Search" executed="True" result="Success" success="True" time="0.465" asserts="3">
+                        <categories>
+                          <category name="Search" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterStatusTests" executed="True" result="Success" success="True" time="0.628" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterStatusTests.Show" executed="True" result="Success" success="True" time="0.627" asserts="3">
+                        <categories>
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterTimelineTests" executed="True" result="Success" success="True" time="4.922" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.FriendTimeline" executed="True" result="Success" success="True" time="0.702" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.Mentions" executed="True" result="Success" success="True" time="0.397" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.PublicTimeline" executed="True" result="Success" success="True" time="1.163" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetedByMe" executed="True" result="Success" success="True" time="0.964" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetedToMe" executed="True" result="Success" success="True" time="0.976" asserts="3">
+                        <categories>
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.RetweetsOfMe" executed="True" result="Success" success="True" time="0.361" asserts="3">
+                        <categories>
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterTimelineTests.UserTimeline" executed="True" result="Success" success="True" time="0.337" asserts="3">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterTrendTests" executed="True" result="Success" success="True" time="0.265" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterTrendTests.CurrentTrends" executed="True" result="Success" success="True" time="0.265" asserts="1">
+                        <categories>
+                          <category name="Search" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TwitterUserTests" executed="True" result="Success" success="True" time="0.659" asserts="0">
+                    <results>
+                      <test-case name="Twitterizer2.TestCases.TwitterUserTests.Search" executed="True" result="Success" success="True" time="0.314" asserts="2">
+                        <categories>
+                          <category name="REST" />
+                          <category name="Read-Only" />
+                        </categories>
+                      </test-case>
+                      <test-case name="Twitterizer2.TestCases.TwitterUserTests.Show" executed="True" result="Success" success="True" time="0.337" asserts="4">
+                        <categories>
+                          <category name="Read-Only" />
+                          <category name="REST" />
+                        </categories>
+                      </test-case>
                     </results>
                   </test-suite>
                 </results>

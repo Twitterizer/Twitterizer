@@ -89,32 +89,33 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            if (this.Page <= 0)
+                this.Page = 1;
+
             ListStatusesOptions options = this.OptionalProperties as ListStatusesOptions;
 
-            if (options == null)
-            { 
-                return; 
+            if (options != null)
+            {
+                if (options.SinceId > 0)
+                {
+                    this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
+                }
+
+                if (options.MaxId > 0)
+                {
+                    this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
+                }
+
+                if (options.ItemsPerPage > 0)
+                {
+                    this.RequestParameters.Add("per_page", options.ItemsPerPage.ToString(CultureInfo.InvariantCulture));
+                }
+
+                if (this.Page <= 1 && options.Page > 1)
+                    this.Page = options.Page;
             }
 
-            if (options.SinceId > 0)
-            {
-                this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (options.MaxId > 0)
-            {
-                this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (options.ItemsPerPage > 0)
-            {
-                this.RequestParameters.Add("per_page", options.ItemsPerPage.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (options.Page > 0)
-            {
-                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
-            }
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

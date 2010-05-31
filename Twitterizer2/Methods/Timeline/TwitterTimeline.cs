@@ -80,22 +80,46 @@ namespace Twitterizer
         /// Gets the user time line.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
-        /// <param name="userId">The user id.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
         public static TwitterStatusCollection UserTimeline(
             OAuthTokens tokens,
-            decimal userId,
             TimelineOptions options)
         {
             Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, options);
-            
+
             TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
             result.Command = command;
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the user time line.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection UserTimeline(
+            OAuthTokens tokens)
+        {
+            return UserTimeline(tokens, null);
+        }
+
+        /// <summary>
+        /// Gets the user time line.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/> instance.
+        /// </returns>
+        public static TwitterStatusCollection UserTimeline(
+            TimelineOptions options)
+        {
+            return UserTimeline(null, options);
         }
 
         /// <summary>

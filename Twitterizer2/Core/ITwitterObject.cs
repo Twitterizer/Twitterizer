@@ -51,5 +51,11 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The oauth tokens.</value>
         OAuthTokens Tokens { get; set; }
+
+        /// <summary>
+        /// Gets details about the request attempted.
+        /// </summary>
+        /// <value>The last request status.</value>
+        RequestStatus RequestStatus { get; set; }
     }
 }

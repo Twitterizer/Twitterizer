@@ -7,6 +7,8 @@
     [TestFixture]
     public static class TwitterTimelineTests
     {
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void PublicTimeline()
         {
@@ -17,6 +19,20 @@
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Test]
+        public static void UserTimeline()
+        {
+            TwitterStatusCollection timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens());
+            Assert.IsNotNull(timeline);
+            Assert.IsNotEmpty(timeline);
+
+            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+        }
+
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void FriendTimeline()
         {
@@ -29,6 +45,8 @@
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void RetweetsOfMe()
         {
@@ -41,6 +59,8 @@
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void RetweetedByMe()
         {
@@ -53,6 +73,8 @@
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void RetweetedToMe()
         {
@@ -65,6 +87,8 @@
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void Mentions()
         {

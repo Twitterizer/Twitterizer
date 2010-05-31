@@ -65,15 +65,9 @@ namespace Twitterizer.Core
         public OAuthTokens Tokens { get; set; }
 
         /// <summary>
-        /// Gets details about the last request attempted.
+        /// Gets details about the request attempted.
         /// </summary>
         /// <value>The last request status.</value>
-        public static RequestStatus LastRequestStatus
-        {
-            get
-            {
-                return RequestStatus.LastRequestStatus;
-            }
-        }
+        public RequestStatus RequestStatus { get; set; }
     }
 }

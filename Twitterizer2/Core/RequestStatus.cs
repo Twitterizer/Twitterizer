@@ -169,60 +169,90 @@ namespace Twitterizer
         /// <returns>
         /// 	<c>true</c> if the status was updated successfully, otherwise <c>false</c>
         /// </returns>
-        internal static bool UpdateRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType)
+        internal static void UpdateRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType)
         {
-            LastRequestStatus.ResponseBody = Encoding.UTF8.GetString(responseData);
-            LastRequestStatus.FullPath = absoluteUri;
+            RequestStatus requestStatus = BuildRequestStatus(responseData, absoluteUri, statusCode, contentType);
+
+            UpdateRequestStatus(requestStatus);
+        }
+
+        /// <summary>
+        /// Updates the request status.
+        /// </summary>
+        /// <param name="requestStatus">The request status.</param>
+        internal static void UpdateRequestStatus(RequestStatus requestStatus)
+        {
+            lock (padlock)
+            {
+                lastRequestStatus = requestStatus;
+            }
+        }
+
+        /// <summary>
+        /// Builds the request status.
+        /// </summary>
+        /// <param name="responseData">The response data.</param>
+        /// <param name="absoluteUri">The absolute URI.</param>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns></returns>
+        internal static RequestStatus BuildRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType)
+        {
+            RequestStatus requestStatus = new RequestStatus();
+
+            requestStatus.ResponseBody = Encoding.UTF8.GetString(responseData);
+            requestStatus.FullPath = absoluteUri;
 
             // Lookup the status code and set the status accordingly
             switch (statusCode)
             {
                 case HttpStatusCode.OK:
-                    LastRequestStatus.Status = RequestResult.Success;
-                    return true;
+                    requestStatus.Status = RequestResult.Success;
+                    break;
 
                 case HttpStatusCode.BadRequest:
-                    LastRequestStatus.Status = RequestResult.BadRequest;
+                    requestStatus.Status = RequestResult.BadRequest;
                     break;
 
                 case HttpStatusCode.Unauthorized:
-                    LastRequestStatus.Status = RequestResult.Unauthorized;
+                    requestStatus.Status = RequestResult.Unauthorized;
                     break;
 
                 case HttpStatusCode.Forbidden:
-                    LastRequestStatus.Status = RequestResult.RateLimited;
+                    requestStatus.Status = RequestResult.RateLimited;
                     break;
 
                 case HttpStatusCode.NotFound:
-                    lastRequestStatus.Status = RequestResult.FileNotFound;
+                    requestStatus.Status = RequestResult.FileNotFound;
                     break;
 
                 default:
-                    LastRequestStatus.Status = RequestResult.Unknown;
-                    return false;
+                    requestStatus.Status = RequestResult.Unknown;
+                    break;
             }
 
             // Attempt to parse the error details returned by the API
             try
             {
-                if (contentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
+                if (responseData.Length > 0 && requestStatus.Status != RequestResult.Success)
                 {
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(TwitterErrorDetails));
-                    LastRequestStatus.ErrorDetails = xmlSerializer.Deserialize(new System.IO.MemoryStream(responseData)) as TwitterErrorDetails;
-                }
+                    if (contentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
+                    {
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(TwitterErrorDetails));
+                        requestStatus.ErrorDetails = xmlSerializer.Deserialize(new System.IO.MemoryStream(responseData)) as TwitterErrorDetails;
+                    }
 
-                if (contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
-                {
-                    LastRequestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
-
+                    if (contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+                    {
+                        requestStatus.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
+                    }
                 }
             }
             catch (Exception)
             {
                 // Do nothing.
             }
-
-            return true;
+            return requestStatus;
         }
     }
 }

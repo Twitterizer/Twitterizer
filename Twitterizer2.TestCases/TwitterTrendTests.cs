@@ -6,6 +6,8 @@
     [TestFixture]
     public static class TwitterTrendTests
     {
+        [Category("Read-Only")]
+        [Category("Search")]
         [Test]
         public static void CurrentTrends()
         {

@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// The user timeline command.
     /// </summary>
     internal sealed class UserTimelineCommand :
-        PagedCommand<TwitterStatusCollection>
+        PagedTimelineCommand<TwitterStatusCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
@@ -59,51 +59,17 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
-
-            UserTimelineOptions options = this.OptionalProperties as UserTimelineOptions;
-
-            if (options == null)
-            {
-                return;
-            }
-
-            if (options.UserId > 0)
-                this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.InvariantCulture));
-
-            if (!string.IsNullOrEmpty(options.ScreenName))
-                this.RequestParameters.Add("screen_name", options.ScreenName);
-
-            if (options.Count > 0)
-                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-            if (options.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Page > 0)
-                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
-
-            if (options.IncludeRetweets)
-                this.RequestParameters.Add("include_rts", "true");
-        }
-
-        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
         internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
         {
             return new UserTimelineCommand(
-                this.Tokens, 
-                this.OptionalProperties as UserTimelineOptions);
+                this.Tokens,
+                this.OptionalProperties as UserTimelineOptions)
+                {
+                    Page = this.Page
+                };
         }
     }
 }

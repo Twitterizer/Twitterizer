@@ -98,6 +98,18 @@ namespace Twitterizer
             }
         }
 
+        RequestStatus ITwitterObject.RequestStatus
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
         #endregion
     }
 }

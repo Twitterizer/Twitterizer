@@ -143,5 +143,19 @@ namespace Twitterizer
                 }
             }
         }
+
+        /// <summary>
+        /// Allows the authenticating users to unfollow the user specified.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// Returns the unfollowed user in the requested format when successful. Returns a string describing the failure condition when unsuccessful.
+        /// </returns>
+        public TwitterUser Delete(OAuthTokens tokens)
+        {
+            Commands.DeleteFriendshipCommand command = new Twitterizer.Commands.DeleteFriendshipCommand(tokens, this.Target.Id, string.Empty, null);
+
+            return CommandPerformer<TwitterUser>.PerformAction(command);
+        }
     }
 }

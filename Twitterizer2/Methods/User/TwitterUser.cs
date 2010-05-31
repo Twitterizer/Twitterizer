@@ -166,6 +166,13 @@ namespace Twitterizer
         public bool? IsFollowing { get; set; }
 
         /// <summary>
+        /// Gets or sets the a value indicating whether the authenticated user is followed by this user.
+        /// </summary>
+        /// <value>The is followed by.</value>
+        [JsonProperty(PropertyName = "followed_by")]
+        public bool? IsFollowedBy { get; set; }
+
+        /// <summary>
         /// Gets or sets the number of favorites.
         /// </summary>
         /// <value>The number of favorites.</value>

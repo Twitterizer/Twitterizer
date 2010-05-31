@@ -7,6 +7,8 @@
     public class TwitterGeoTests
     {
         [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
         public static void LookupPlaces()
         {
             TwitterPlaceLookupOptions options = new TwitterPlaceLookupOptions()

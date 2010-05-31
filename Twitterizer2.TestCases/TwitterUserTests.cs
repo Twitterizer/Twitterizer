@@ -6,6 +6,8 @@
     [TestFixture]
     public class TwitterUserTests
     {
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void Show()
         {
@@ -19,6 +21,8 @@
             Assert.That(!string.IsNullOrEmpty(user.Status.Text));
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
         [Test]
         public static void Search()
         {

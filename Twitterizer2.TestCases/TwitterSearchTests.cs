@@ -7,6 +7,8 @@
     public class TwitterSearchTests
     {
         [Test]
+        [Category("Read-Only")]
+        [Category("Search")]
         public static void Search()
         {
             SearchOptions options = new SearchOptions();

@@ -77,5 +77,11 @@ namespace Twitterizer.Core
                 }
             }
         }
+
+        /// <summary>
+        /// Gets details about the request attempted.
+        /// </summary>
+        /// <value>The last request status.</value>
+        public RequestStatus RequestStatus { get; set; }
     }
 }

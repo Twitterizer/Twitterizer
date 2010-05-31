@@ -138,7 +138,7 @@ namespace Twitterizer.Core
         /// <returns>The results of the command.</returns>
         public T ExecuteCommand()
         {
-            Trace.Write(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             // Check if the command is flagged to check for rate limiting.
             if (this.GetType().GetCustomAttributes(typeof(RateLimitedAttribute), false).Length > 0)
@@ -177,14 +177,15 @@ namespace Twitterizer.Core
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
-                    Trace.Write("Found in cache", "Twitterizer2");
-                    Trace.Write(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+                    Debug.WriteLine("Found in cache", "Twitterizer2");
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
                     return (T)cache[cacheKeyBuilder.ToString()];
                 }
             }
 
             // Declare the variable to be returned
             T resultObject = default(T);
+            RequestStatus requestStatus = null;
 
             // This must be set for all twitter request.
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -215,12 +216,13 @@ namespace Twitterizer.Core
 
                 responseData = ConversionUtility.ReadStream(webResponse.GetResponseStream());
 
-                // Update the last status
-                RequestStatus.UpdateRequestStatus(
+                // Build the request status (holds details about the last request) and update the singleton
+                requestStatus = RequestStatus.BuildRequestStatus(
                     responseData, 
                     webResponse.ResponseUri.AbsoluteUri, 
                     webResponse.StatusCode, 
                     webResponse.ContentType);
+                RequestStatus.UpdateRequestStatus(requestStatus);
 
                 // Parse the rate limiting HTTP Headers
                 ParseRateLimitHeaders(resultObject, webResponse);
@@ -234,15 +236,11 @@ namespace Twitterizer.Core
                 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
 
-                if (exceptionResponse == null || 
-                    !RequestStatus.UpdateRequestStatus(
+                RequestStatus.UpdateRequestStatus(
                         responseData, 
                         exceptionResponse.ResponseUri.AbsoluteUri, 
                         exceptionResponse.StatusCode, 
-                        exceptionResponse.ContentType))
-                {
-                    throw;
-                }
+                        exceptionResponse.ContentType);
 
                 return default(T);
             }
@@ -260,9 +258,10 @@ namespace Twitterizer.Core
             if (resultObject != null)
             {
                 resultObject.Tokens = this.Tokens;
+                resultObject.RequestStatus = requestStatus;
             }
 
-            Trace.Write(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             return resultObject;
         }
@@ -336,7 +335,7 @@ namespace Twitterizer.Core
                     CacheItemPriority.Normal,
                     null);
 
-                Trace.Write(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
+                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
             }
         }
         

@@ -84,8 +84,6 @@ namespace Twitterizer.Core
                     resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData)));
                 }
 
-                Trace.Write(resultObject, "Twitterizer2");
-
                 return resultObject;
             }
             catch (System.Exception)

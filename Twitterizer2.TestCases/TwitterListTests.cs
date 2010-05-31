@@ -11,6 +11,8 @@ namespace Twitterizer2.TestCases
     public class TwitterListTests
     {
         [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
         public static void GetStatuses()
         {
             OAuthTokens tokens = Configuration.GetTokens();
