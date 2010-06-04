@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class DeleteListCommand : TwitterCommand<TwitterList>
     {
         #region Constructors

@@ -140,14 +140,40 @@ namespace Twitterizer.Core
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
-            // Check if the command is flagged to check for rate limiting.
-            if (this.GetType().GetCustomAttributes(typeof(RateLimitedAttribute), false).Length > 0)
+            // Loop through all of the custom attributes assigned to the command class
+            foreach (Attribute attribute in this.GetType().GetCustomAttributes(false))
             {
-                // Get the rate limiting status
-                if (TwitterRateLimitStatus.GetStatus(this.Tokens).RemainingHits == 0)
+                if (attribute.GetType() == typeof(AuthorizedCommandAttribute))
                 {
-                    throw new TwitterizerException("You are being rate limited.");
+                    if (this.Tokens == null)
+                    {
+                        throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Tokens are required for the \"{0}\" command.", this.GetType()));
+                    }
+
+                    if (string.IsNullOrEmpty(this.Tokens.ConsumerKey) || 
+                        string.IsNullOrEmpty(this.Tokens.ConsumerSecret) || 
+                        string.IsNullOrEmpty(this.Tokens.AccessToken) || 
+                        string.IsNullOrEmpty(this.Tokens.AccessTokenSecret))
+                    {
+                        throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Token values cannot be null when executing the \"{0}\" command.", this.GetType()));
+                    }
                 }
+                else if (attribute.GetType() == typeof(RateLimitedAttribute))
+                {
+                    // Get the rate limiting status
+                    if (TwitterRateLimitStatus.GetStatus(this.Tokens).RemainingHits == 0)
+                    {
+                        throw new TwitterizerException("You are being rate limited.");
+                    }
+                }
+
+            }
+
+            // Check if the command is flagged as an authorized command
+            if (this.GetType().GetCustomAttributes(typeof(AuthorizedCommandAttribute), false).Length > 0)
+            {
+                // Verify that the tokens are supplied.
+
             }
 
             WebPermission permission = new WebPermission();

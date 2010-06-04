@@ -51,9 +51,9 @@ namespace Twitterizer.Commands
         public ListFavoritesCommand(OAuthTokens tokens, ListFavoritesOptions options)
             : base(HTTPVerb.GET, "favorites.json", tokens, options)
         {
-            if (tokens == null)
+            if (tokens == null && options == null)
             {
-                throw new ArgumentNullException("tokens");
+                throw new ArgumentException("Valid tokens or user must be supplied.");
             }
         }
 

@@ -41,6 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Mentions Command class
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class MentionsCommand : PagedTimelineCommand<TwitterStatusCollection>
     {
         /// <summary>

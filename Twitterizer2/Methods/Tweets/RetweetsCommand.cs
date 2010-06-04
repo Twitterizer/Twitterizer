@@ -41,6 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The retweets command class.
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class RetweetsCommand : TwitterCommand<TwitterStatusCollection>
     {
         #region Constructors

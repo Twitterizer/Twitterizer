@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Direct Messages Command
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class DirectMessagesCommand : PagedCommand<TwitterDirectMessageCollection>
     {
         /// <summary>

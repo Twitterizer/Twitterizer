@@ -41,6 +41,7 @@ namespace Twitterizer.Commands
     /// The Home Timeline Command
     /// </summary>
     [Serializable]
+    [AuthorizedCommandAttribute]
     internal sealed class HomeTimelineCommand : PagedTimelineCommand<TwitterStatusCollection>
     {
         /// <summary>

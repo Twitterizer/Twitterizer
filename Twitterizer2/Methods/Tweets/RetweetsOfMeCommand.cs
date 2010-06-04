@@ -41,6 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Retweets Of Me Command.
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class RetweetsOfMeCommand : PagedCommand<TwitterStatusCollection>
     {
         #region Constructors

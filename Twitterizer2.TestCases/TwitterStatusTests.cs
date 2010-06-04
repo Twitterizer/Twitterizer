@@ -49,5 +49,28 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(deletedStatus);
             Assert.That(newStatus.Id == deletedStatus.Id);
         }
+
+        [Category("Core")]
+        [Test]
+        [ExpectedException(ExpectedException=typeof(ArgumentException))]
+        public static void TestTokenValidation()
+        {
+            OAuthTokens fakeTokens = new OAuthTokens();
+            TwitterStatus.Update(fakeTokens, "This shouldn't work");
+        }
+
+        [Category("Core")]
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException))]
+        public static void TestTokenValidation2()
+        {
+            OAuthTokens fakeTokens = new OAuthTokens()
+                {
+                    ConsumerKey = "fake",
+                    ConsumerSecret = "fake"
+                };
+
+            TwitterStatus.Update(fakeTokens, "This shouldn't work");
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The list membership command class
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
     {
         /// <summary>

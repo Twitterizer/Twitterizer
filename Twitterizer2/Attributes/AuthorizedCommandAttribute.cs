@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DeleteFavoriteCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="AuthorizedCommandAttribute.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,57 +29,22 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The delete favorite command class.</summary>
+// <summary>The authorized command attribute class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+namespace Twitterizer.Core
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer.Core;
-
     /// <summary>
-    /// The delete favoriate command class. 
-    /// Un-favorites the status specified in the ID parameter as the authenticating user. 
-    /// Returns the un-favorited status in the requested format when successful.
+    /// Indicates that a command class requires authorization tokens.
     /// </summary>
-    [AuthorizedCommandAttribute]
-    internal sealed class DeleteFavoriteCommand : TwitterCommand<TwitterStatus>
+    [global::System.AttributeUsage(System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    internal sealed class AuthorizedCommandAttribute : System.Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteFavoriteCommand"/> class.
+        /// Initializes a new instance of the <see cref="AuthorizedCommandAttribute"/> class.
         /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="statusId">The status id.</param>
-        /// <param name="options">The options.</param>
-        public DeleteFavoriteCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options)
-            : base(HTTPVerb.POST, "/favorites/destroy.json", tokens, options)
+        public AuthorizedCommandAttribute()
         {
-            if (statusId <= 0)
-            {
-                throw new ArgumentException("Status Id is required.");
-            }
-
-            if (tokens == null)
-            {
-                throw new ArgumentNullException("tokens");
-            }
-
-            this.StatusId = statusId;
-        }
-
-        /// <summary>
-        /// Gets or sets the status id.
-        /// </summary>
-        /// <value>The status id.</value>
-        public decimal StatusId { get; set; }
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            this.RequestParameters.Add("id", this.StatusId.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

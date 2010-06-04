@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
+    <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
     <Compile Include="Methods\Direct Message\DeleteDirectMessageCommand.cs" />
     <Compile Include="Methods\Direct Message\DirectMessagesCommand.cs" />

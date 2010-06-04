@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// Creates a friendship between the authenticated user and another user
     /// </summary>
+    [AuthorizedCommandAttribute]
     internal sealed class CreateFriendshipCommand : Core.TwitterCommand<TwitterUser>
     {
         /// <summary>
