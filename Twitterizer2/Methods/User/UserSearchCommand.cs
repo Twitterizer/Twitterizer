@@ -76,20 +76,23 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            if (this.Page <= 0)
+                this.Page = 1;
+
             this.RequestParameters.Add("q", this.Query);
 
             UserSearchOptions options = this.OptionalProperties as UserSearchOptions;
 
-            if (options == null)
+            if (options != null)
             {
-                return;
+                if (options.NumberPerPage > 0)
+                    this.RequestParameters.Add("per_page", options.NumberPerPage.ToString(CultureInfo.InvariantCulture));
+
+                if (this.Page <= 1 && options.Page > 1)
+                    this.Page = options.Page;
             }
 
-            if (options.NumberPerPage > 0)
-                this.RequestParameters.Add("per_page", options.NumberPerPage.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Page > 0)
-                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

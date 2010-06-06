@@ -65,25 +65,26 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("page", "1");
+            if (this.Page <= 0)
+                this.Page = 1;
 
             RetweetsOfMeOptions options = this.OptionalProperties as RetweetsOfMeOptions;
-            if (options == null)
+            if (options != null)
             {
-                return;
+                if (options.SinceStatusId > 0)
+                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.MaxStatusId > 0)
+                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.Count > 0)
+                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+                if (this.Page <= 1 && options.Page > 1)
+                    this.Page = options.Page;
             }
 
-            if (options.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Count > 0)
-                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Page > 0)
-                this.RequestParameters["page"] = options.Page.ToString(CultureInfo.InvariantCulture);
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
