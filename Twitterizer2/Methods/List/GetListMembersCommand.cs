@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DirectMessagesSentCommand.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="GetListMembersCommand.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,62 +29,73 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The Direct Messages Sent Command class.</summary>
+// <summary>The get list members command class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
-    using Twitterizer;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The Direct Messages Sent Command class
+    /// Returns the members of the specified list.
     /// </summary>
-    [AuthorizedCommandAttribute]
-    internal sealed class DirectMessagesSentCommand : PagedCommand<TwitterDirectMessageCollection>
+    [AuthorizedCommand]
+    internal class GetListMembersCommand : CursorPagedCommand<TwitterUserCollection>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DirectMessagesSentCommand"/> class.
+        /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
         /// </summary>
-        /// <param name="tokens">The request tokens.</param>
+        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
-        public DirectMessagesSentCommand(OAuthTokens tokens, DirectMessagesSentOptions options)
-            : base(HTTPVerb.GET, "direct_messages/sent.json", tokens, options)
+        public GetListMembersCommand(OAuthTokens requestTokens, string username, decimal listId, OptionalProperties options)
+            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "/{0}/{1}/members.json", username, listId), requestTokens, options)
         {
-            if (tokens == null)
+            if (requestTokens == null)
             {
-                throw new ArgumentNullException("tokens");
+                throw new ArgumentNullException("requestTokens");
             }
+
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username");
+            }
+
+            if (listId <= 0)
+            {
+                throw new ArgumentNullException("listId");
+            }
+
+            this.ListId = listId;
+            this.Username = username;
         }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string Username { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list id.
+        /// </summary>
+        /// <value>The list id.</value>
+        public decimal ListId { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
-            DirectMessagesSentOptions options = this.OptionalProperties as DirectMessagesSentOptions;
-
-            if (options != null)
+            if (this.Cursor <= 0)
             {
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
+                this.Cursor = -1;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InstalledUICulture));
+            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -93,9 +104,9 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override TwitterCommand<TwitterDirectMessageCollection> Clone()
+        internal override TwitterCommand<TwitterUserCollection> Clone()
         {
-            return new DirectMessagesSentCommand(this.Tokens, this.OptionalProperties as DirectMessagesSentOptions);
+            return new GetListMembersCommand(this.Tokens, this.Username, this.ListId, this.OptionalProperties);
         }
     }
 }

@@ -105,9 +105,13 @@
     <Compile Include="Methods\Geo\TwitterPlace.cs" />
     <Compile Include="Methods\Geo\TwitterPlaceCollection.cs" />
     <Compile Include="Methods\Geo\TwitterPlaceLookupOptions.cs" />
+    <Compile Include="Methods\List\AddListMemberCommand.cs" />
+    <Compile Include="Methods\List\CheckListMembershipCommand.cs" />
+    <Compile Include="Methods\List\RemoveListMemberCommand.cs" />
     <Compile Include="Methods\List\CreateListCommand.cs" />
     <Compile Include="Methods\Friendship\DeleteFriendshipCommand.cs" />
     <Compile Include="Methods\List\DeleteListCommand.cs" />
+    <Compile Include="Methods\List\GetListMembersCommand.cs" />
     <Compile Include="Methods\List\GetListSubscriptionsCommand.cs" />
     <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />

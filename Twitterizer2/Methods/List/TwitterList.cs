@@ -153,9 +153,8 @@ namespace Twitterizer
         }
         #endregion
 
-        #region Static Members
         /// <summary>
-        /// Creates a new list.
+        /// Creates a new list for the authenticated user. Accounts are limited to 20 lists.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="username">The username.</param>
@@ -176,7 +175,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Modifies a list.
+        /// Updates the specified list.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="username">The username.</param>
@@ -223,7 +222,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets a single list by id number.
+        /// Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
@@ -240,7 +239,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Deletes the specified list.
+        /// Deletes the specified list. Must be owned by the authenticated user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
@@ -326,6 +325,142 @@ namespace Twitterizer
         {
             return GetSubscriptions(tokens, null);
         }
-        #endregion
+
+
+        /// <summary>
+        /// Returns the members of the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A collection of users as <see cref="TwitterUserCollection"/>.
+        /// </returns>
+        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, decimal listId, OptionalProperties options)
+        {
+            Commands.GetListMembersCommand command = new Twitterizer.Commands.GetListMembersCommand(tokens, username, listId, options);
+
+            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns the members of the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listId">The list id.</param>
+        /// <returns>
+        /// A collection of users as <see cref="TwitterUserCollection"/>.
+        /// </returns>
+        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, decimal listId)
+        {
+            return GetMembers(tokens, username, listId, null);
+        }
+
+        /// <summary>
+        /// Add a member to a list. The authenticated user must own the list to be able to add members to it. Lists are limited to having 500 members.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="ownerUsername">The username of the list owner.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="userIdToAdd">The user id to add.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
+        /// </returns>
+        public static TwitterList AddMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd, OptionalProperties options)
+        {
+            Commands.AddListMemberCommand command = new Twitterizer.Commands.AddListMemberCommand(tokens, ownerUsername, listId, userIdToAdd, options);
+
+            return CommandPerformer<TwitterList>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Add a member to a list. The authenticated user must own the list to be able to add members to it. Lists are limited to having 500 members.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="ownerUsername">The username of the list owner.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="userIdToAdd">The user id to add.</param>
+        /// <returns>
+        /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
+        /// </returns>
+        public static TwitterList AddMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd)
+        {
+            return AddMember(tokens, ownerUsername, listId, userIdToAdd, null);
+        }
+
+        /// <summary>
+        /// Removes the specified member from the list. The authenticated user must be the list's owner to remove members from the list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="ownerUsername">The username of the list owner.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="userIdToAdd">The user id to add.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
+        /// </returns>
+        public static TwitterList RemoveMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd, OptionalProperties options)
+        {
+            Commands.RemoveListMemberCommand command = new Twitterizer.Commands.RemoveListMemberCommand(tokens, ownerUsername, listId, userIdToAdd, options);
+
+            return CommandPerformer<TwitterList>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Removes the specified member from the list. The authenticated user must be the list's owner to remove members from the list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="ownerUsername">The username of the list owner.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="userIdToAdd">The user id to add.</param>
+        /// <returns>
+        /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
+        /// </returns>
+        public static TwitterList RemoveMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd)
+        {
+            return RemoveMember(tokens, ownerUsername, listId, userIdToAdd, null);
+        }
+
+        /// <summary>
+        /// Check if a user is a member of the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="ownerUsername">The username of the list owner.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The user's details, if they are a member of the list, otherwise <c>null</c>.
+        /// </returns>
+        public static TwitterUser CheckMembership(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userId, OptionalProperties options)
+        {
+            Commands.CheckListMembershipCommand command = new Twitterizer.Commands.CheckListMembershipCommand(
+                tokens,
+                ownerUsername,
+                listId,
+                userId,
+                options);
+
+            return CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Check if a user is a member of the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="ownerUsername">The username of the list owner.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The user's details, if they are a member of the list, otherwise <c>null</c>.
+        /// </returns>
+        public static TwitterUser CheckMembership(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userId)
+        {
+            return CheckMembership(tokens, ownerUsername, listId, userId, null);
+        }
     }
 }
