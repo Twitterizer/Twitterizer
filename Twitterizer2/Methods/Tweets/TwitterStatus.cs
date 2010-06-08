@@ -310,7 +310,6 @@ namespace Twitterizer
         /// Retweets a tweet. Requires the id parameter of the tweet you are retweeting. (say that 5 times fast)
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterStatus"/> representing the newly created tweet.
         /// </returns>

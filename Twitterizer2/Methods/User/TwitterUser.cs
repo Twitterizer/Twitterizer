@@ -394,6 +394,52 @@ namespace Twitterizer
         public static TwitterUserCollection Search(OAuthTokens tokens, string query)
         {
             return Search(tokens, query, null);
-        } 
+        }
+
+        #region Account update methods
+        /// <summary>
+        /// Sets one or more hex values that control the color scheme of the authenticating user's profile page on twitter.com
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The user, with updated data, as a <see cref="TwitterUser"/>
+        /// </returns>
+        public static TwitterUser UpdateProfileColors(OAuthTokens tokens, UpdateProfileColorsOptions options)
+        {
+            Commands.UpdateProfileColorsCommand command = new Twitterizer.Commands.UpdateProfileColorsCommand(tokens, options);
+
+            return CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Updates the authenticating user's profile image. 
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="image">The avatar image for the profile. Must be a valid GIF, JPG, or PNG image of less than 700 kilobytes in size. Images with width larger than 500 pixels will be scaled down.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The user, with updated data, as a <see cref="TwitterUser"/>
+        /// </returns>
+        public static TwitterUser UpdateProfileImage(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
+        {
+            Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
+
+            return CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Updates the authenticating user's profile image.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="image">The avatar image for the profile. Must be a valid GIF, JPG, or PNG image of less than 700 kilobytes in size. Images with width larger than 500 pixels will be scaled down.</param>
+        /// <returns>
+        /// The user, with updated data, as a <see cref="TwitterUser"/>
+        /// </returns>
+        public static TwitterUser UpdateProfileImage(OAuthTokens tokens, TwitterImage image)
+        {
+            return UpdateProfileImage(tokens, image, null);
+        }
+        #endregion
     }
 }

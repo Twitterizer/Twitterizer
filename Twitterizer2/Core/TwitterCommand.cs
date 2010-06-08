@@ -115,7 +115,13 @@ namespace Twitterizer.Core
         /// <value>The request parameters.</value>
         public Dictionary<string, string> RequestParameters { get; set; }
 
-         /// <summary>
+        /// <summary>
+        /// Gets or sets the image to upload.
+        /// </summary>
+        /// <value>The image to upload.</value>
+        public TwitterImage ImageToUpload { get; set; }
+
+        /// <summary>
         /// Gets or sets the serialization delegate.
         /// </summary>
         /// <value>The serialization delegate.</value>
@@ -225,14 +231,33 @@ namespace Twitterizer.Core
                 // If we have OAuth tokens, then build and execute an OAuth request.
                 if (this.Tokens != null)
                 {
-                    webResponse = OAuthUtility.BuildOAuthRequestAndGetResponse(
-                        this.Uri.AbsoluteUri,
-                        queryParameters,
-                        this.Verb,
-                        this.Tokens.ConsumerKey,
-                        this.Tokens.ConsumerSecret,
-                        this.Tokens.AccessToken,
-                        this.Tokens.AccessTokenSecret);
+                    if (this.ImageToUpload != null)
+                    {
+                        webResponse = OAuthUtility.ExecuteRequest(
+                            this.Uri.AbsoluteUri,
+                            "image",
+                            this.ImageToUpload.Filename,
+                            this.ImageToUpload.Data,
+                            this.ImageToUpload.GetMimeType(),
+                            queryParameters,
+                            this.Tokens.ConsumerKey,
+                            this.Tokens.ConsumerSecret,
+                            this.Tokens.AccessToken,
+                            this.Tokens.AccessTokenSecret,
+                            this.OptionalProperties != null ? this.OptionalProperties.Proxy : null);
+                    }
+                    else
+                    {
+                        webResponse = OAuthUtility.ExecuteRequest(
+                            this.Uri.AbsoluteUri,
+                            queryParameters,
+                            this.Verb,
+                            this.Tokens.ConsumerKey,
+                            this.Tokens.ConsumerSecret,
+                            this.Tokens.AccessToken,
+                            this.Tokens.AccessTokenSecret,
+                            this.OptionalProperties != null ? this.OptionalProperties.Proxy : null);
+                    }
                 }
                 else
                 {
@@ -259,6 +284,11 @@ namespace Twitterizer.Core
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse exceptionResponse = wex.Response as HttpWebResponse;
+
+                if (wex.Response == null)
+                {
+                    throw;
+                }
                 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
 

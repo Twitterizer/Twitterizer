@@ -101,12 +101,13 @@ namespace Twitterizer
 
             try
             {
-                HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
+                HttpWebResponse webResponse = ExecuteRequest(
                     "https://api.twitter.com/oauth/request_token",
                     parameters,
                     HTTPVerb.POST,
                     consumerKey,
                     consumerSecret,
+                    null,
                     null,
                     null);
 
@@ -164,14 +165,15 @@ namespace Twitterizer
                     parameters.Add("oauth_verifier", verifier);
                 }
 
-                HttpWebResponse webResponse = BuildOAuthRequestAndGetResponse(
+                HttpWebResponse webResponse = ExecuteRequest(
                     "https://api.twitter.com/oauth/access_token",
                     parameters,
                     HTTPVerb.POST,
                     consumerKey,
                     consumerSecret,
                     requestToken,
-                    string.Empty);
+                    string.Empty,
+                    null);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
@@ -289,8 +291,85 @@ namespace Twitterizer
             return GetAccessToken(consumerKey, consumerSecret, requestToken, verifier);
         }
 
+        internal static HttpWebResponse ExecuteRequest(
+            string baseUrl,
+            string fileParameterName,
+            string filename,
+            byte[] fileData,
+            string mimeType,
+            Dictionary<string, string> parameters,
+            string consumerKey,
+            string consumerSecret,
+            string token,
+            string tokenSecret,
+            WebProxy proxy)
+        {
+            Dictionary<string, string> combinedParameters = PrepareOAuthParameters(
+                baseUrl, 
+                parameters, 
+                HTTPVerb.POST, 
+                consumerKey, 
+                consumerSecret, 
+                token, 
+                tokenSecret);
+
+            WebPermission permission = new WebPermission();
+            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            permission.Demand();
+
+            baseUrl = AppendParametersForPOST(baseUrl, combinedParameters);
+
+            // Build the POST body.
+            string boundaryTicks = DateTime.Now.Ticks.ToString("x");
+            string contentBoundary = string.Format("--{0}\r\n", boundaryTicks);
+            string endBoundary = string.Format("--{0}--\r\n", boundaryTicks);
+            Encoding encoding = Encoding.GetEncoding("ISO-8859-1");
+
+            string contentDisposition = string.Format(
+                "Content-Disposition: form-data;name=\"image\";filename=\"{0}\"\r\nContent-Type: {1}\r\n\r\n",
+                filename,
+                mimeType);
+
+            byte[] formData = encoding.GetBytes(
+                string.Format(
+                    "{0}{1}{2}\r\n{3}",
+                    contentBoundary,
+                    contentDisposition,
+                    Encoding.Default.GetString(fileData),
+                    endBoundary)
+                );
+
+            // Create and setup the request
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
+            request.Method = "POST";
+            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+            request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
+            request.ContentType = string.Concat("multipart/form-data;boundary=", boundaryTicks);
+            request.AllowWriteStreamBuffering = true;
+            request.ContentLength = formData.Length;
+            request.Proxy = proxy;
+
+            // Stream the form data to the request
+            using (Stream reqStream = request.GetRequestStream())
+            {
+                reqStream.Write(formData, 0, formData.Length);
+                reqStream.Flush();
+            }
+
+#if DEBUG
+            Console.WriteLine("----- Headers -----");
+            foreach (string key in request.Headers.AllKeys)
+            {
+                Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} = {1}\n", key, request.Headers[key]));
+            }
+
+            Console.WriteLine("----- End Of Headers -----");
+#endif
+            return (HttpWebResponse)request.GetResponse();
+        }
+
         /// <summary>
-        /// Creates the OAuth request.
+        /// Creates and executes an OAuth signed HTTP request.
         /// </summary>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="parameters">The parameters.</param>
@@ -302,14 +381,108 @@ namespace Twitterizer
         /// <returns>
         /// A new instance of the <see cref="System.Net.HttpWebRequest"/> class.
         /// </returns>
-        internal static HttpWebResponse BuildOAuthRequestAndGetResponse(
+        internal static HttpWebResponse ExecuteRequest(
             string baseUrl,
             Dictionary<string, string> parameters,
             Core.HTTPVerb verb,
             string consumerKey,
             string consumerSecret,
             string token,
-            string tokenSecret)
+            string tokenSecret,
+            WebProxy proxy)
+        {
+            Dictionary<string, string> combinedParameters = PrepareOAuthParameters(
+                baseUrl, 
+                parameters, 
+                verb, 
+                consumerKey, 
+                consumerSecret, 
+                token, 
+                tokenSecret);
+
+            WebPermission permission = new WebPermission();
+            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
+            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
+            permission.Demand();
+
+            HttpWebResponse response;
+
+            if (verb == HTTPVerb.POST)
+            {
+                baseUrl = AppendParametersForPOST(baseUrl, combinedParameters);
+            }
+            else
+            {
+                string querystring = GenerateGetQueryString(combinedParameters);
+                if (!string.IsNullOrEmpty(querystring))
+                {
+                    baseUrl = string.Concat(baseUrl, "?", querystring);
+                }
+            }
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
+            request.Method = verb.ToString();
+            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+            request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
+            request.Proxy = proxy;
+
+            if (verb == HTTPVerb.POST)
+            {
+                request.ContentType = "application/x-www-form-urlencoded";
+            }
+
+#if DEBUG
+            Console.WriteLine("----- Headers -----");
+            foreach (string key in request.Headers.AllKeys)
+            {
+                Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} = {1}\n", key, request.Headers[key]));
+            }
+            
+            Console.WriteLine("----- End Of Headers -----");
+#endif
+            response = (HttpWebResponse)request.GetResponse();
+
+            return response;
+        }
+
+        private static string AppendParametersForPOST(string baseUrl, Dictionary<string, string> combinedParameters)
+        {
+            StringBuilder requestParametersBuilder = new StringBuilder();
+
+            foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_") || p.Key == "oauth_verifier"))
+            {
+                if (requestParametersBuilder.Length > 0)
+                {
+                    requestParametersBuilder.Append("&");
+                }
+
+                requestParametersBuilder.AppendFormat(
+                    "{0}={1}",
+                    item.Key,
+                    EncodeForUrl(item.Value));
+            }
+
+            if (requestParametersBuilder.Length > 0)
+                baseUrl = string.Concat(baseUrl, "?", requestParametersBuilder.ToString());
+
+            return baseUrl;
+        }
+
+        /// <summary>
+        /// Prepares the OAuth parameters.
+        /// </summary>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="verb">The verb.</param>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="tokenSecret">The token secret.</param>
+        /// <returns>
+        /// 
+        /// </returns>
+        private static Dictionary<string, string> PrepareOAuthParameters(string baseUrl, Dictionary<string, string> parameters, Core.HTTPVerb verb, string consumerKey, string consumerSecret, string token, string tokenSecret)
         {
             Dictionary<string, string> combinedParameters = new Dictionary<string, string>();
 
@@ -329,7 +502,7 @@ namespace Twitterizer
             combinedParameters.Add("oauth_signature_method", "HMAC-SHA1");
             combinedParameters.Add("oauth_consumer_key", consumerKey);
             combinedParameters.Add("oauth_consumer_secret", consumerSecret);
-            
+
             if (!string.IsNullOrEmpty(token))
             {
                 combinedParameters.Add("oauth_token", token);
@@ -347,64 +520,7 @@ namespace Twitterizer
                 consumerSecret,
                 tokenSecret);
 
-            WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            permission.Demand();
-
-            HttpWebResponse response;
-
-            if (verb == HTTPVerb.POST)
-            {
-                StringBuilder requestParametersBuilder = new StringBuilder();
-
-                foreach (KeyValuePair<string, string> item in combinedParameters.Where(p => !p.Key.Contains("oauth_") || p.Key == "oauth_verifier"))
-                {
-                    if (requestParametersBuilder.Length > 0)
-                    {
-                        requestParametersBuilder.Append("&");
-                    }
-
-                    requestParametersBuilder.AppendFormat(
-                        "{0}={1}",
-                        item.Key,
-                        EncodeForUrl(item.Value));
-                }
-
-                baseUrl = string.Concat(baseUrl, "?", requestParametersBuilder.ToString());
-            }
-            else
-            {
-                string querystring = GenerateGetQueryString(combinedParameters);
-                if (!string.IsNullOrEmpty(querystring))
-                {
-                    baseUrl = string.Concat(baseUrl, "?", querystring);
-                }
-            }
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baseUrl);
-            request.Method = verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
-            request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
-
-            if (verb == HTTPVerb.POST)
-            {
-                request.ContentType = "application/x-www-form-urlencoded";
-            }
-
-#if DEBUG
-            Console.WriteLine("----- Headers -----");
-            foreach (string key in request.Headers.AllKeys)
-            {
-                Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} = {1}\n", key, request.Headers[key]));
-            }
-            
-            Console.WriteLine("----- End Of Headers -----");
-#endif
-            response = (HttpWebResponse)request.GetResponse();
-
-            return response;
+            return combinedParameters;
         }
 
         /// <summary>

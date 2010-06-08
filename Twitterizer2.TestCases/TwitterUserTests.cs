@@ -32,5 +32,19 @@
             Assert.IsNotNull(results);
             Assert.IsNotEmpty(results);
         }
+
+        [Category("Read-Write")]
+        [Category("REST")]
+        [Test]
+        [Ignore]
+        public static void UploadProfileImage()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterImage newProfileImage = TwitterImage.ReadFromDisk("Paper_Cup.jpg");
+            TwitterUser updatedUser = TwitterUser.UpdateProfileImage(tokens, newProfileImage, null);
+
+            Assert.IsNotNull(updatedUser);
+        }
     }
 }

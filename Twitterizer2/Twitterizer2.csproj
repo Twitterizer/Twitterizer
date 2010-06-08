@@ -81,7 +81,11 @@
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
+    <Compile Include="Core\TwitterImage.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
+    <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
+    <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
     <Compile Include="Methods\Direct Message\DeleteDirectMessageCommand.cs" />
     <Compile Include="Methods\Direct Message\DirectMessagesCommand.cs" />
     <Compile Include="Methods\Direct Message\DirectMessagesOptions.cs">

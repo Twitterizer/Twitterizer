@@ -87,14 +87,15 @@ namespace Twitterizer
 
             try
             {
-                HttpWebResponse webResponse = OAuthUtility.BuildOAuthRequestAndGetResponse(
+                HttpWebResponse webResponse = OAuthUtility.ExecuteRequest(
                     "https://api.twitter.com/oauth/access_token",
                     parameters,
                     HTTPVerb.POST,
                     consumerKey,
                     consumerSecret,
                     string.Empty,
-                    string.Empty);
+                    string.Empty,
+                    null);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 

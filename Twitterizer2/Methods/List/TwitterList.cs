@@ -454,7 +454,6 @@ namespace Twitterizer
         /// <param name="ownerUsername">The username of the list owner.</param>
         /// <param name="listId">The list id.</param>
         /// <param name="userId">The user id.</param>
-        /// <param name="options">The options.</param>
         /// <returns>
         /// The user's details, if they are a member of the list, otherwise <c>null</c>.
         /// </returns>
