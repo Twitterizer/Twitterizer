@@ -37,6 +37,8 @@ namespace Twitterizer.Commands
     using System;
     using System.Globalization;
     using Twitterizer.Core;
+using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Returns the members of the specified list.
@@ -52,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
         public GetListMembersCommand(OAuthTokens requestTokens, string username, decimal listId, OptionalProperties options)
-            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "/{0}/{1}/members.json", username, listId), requestTokens, options)
+            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/{1}/members.json", username, listId), requestTokens, options)
         {
             if (requestTokens == null)
             {
@@ -71,6 +73,8 @@ namespace Twitterizer.Commands
 
             this.ListId = listId;
             this.Username = username;
+
+            this.DeserializationHandler = this.Deserialize;
         }
 
         /// <summary>
@@ -107,6 +111,19 @@ namespace Twitterizer.Commands
         internal override TwitterCommand<TwitterUserCollection> Clone()
         {
             return new GetListMembersCommand(this.Tokens, this.Username, this.ListId, this.OptionalProperties);
+        }
+
+        /// <summary>
+        /// Deserializes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public TwitterUserCollection Deserialize(JObject value)
+        {
+            if (value == null || value.First == null || value.First.First == null)
+                return null;
+
+            return JsonConvert.DeserializeObject<TwitterUserCollection>(value.First.First.ToString());
         }
     }
 }

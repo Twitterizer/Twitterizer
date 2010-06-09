@@ -201,10 +201,11 @@ namespace Twitterizer
         public static TwitterListCollection GetLists(OAuthTokens tokens, string username, OptionalProperties options)
         {
             Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, username, options);
-            TwitterListWrapper resultWrapper = Core.CommandPerformer<TwitterListWrapper>.PerformAction(command);
+            TwitterListCollection results = Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
 
-            TwitterListCollection results = resultWrapper.Lists;
-            results.Command = command;
+            if (results != null)
+                results.Command = command;
+
             return results;
         }
 

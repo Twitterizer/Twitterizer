@@ -36,7 +36,7 @@
         [Category("Read-Write")]
         [Category("REST")]
         [Test]
-        [Ignore]
+        
         public static void UploadProfileImage()
         {
             OAuthTokens tokens = Configuration.GetTokens();

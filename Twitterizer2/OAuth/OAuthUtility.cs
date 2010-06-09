@@ -69,6 +69,11 @@ namespace Twitterizer
             return GetRequestToken(consumerKey, consumerSecret, string.Empty);
         }
 
+        public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress)
+        {
+            return GetRequestToken(consumerKey, consumerSecret, callbackAddress, null);
+        }
+
         /// <summary>
         /// Gets a new OAuth request token from the twitter api.
         /// </summary>
@@ -78,7 +83,7 @@ namespace Twitterizer
         /// <returns>
         /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
         /// </returns>
-        public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress)
+        public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress, WebProxy proxy)
         {
             if (string.IsNullOrEmpty(consumerKey))
             {
@@ -109,7 +114,7 @@ namespace Twitterizer
                     consumerSecret,
                     null,
                     null,
-                    null);
+                    proxy);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
@@ -138,6 +143,22 @@ namespace Twitterizer
         /// An <see cref="OAuthTokenResponse"/> class containing access token information.
         /// </returns>
         public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken, string verifier)
+        {
+            return GetAccessToken(consumerKey, consumerSecret, requestToken, verifier, null);
+        }
+
+        /// <summary>
+        /// Gets the access token from pin.
+        /// </summary>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="requestToken">The request token.</param>
+        /// <param name="verifier">The pin number or verifier string.</param>
+        /// <param name="proxy">The proxy.</param>
+        /// <returns>
+        /// An <see cref="OAuthTokenResponse"/> class containing access token information.
+        /// </returns>
+        public static OAuthTokenResponse GetAccessToken(string consumerKey, string consumerSecret, string requestToken, string verifier, WebProxy proxy)
         {
             if (string.IsNullOrEmpty(consumerKey))
             {
@@ -323,14 +344,13 @@ namespace Twitterizer
             string boundaryTicks = DateTime.Now.Ticks.ToString("x");
             string contentBoundary = string.Format("--{0}\r\n", boundaryTicks);
             string endBoundary = string.Format("--{0}--\r\n", boundaryTicks);
-            Encoding encoding = Encoding.GetEncoding("ISO-8859-1");
 
             string contentDisposition = string.Format(
                 "Content-Disposition: form-data;name=\"image\";filename=\"{0}\"\r\nContent-Type: {1}\r\n\r\n",
                 filename,
                 mimeType);
 
-            byte[] formData = encoding.GetBytes(
+            byte[] formData = Encoding.UTF8.GetBytes(
                 string.Format(
                     "{0}{1}{2}\r\n{3}",
                     contentBoundary,

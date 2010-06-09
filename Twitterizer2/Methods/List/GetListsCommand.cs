@@ -36,6 +36,8 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Twitterizer;
     using Twitterizer.Core;
 
@@ -43,7 +45,7 @@ namespace Twitterizer.Commands
     /// The get lists command class
     /// </summary>
     [Serializable]
-    internal sealed class GetListsCommand : CursorPagedCommand<TwitterListWrapper>
+    internal sealed class GetListsCommand : CursorPagedCommand<TwitterListCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
@@ -65,6 +67,8 @@ namespace Twitterizer.Commands
             }
 
             this.Username = username;
+
+            this.DeserializationHandler = TwitterListCollection.Deserialize;
         }
 
         /// <summary>
@@ -92,7 +96,7 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override TwitterCommand<TwitterListWrapper> Clone()
+        internal override TwitterCommand<TwitterListCollection> Clone()
         {
             return new GetListsCommand(this.Tokens, this.Username, this.OptionalProperties)
             {

@@ -77,7 +77,14 @@ namespace Twitterizer
             {
                 HttpWebResponse response = (HttpWebResponse)((WebException)innerException).Response;
 
-                byte[] responseData = ConversionUtility.ReadStream(response.GetResponseStream());
+                if (response == null)
+                    return;
+
+                Stream responseStream = response.GetResponseStream();
+                if (responseStream == null)
+                    return;
+
+                byte[] responseData = ConversionUtility.ReadStream(responseStream);
 
                 this.ResponseBody = Encoding.UTF8.GetString(responseData);
 

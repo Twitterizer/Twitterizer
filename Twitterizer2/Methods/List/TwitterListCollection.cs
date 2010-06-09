@@ -36,6 +36,8 @@ namespace Twitterizer
 {
     using System;
     using Twitterizer.Core;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The twitter list collection class.
@@ -71,7 +73,7 @@ namespace Twitterizer
         /// Gets or sets the command.
         /// </summary>
         /// <value>The command.</value>
-        internal Core.TwitterCommand<TwitterListWrapper> Command { get; set; }
+        internal Core.TwitterCommand<TwitterListCollection> Command { get; set; }
 
         /// <summary>
         /// Gets the next page.
@@ -80,13 +82,11 @@ namespace Twitterizer
         /// <value>The next page.</value>
         public TwitterListCollection NextPage()
         {
-            CursorPagedCommand<TwitterListWrapper> newCommand =
-                (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
+            CursorPagedCommand<TwitterListCollection> newCommand =
+                (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
             newCommand.Cursor = this.NextCursor;
 
-            TwitterListWrapper result = CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
-            result.Lists.Command = newCommand;
-            return result.Lists;
+            return CommandPerformer<TwitterListCollection>.PerformAction(newCommand);
         }
 
         /// <summary>
@@ -96,13 +96,25 @@ namespace Twitterizer
         /// <value>The previous page.</value>
         public TwitterListCollection PreviousPage()
         {
-            CursorPagedCommand<TwitterListWrapper> newCommand =
-                (CursorPagedCommand<TwitterListWrapper>)this.Command.Clone();
+            CursorPagedCommand<TwitterListCollection> newCommand =
+                (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
             newCommand.Cursor = this.PreviousCursor;
 
-            TwitterListWrapper result = Core.CommandPerformer<TwitterListWrapper>.PerformAction(newCommand);
-            result.Lists.Command = newCommand;
-            return result.Lists;
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(newCommand);
+        }
+
+
+        /// <summary>
+        /// Deserializes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        internal static TwitterListCollection Deserialize(JObject value)
+        {
+            if (value == null || value.First == null || value.First.First == null)
+                return null;
+
+            return JsonConvert.DeserializeObject<TwitterListCollection>(value.First.First.ToString());
         }
     }
 }
