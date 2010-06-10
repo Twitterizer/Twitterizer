@@ -10,20 +10,17 @@ namespace Twitterizer2.TestCases
     [TestFixture]
     public class TwitterListTests
     {
-        private TwitterList List;
-        private OAuthTokens Tokens;
+        private const string userName = "twitterapi";
+        private const string listName = "team";
 
-        [TestFixtureSetUp]
-        public void Setup()
+        [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
+        public void GetList()
         {
-            this.Tokens = Configuration.GetTokens();
+            TwitterList list = TwitterList.GetList(Configuration.GetTokens(), userName, listName, null);
 
-            TwitterListCollection lists = TwitterList.GetLists(this.Tokens, "twit_er_izer");
-
-            if (lists != null)
-                this.List = lists.FirstOrDefault();
-
-            Assert.IsNotNull(this.List);
+            Assert.IsNotNull(list);
         }
 
         [Test]
@@ -31,14 +28,11 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public void GetStatuses()
         {
-            if (this.List != null)
-            {
-                ListStatusesOptions options = new ListStatusesOptions();
-                TwitterStatusCollection statuses = TwitterList.GetStatuses(this.Tokens, "twit_er_izer", this.List.Id, options);
+            ListStatusesOptions options = new ListStatusesOptions();
+            TwitterStatusCollection statuses = TwitterList.GetStatuses(Configuration.GetTokens(), userName, listName, options);
 
-                Assert.IsNotNull(statuses);
-                Assert.IsNotEmpty(statuses);
-            }
+            Assert.IsNotNull(statuses);
+            Assert.IsNotEmpty(statuses);
         }
 
         [Test]
@@ -46,12 +40,9 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public void GetMembers()
         {
-            if (this.List != null)
-            {
-                TwitterUserCollection usersInTheList = TwitterList.GetMembers(this.Tokens, "twit_er_izer", this.List.Id);
+            TwitterUserCollection usersInTheList = TwitterList.GetMembers(Configuration.GetTokens(), userName, listName);
 
-                Assert.IsNotNull(usersInTheList);
-            }
+            Assert.IsNotNull(usersInTheList);
         }
 
         [Test]
@@ -59,7 +50,7 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public static void GetSubscriptions()
         {
-            TwitterListCollection lists = TwitterList.GetSubscriptions(Configuration.GetTokens(), "twit_er_izer");
+            TwitterListCollection lists = TwitterList.GetSubscriptions(Configuration.GetTokens(), userName);
 
             Assert.IsNotNull(lists);
         }
@@ -69,7 +60,7 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public static void GetMemberships()
         {
-            TwitterListCollection lists = TwitterList.GetMemberships(Configuration.GetTokens(), "twit_er_izer");
+            TwitterListCollection lists = TwitterList.GetMemberships(Configuration.GetTokens(), userName);
 
             Assert.IsNotNull(lists);
         }

@@ -232,11 +232,11 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterListCollection GetList(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
+        public static TwitterList GetList(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
         {
             Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username, listIdOrSlug, options);
 
-            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
+            return Core.CommandPerformer<TwitterList>.PerformAction(command);
         }
 
         /// <summary>
@@ -259,14 +259,14 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="listId">The list id.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, decimal listId, ListStatusesOptions options)
+        public static TwitterStatusCollection GetStatuses(OAuthTokens tokens, string username, string listIdOrSlug, ListStatusesOptions options)
         {
-            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listId, options);
+            Commands.ListStatusesCommand command = new Twitterizer.Commands.ListStatusesCommand(tokens, username, listIdOrSlug, options);
 
             return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
         }
@@ -335,14 +335,14 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="listId">The list id.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A collection of users as <see cref="TwitterUserCollection"/>.
         /// </returns>
-        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, decimal listId, OptionalProperties options)
+        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
         {
-            Commands.GetListMembersCommand command = new Twitterizer.Commands.GetListMembersCommand(tokens, username, listId, options);
+            Commands.GetListMembersCommand command = new Twitterizer.Commands.GetListMembersCommand(tokens, username, listIdOrSlug, options);
 
             return CommandPerformer<TwitterUserCollection>.PerformAction(command);
         }
@@ -356,9 +356,9 @@ namespace Twitterizer
         /// <returns>
         /// A collection of users as <see cref="TwitterUserCollection"/>.
         /// </returns>
-        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, decimal listId)
+        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, string listIdOrSlug)
         {
-            return GetMembers(tokens, username, listId, null);
+            return GetMembers(tokens, username, listIdOrSlug, null);
         }
 
         /// <summary>

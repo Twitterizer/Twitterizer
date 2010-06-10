@@ -51,10 +51,10 @@ using Newtonsoft.Json.Linq;
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="listId">The list id.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
         /// <param name="options">The options.</param>
-        public GetListMembersCommand(OAuthTokens requestTokens, string username, decimal listId, OptionalProperties options)
-            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/{1}/members.json", username, listId), requestTokens, options)
+        public GetListMembersCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, OptionalProperties options)
+            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/{1}/members.json", username, listIdOrSlug), requestTokens, options)
         {
             if (requestTokens == null)
             {
@@ -66,12 +66,12 @@ using Newtonsoft.Json.Linq;
                 throw new ArgumentNullException("username");
             }
 
-            if (listId <= 0)
+            if (string.IsNullOrEmpty(listIdOrSlug))
             {
-                throw new ArgumentNullException("listId");
+                throw new ArgumentNullException("listIdOrSlug");
             }
 
-            this.ListId = listId;
+            this.ListIdOrSlug = listIdOrSlug;
             this.Username = username;
 
             this.DeserializationHandler = this.Deserialize;
@@ -87,7 +87,7 @@ using Newtonsoft.Json.Linq;
         /// Gets or sets the list id.
         /// </summary>
         /// <value>The list id.</value>
-        public decimal ListId { get; set; }
+        public string ListIdOrSlug { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -110,7 +110,7 @@ using Newtonsoft.Json.Linq;
         /// </returns>
         internal override TwitterCommand<TwitterUserCollection> Clone()
         {
-            return new GetListMembersCommand(this.Tokens, this.Username, this.ListId, this.OptionalProperties);
+            return new GetListMembersCommand(this.Tokens, this.Username, this.ListIdOrSlug, this.OptionalProperties);
         }
 
         /// <summary>

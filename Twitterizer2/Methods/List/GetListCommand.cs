@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
-    internal sealed class GetListCommand : TwitterCommand<TwitterListCollection>
+    internal sealed class GetListCommand : TwitterCommand<TwitterList>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListCommand"/> class.

@@ -52,21 +52,21 @@ namespace Twitterizer.Commands
         /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
-        public ListStatusesCommand(OAuthTokens requestTokens, string username, decimal listId, ListStatusesOptions options)
-            : base(HTTPVerb.GET, string.Format("{0}/lists/{1}/statuses.json", username, listId), requestTokens, options)
+        public ListStatusesCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, ListStatusesOptions options)
+            : base(HTTPVerb.GET, string.Format("{0}/lists/{1}/statuses.json", username, listIdOrSlug), requestTokens, options)
         {
             if (string.IsNullOrEmpty(username))
             {
                 throw new ArgumentNullException("username");
             }
 
-            if (listId <= 0)
+            if (string.IsNullOrEmpty(listIdOrSlug))
             {
-                throw new ArgumentNullException("listId");
+                throw new ArgumentNullException("listIdOrSlug");
             }
 
             this.Username = username;
-            this.ListId = listId;
+            this.ListIdOrSlug = listIdOrSlug;
         }
         #endregion
 
@@ -81,7 +81,7 @@ namespace Twitterizer.Commands
         /// Gets the list id.
         /// </summary>
         /// <value>The list id.</value>
-        public decimal ListId { get; private set; }
+        public string ListIdOrSlug { get; private set; }
         #endregion
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Twitterizer.Commands
         /// </returns>
         internal override TwitterCommand<TwitterStatusCollection> Clone()
         {
-            return new ListStatusesCommand(this.Tokens, this.Username, this.ListId, this.OptionalProperties as ListStatusesOptions);
+            return new ListStatusesCommand(this.Tokens, this.Username, this.ListIdOrSlug, this.OptionalProperties as ListStatusesOptions);
         }
     }
 }
