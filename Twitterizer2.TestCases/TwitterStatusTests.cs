@@ -28,24 +28,15 @@ namespace Twitterizer2.TestCases
         [Test]
         public static void UpdateAndDelete()
         {
-            Stopwatch stopWatch = new Stopwatch();
             OAuthTokens tokens = Configuration.GetTokens();
 
-            stopWatch.Start();
-            TwitterStatus newStatus = TwitterStatus.Update(tokens, "Performing Twitterizer testing ...");
-            
-            stopWatch.Stop();
-            Debug.WriteLine(string.Format("Update finished in {0}ms", stopWatch.ElapsedMilliseconds));
-            stopWatch.Reset();
+            StatusUpdateOptions options = new StatusUpdateOptions();
+            options.UseSSL = true;
 
+            TwitterStatus newStatus = TwitterStatus.Update(tokens, "Performing Twitterizer testing ...", options);
             Assert.IsNotNull(newStatus);
 
-            stopWatch.Start();
             TwitterStatus deletedStatus = newStatus.Delete(tokens);
-
-            stopWatch.Stop();
-            Debug.WriteLine(string.Format("Delete finished in {0}ms", stopWatch.ElapsedMilliseconds));
-
             Assert.IsNotNull(deletedStatus);
             Assert.That(newStatus.Id == deletedStatus.Id);
         }

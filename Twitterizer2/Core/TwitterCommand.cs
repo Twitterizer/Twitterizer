@@ -144,6 +144,11 @@ namespace Twitterizer.Core
         /// <returns>The results of the command.</returns>
         public T ExecuteCommand()
         {
+            if (this.OptionalProperties.UseSSL)
+            {
+                this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
+            }
+
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             // Loop through all of the custom attributes assigned to the command class
