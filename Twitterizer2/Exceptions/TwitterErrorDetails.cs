@@ -37,6 +37,7 @@ namespace Twitterizer
     using System.Xml.Serialization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
+    using System;
 
     /// <summary>
     /// Twitter Error Details class
@@ -44,6 +45,7 @@ namespace Twitterizer
     /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [XmlRoot("hash")]
+    [Serializable]
     public class TwitterErrorDetails : ITwitterObject
     {
         /// <summary>
