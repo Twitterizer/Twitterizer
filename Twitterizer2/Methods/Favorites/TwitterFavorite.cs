@@ -34,11 +34,13 @@
 
 namespace Twitterizer
 {
+    using System;
     using Twitterizer.Core;
 
     /// <summary>
     /// The TwitterFavorite class. Provides static methods for manipulating favorite tweets.
     /// </summary>
+    [Serializable]
     public sealed class TwitterFavorite : TwitterObject
     {
         /// <summary>

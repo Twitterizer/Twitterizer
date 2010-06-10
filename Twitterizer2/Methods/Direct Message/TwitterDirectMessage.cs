@@ -42,6 +42,7 @@ namespace Twitterizer
     /// The Direct Message Entity Class
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    [Serializable]
     public class TwitterDirectMessage : TwitterObject
     {
         #region Constructors

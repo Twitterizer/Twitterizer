@@ -35,10 +35,12 @@
 namespace Twitterizer
 {
     using Twitterizer.Core;
+    using System;
 
     /// <summary>
     /// The Direct Message Collection class
     /// </summary>
+    [Serializable]
     public class TwitterDirectMessageCollection : TwitterCollection<TwitterDirectMessage>
     {
     }

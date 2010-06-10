@@ -34,8 +34,8 @@
 
 namespace Twitterizer
 {
+    using System;
     using System.Diagnostics;
-    using System.Runtime.Serialization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
@@ -44,6 +44,7 @@ namespace Twitterizer
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [DebuggerDisplay("TwitterRelationship = {Source} -> {Target}")]
+    [Serializable]
     public class TwitterRelationship : TwitterObject
     {
         /// <summary>

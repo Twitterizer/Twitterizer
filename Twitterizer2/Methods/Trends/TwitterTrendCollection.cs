@@ -41,6 +41,7 @@ namespace Twitterizer
     /// The TwitterTrendCollection class. Represents multiple <see cref="Twitterizer.TwitterTrend"/> elements.
     /// </summary>
     [JsonConverter(typeof(TwitterTrendCollection.Converter))]
+    [Serializable]
     public class TwitterTrendCollection : Core.TwitterCollection<TwitterTrend>
     {
         /// <summary>

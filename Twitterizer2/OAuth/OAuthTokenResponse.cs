@@ -31,12 +31,14 @@
 // <author>Ricky Smith</author>
 // <summary>The OAuth token response class. Represents tokens returned by the service.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer
 {
+    using System;
+    
     /// <summary>
     /// Values returned by Twitter when getting a request token or an access token.
     /// </summary>
+    [Serializable]
     public class OAuthTokenResponse
     {
         /// <summary>
