@@ -284,7 +284,7 @@ namespace Twitterizer
         {
             Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, username, options);
 
-            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -304,27 +304,29 @@ namespace Twitterizer
         /// List the lists the specified user follows.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="userName">Name of the user.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, OptionalProperties options)
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, string userName, OptionalProperties options)
         {
-            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens, options);
+            Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens, userName, options);
 
-            return Core.CommandPerformer<TwitterListWrapper>.PerformAction(command).Lists;
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
         }
 
         /// <summary>
         /// List the lists the specified user follows.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="userName">Name of the user.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens)
+        public static TwitterListCollection GetSubscriptions(OAuthTokens tokens, string userName)
         {
-            return GetSubscriptions(tokens, null);
+            return GetSubscriptions(tokens, userName, null);
         }
 
 

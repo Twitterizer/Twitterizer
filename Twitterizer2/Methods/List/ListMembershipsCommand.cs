@@ -43,7 +43,7 @@ namespace Twitterizer.Commands
     /// The list membership command class
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListWrapper>
+    internal sealed class ListMembershipsCommand : CursorPagedCommand<TwitterListCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
@@ -69,6 +69,8 @@ namespace Twitterizer.Commands
             }
 
             this.Username = username;
+
+            this.DeserializationHandler = TwitterListCollection.Deserialize;
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override TwitterCommand<TwitterListWrapper> Clone()
+        internal override TwitterCommand<TwitterListCollection> Clone()
         {
             return new ListMembershipsCommand(this.Tokens, this.Username, this.OptionalProperties)
             {

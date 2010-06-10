@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		XML Documentation\Desktop Authorization.aml = XML Documentation\Desktop Authorization.aml
 		XML Documentation\OAuth.aml = XML Documentation\OAuth.aml
+		XML Documentation\Troubleshooting.aml = XML Documentation\Troubleshooting.aml
 		XML Documentation\Twitterizer2.content = XML Documentation\Twitterizer2.content
 		XML Documentation\Web Authorization.aml = XML Documentation\Web Authorization.aml
 		XML Documentation\WelcomeTopic.aml = XML Documentation\WelcomeTopic.aml

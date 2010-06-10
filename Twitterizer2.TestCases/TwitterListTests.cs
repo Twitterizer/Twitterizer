@@ -53,5 +53,25 @@ namespace Twitterizer2.TestCases
                 Assert.IsNotNull(usersInTheList);
             }
         }
+
+        [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
+        public static void GetSubscriptions()
+        {
+            TwitterListCollection lists = TwitterList.GetSubscriptions(Configuration.GetTokens(), "twit_er_izer");
+
+            Assert.IsNotNull(lists);
+        }
+
+        [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
+        public static void GetMemberships()
+        {
+            TwitterListCollection lists = TwitterList.GetMemberships(Configuration.GetTokens(), "twit_er_izer");
+
+            Assert.IsNotNull(lists);
+        }
     }
 }

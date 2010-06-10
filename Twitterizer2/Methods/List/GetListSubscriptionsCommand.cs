@@ -43,21 +43,31 @@ namespace Twitterizer.Commands
     /// The create list command class
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class GetListSubscriptionsCommand : CursorPagedCommand<TwitterListWrapper>
+    internal sealed class GetListSubscriptionsCommand : CursorPagedCommand<TwitterListCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListSubscriptionsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="options">The options.</param>
-        public GetListSubscriptionsCommand(OAuthTokens requestTokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "{0}/lists/subscriptions.json", requestTokens, options)
+        public GetListSubscriptionsCommand(OAuthTokens requestTokens, string userName, OptionalProperties options)
+            : base(HTTPVerb.GET, string.Format("{0}/lists/subscriptions.json", userName), requestTokens, options)
         {
             if (requestTokens == null)
             {
                 throw new ArgumentNullException("requestTokens");
             }
+
+            this.Username = userName;
+
+            this.DeserializationHandler = TwitterListCollection.Deserialize;
         }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string Username { get; set; }
 
         /// <summary>
         /// Initializes the command.
@@ -78,9 +88,9 @@ namespace Twitterizer.Commands
         /// <returns>
         /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
         /// </returns>
-        internal override TwitterCommand<TwitterListWrapper> Clone()
+        internal override TwitterCommand<TwitterListCollection> Clone()
         {
-            return new GetListSubscriptionsCommand(this.Tokens, this.OptionalProperties)
+            return new GetListSubscriptionsCommand(this.Tokens, Username, this.OptionalProperties)
             {
                 Cursor = this.Cursor
             };
