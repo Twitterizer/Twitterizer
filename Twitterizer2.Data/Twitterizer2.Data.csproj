@@ -80,6 +80,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath)*.* $(SolutionDir)Release\</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

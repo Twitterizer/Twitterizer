@@ -43,7 +43,7 @@ public partial class Lists : System.Web.UI.Page
         if (!this.IsPostBack)
         {
             YourListsGridView.DataSource = TwitterList.GetLists(Master.Tokens, Master.ScreenName);
-            SubscribedListsGridView.DataSource = TwitterList.GetSubscriptions(Master.Tokens);
+            SubscribedListsGridView.DataSource = TwitterList.GetSubscriptions(Master.Tokens, Master.ScreenName);
             this.DataBind();
         }
         else
