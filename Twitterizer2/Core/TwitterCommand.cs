@@ -180,13 +180,6 @@ namespace Twitterizer.Core
 
             }
 
-            // Check if the command is flagged as an authorized command
-            if (this.GetType().GetCustomAttributes(typeof(AuthorizedCommandAttribute), false).Length > 0)
-            {
-                // Verify that the tokens are supplied.
-
-            }
-
             WebPermission permission = new WebPermission();
             permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
             permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
@@ -210,7 +203,7 @@ namespace Twitterizer.Core
             }
 
             // Lookup the cached item and return it
-            if (this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
+            if (this.Verb == HTTPVerb.GET && this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
@@ -385,7 +378,7 @@ namespace Twitterizer.Core
         private void AddResultToCache(StringBuilder cacheKeyBuilder, Cache cache, T resultObject)
         {
             // If caching is enabled, add the result to the cache.
-            if (this.OptionalProperties.CacheOutput)
+            if (this.Verb == HTTPVerb.GET && this.OptionalProperties.CacheOutput)
             {
                 cache.Add(
                     cacheKeyBuilder.ToString(),
