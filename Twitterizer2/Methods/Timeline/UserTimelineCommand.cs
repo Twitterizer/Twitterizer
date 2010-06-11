@@ -49,13 +49,38 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
-        public UserTimelineCommand(OAuthTokens tokens, TimelineOptions options)
+        public UserTimelineCommand(OAuthTokens tokens, UserTimelineOptions options)
             : base(HTTPVerb.GET, "statuses/user_timeline.json", tokens, options)
         {
             if (tokens == null && options == null)
             {
                 throw new ArgumentException("You must supply either OAuth tokens or identify a user in the TimelineOptions class.");
             }
+
+            if (options != null && string.IsNullOrEmpty(options.ScreenName) && options.UserId <= 0)
+            {
+                throw new ArgumentException("You must specify a user's screen name or id for unauthorized requests.");
+            }
+        }
+
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
+        public override void Init()
+        {
+            base.Init();
+
+            UserTimelineOptions options = this.OptionalProperties as UserTimelineOptions;
+            if (options == null)
+            {
+                return;
+            }
+
+            if (options.UserId > 0)
+                this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));
+
+            if (!string.IsNullOrEmpty(options.ScreenName))
+                this.RequestParameters.Add("screen_name", options.ScreenName);
         }
 
         /// <summary>

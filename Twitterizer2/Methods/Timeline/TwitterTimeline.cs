@@ -86,7 +86,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterStatusCollection UserTimeline(
             OAuthTokens tokens,
-            TimelineOptions options)
+            UserTimelineOptions options)
         {
             Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, options);
 
@@ -117,7 +117,7 @@ namespace Twitterizer
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
         public static TwitterStatusCollection UserTimeline(
-            TimelineOptions options)
+            UserTimelineOptions options)
         {
             return UserTimeline(null, options);
         }

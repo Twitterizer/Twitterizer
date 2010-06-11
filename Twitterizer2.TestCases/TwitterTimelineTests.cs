@@ -34,6 +34,23 @@
         [Category("Read-Only")]
         [Category("REST")]
         [Test]
+        public static void UserTimelineUnauthorized()
+        {
+            UserTimelineOptions options = new UserTimelineOptions()
+            {
+                ScreenName = "twitterapi"
+            };
+
+            TwitterStatusCollection timeline = TwitterTimeline.UserTimeline(options);
+            Assert.IsNotNull(timeline);
+            Assert.IsNotEmpty(timeline);
+
+            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+        }
+
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Test]
         public static void FriendTimeline()
         {
             OAuthTokens tokens = Configuration.GetTokens();

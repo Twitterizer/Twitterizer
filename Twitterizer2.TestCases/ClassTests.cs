@@ -12,6 +12,7 @@
     public class ClassTests
     {
         [Test]
+        [Category("Read-Only")]
         public static void Serialization()
         {
             Assembly twitterizerAssembly = Assembly.GetAssembly(typeof(TwitterUser));
