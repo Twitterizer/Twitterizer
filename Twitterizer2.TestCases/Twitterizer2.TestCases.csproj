@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassTests.cs" />
+    <Compile Include="CoreTests.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="OAuthTests.cs" />
     <Compile Include="PagingTests.cs" />

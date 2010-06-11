@@ -9,7 +9,7 @@
     using Twitterizer;
 
     [TestFixture]
-    public class ClassTests
+    public class CoreTests
     {
         [Test]
         [Category("Read-Only")]
@@ -57,6 +57,20 @@
                     Assert.Fail(string.Format("{0} could not be serialized", type.FullName));
                 }
             }
+        }
+
+        [Test]
+        [Category("Read-Only")]
+        public static void SSL()
+        {
+            OptionalProperties options = new OptionalProperties()
+            {
+                UseSSL = true
+            };
+
+            TwitterUser user = TwitterUser.Show("twitterapi", options);
+
+            Assert.That(user.RequestStatus.FullPath.StartsWith("https://"));
         }
     }
 }
