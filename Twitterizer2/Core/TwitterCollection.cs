@@ -36,6 +36,7 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// The base class for object collections.
@@ -60,6 +61,7 @@ namespace Twitterizer.Core
         /// Gets or sets the oauth tokens.
         /// </summary>
         /// <value>The oauth tokens.</value>
+        [XmlIgnore, SoapIgnore]
         public OAuthTokens Tokens
         {
             get
@@ -82,6 +84,7 @@ namespace Twitterizer.Core
         /// Gets details about the request attempted.
         /// </summary>
         /// <value>The last request status.</value>
+        [XmlIgnore, SoapIgnore]
         public RequestStatus RequestStatus { get; set; }
     }
 }

@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core
 {
-    using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using Twitterizer;
 
     /// <summary>
@@ -62,12 +62,14 @@ namespace Twitterizer.Core
         /// Gets or sets the oauth tokens.
         /// </summary>
         /// <value>The oauth tokens.</value>
+        [XmlIgnore, SoapIgnore]
         public OAuthTokens Tokens { get; set; }
 
         /// <summary>
         /// Gets details about the request attempted.
         /// </summary>
         /// <value>The last request status.</value>
+        [XmlIgnore, SoapIgnore]
         public RequestStatus RequestStatus { get; set; }
     }
 }
