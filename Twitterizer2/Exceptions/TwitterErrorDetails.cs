@@ -34,10 +34,11 @@
 
 namespace Twitterizer
 {
+    using System;
+    using System.Diagnostics;
     using System.Xml.Serialization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
-    using System;
 
     /// <summary>
     /// Twitter Error Details class
@@ -46,6 +47,7 @@ namespace Twitterizer
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [XmlRoot("hash")]
     [Serializable]
+    [DebuggerDisplay("@{ErrorMessage}")]
     public class TwitterErrorDetails : ITwitterObject
     {
         /// <summary>
@@ -113,5 +115,11 @@ namespace Twitterizer
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is empty.
+        /// </summary>
+        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
+        public new bool IsEmpty { get { return false; } set { } }
     }
 }

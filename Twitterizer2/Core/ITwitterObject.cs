@@ -57,5 +57,11 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The last request status.</value>
         RequestStatus RequestStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is empty.
+        /// </summary>
+        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
+        bool IsEmpty { get; set; }
     }
 }

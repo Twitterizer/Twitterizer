@@ -42,6 +42,14 @@ namespace Twitterizer.Core
     [System.Serializable]
     public class TwitterObject : ITwitterObject
     {
+        public static TwitterObject Empty = new TwitterObject() { IsEmpty = true };
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is empty.
+        /// </summary>
+        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
+        public new bool IsEmpty { get; set; }
+
         /// <summary>
         /// The format that all twitter dates are in.
         /// </summary>
@@ -71,5 +79,36 @@ namespace Twitterizer.Core
         /// <value>The last request status.</value>
         [XmlIgnore, SoapIgnore]
         public RequestStatus RequestStatus { get; set; }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="obj1">The obj1.</param>
+        /// <param name="obj2">The obj2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(TwitterObject obj1, TwitterObject obj2)
+        {
+            if (object.ReferenceEquals(obj1, obj2))
+                return true;
+
+            if (obj1.IsEmpty && object.ReferenceEquals(obj2, TwitterObject.Empty))
+                return true;
+
+            if (obj2.IsEmpty && object.ReferenceEquals(obj1, TwitterObject.Empty))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="obj1">The obj1.</param>
+        /// <param name="obj2">The obj2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(TwitterObject obj1, TwitterObject obj2)
+        {
+            return !(obj1 == obj2);
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace Twitterizer.Core
     /// <tocexclude />
     [Serializable]
     internal abstract class CursorPagedCommand<T> : TwitterCommand<T>
-        where T : ITwitterObject
+        where T : class, ITwitterObject, new()
     {
         #region Constructors
         /// <summary>

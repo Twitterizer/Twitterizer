@@ -23,6 +23,23 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNullOrEmpty(status.Text);
         }
 
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Test]
+        public static void ShowMissing()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterStatus missingStatus = TwitterStatus.Show(tokens, 1);
+            Assert.IsNotNull(missingStatus);
+            Assert.That(missingStatus.IsEmpty);
+            Assert.That(TwitterStatus.Empty == missingStatus);
+
+            TwitterStatus status = TwitterStatus.Show(tokens, 2);
+            Assert.IsNotNull(status);
+            Assert.That(missingStatus.IsEmpty);
+        }
+
         [Category("Read-Write")]
         [Category("REST")]
         [Test]

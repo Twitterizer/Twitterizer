@@ -61,7 +61,7 @@ namespace Twitterizer
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterList"/> class.
         /// </summary>
-        internal TwitterList()
+        public TwitterList()
             : base()
         {
         }

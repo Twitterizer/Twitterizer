@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
+    <Compile Include="Core\TwitterEmptyObject.cs" />
     <Compile Include="Core\TwitterImage.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />

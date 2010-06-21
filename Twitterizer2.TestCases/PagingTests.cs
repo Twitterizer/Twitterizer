@@ -117,5 +117,36 @@
 
             Assert.That(pagenumber > 1);
         }
+
+        [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Category("Paging")]
+        public static void Followers()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterUserCollection followers = TwitterFriendship.Followers(tokens, new FollowersOptions()
+            {
+                ScreenName = "twitterapi"
+            });
+
+            int pagenumber = 1;
+            decimal firstId = followers[0].Id;
+
+            while (followers != null && pagenumber < 3)
+            {
+                Assert.IsNotEmpty(followers);
+
+                if (pagenumber > 1)
+                    Assert.That(followers[0].Id != firstId);
+
+                followers = followers.NextPage();
+
+                pagenumber++;
+            }
+
+            Assert.That(pagenumber > 1);
+        }
     }
 }

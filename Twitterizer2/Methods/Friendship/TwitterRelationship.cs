@@ -71,7 +71,7 @@ namespace Twitterizer
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
         /// </summary>
-        internal TwitterRelationship()
+        public TwitterRelationship()
             : base()
         {
         }

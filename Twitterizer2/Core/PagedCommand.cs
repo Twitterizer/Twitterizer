@@ -41,7 +41,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
     [Serializable]
     internal abstract class PagedCommand<T> : TwitterCommand<T>
-        where T : ITwitterObject
+        where T : class, ITwitterObject, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.

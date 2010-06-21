@@ -6,6 +6,7 @@
     /// <summary>
     /// The image type that is being uploaded.
     /// </summary>
+    [Serializable]
     public enum TwitterImageImageType
     {
         /// <summary>
@@ -27,6 +28,7 @@
     /// <summary>
     /// Represents an image for uploading. Used to upload new profile and background images.
     /// </summary>
+    [Serializable]
     public class TwitterImage
     {
         /// <summary>

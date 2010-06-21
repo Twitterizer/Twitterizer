@@ -53,7 +53,7 @@ namespace Twitterizer.Commands
         public FollowersCommand(OAuthTokens tokens, FollowersOptions options)
             : base(HTTPVerb.GET, "statuses/followers.json", tokens, options)
         {
-            if (tokens == null && (options == null || (options.UserId <= 0 ^ string.IsNullOrEmpty(options.ScreenName))))
+            if ((tokens == null && options == null) || (options.UserId <= 0 && string.IsNullOrEmpty(options.ScreenName)))
             {
                 throw new ArgumentException("Either a user id or screen name (but not both) must be supplied (using the options parameter) when called unauthorized.");
             }

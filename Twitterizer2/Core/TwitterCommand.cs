@@ -72,7 +72,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The business object the command should return.</typeparam>
     [Serializable]
     internal abstract class TwitterCommand<T> : ICommand<T>
-        where T : ITwitterObject
+        where T : class, ITwitterObject, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
@@ -271,6 +271,7 @@ namespace Twitterizer.Core
                     webResponse.ResponseUri.AbsoluteUri, 
                     webResponse.StatusCode, 
                     webResponse.ContentType);
+
                 RequestStatus.UpdateRequestStatus(requestStatus);
 
                 // Parse the rate limiting HTTP Headers
@@ -290,13 +291,18 @@ namespace Twitterizer.Core
                 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
 
-                RequestStatus.UpdateRequestStatus(
+                requestStatus = RequestStatus.BuildRequestStatus(
                         responseData, 
                         exceptionResponse.ResponseUri.AbsoluteUri, 
                         exceptionResponse.StatusCode, 
                         exceptionResponse.ContentType);
 
-                return default(T);
+                RequestStatus.UpdateRequestStatus(requestStatus);
+
+                if (wex.Status == WebExceptionStatus.UnknownError) 
+                    throw;
+
+                return new T() { IsEmpty = true, RequestStatus = requestStatus };
             }
             finally
             {
