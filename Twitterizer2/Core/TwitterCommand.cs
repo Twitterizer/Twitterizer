@@ -161,9 +161,9 @@ namespace Twitterizer.Core
                         throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Tokens are required for the \"{0}\" command.", this.GetType()));
                     }
 
-                    if (string.IsNullOrEmpty(this.Tokens.ConsumerKey) || 
-                        string.IsNullOrEmpty(this.Tokens.ConsumerSecret) || 
-                        string.IsNullOrEmpty(this.Tokens.AccessToken) || 
+                    if (string.IsNullOrEmpty(this.Tokens.ConsumerKey) ||
+                        string.IsNullOrEmpty(this.Tokens.ConsumerSecret) ||
+                        string.IsNullOrEmpty(this.Tokens.AccessToken) ||
                         string.IsNullOrEmpty(this.Tokens.AccessTokenSecret))
                     {
                         throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Token values cannot be null when executing the \"{0}\" command.", this.GetType()));
@@ -221,7 +221,7 @@ namespace Twitterizer.Core
             System.Net.ServicePointManager.Expect100Continue = false;
 
             byte[] responseData = null;
-            
+
             try
             {
                 HttpWebResponse webResponse;
@@ -267,9 +267,9 @@ namespace Twitterizer.Core
 
                 // Build the request status (holds details about the last request) and update the singleton
                 requestStatus = RequestStatus.BuildRequestStatus(
-                    responseData, 
-                    webResponse.ResponseUri.AbsoluteUri, 
-                    webResponse.StatusCode, 
+                    responseData,
+                    webResponse.ResponseUri.AbsoluteUri,
+                    webResponse.StatusCode,
                     webResponse.ContentType);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
@@ -288,18 +288,18 @@ namespace Twitterizer.Core
                 {
                     throw;
                 }
-                
+
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
 
                 requestStatus = RequestStatus.BuildRequestStatus(
-                        responseData, 
-                        exceptionResponse.ResponseUri.AbsoluteUri, 
-                        exceptionResponse.StatusCode, 
+                        responseData,
+                        exceptionResponse.ResponseUri.AbsoluteUri,
+                        exceptionResponse.StatusCode,
                         exceptionResponse.ContentType);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
 
-                if (wex.Status == WebExceptionStatus.UnknownError) 
+                if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
                 return new T() { IsEmpty = true, RequestStatus = requestStatus };
@@ -314,12 +314,12 @@ namespace Twitterizer.Core
 
             this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
 
+            if (resultObject == null)
+                resultObject = new T();
+
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
-            if (resultObject != null)
-            {
-                resultObject.Tokens = this.Tokens;
-                resultObject.RequestStatus = requestStatus;
-            }
+            resultObject.Tokens = this.Tokens;
+            resultObject.RequestStatus = requestStatus;
 
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 

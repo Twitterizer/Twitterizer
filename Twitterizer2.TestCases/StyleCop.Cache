@@ -1,108 +1,126 @@
 <stylecopresultscache>
   <version>10</version>
-  <project key="-134457980">
-    <configuration>DEBUG;TRACE</configuration>
-  </project>
   <project key="-777347283">
     <configuration>DEBUG;TRACE</configuration>
   </project>
-  <sourcecode name="Configuration.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+  <project key="-134457980">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
+  <sourcecode name="OAuthTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>469</milliseconds>
+    <timestamp>06/09/2010 14:48:09</timestamp>
+    <milliseconds>630</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="PagingTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+  <sourcecode name="Configuration.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/31/2010 10:53:28</timestamp>
-    <milliseconds>948</milliseconds>
+    <timestamp>05/26/2010 11:02:37</timestamp>
+    <milliseconds>286</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="AssemblyInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>328</milliseconds>
+    <timestamp>05/26/2010 10:19:35</timestamp>
+    <milliseconds>686</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="CoreTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
+    </settings>
+    <timestamp>06/11/2010 13:38:21</timestamp>
+    <milliseconds>573</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="TwitterFriendshipTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/31/2010 13:09:09</timestamp>
-    <milliseconds>635</milliseconds>
+    <timestamp>06/01/2010 13:11:13</timestamp>
+    <milliseconds>617</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="TwitterGeoTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>387</milliseconds>
+    <timestamp>06/01/2010 13:11:13</timestamp>
+    <milliseconds>598</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="TwitterListTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+  <sourcecode name="PagingTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/31/2010 10:53:28</timestamp>
-    <milliseconds>935</milliseconds>
+    <timestamp>06/14/2010 16:57:01</timestamp>
+    <milliseconds>278</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="TwitterSearchTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/27/2010 19:21:46</timestamp>
-    <milliseconds>792</milliseconds>
+    <timestamp>06/01/2010 13:11:13</timestamp>
+    <milliseconds>592</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="TwitterStatusTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+  <sourcecode name="TwitterListTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>471</milliseconds>
+    <timestamp>06/10/2010 10:01:09</timestamp>
+    <milliseconds>275</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="TwitterTrendTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>459</milliseconds>
+    <timestamp>06/01/2010 13:11:13</timestamp>
+    <milliseconds>601</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="TwitterTimelineTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+  <sourcecode name="TwitterStatusTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>383</milliseconds>
+    <timestamp>06/21/2010 10:50:09</timestamp>
+    <milliseconds>504</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="TwitterUserTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>05/26/2010 18:25:44</timestamp>
-      <milliseconds>385</milliseconds>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
     </settings>
-    <timestamp>05/26/2010 18:25:44</timestamp>
-    <milliseconds>463</milliseconds>
+    <timestamp>06/08/2010 18:21:08</timestamp>
+    <milliseconds>90</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="TwitterTimelineTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/26/2010 17:42:19</timestamp>
+      <milliseconds>782</milliseconds>
+    </settings>
+    <timestamp>06/11/2010 11:31:41</timestamp>
+    <milliseconds>207</milliseconds>
     <violations />
   </sourcecode>
 </stylecopresultscache>
