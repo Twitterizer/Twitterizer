@@ -334,10 +334,6 @@ namespace Twitterizer
                 token, 
                 tokenSecret);
 
-            WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            permission.Demand();
-
             baseUrl = AppendParametersForPOST(baseUrl, combinedParameters);
 
             // Build the POST body.
@@ -419,12 +415,6 @@ namespace Twitterizer
                 consumerSecret, 
                 token, 
                 tokenSecret);
-
-            WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"https?://twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            permission.Demand();
 
             HttpWebResponse response;
 

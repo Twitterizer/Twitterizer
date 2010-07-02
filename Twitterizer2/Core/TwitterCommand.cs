@@ -180,11 +180,6 @@ namespace Twitterizer.Core
 
             }
 
-            WebPermission permission = new WebPermission();
-            permission.AddPermission(NetworkAccess.Connect, @"https?://api.twitter.com/.*");
-            permission.AddPermission(NetworkAccess.Connect, @"https?://search.twitter.com/.*");
-            permission.Demand();
-
             // Variables and objects needed for caching
             StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
             if (this.Tokens != null)
