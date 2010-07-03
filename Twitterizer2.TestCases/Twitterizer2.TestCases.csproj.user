@@ -13,4 +13,9 @@
     <StartArguments>
     </StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CCNET|AnyCPU' ">
+    <StartProgram>C:\Program Files (x86)\NUnit 2.5.2\bin\net-2.0\nunit-x86.exe</StartProgram>
+    <StartArguments>..\..\..\Twitterizer2.nunit</StartArguments>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
 </Project>

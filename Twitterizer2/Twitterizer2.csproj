@@ -54,6 +54,15 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CCNET|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\CCNET\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Twitterizer2.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -238,9 +247,9 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>IF NOT '%25SKIPPOSTBUILD%25'=='True' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
-IF NOT '%25SKIPPOSTBUILD%25'=='True' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
-IF NOT '%25SKIPPOSTBUILD%25'=='True' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
+    <PostBuildEvent>IF NOT '$(ConfigurationName)'=='CCNET' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
+IF NOT '$(ConfigurationName)'=='CCNET' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
+IF NOT '$(ConfigurationName)'=='CCNET' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
