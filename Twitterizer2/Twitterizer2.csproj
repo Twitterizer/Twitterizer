@@ -238,9 +238,9 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
-copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
-del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
+    <PostBuildEvent>IF NOT '%25SKIPPOSTBUILD%25'=='True' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
+IF NOT '%25SKIPPOSTBUILD%25'=='True' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
+IF NOT '%25SKIPPOSTBUILD%25'=='True' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
