@@ -80,6 +80,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
+    <PostBuildEvent>IF NOT '%25SKIPPOSTBUILD%25'=='True' copy "$(TargetPath)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
