@@ -114,5 +114,19 @@ namespace Twitterizer
         /// <value>The language.</value>
         [JsonProperty(PropertyName = "iso_language_code")]
         public string Language { get; set; }
+
+        /// <summary>
+        /// Gets or sets the geo location associated with the result.
+        /// </summary>
+        /// <value>The geo location data.</value>
+        [JsonProperty(PropertyName = "geo")]
+        public TwitterGeo Geo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location.
+        /// </summary>
+        /// <value>The location.</value>
+        [JsonProperty(PropertyName = "location")]
+        public string Location { get; set; }
     }
 }

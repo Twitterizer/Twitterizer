@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
-    internal sealed class SearchCommand : TwitterCommand<TwitterSearchResultWrapper>
+    internal sealed class SearchCommand : TwitterCommand<TwitterSearchResultCollection>
     {
         #region Constructors
         /// <summary>
@@ -60,6 +60,8 @@ namespace Twitterizer.Commands
             }
 
             this.Query = query;
+
+            this.DeserializationHandler = TwitterSearchResultCollection.Deserialize;
         }
         #endregion
 

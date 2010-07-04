@@ -29,23 +29,16 @@
             Assert.IsNotEmpty(timeline);
 
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
-        }
 
-        [Category("Read-Only")]
-        [Category("REST")]
-        [Test]
-        public static void UserTimelineUnauthorized()
-        {
-            UserTimelineOptions options = new UserTimelineOptions()
-            {
-                ScreenName = "twitterapi"
-            };
+            UserTimelineOptions User_Options = new UserTimelineOptions();
+            User_Options.ScreenName = "twitterapi";
+            User_Options.Count = 8;
 
-            TwitterStatusCollection timeline = TwitterTimeline.UserTimeline(options);
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
+            timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens(), User_Options);
+            Assert.That(timeline.Count == 8);
 
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            timeline = TwitterTimeline.UserTimeline(User_Options);
+            Assert.That(timeline.Count == 8);
         }
 
         [Category("Read-Only")]

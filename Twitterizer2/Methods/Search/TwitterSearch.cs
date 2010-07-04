@@ -66,7 +66,7 @@ namespace Twitterizer
             Commands.SearchCommand command = new Twitterizer.Commands.SearchCommand(null, query, options);
 
             TwitterSearchResultCollection results =
-                Core.CommandPerformer<TwitterSearchResultWrapper>.PerformAction(command).Results;
+                Core.CommandPerformer<TwitterSearchResultCollection>.PerformAction(command);
 
             return results;
         }

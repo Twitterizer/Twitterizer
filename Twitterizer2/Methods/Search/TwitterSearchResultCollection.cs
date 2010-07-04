@@ -35,6 +35,8 @@
 namespace Twitterizer
 {
     using System;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The Twitter Search Result Collection class
@@ -42,5 +44,17 @@ namespace Twitterizer
     [Serializable]
     public class TwitterSearchResultCollection : Core.TwitterCollection<TwitterSearchResult>
     {
+        /// <summary>
+        /// Deserializes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        internal static TwitterSearchResultCollection Deserialize(JObject value)
+        {
+            if (value == null || value.First == null || value.First.First == null)
+                return null;
+
+            return JsonConvert.DeserializeObject<TwitterSearchResultCollection>(value.First.First.ToString());
+        }
     }
 }

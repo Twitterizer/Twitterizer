@@ -194,7 +194,6 @@
     <Compile Include="OAuth\XAuthUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Methods\Streaming\TwitterStream.cs" />
-    <Compile Include="Methods\Search\TwitterSearchResultWrapper.cs" />
     <Compile Include="Methods\User\TwitterUserWrapper.cs" />
     <Compile Include="Core\OptionalProperties.cs" />
     <Compile Include="Methods\Tweets\StatusUpdateOptions.cs" />
