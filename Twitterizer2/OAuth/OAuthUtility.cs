@@ -194,7 +194,7 @@ namespace Twitterizer
                     consumerSecret,
                     requestToken,
                     string.Empty,
-                    null);
+                    proxy);
 
                 string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
 
