@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}</ProjectGuid>
+    <ProjectGuid>{AFDC57ED-C013-4581-9D06-54D8A42D696D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Twitterizer2.TestCases</RootNamespace>
-    <AssemblyName>Twitterizer2.TestCases</AssemblyName>
+    <RootNamespace>Twitterizer2.Streaming</RootNamespace>
+    <AssemblyName>Twitterizer2.Streaming</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkSubset>Full</TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,24 +30,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CCNET|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\CCNET\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -59,40 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoreTests.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="OAuthTests.cs" />
-    <Compile Include="PagingTests.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TwitterFriendshipTests.cs" />
-    <Compile Include="TwitterGeoTests.cs" />
-    <Compile Include="TwitterListTests.cs" />
-    <Compile Include="TwitterSearchTests.cs" />
-    <Compile Include="TwitterStatusTests.cs" />
-    <Compile Include="TwitterStreamTests.cs" />
-    <Compile Include="TwitterTimelineTests.cs" />
-    <Compile Include="TwitterTrendTests.cs" />
-    <Compile Include="TwitterUserTests.cs" />
+    <Compile Include="SerializationHelper.cs" />
+    <Compile Include="FilterStreamOptions.cs" />
+    <Compile Include="TwitterStream.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Twitterizer2.Streaming\Twitterizer2.Streaming.csproj">
-      <Project>{AFDC57ED-C013-4581-9D06-54D8A42D696D}</Project>
-      <Name>Twitterizer2.Streaming</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">
       <Project>{2FDC3492-6B9E-4771-9755-7892C9CB1E96}</Project>
       <Name>Twitterizer2</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="TestSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Paper_Cup.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
