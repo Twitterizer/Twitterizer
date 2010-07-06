@@ -169,9 +169,9 @@ namespace Twitterizer
         /// <returns>
         /// 	<c>true</c> if the status was updated successfully, otherwise <c>false</c>
         /// </returns>
-        internal static void UpdateRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType)
+        internal static void UpdateRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType, RateLimiting rateLimiting)
         {
-            RequestStatus requestStatus = BuildRequestStatus(responseData, absoluteUri, statusCode, contentType);
+            RequestStatus requestStatus = BuildRequestStatus(responseData, absoluteUri, statusCode, contentType, rateLimiting);
 
             UpdateRequestStatus(requestStatus);
         }
@@ -196,7 +196,7 @@ namespace Twitterizer
         /// <param name="statusCode">The status code.</param>
         /// <param name="contentType">Type of the content.</param>
         /// <returns></returns>
-        internal static RequestStatus BuildRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType)
+        internal static RequestStatus BuildRequestStatus(byte[] responseData, string absoluteUri, HttpStatusCode statusCode, string contentType, RateLimiting rateLimiting)
         {
             RequestStatus requestStatus = new RequestStatus();
 
@@ -211,15 +211,11 @@ namespace Twitterizer
                     break;
 
                 case HttpStatusCode.BadRequest:
-                    requestStatus.Status = RequestResult.BadRequest;
+            		requestStatus.Status = rateLimiting.Remaining == 0 ? RequestResult.RateLimited : RequestResult.BadRequest;
                     break;
 
                 case HttpStatusCode.Unauthorized:
                     requestStatus.Status = RequestResult.Unauthorized;
-                    break;
-
-                case HttpStatusCode.Forbidden:
-                    requestStatus.Status = RequestResult.RateLimited;
                     break;
 
                 case HttpStatusCode.NotFound:

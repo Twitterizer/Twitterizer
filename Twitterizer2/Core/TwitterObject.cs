@@ -88,6 +88,11 @@ namespace Twitterizer.Core
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(TwitterObject obj1, TwitterObject obj2)
         {
+			if (object.Equals(obj1, null) || object.Equals(obj2, null))
+			{
+				return object.Equals(obj1, null) && object.Equals(obj2, null);
+			}
+
             if (object.ReferenceEquals(obj1, obj2))
                 return true;
 

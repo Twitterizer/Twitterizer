@@ -211,6 +211,7 @@ namespace Twitterizer.Core
             // Declare the variable to be returned
             T resultObject = default(T);
             RequestStatus requestStatus = null;
+        	RateLimiting rateLimiting = null;
 
             // This must be set for all twitter request.
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -260,17 +261,18 @@ namespace Twitterizer.Core
 
                 responseData = ConversionUtility.ReadStream(webResponse.GetResponseStream());
 
+				// Parse the rate limiting HTTP Headers
+				rateLimiting = ParseRateLimitHeaders(webResponse.Headers);
+
                 // Build the request status (holds details about the last request) and update the singleton
                 requestStatus = RequestStatus.BuildRequestStatus(
                     responseData,
                     webResponse.ResponseUri.AbsoluteUri,
                     webResponse.StatusCode,
-                    webResponse.ContentType);
+                    webResponse.ContentType,
+					rateLimiting);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
-
-                // Parse the rate limiting HTTP Headers
-                ParseRateLimitHeaders(resultObject, webResponse);
             }
             catch (WebException wex)
             {
@@ -286,18 +288,21 @@ namespace Twitterizer.Core
 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
 
-                requestStatus = RequestStatus.BuildRequestStatus(
+				rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
+
+				requestStatus = RequestStatus.BuildRequestStatus(
                         responseData,
                         exceptionResponse.ResponseUri.AbsoluteUri,
                         exceptionResponse.StatusCode,
-                        exceptionResponse.ContentType);
+                        exceptionResponse.ContentType,
+						rateLimiting);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
 
-                if (wex.Status == WebExceptionStatus.UnknownError)
+				if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
-                return new T() { IsEmpty = true, RequestStatus = requestStatus };
+                return new T() { IsEmpty = true, RequestStatus = requestStatus, RateLimiting = rateLimiting };
             }
             finally
             {
@@ -315,6 +320,7 @@ namespace Twitterizer.Core
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             resultObject.Tokens = this.Tokens;
             resultObject.RequestStatus = requestStatus;
+        	resultObject.RateLimiting = rateLimiting;
 
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
@@ -342,32 +348,28 @@ namespace Twitterizer.Core
         /// <summary>
         /// Parses the rate limit headers.
         /// </summary>
-        /// <param name="resultObject">The result object.</param>
-        /// <param name="webResponse">The web response.</param>
-        private static void ParseRateLimitHeaders(T resultObject, WebResponse webResponse)
+		/// <param name="responseHeaders">The headers of the web response.</param>
+		/// <returns>An object that contains the rate-limiting info contained in the response headers</returns>
+        private static RateLimiting ParseRateLimitHeaders(WebHeaderCollection responseHeaders)
         {
-            if (resultObject == null)
+            RateLimiting rateLimiting = new RateLimiting();
+
+			if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Limit")))
             {
-                return;
+				rateLimiting.Total = int.Parse(responseHeaders.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
             }
 
-            resultObject.RateLimiting = new RateLimiting();
-
-            if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Limit")))
+			if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Remaining")))
             {
-                resultObject.RateLimiting.Total = int.Parse(webResponse.Headers.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
+				rateLimiting.Remaining = int.Parse(responseHeaders.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
             }
 
-            if (!string.IsNullOrEmpty(webResponse.Headers.Get("X-RateLimit-Remaining")))
+			if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
             {
-                resultObject.RateLimiting.Remaining = int.Parse(webResponse.Headers.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
+                rateLimiting.ResetDate = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
+					.AddSeconds(double.Parse(responseHeaders.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture)), DateTimeKind.Utc));
             }
-
-            if (!string.IsNullOrEmpty(webResponse.Headers["X-RateLimit-Reset"]))
-            {
-                resultObject.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(webResponse.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
-            }
+        	return rateLimiting;
         }
 
         /// <summary>
