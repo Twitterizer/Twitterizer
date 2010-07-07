@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project name="Twitterizer" default="build">
+	<target name="build" depends="clean">
+		<mkdir dir="${CCNetWorkingDirectory}\bin" />
+		<csc target="library" output="${CCNetWorkingDirectory}\bin\Twitterizer2.dll" doc="${CCNetWorkingDirectory}\bin\Twitterizer2.xml">
+			<sources>
+				<include name="${CCNetWorkingDirectory}\Twitterizer2\**\*.cs" />
+			</sources>
+			<references>
+				<include name="${CCNetWorkingDirectory}\lib\Newtonsoft.Json.dll" />
+				<include name="System.Web.dll" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="buildstreaming" depends="build">
+		<csc target="library" output="${CCNetWorkingDirectory}\bin\Twitterizer2.Streaming.dll" doc="${CCNetWorkingDirectory}\bin\Twitterizer2.Streaming.xml">
+			<sources>
+				<include name="${CCNetWorkingDirectory}\Twitterizer2.Streaming\**\*.cs" />
+			</sources>
+			<references>
+				<include name="${CCNetWorkingDirectory}\bin\Twitterizer2.dll" />
+				<include name="${CCNetWorkingDirectory}\lib\Newtonsoft.Json.dll" />
+				<include name="System.Web.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="clean" description="Delete all previously compiled binaries.">
+		<delete>
+			<fileset>
+				<include name="**/bin/**" />
+				<include name="**/obj/**" />
+				<include name="**/*.suo" />
+				<include name="**/*.user" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="test" depends="build,buildstreaming">
+		<csc target="library" output="${CCNetWorkingDirectory}\bin\Twitterizer2.TestCases.dll">
+			<sources>
+				<include name="${CCNetWorkingDirectory}\Twitterizer2.TestCases\**\*.cs" />
+			</sources>
+			<references>
+				<include name="${CCNetWorkingDirectory}\bin\Twitterizer2.dll" />
+				<include name="${CCNetWorkingDirectory}\bin\Twitterizer2.Streaming.dll" />
+				<include name="${CCNetWorkingDirectory}\lib\Newtonsoft.Json.dll" />
+				<include name="${CCNetWorkingDirectory}\lib\nunit.framework.dll" />
+			</references>
+		</csc>
+
+		<nunit2 haltonfailure="true">
+			<test assemblyname="${CCNetWorkingDirectory}\bin\Twitterizer2.TestCases.dll">
+				<categories>
+					<include name="Read-Only" />
+				</categories>
+			</test>
+		</nunit2>
+		
+		<delete file="${CCNetWorkingDirectory}\bin\Twitterizer2.TestCases.dll" />
+	</target>
+</project>
