@@ -1,0 +1,106 @@
+<stylecopresultscache>
+  <version>10</version>
+  <sourcecode name="callback.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>242</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="pin-based.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>235</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="check-rate-limit-status.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>266</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="followers.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/21/2010 18:55:05</timestamp>
+    <milliseconds>85</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="friends.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>293</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="Lists.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>297</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="MasterPage.master.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>274</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="search.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>270</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="Trends.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/21/2010 18:55:05</timestamp>
+    <milliseconds>89</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="user.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>280</milliseconds>
+    <violations />
+  </sourcecode>
+  <project key="-1888292690">
+    <configuration>
+    </configuration>
+  </project>
+  <sourcecode name="Default.aspx.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>05/11/2010 22:53:43</timestamp>
+      <milliseconds>284</milliseconds>
+    </settings>
+    <timestamp>05/11/2010 22:53:43</timestamp>
+    <milliseconds>238</milliseconds>
+    <violations />
+  </sourcecode>
+</stylecopresultscache>
