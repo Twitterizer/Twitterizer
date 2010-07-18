@@ -34,6 +34,8 @@
 namespace Twitterizer
 {
     using Twitterizer.Core;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The TwitterUserCollection class.
@@ -69,7 +71,7 @@ namespace Twitterizer
         /// Gets or sets the cursor paged command.
         /// </summary>
         /// <value>The cursor paged command.</value>
-        internal CursorPagedCommand<TwitterUserWrapper> CursorPagedCommand { get; set; }
+        internal CursorPagedCommand<TwitterUserCollection> CursorPagedCommand { get; set; }
 
         /// <summary>
         /// Gets the next page.
@@ -90,11 +92,11 @@ namespace Twitterizer
             }
             else if (this.CursorPagedCommand != null)
             {
-                CursorPagedCommand<TwitterUserWrapper> newCommand =
-                    (CursorPagedCommand<TwitterUserWrapper>)this.CursorPagedCommand.Clone();
+                CursorPagedCommand<TwitterUserCollection> newCommand =
+                    (CursorPagedCommand<TwitterUserCollection>)this.CursorPagedCommand.Clone();
                 newCommand.Cursor = this.NextCursor;
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(newCommand).Users;
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
                 result.CursorPagedCommand = newCommand;
                 return result;
             }
@@ -123,11 +125,11 @@ namespace Twitterizer
             }
             else if (this.CursorPagedCommand != null)
             {
-                CursorPagedCommand<TwitterUserWrapper> newCommand =
-                    (CursorPagedCommand<TwitterUserWrapper>)this.CursorPagedCommand.Clone();
+                CursorPagedCommand<TwitterUserCollection> newCommand =
+                    (CursorPagedCommand<TwitterUserCollection>)this.CursorPagedCommand.Clone();
                 newCommand.Cursor = this.PreviousCursor;
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(newCommand).Users;
+                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
                 result.CursorPagedCommand = newCommand;
                 return result;
             }
@@ -135,6 +137,23 @@ namespace Twitterizer
             {
                 throw new System.NotSupportedException("Paging is not supported for this API call.");
             }
+        }
+
+        /// <summary>
+        /// Deserializes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        internal static TwitterUserCollection DeserializeWrapper(JObject value)
+        {
+            if (value == null || value.First == null || value.First.First == null)
+                return null;
+
+            TwitterUserCollection result = JsonConvert.DeserializeObject<TwitterUserCollection>(value.First.First.ToString());
+            result.NextCursor = value.SelectToken("next_cursor").Value<long>();
+            result.PreviousCursor = value.SelectToken("previous_cursor").Value<long>();
+
+            return result;
         }
     }
 }

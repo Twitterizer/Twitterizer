@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterUserWrapper.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="FriendsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,64 +29,16 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter user wrapper class.</summary>
+// <summary>Optional parameters for the GetListMembers methods.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
-    using System;
-    using Newtonsoft.Json;
-    using Twitterizer.Core;
-
-    /// <summary>
-    /// The Twitter User Wrapper class.
-    /// </summary>
-    [Serializable]
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
-    internal class TwitterUserWrapper : TwitterObject
+    public class GetListMembersOptions : OptionalProperties
     {
         /// <summary>
-        /// The private collection for the contained collection
+        /// Gets or sets the cursor.
         /// </summary>
-        private TwitterUserCollection users;
-
-        /// <summary>
-        /// Gets or sets the users.
-        /// </summary>
-        /// <value>The users.</value>
-        [JsonProperty(PropertyName = "users")]
-        public TwitterUserCollection Users
-        {
-            get
-            {
-                if (this.users != null)
-                {
-                    this.users.RateLimiting = this.RateLimiting;
-                    this.users.Tokens = this.Tokens;
-                    this.users.NextCursor = this.NextCursor;
-                    this.users.PreviousCursor = this.PreviousCursor;
-                }
-
-                return this.users;
-            }
-
-            set
-            {
-                this.users = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the next cursor.
-        /// </summary>
-        /// <value>The next cursor.</value>
-        [JsonProperty(PropertyName = "next_cursor")]
-        public long NextCursor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the previous cursor.
-        /// </summary>
-        /// <value>The previous cursor.</value>
-        [JsonProperty(PropertyName = "previous_cursor")]
-        public long PreviousCursor { get; set; }
+        /// <value>The cursor.</value>
+        public long Cursor { get; set; }
     }
 }

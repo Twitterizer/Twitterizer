@@ -1,14 +1,10 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2", "Twitterizer2\Twitterizer2.csproj", "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{09A4B653-29C4-467A-A1FE-BA74C0D70978}"
 	ProjectSection(SolutionItems) = preProject
 		CustomDictionary.xml = CustomDictionary.xml
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Data", "Twitterizer2.Data\Twitterizer2.Data.csproj", "{4ACED651-D888-4E46-A38B-13291C00FABF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0069E24B-470C-43E4-A6D0-536D3A6A1E6F}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		XML Documentation\Web Authorization.aml = XML Documentation\Web Authorization.aml
 		XML Documentation\WelcomeTopic.aml = XML Documentation\WelcomeTopic.aml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2", "Twitterizer2\Twitterizer2.csproj", "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Data", "Twitterizer2.Data\Twitterizer2.Data.csproj", "{4ACED651-D888-4E46-A38B-13291C00FABF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.TestCases", "Twitterizer2.TestCases\Twitterizer2.TestCases.csproj", "{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}"
 EndProject

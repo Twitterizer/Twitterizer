@@ -3,6 +3,9 @@
     using System;
     using Twitterizer.Core;
 
+    /// <summary>
+    /// Represents an empty object.
+    /// </summary>
     [Serializable]
     public class TwitterEmptyObject : ITwitterObject
     {

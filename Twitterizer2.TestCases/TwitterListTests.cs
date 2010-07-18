@@ -11,7 +11,7 @@ namespace Twitterizer2.TestCases
     public class TwitterListTests
     {
         private const string userName = "twitterapi";
-        private const string listName = "team";
+        private const string listName = "meetup-20100301";
 
         [Test]
         [Category("Read-Only")]
@@ -43,6 +43,13 @@ namespace Twitterizer2.TestCases
             TwitterUserCollection usersInTheList = TwitterList.GetMembers(Configuration.GetTokens(), userName, listName);
 
             Assert.IsNotNull(usersInTheList);
+            Assert.That(!usersInTheList.IsEmpty);
+
+            // Attempt to page through the results.
+            if (usersInTheList.Count == 20)
+            {
+                usersInTheList = usersInTheList.NextPage();
+            }
         }
 
         [Test]

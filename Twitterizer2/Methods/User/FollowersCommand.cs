@@ -43,7 +43,7 @@ namespace Twitterizer.Commands
     /// </summary>
     [Serializable]
     internal sealed class FollowersCommand :
-        Core.CursorPagedCommand<TwitterUserWrapper>
+        Core.CursorPagedCommand<TwitterUserCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FollowersCommand"/> class.
@@ -57,6 +57,8 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentException("Either a user id or screen name (but not both) must be supplied (using the options parameter) when called unauthorized.");
             }
+
+            this.DeserializationHandler = TwitterUserCollection.DeserializeWrapper;
         }
         
         /// <summary>
@@ -90,7 +92,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.TwitterCommand<TwitterUserWrapper> Clone()
+        internal override Twitterizer.Core.TwitterCommand<TwitterUserCollection> Clone()
         {
             FollowersCommand newCommand = new FollowersCommand(this.Tokens, this.OptionalProperties as FollowersOptions);
             newCommand.Cursor = this.Cursor;

@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// The command to obtain followers of a user.
     /// </summary>
     [Serializable]
-    internal sealed class FriendsCommand : CursorPagedCommand<TwitterUserWrapper>
+    internal sealed class FriendsCommand : CursorPagedCommand<TwitterUserCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendsCommand"/> class.
@@ -52,6 +52,7 @@ namespace Twitterizer.Commands
         public FriendsCommand(OAuthTokens tokens, FriendsOptions options)
             : base(HTTPVerb.GET, "statuses/friends.json", tokens, options)
         {
+            this.DeserializationHandler = TwitterUserCollection.DeserializeWrapper;
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace Twitterizer.Commands
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.TwitterCommand<TwitterUserWrapper> Clone()
+        internal override Twitterizer.Core.TwitterCommand<TwitterUserCollection> Clone()
         {
             FriendsCommand newCommand = new FriendsCommand(this.Tokens, this.OptionalProperties as FriendsOptions);
             newCommand.Cursor = this.Cursor;

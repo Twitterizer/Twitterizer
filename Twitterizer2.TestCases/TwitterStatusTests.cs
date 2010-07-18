@@ -15,12 +15,11 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatus missingStatus = TwitterStatus.Show(tokens, 1);
-            Assert.IsNull(missingStatus);
-
             TwitterStatus status = TwitterStatus.Show(tokens, 14772516348);
             Assert.IsNotNull(status);
             Assert.IsNotNullOrEmpty(status.Text);
+            Assert.That(!status.IsEmpty);
+            Assert.That(status != TwitterStatus.Empty);
         }
 
         [Category("Read-Only")]
@@ -34,10 +33,6 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(missingStatus);
             Assert.That(missingStatus.IsEmpty);
             Assert.That(TwitterStatus.Empty == missingStatus);
-
-            TwitterStatus status = TwitterStatus.Show(tokens, 2);
-            Assert.IsNotNull(status);
-            Assert.That(missingStatus.IsEmpty);
         }
 
         [Category("Read-Write")]

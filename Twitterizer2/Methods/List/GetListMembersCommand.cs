@@ -37,8 +37,6 @@ namespace Twitterizer.Commands
     using System;
     using System.Globalization;
     using Twitterizer.Core;
-using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Returns the members of the specified list.
@@ -53,7 +51,7 @@ using Newtonsoft.Json.Linq;
         /// <param name="username">The username.</param>
         /// <param name="listIdOrSlug">The list id or slug.</param>
         /// <param name="options">The options.</param>
-        public GetListMembersCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, OptionalProperties options)
+        public GetListMembersCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, GetListMembersOptions options)
             : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/{1}/members.json", username, listIdOrSlug), requestTokens, options)
         {
             if (requestTokens == null)
@@ -74,7 +72,7 @@ using Newtonsoft.Json.Linq;
             this.ListIdOrSlug = listIdOrSlug;
             this.Username = username;
 
-            this.DeserializationHandler = this.Deserialize;
+            this.DeserializationHandler = TwitterUserCollection.DeserializeWrapper;
         }
 
         /// <summary>
@@ -110,20 +108,12 @@ using Newtonsoft.Json.Linq;
         /// </returns>
         internal override TwitterCommand<TwitterUserCollection> Clone()
         {
-            return new GetListMembersCommand(this.Tokens, this.Username, this.ListIdOrSlug, this.OptionalProperties);
-        }
+            GetListMembersCommand command = new GetListMembersCommand(this.Tokens, this.Username, this.ListIdOrSlug, this.OptionalProperties as GetListMembersOptions);
 
-        /// <summary>
-        /// Deserializes the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        public TwitterUserCollection Deserialize(JObject value)
-        {
-            if (value == null || value.First == null || value.First.First == null)
-                return null;
+            if (command != null && this.OptionalProperties != null && this.OptionalProperties is GetListMembersOptions)
+                command.Cursor = ((GetListMembersOptions)this.OptionalProperties).Cursor;
 
-            return JsonConvert.DeserializeObject<TwitterUserCollection>(value.First.First.ToString());
+            return command;
         }
     }
 }

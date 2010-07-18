@@ -58,8 +58,7 @@ namespace Twitterizer
         {
             Commands.FollowersCommand command = new Commands.FollowersCommand(tokens, options);
 
-            TwitterUserWrapper resultWrapper = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command);
-            TwitterUserCollection result = resultWrapper.Users;
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
 
             result.CursorPagedCommand = command;
 
@@ -106,7 +105,7 @@ namespace Twitterizer
         {
             Commands.FriendsCommand command = new Commands.FriendsCommand(tokens, options);
 
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserWrapper>.PerformAction(command).Users;
+            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
             result.CursorPagedCommand = command;
 
             return result;

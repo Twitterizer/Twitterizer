@@ -283,8 +283,11 @@ namespace Twitterizer
         public static TwitterListCollection GetMemberships(OAuthTokens tokens, string username, OptionalProperties options)
         {
             Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, username, options);
+            TwitterListCollection result = Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
 
-            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
+            result.Command = command;
+
+            return result;
         }
 
         /// <summary>
@@ -340,11 +343,14 @@ namespace Twitterizer
         /// <returns>
         /// A collection of users as <see cref="TwitterUserCollection"/>.
         /// </returns>
-        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
+        public static TwitterUserCollection GetMembers(OAuthTokens tokens, string username, string listIdOrSlug, GetListMembersOptions options)
         {
             Commands.GetListMembersCommand command = new Twitterizer.Commands.GetListMembersCommand(tokens, username, listIdOrSlug, options);
 
-            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            TwitterUserCollection result = CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            result.CursorPagedCommand = command;
+
+            return result;
         }
 
         /// <summary>
