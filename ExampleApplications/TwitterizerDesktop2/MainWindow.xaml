@@ -1,0 +1,21 @@
+﻿<Window x:Class="TwitterizerDesktop2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="222" Width="305">
+    <Grid Height="174" Width="271">
+   
+
+        <Label Margin="8,11,0,139" HorizontalAlignment="Left" Width="147">Authenticate with Twitter</Label>
+        <Button Content="Authenticate" Height="23" HorizontalAlignment="Left" Margin="164,12,0,0" Name="button1" VerticalAlignment="Top" Width="85" Click="button1_Click" />
+        <GroupBox Header="Authentication Complete" Height="126" HorizontalAlignment="Left" Margin="12,41,0,0" Name="groupBox1" VerticalAlignment="Top" Width="247" Visibility="Hidden">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="43*" />
+                    <ColumnDefinition Width="192*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Username / User Id" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="UserTextBlock" VerticalAlignment="Top" Width="223" Grid.ColumnSpan="2" />
+                <TextBlock Text="Access Token" Height="57" HorizontalAlignment="Left" Margin="6,40,0,0" Name="AccessTokenTextBlock" VerticalAlignment="Top" Width="223" Grid.ColumnSpan="2" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

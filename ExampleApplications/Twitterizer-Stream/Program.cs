@@ -36,6 +36,8 @@ namespace Twitterizer_Stream
 {
     using System;
     using Twitterizer;
+    using Twitterizer_Stream;
+    using Twitterizer.Streaming;
 
     /// <summary>
     /// The program class
@@ -79,7 +81,7 @@ namespace Twitterizer_Stream
             {
                 stream.OnStatus += new TwitterStatusReceivedHandler(Stream_OnStatus);
 
-                stream.StartStream();
+                stream.StartFilterStream(new FilterStreamOptions() { Track = new System.Collections.Generic.List<string>() { "digitallyborn", "twit_er_izer" } });
 
                 Console.ReadKey();
 
