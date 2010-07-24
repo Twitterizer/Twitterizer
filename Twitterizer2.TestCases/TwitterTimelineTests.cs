@@ -35,10 +35,10 @@
             User_Options.Count = 8;
 
             timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens(), User_Options);
-            Assert.That(timeline.Count == 8);
+            Assert.That(timeline.Count <= 8);
 
             timeline = TwitterTimeline.UserTimeline(User_Options);
-            Assert.That(timeline.Count == 8);
+            Assert.That(timeline.Count <= 8);
         }
 
         [Category("Read-Only")]

@@ -291,7 +291,7 @@ namespace Twitterizer
                 return ConversionUtility.FromTwitterString(this.ProfileTextColorString);
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the profile image location.
         /// </summary>
@@ -356,7 +356,7 @@ namespace Twitterizer
         public static TwitterUser Show(OAuthTokens tokens, string username, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, 0, username, options);
-            
+
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
@@ -400,6 +400,13 @@ namespace Twitterizer
         public static TwitterUserCollection Search(OAuthTokens tokens, string query)
         {
             return Search(tokens, query, null);
+        }
+
+        public static TwitterUserCollection Lookup(OAuthTokens tokens, LookupUsersOptions options)
+        {
+            Commands.LookupUsersCommand command = new Commands.LookupUsersCommand(tokens, options);
+
+            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
         }
 
         #region Account update methods

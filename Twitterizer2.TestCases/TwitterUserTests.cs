@@ -36,7 +36,7 @@
         [Category("Read-Write")]
         [Category("REST")]
         [Test]
-        
+        [TestCase]
         public static void UploadProfileImage()
         {
             OAuthTokens tokens = Configuration.GetTokens();
@@ -45,6 +45,22 @@
             TwitterUser updatedUser = TwitterUser.UpdateProfileImage(tokens, newProfileImage, null);
 
             Assert.IsNotNull(updatedUser);
+        }
+
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Test]
+        public static void LookupUsers()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            LookupUsersOptions options = new LookupUsersOptions();
+            options.ScreenNames.Add("twitterapi");
+            options.ScreenNames.Add("digitallyborn");
+            options.ScreenNames.Add("trixtur");
+            options.ScreenNames.Add("twit_er_izer");
+
+            TwitterUserCollection users = TwitterUser.Lookup(tokens, options);
         }
     }
 }

@@ -193,6 +193,8 @@
     <Compile Include="Methods\Tweets\UpdateStatusCommand.cs" />
     <Compile Include="Methods\User\FollowersCommand.cs" />
     <Compile Include="Methods\User\FriendsOptions.cs" />
+    <Compile Include="Methods\User\LookupUsersOptions.cs" />
+    <Compile Include="Methods\User\LookupUsersCommand.cs" />
     <Compile Include="Methods\User\UserSearchCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineCommand.cs" />
     <Compile Include="Core\SerializationHelper.cs" />

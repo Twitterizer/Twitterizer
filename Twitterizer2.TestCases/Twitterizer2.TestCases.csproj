@@ -97,16 +97,6 @@
     <Compile Include="TwitterUserTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Twitterizer2.Streaming\Twitterizer2.Streaming.csproj">
-      <Project>{AFDC57ED-C013-4581-9D06-54D8A42D696D}</Project>
-      <Name>Twitterizer2.Streaming</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">
-      <Project>{2FDC3492-6B9E-4771-9755-7892C9CB1E96}</Project>
-      <Name>Twitterizer2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="TestSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -132,6 +122,16 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Twitterizer2.Streaming\Twitterizer2.Streaming.csproj">
+      <Project>{AFDC57ED-C013-4581-9D06-54D8A42D696D}</Project>
+      <Name>Twitterizer2.Streaming</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">
+      <Project>{2FDC3492-6B9E-4771-9755-7892C9CB1E96}</Project>
+      <Name>Twitterizer2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
