@@ -87,6 +87,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -288,9 +291,10 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>IF NOT '$(ConfigurationName)'=='CCNET' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
-IF NOT '$(ConfigurationName)'=='CCNET' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
-IF NOT '$(ConfigurationName)'=='CCNET' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
+    <PostBuildEvent>IF '$(ConfigurationName)'=='Release' mkdir "$(SolutionDir)Release\"
+IF '$(ConfigurationName)'=='Release' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
+IF '$(ConfigurationName)'=='Release' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
+IF '$(ConfigurationName)'=='Release' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>

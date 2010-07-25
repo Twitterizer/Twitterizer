@@ -86,7 +86,7 @@ namespace Twitterizer
         {
             get
             {
-                if (this.source != null)
+                if (!this.source.IsEmpty)
                 {
                     this.source.Tokens = this.Tokens;
                 }
@@ -109,7 +109,7 @@ namespace Twitterizer
         {
             get
             {
-                if (this.target != null)
+                if (!this.target.IsEmpty)
                 {
                     this.target.Tokens = this.Tokens;
                 }
