@@ -32,77 +32,80 @@
 // <summary>The example web application master page.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Configuration;
-using Twitterizer;
-
-public partial class MasterPage : System.Web.UI.MasterPage
+namespace Twitterizer.ExampleWeb
 {
-    /// <summary>
-    /// Gets the tokens.
-    /// </summary>
-    /// <value>The tokens.</value>
-    public OAuthTokens Tokens
-    {
-        get
-        {
-            OAuthTokens tokens = Session["OAuthTokens"] as OAuthTokens;
+    using System;
+    using System.Configuration;
+    using Twitterizer;
 
-            if (tokens == null)
+    public partial class MasterPage : System.Web.UI.MasterPage
+    {
+        /// <summary>
+        /// Gets the tokens.
+        /// </summary>
+        /// <value>The tokens.</value>
+        public OAuthTokens Tokens
+        {
+            get
             {
-                Response.Redirect("~/authenticate/", true);
+                OAuthTokens tokens = Session["OAuthTokens"] as OAuthTokens;
+
+                if (tokens == null)
+                {
+                    Response.Redirect("~/authenticate/", true);
+                }
+
+                return tokens;
             }
-
-            return tokens;
         }
-    }
 
-    /// <summary>
-    /// Gets the user id.
-    /// </summary>
-    /// <value>The user id.</value>
-    public decimal UserId
-    {
-        get
+        /// <summary>
+        /// Gets the user id.
+        /// </summary>
+        /// <value>The user id.</value>
+        public decimal UserId
         {
-            if (Session["UserId"] != null)
-                return (decimal)Session["UserId"];
+            get
+            {
+                if (Session["UserId"] != null)
+                    return (decimal)Session["UserId"];
 
-            return 0;
+                return 0;
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets the user's screen name
-    /// </summary>
-    /// <value>The screen name.</value>
-    public string ScreenName
-    {
-        get
+        /// <summary>
+        /// Gets the user's screen name
+        /// </summary>
+        /// <value>The screen name.</value>
+        public string ScreenName
         {
-            if (!string.IsNullOrEmpty(Session["Username"] as string))
-                return (string)Session["Username"];
+            get
+            {
+                if (!string.IsNullOrEmpty(Session["Username"] as string))
+                    return (string)Session["Username"];
 
-            return string.Empty;
+                return string.Empty;
+            }
         }
-    }
 
-    public string LinkifyText(string text)
-    {
-        string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
-
-        text = System.Text.RegularExpressions.Regex.Replace(text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
-        text = System.Text.RegularExpressions.Regex.Replace(text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
-
-        return text;
-    }
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        if (Session["OAuthTokens"] != null)
+        public string LinkifyText(string text)
         {
-            TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
-            this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
+            string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
+
+            text = System.Text.RegularExpressions.Regex.Replace(text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
+            text = System.Text.RegularExpressions.Regex.Replace(text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
+
+            return text;
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["OAuthTokens"] != null)
+            {
+                TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
+                this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
+            }
         }
     }
 }

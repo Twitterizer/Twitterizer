@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterizerStream", "Twitte
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web\", "{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
 		Debug.AspNetCompiler.VirtualPath = "/Twitterizer-Web"
 		Debug.AspNetCompiler.PhysicalPath = "Twitterizer-Web\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Twitterizer-Web\"

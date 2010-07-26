@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
     CodeFile="friends.aspx.cs" Inherits="friends" %>
 
-<%@ MasterType TypeName="MasterPage" %>
+<%@ MasterType TypeName="Twitterizer.ExampleWeb.MasterPage" %>
 <asp:Content ContentPlaceHolderID="PageBodyContentPlaceHolder" runat="Server">
     <asp:DataList ID="FriendsDataList" runat="server" EnableViewState="false" RepeatColumns="6"
         RepeatDirection="Horizontal" DataSource='<%# FriendsCollection %>'>

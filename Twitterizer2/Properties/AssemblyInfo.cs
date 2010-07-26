@@ -52,7 +52,8 @@ using System.Security.Permissions;
 [assembly: AssemblyProduct("Twitterizer")]
 [assembly: AssemblyCopyright("2010 Patrick 'Ricky' Smith (www.ricky-dev.com)")]
 [assembly: AssemblyTrademark("")]
-[assembly: SecurityRules(SecurityRuleSet.Level1)]
+//[assembly: SecurityRules(SecurityRuleSet.Level1)]
+[assembly: AllowPartiallyTrustedCallers()]
 
 [assembly: CLSCompliant(true)]
 

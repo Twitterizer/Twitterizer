@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
     CodeFile="user.aspx.cs" Inherits="user" %>
 
-<%@ MasterType TypeName="MasterPage" %>
+<%@ MasterType TypeName="Twitterizer.ExampleWeb.MasterPage" %>
 <asp:Content ContentPlaceHolderID="PageBodyContentPlaceHolder" runat="Server">
     <asp:DetailsView ID="UserDetailsView" runat="server"
         AutoGenerateRows="false" Width="100%">

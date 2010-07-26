@@ -324,7 +324,7 @@
             Initializes a new instance of the <see cref="T:Twitterizer.RequestStatus"/> class.
             </summary>
         </member>
-        <member name="M:Twitterizer.RequestStatus.UpdateRequestStatus(System.Byte[],System.String,System.Net.HttpStatusCode,System.String)">
+        <member name="M:Twitterizer.RequestStatus.UpdateRequestStatus(System.Byte[],System.String,System.Net.HttpStatusCode,System.String,Twitterizer.RateLimiting)">
             <summary>
             Updates the request status.
             </summary>
@@ -342,7 +342,7 @@
             </summary>
             <param name="requestStatus">The request status.</param>
         </member>
-        <member name="M:Twitterizer.RequestStatus.BuildRequestStatus(System.Byte[],System.String,System.Net.HttpStatusCode,System.String)">
+        <member name="M:Twitterizer.RequestStatus.BuildRequestStatus(System.Byte[],System.String,System.Net.HttpStatusCode,System.String,Twitterizer.RateLimiting)">
             <summary>
             Builds the request status.
             </summary>
@@ -450,12 +450,12 @@
             </summary>
             <param name="endPoint">The end point.</param>
         </member>
-        <member name="M:Twitterizer.Core.TwitterCommand`1.ParseRateLimitHeaders(`0,System.Net.WebResponse)">
+        <member name="M:Twitterizer.Core.TwitterCommand`1.ParseRateLimitHeaders(System.Net.WebHeaderCollection)">
             <summary>
             Parses the rate limit headers.
             </summary>
-            <param name="resultObject">The result object.</param>
-            <param name="webResponse">The web response.</param>
+            <param name="responseHeaders">The headers of the web response.</param>
+            <returns>An object that contains the rate-limiting info contained in the response headers</returns>
         </member>
         <member name="M:Twitterizer.Core.TwitterCommand`1.AddResultToCache(System.Text.StringBuilder,System.Web.Caching.Cache,`0)">
             <summary>
@@ -679,7 +679,7 @@
             Returns the members of the specified list.
             </summary>
         </member>
-        <member name="M:Twitterizer.Commands.GetListMembersCommand.#ctor(Twitterizer.OAuthTokens,System.String,System.String,Twitterizer.OptionalProperties)">
+        <member name="M:Twitterizer.Commands.GetListMembersCommand.#ctor(Twitterizer.OAuthTokens,System.String,System.String,Twitterizer.GetListMembersOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.Commands.GetListsCommand"/> class.
             </summary>
@@ -700,13 +700,6 @@
             <returns>
             A new instance of the <see cref="T:Twitterizer.Core.PagedCommand`1"/> interface.
             </returns>
-        </member>
-        <member name="M:Twitterizer.Commands.GetListMembersCommand.Deserialize(Newtonsoft.Json.Linq.JObject)">
-            <summary>
-            Deserializes the specified value.
-            </summary>
-            <param name="value">The value.</param>
-            <returns></returns>
         </member>
         <member name="P:Twitterizer.Commands.GetListMembersCommand.Username">
             <summary>
@@ -1045,66 +1038,6 @@
             Gets or sets the search query.
             </summary>
             <value>The search query.</value>
-        </member>
-        <member name="T:Twitterizer.TwitterStatusReceivedHandler">
-            <summary>
-            The delegate to handle each status received.
-            </summary>
-            <param name="status">The status received.</param>
-        </member>
-        <member name="T:Twitterizer.TwitterStream">
-            <summary>
-            The TwitterStream class. Provides an interface to real-time status changes.
-            </summary>
-        </member>
-        <member name="F:Twitterizer.TwitterStream.request">
-            <summary>
-            The web request
-            </summary>
-        </member>
-        <member name="F:Twitterizer.TwitterStream.stopReceived">
-            <summary>
-            This value is set to true to indicate that the stream connection should be closed. 
-            </summary>
-        </member>
-        <member name="M:Twitterizer.TwitterStream.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Twitterizer.TwitterStream"/> class.
-            </summary>
-            <param name="username">The username.</param>
-            <param name="password">The password.</param>
-        </member>
-        <member name="M:Twitterizer.TwitterStream.StartStream">
-            <summary>
-            Starts the stream.
-            </summary>
-        </member>
-        <member name="M:Twitterizer.TwitterStream.EndStream">
-            <summary>
-            Ends the stream.
-            </summary>
-        </member>
-        <member name="M:Twitterizer.TwitterStream.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-        </member>
-        <member name="E:Twitterizer.TwitterStream.OnStatus">
-            <summary>
-            Occurs when a status is received from the stream.
-            </summary>
-        </member>
-        <member name="P:Twitterizer.TwitterStream.Username">
-            <summary>
-            Gets or sets the username.
-            </summary>
-            <value>The username.</value>
-        </member>
-        <member name="P:Twitterizer.TwitterStream.Password">
-            <summary>
-            Gets or sets the password.
-            </summary>
-            <value>The password.</value>
         </member>
         <member name="T:Twitterizer.Core.HTTPVerb">
             <summary>
@@ -2662,6 +2595,11 @@
             <param name="tokens">The tokens.</param>
             <returns>The 20 most recent favorite statuses</returns>
         </member>
+        <member name="T:Twitterizer.TwitterEmptyObject">
+            <summary>
+            Represents an empty object.
+            </summary>
+        </member>
         <member name="P:Twitterizer.TwitterEmptyObject.IsEmpty">
             <summary>
             Gets or sets a value indicating whether this instance is empty.
@@ -2775,6 +2713,29 @@
             </summary>
             <value>The verification string.</value>
         </member>
+        <member name="M:Twitterizer.LookupUsersOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.LookupUsersOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:Twitterizer.LookupUsersOptions.ScreenNames">
+            <summary>
+            Gets or sets the screen names.
+            </summary>
+            <value>The screen names.</value>
+        </member>
+        <member name="P:Twitterizer.LookupUsersOptions.UserIds">
+            <summary>
+            Gets or sets the user ids.
+            </summary>
+            <value>The user ids.</value>
+        </member>
+        <member name="P:Twitterizer.LookupUsersOptions.IncludeEntities">
+            <summary>
+            Gets or sets a value indicating whether [include entities].
+            </summary>
+            <value><c>true</c> if [include entities]; otherwise, <c>false</c>.</value>
+        </member>
         <member name="T:Twitterizer.Commands.ListMembershipsCommand">
             <summary>
             The list membership command class
@@ -2855,6 +2816,23 @@
             <returns>The parsed result of the action.</returns>
             <seealso cref="T:Twitterizer.Core.TwitterCommand`1"/>
             <seealso cref="T:Twitterizer.Core.TwitterObject"/>
+        </member>
+        <member name="T:Twitterizer.Commands.LookupUsersCommand">
+            <summary>
+            The Lookup Users command class.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Commands.LookupUsersCommand.#ctor(Twitterizer.OAuthTokens,Twitterizer.LookupUsersOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Commands.LookupUsersCommand"/> class.
+            </summary>
+            <param name="tokens">The tokens.</param>
+            <param name="options">The options.</param>
+        </member>
+        <member name="M:Twitterizer.Commands.LookupUsersCommand.Init">
+            <summary>
+            Inits this instance.
+            </summary>
         </member>
         <member name="T:Twitterizer.Commands.RetweetedToMeCommand">
             <summary>
@@ -3343,6 +3321,13 @@
             </summary>
             <returns>A <see cref="T:Twitterizer.TwitterUserCollection"/> instance.</returns>
             <value>The previous page.</value>
+        </member>
+        <member name="M:Twitterizer.TwitterUserCollection.DeserializeWrapper(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Deserializes the specified value.
+            </summary>
+            <param name="value">The value.</param>
+            <returns></returns>
         </member>
         <member name="P:Twitterizer.TwitterUserCollection.NextCursor">
             <summary>
@@ -4054,7 +4039,7 @@
             A <see cref="T:Twitterizer.TwitterListCollection"/> instance.
             </returns>
         </member>
-        <member name="M:Twitterizer.TwitterList.GetMembers(Twitterizer.OAuthTokens,System.String,System.String,Twitterizer.OptionalProperties)">
+        <member name="M:Twitterizer.TwitterList.GetMembers(Twitterizer.OAuthTokens,System.String,System.String,Twitterizer.GetListMembersOptions)">
             <summary>
             Returns the members of the specified list.
             </summary>
@@ -5351,34 +5336,6 @@
             </summary>
             <value>The command.</value>
         </member>
-        <member name="T:Twitterizer.TwitterUserWrapper">
-            <summary>
-            The Twitter User Wrapper class.
-            </summary>
-        </member>
-        <member name="F:Twitterizer.TwitterUserWrapper.users">
-            <summary>
-            The private collection for the contained collection
-            </summary>
-        </member>
-        <member name="P:Twitterizer.TwitterUserWrapper.Users">
-            <summary>
-            Gets or sets the users.
-            </summary>
-            <value>The users.</value>
-        </member>
-        <member name="P:Twitterizer.TwitterUserWrapper.NextCursor">
-            <summary>
-            Gets or sets the next cursor.
-            </summary>
-            <value>The next cursor.</value>
-        </member>
-        <member name="P:Twitterizer.TwitterUserWrapper.PreviousCursor">
-            <summary>
-            Gets or sets the previous cursor.
-            </summary>
-            <value>The previous cursor.</value>
-        </member>
         <member name="T:Twitterizer.Commands.UpdateListCommand">
             <summary>
             The update list command class
@@ -5522,6 +5479,12 @@
             Gets or sets a value indicating whether [exclude hash tags].
             </summary>
             <value><c>true</c> if [exclude hash tags]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Twitterizer.GetListMembersOptions.Cursor">
+            <summary>
+            Gets or sets the cursor.
+            </summary>
+            <value>The cursor.</value>
         </member>
         <member name="T:Twitterizer.Commands.DeleteFavoriteCommand">
             <summary>

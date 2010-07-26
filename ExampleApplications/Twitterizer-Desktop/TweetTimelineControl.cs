@@ -49,7 +49,7 @@ namespace Twitterizer_Desktop
         /// <param name="status">The status.</param>
         public TweetTimelineControl(TwitterStatus status)
         {
-            if (status == null)
+            if (status == null || status.IsEmpty)
             {
                 throw new ArgumentNullException("status");
             }

@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
     CodeFile="search.aspx.cs" Inherits="search" %>
 
-<%@ MasterType TypeName="MasterPage" %>
+<%@ MasterType TypeName="Twitterizer.ExampleWeb.MasterPage" %>
 <asp:Content ContentPlaceHolderID="PageBodyContentPlaceHolder" runat="Server">
     <fieldset>
         <label>

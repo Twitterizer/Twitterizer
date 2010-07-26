@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="followers.aspx.cs" Inherits="followers"
     MasterPageFile="~/MasterPage.master" %>
 
-<%@ MasterType TypeName="MasterPage" %>
+<%@ MasterType TypeName="Twitterizer.ExampleWeb.MasterPage" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageBodyContentPlaceHolder">
      <asp:DataList ID="FollowersDataList" runat="server" EnableViewState="false" RepeatColumns="6"
         RepeatDirection="Horizontal" DataSource='<%# FollowersCollection %>'>

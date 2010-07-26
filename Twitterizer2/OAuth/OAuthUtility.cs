@@ -363,7 +363,9 @@ namespace Twitterizer
             request.ContentType = string.Concat("multipart/form-data;boundary=", boundaryTicks);
             request.AllowWriteStreamBuffering = true;
             request.ContentLength = formData.Length;
-            request.Proxy = proxy;
+
+            if (proxy != null)
+                request.Proxy = proxy;
 
             // Stream the form data to the request
             using (Stream reqStream = request.GetRequestStream())
@@ -435,7 +437,9 @@ namespace Twitterizer
             request.Method = verb.ToString();
             request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
             request.Headers.Add("Authorization", GenerateAuthorizationHeader(combinedParameters));
-            request.Proxy = proxy;
+            
+            if (proxy != null)
+                request.Proxy = proxy;
 
             if (verb == HTTPVerb.POST)
             {

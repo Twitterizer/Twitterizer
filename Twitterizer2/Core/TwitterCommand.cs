@@ -440,7 +440,9 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
-                    request.Proxy = this.OptionalProperties.Proxy;
+
+                    if (this.OptionalProperties.Proxy != null)
+                        request.Proxy = this.OptionalProperties.Proxy;
                     break;
                 case HTTPVerb.POST:
                     request = (HttpWebRequest)WebRequest.Create(this.Uri);
@@ -450,7 +452,9 @@ namespace Twitterizer.Core
                         CultureInfo.InvariantCulture,
                         "Twitterizer/{0}",
                         Information.AssemblyVersion());
-                    request.Proxy = this.OptionalProperties.Proxy;
+
+                    if (this.OptionalProperties.Proxy != null)
+                        request.Proxy = this.OptionalProperties.Proxy;
 
                     using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
                     {

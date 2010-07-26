@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default"
-    MasterPageFile="~/MasterPage.master" %>
+    MasterPageFile="~/MasterPage.master" Theme="DefaultTheme" %>
 
-<%@ MasterType TypeName="MasterPage" %>
+<%@ MasterType TypeName="Twitterizer.ExampleWeb.MasterPage" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageBodyContentPlaceHolder">
     <h2>
         What's Happening?</h2>
