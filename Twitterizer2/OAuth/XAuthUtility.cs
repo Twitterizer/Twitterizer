@@ -79,25 +79,18 @@ namespace Twitterizer
 
             OAuthTokenResponse response = new OAuthTokenResponse();
 
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            
-            parameters.Add("x_auth_username", username);
-            parameters.Add("x_auth_password", password);
-            parameters.Add("x_auth_mode", "client_auth");
-
             try
             {
-                HttpWebResponse webResponse = OAuthUtility.ExecuteRequest(
-                    "https://api.twitter.com/oauth/access_token",
-                    parameters,
+                WebRequestBuilder builder = new WebRequestBuilder(
+                    new Uri("https://api.twitter.com/oauth/access_token"),
                     HTTPVerb.POST,
-                    consumerKey,
-                    consumerSecret,
-                    string.Empty,
-                    string.Empty,
-                    null);
+                    new OAuthTokens() { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
 
-                string responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
+                builder.Parameters.Add("x_auth_username", username);
+                builder.Parameters.Add("x_auth_password", password);
+                builder.Parameters.Add("x_auth_mode", "client_auth");
+
+                string responseBody = new StreamReader(builder.ExecuteRequest().GetResponseStream()).ReadToEnd();
 
                 response.Token = Regex.Match(responseBody, @"oauth_token=([^&]+)").Groups[1].Value;
                 response.TokenSecret = Regex.Match(responseBody, @"oauth_token_secret=([^&]+)").Groups[1].Value;

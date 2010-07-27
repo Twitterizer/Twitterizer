@@ -31,7 +31,6 @@
 // <author>Ricky Smith</author>
 // <summary>The base class for all command classes.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Core
 {
     using System;
@@ -44,27 +43,6 @@ namespace Twitterizer.Core
     using System.Web;
     using System.Web.Caching;
     using Twitterizer;
-
-    /// <summary>
-    /// Enumeration of the supported HTTP verbs supported by the <see cref="Twitterizer.Core.CommandPerformer{T}"/>
-    /// </summary>
-    internal enum HTTPVerb
-    {
-        /// <summary>
-        /// The HTTP GET method is used to retrieve data.
-        /// </summary>
-        GET,
-
-        /// <summary>
-        /// The HTTP POST method is used to transmit data.
-        /// </summary>
-        POST,
-
-        /// <summary>
-        /// The HTTP DELETE method is used to indicate that a resource should be deleted.
-        /// </summary>
-        DELETE
-    }
 
     /// <summary>
     /// The base command class.
@@ -220,56 +198,29 @@ namespace Twitterizer.Core
 
             try
             {
-                HttpWebResponse webResponse;
+                WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens);
 
-                // If we have OAuth tokens, then build and execute an OAuth request.
-                if (this.Tokens != null)
+                if (this.OptionalProperties != null)
+                    requestBuilder.Proxy = this.OptionalProperties.Proxy;
+
+                foreach (var item in queryParameters)
                 {
-                    if (this.ImageToUpload != null)
-                    {
-                        webResponse = OAuthUtility.ExecuteRequest(
-                            this.Uri.AbsoluteUri,
-                            "image",
-                            this.ImageToUpload.Filename,
-                            this.ImageToUpload.Data,
-                            this.ImageToUpload.GetMimeType(),
-                            queryParameters,
-                            this.Tokens.ConsumerKey,
-                            this.Tokens.ConsumerSecret,
-                            this.Tokens.AccessToken,
-                            this.Tokens.AccessTokenSecret,
-                            this.OptionalProperties != null ? this.OptionalProperties.Proxy : null);
-                    }
-                    else
-                    {
-                        webResponse = OAuthUtility.ExecuteRequest(
-                            this.Uri.AbsoluteUri,
-                            queryParameters,
-                            this.Verb,
-                            this.Tokens.ConsumerKey,
-                            this.Tokens.ConsumerSecret,
-                            this.Tokens.AccessToken,
-                            this.Tokens.AccessTokenSecret,
-                            this.OptionalProperties != null ? this.OptionalProperties.Proxy : null);
-                    }
-                }
-                else
-                {
-                    // Otherwise, build and execute a regular request
-                    webResponse = this.BuildRequestAndGetResponse(queryParameters);
+                    requestBuilder.Parameters.Add(item.Key, item.Value);
                 }
 
-                responseData = ConversionUtility.ReadStream(webResponse.GetResponseStream());
+                HttpWebResponse response = requestBuilder.ExecuteRequest();
+
+                responseData = ConversionUtility.ReadStream(response.GetResponseStream());
 
 				// Parse the rate limiting HTTP Headers
-				rateLimiting = ParseRateLimitHeaders(webResponse.Headers);
+                rateLimiting = ParseRateLimitHeaders(response.Headers);
 
                 // Build the request status (holds details about the last request) and update the singleton
                 requestStatus = RequestStatus.BuildRequestStatus(
                     responseData,
-                    webResponse.ResponseUri.AbsoluteUri,
-                    webResponse.StatusCode,
-                    webResponse.ContentType,
+                    response.ResponseUri.AbsoluteUri,
+                    response.StatusCode,
+                    response.ContentType,
 					rateLimiting);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);

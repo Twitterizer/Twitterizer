@@ -47,7 +47,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         public LookupUsersCommand(OAuthTokens tokens, LookupUsersOptions options)
-            : base(Core.HTTPVerb.GET, "users/lookup.json", tokens, options)
+            : base(HTTPVerb.GET, "users/lookup.json", tokens, options)
         {
             if (tokens == null)
             {

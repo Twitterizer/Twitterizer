@@ -221,6 +221,7 @@
     <Compile Include="Core\TwitterCommand.cs" />
     <Compile Include="Core\CommandPerformer.cs" />
     <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="OAuth\WebRequestBuilder.cs" />
     <Compile Include="OAuth\XAuthUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\OptionalProperties.cs" />
