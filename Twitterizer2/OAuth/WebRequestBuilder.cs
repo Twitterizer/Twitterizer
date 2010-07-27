@@ -1,4 +1,37 @@
-﻿namespace Twitterizer
+﻿//-----------------------------------------------------------------------
+// <copyright file="WebRequestBuilder.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// 
+//  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
+//  All rights reserved.
+//  
+//  Redistribution and use in source and binary forms, with or without modification, are 
+//  permitted provided that the following conditions are met:
+// 
+//  - Redistributions of source code must retain the above copyright notice, this list 
+//    of conditions and the following disclaimer.
+//  - Redistributions in binary form must reproduce the above copyright notice, this list 
+//    of conditions and the following disclaimer in the documentation and/or other 
+//    materials provided with the distribution.
+//  - Neither the name of the Twitterizer nor the names of its contributors may be 
+//    used to endorse or promote products derived from this software without specific 
+//    prior written permission.
+// 
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+//  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+//  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+//  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+//  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+//  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+//  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+//  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+//  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+//  POSSIBILITY OF SUCH DAMAGE.
+// </copyright>
+// <author>Ricky Smith</author>
+// <summary>Provides the means of preparing and executing Anonymous and OAuth signed web requests.</summary>
+//-----------------------------------------------------------------------
+namespace Twitterizer
 {
     using System;
     using System.Collections.Generic;
@@ -32,20 +65,51 @@
         DELETE
     }
 
+    /// <summary>
+    /// The Web Request Builder class.
+    /// </summary>
     public sealed class WebRequestBuilder
     {
+        /// <summary>
+        /// Gets or sets the request URI.
+        /// </summary>
+        /// <value>The request URI.</value>
         public Uri RequestUri { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the parameters.
+        /// </summary>
+        /// <value>The parameters.</value>
         public Dictionary<string, string> Parameters { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the OAuth parameters.
+        /// </summary>
+        /// <value>The O auth parameters.</value>
         public Dictionary<string, string> OAuthParameters { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the verb.
+        /// </summary>
+        /// <value>The verb.</value>
         public HTTPVerb Verb { get; set; }
 
+        /// <summary>
+        /// Gets or sets the oauth tokens.
+        /// </summary>
+        /// <value>The tokens.</value>
         public OAuthTokens Tokens { get; set; }
 
+        /// <summary>
+        /// Gets or sets the proxy.
+        /// </summary>
+        /// <value>The proxy.</value>
         public WebProxy Proxy { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the request will be signed with an OAuth authorization header.
+        /// </summary>
+        /// <value><c>true</c> if [use O auth]; otherwise, <c>false</c>.</value>
         public bool UseOAuth { get; private set; }
 
         /// <summary>
@@ -99,12 +163,23 @@
         /// <returns></returns>
         public HttpWebResponse ExecuteRequest()
         {
+            HttpWebRequest request = PrepareRequest();
+
+            return (HttpWebResponse)request.GetResponse();
+        }
+
+        /// <summary>
+        /// Prepares the request. It is not nessisary to call this method unless additional configuration is required.
+        /// </summary>
+        /// <returns>A <see cref="HttpWebRequest"/> object fully configured and ready for execution.</returns>
+        public HttpWebRequest PrepareRequest()
+        {
             SetupOAuth();
             RebuildRequestUriWithParameters();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
             request.Method = this.Verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion());
+            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetAssembly(typeof(WebRequestBuilder)).GetName().Version.ToString());
 
             if (this.UseOAuth)
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
@@ -117,7 +192,7 @@
                 request.ContentType = "application/x-www-form-urlencoded";
             }
 
-            return (HttpWebResponse)request.GetResponse();
+            return request;
         }
 
         /// <summary>
@@ -140,7 +215,10 @@
         }
         
         #region OAuth Helper Methods
-        private void SetupOAuth()
+        /// <summary>
+        /// Sets up the OAuth request details.
+        /// </summary>
+        public void SetupOAuth()
         {
             // We only sign oauth requests
             if (!this.UseOAuth)
@@ -236,12 +314,10 @@
         }
 
         /// <summary>
-        /// This is a different Url Encode implementation since the default .NET one outputs the percent encoding in lower case.
-        /// While this is not a problem with the percent encoding spec, it is used in upper case throughout OAuth
+        /// Encodes a value for inclusion in a URL querystring.
         /// </summary>
         /// <param name="value">The value to Url encode</param>
         /// <returns>Returns a Url encoded string</returns>
-        [SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "Return type is not a URL.")]
         public static string UrlEncode(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -270,7 +346,7 @@
         }
 
         /// <summary>
-        /// URLs the encode.
+        /// Encodes a series of key/value pairs for inclusion in a URL querystring.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A string of all the <paramref name="parameters"/> keys and value pairs with the values encoded.</returns>
@@ -300,7 +376,11 @@
             return UrlEncode(parameterString.ToString());
         }
 
-        private string GenerateAuthorizationHeader()
+        /// <summary>
+        /// Generates the authorization header.
+        /// </summary>
+        /// <returns>The string value of the HTTP header to be included for OAuth requests.</returns>
+        public string GenerateAuthorizationHeader()
         {
             StringBuilder authHeaderBuilder = new StringBuilder("OAuth realm=\"Twitter API\"");
 
