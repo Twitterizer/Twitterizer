@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.TestCases", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Streaming", "Twitterizer2.Streaming\Twitterizer2.Streaming.csproj", "{AFDC57ED-C013-4581-9D06-54D8A42D696D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.OAuth", "Twitterizer.OAuth\Twitterizer.OAuth.csproj", "{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CCNET|Any CPU = CCNET|Any CPU
@@ -71,6 +73,12 @@ Global
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.Release|x86-Only.ActiveCfg = Release|Any CPU
+		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
+		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
+		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
+		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Release|x86-Only.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

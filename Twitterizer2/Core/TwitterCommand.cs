@@ -189,7 +189,7 @@ namespace Twitterizer.Core
             // Declare the variable to be returned
             T resultObject = default(T);
             RequestStatus requestStatus = null;
-        	RateLimiting rateLimiting = null;
+            RateLimiting rateLimiting = null;
 
             // This must be set for all twitter request.
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -212,7 +212,7 @@ namespace Twitterizer.Core
 
                 responseData = ConversionUtility.ReadStream(response.GetResponseStream());
 
-				// Parse the rate limiting HTTP Headers
+                // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
                 // Build the request status (holds details about the last request) and update the singleton
@@ -221,7 +221,7 @@ namespace Twitterizer.Core
                     response.ResponseUri.AbsoluteUri,
                     response.StatusCode,
                     response.ContentType,
-					rateLimiting);
+                    rateLimiting);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
             }
@@ -239,18 +239,18 @@ namespace Twitterizer.Core
 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
 
-				rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
+                rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
-				requestStatus = RequestStatus.BuildRequestStatus(
+                requestStatus = RequestStatus.BuildRequestStatus(
                         responseData,
                         exceptionResponse.ResponseUri.AbsoluteUri,
                         exceptionResponse.StatusCode,
                         exceptionResponse.ContentType,
-						rateLimiting);
+                        rateLimiting);
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
 
-				if (wex.Status == WebExceptionStatus.UnknownError)
+                if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
                 return new T() { IsEmpty = true, RequestStatus = requestStatus, RateLimiting = rateLimiting };
@@ -271,7 +271,7 @@ namespace Twitterizer.Core
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             resultObject.Tokens = this.Tokens;
             resultObject.RequestStatus = requestStatus;
-        	resultObject.RateLimiting = rateLimiting;
+            resultObject.RateLimiting = rateLimiting;
 
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
@@ -299,28 +299,28 @@ namespace Twitterizer.Core
         /// <summary>
         /// Parses the rate limit headers.
         /// </summary>
-		/// <param name="responseHeaders">The headers of the web response.</param>
-		/// <returns>An object that contains the rate-limiting info contained in the response headers</returns>
+        /// <param name="responseHeaders">The headers of the web response.</param>
+        /// <returns>An object that contains the rate-limiting info contained in the response headers</returns>
         private static RateLimiting ParseRateLimitHeaders(WebHeaderCollection responseHeaders)
         {
             RateLimiting rateLimiting = new RateLimiting();
 
-			if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Limit")))
+            if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Limit")))
             {
-				rateLimiting.Total = int.Parse(responseHeaders.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
+                rateLimiting.Total = int.Parse(responseHeaders.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
             }
 
-			if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Remaining")))
+            if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Remaining")))
             {
-				rateLimiting.Remaining = int.Parse(responseHeaders.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
+                rateLimiting.Remaining = int.Parse(responseHeaders.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
             }
 
-			if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
+            if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
             {
                 rateLimiting.ResetDate = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
-					.AddSeconds(double.Parse(responseHeaders.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture)), DateTimeKind.Utc));
+                    .AddSeconds(double.Parse(responseHeaders.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture)), DateTimeKind.Utc));
             }
-        	return rateLimiting;
+            return rateLimiting;
         }
 
         /// <summary>
@@ -345,104 +345,6 @@ namespace Twitterizer.Core
 
                 Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
             }
-        }
-        
-        /// <summary>
-        /// Builds the request.
-        /// </summary>
-        /// <param name="queryParameters">The query parameters.</param>
-        /// <returns>
-        /// A <see cref="System.Net.HttpWebRequest"/> class.
-        /// </returns>
-        private HttpWebResponse BuildRequestAndGetResponse(Dictionary<string, string> queryParameters)
-        {
-            // Check if the SSL configuration flag is set and modify the address accordingly
-            if (this.OptionalProperties.UseSSL)
-            {
-                this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
-            }
-
-            // Prepare and execute un-authorized query
-            HttpWebRequest request;
-
-            StringBuilder queryStringBuilder = new StringBuilder();
-            foreach (KeyValuePair<string, string> item in queryParameters)
-            {
-                if (queryStringBuilder.Length > 0)
-                    queryStringBuilder.Append("&");
-
-                queryStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value);
-            }
-
-            switch (this.Verb)
-            {
-                case HTTPVerb.GET:
-                    string fullPathAndQuery = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", this.Uri, queryStringBuilder);
-#if DEBUG
-                    System.Diagnostics.Debug.WriteLine(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "ANON GET: {0}",
-                            fullPathAndQuery));
-#endif
-                    request = (HttpWebRequest)WebRequest.Create(fullPathAndQuery);
-                    request.Method = "GET";
-                    request.UserAgent = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Twitterizer/{0}",
-                        Information.AssemblyVersion());
-
-                    if (this.OptionalProperties.Proxy != null)
-                        request.Proxy = this.OptionalProperties.Proxy;
-                    break;
-                case HTTPVerb.POST:
-                    request = (HttpWebRequest)WebRequest.Create(this.Uri);
-                    request.Method = "POST";
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    request.UserAgent = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Twitterizer/{0}",
-                        Information.AssemblyVersion());
-
-                    if (this.OptionalProperties.Proxy != null)
-                        request.Proxy = this.OptionalProperties.Proxy;
-
-                    using (StreamWriter postDataWriter = new StreamWriter(request.GetRequestStream()))
-                    {
-                        postDataWriter.Write(queryStringBuilder.ToString());
-                        postDataWriter.Close();
-                    }
-
-#if DEBUG
-                    System.Diagnostics.Debug.WriteLine(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "ANON POST: {1}\n{0}",
-                            this.Uri,
-                            queryStringBuilder.ToString()));
-#endif
-                    break;
-                case HTTPVerb.DELETE:
-#if DEBUG
-                    System.Diagnostics.Debug.WriteLine(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "ANON DELETE: {0}",
-                            this.Uri.AbsoluteUri));
-#endif
-                    request = (HttpWebRequest)WebRequest.Create(this.Uri);
-                    request.Method = "DELETE";
-                    request.UserAgent = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Twitterizer/{0}",
-                        Information.AssemblyVersion());
-                    request.Proxy = this.OptionalProperties.Proxy;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return (HttpWebResponse)request.GetResponse();
         }
     }
 }
