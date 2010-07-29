@@ -34,9 +34,13 @@
 namespace Twitterizer.Streaming
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net;
+    using System.Runtime.Serialization;
     using System.Text;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The delegate to handle each status received.
@@ -44,16 +48,15 @@ namespace Twitterizer.Streaming
     /// <param name="status">The status received.</param>
     public delegate void TwitterStatusReceivedHandler(TwitterStatus status);
 
+    public delegate void TwitterStatusDeletedHandler(TwitterStatus status);
+
+    public delegate void TwitterFriendsReceivedHandler(List<decimal> friendList);
+
     /// <summary>
     /// The TwitterStream class. Provides an interface to real-time status changes.
     /// </summary>
     public class TwitterStream : IDisposable
     {
-        /// <summary>
-        /// The web request
-        /// </summary>
-        private WebRequest request;
-
         /// <summary>
         /// This value is set to true to indicate that the stream connection should be closed. 
         /// </summary>
@@ -64,28 +67,21 @@ namespace Twitterizer.Streaming
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        public TwitterStream(string username, string password)
+        public TwitterStream(OAuthTokens tokens)
         {
-            this.Username = username;
-            this.Password = password;
+            this.Tokens = tokens;
         }
+
+        public OAuthTokens Tokens { get; set; }
 
         /// <summary>
         /// Occurs when a status is received from the stream.
         /// </summary>
-        public event TwitterStatusReceivedHandler OnStatus;
+        public event TwitterStatusReceivedHandler OnStatusReceived;
 
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; set; }
+        public event TwitterStatusDeletedHandler OnStatusDeleted;
 
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        /// <value>The password.</value>
-        public string Password { get; set; }
+        public event TwitterFriendsReceivedHandler OnFriendsReceived;
 
         /// <summary>
         /// Starts the filter stream. Returns public statuses that match one or more filter predicates.
@@ -137,20 +133,139 @@ namespace Twitterizer.Streaming
         }
 
         /// <summary>
+        /// Starts the user stream.
+        /// </summary>
+        public void StartUserStream()
+        {
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("http://betastream.twitter.com/2b/user.json"), HTTPVerb.GET, this.Tokens);
+            
+            HttpWebRequest request = builder.PrepareRequest();
+            request.KeepAlive = true;
+
+            request.BeginGetResponse(StreamCallback, request);
+        }
+
+        /// <summary>
+        /// The callback handler for all streams
+        /// </summary>
+        /// <param name="result">The result.</param>
+        private void StreamCallback(IAsyncResult result)
+        {
+            HttpWebRequest req = (HttpWebRequest)result.AsyncState;
+
+            using (var response = req.EndGetResponse(result))
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                while (!this.stopReceived && !reader.EndOfStream)
+                {
+                    string lineOfData = reader.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(lineOfData))
+                        continue;
+
+                    if (ReadStatus(lineOfData))
+                        continue;
+
+                    if (ReadStatusDeleted(lineOfData))
+                        continue;
+
+                    if (ReadFollowers(lineOfData))
+                        continue;
+                }
+
+                req.Abort();
+                reader.Close();
+                response.Close();
+            }
+        }
+
+        private bool ReadFollowers(string lineOfData)
+        {
+            if (string.IsNullOrWhiteSpace(lineOfData))
+                return false;
+
+            try
+            {
+                JObject deserializedObject = (JObject)JsonConvert.DeserializeObject(lineOfData);
+
+                if (deserializedObject == null || deserializedObject.SelectToken("friends") == null)
+                    return false;
+
+                List<decimal> resultList = JsonConvert.DeserializeObject<List<decimal>>(deserializedObject.SelectToken("friends").ToString());
+
+                if (resultList != null && this.OnFriendsReceived != null)
+                {
+                    OnFriendsReceived(resultList);
+                }
+            }
+            catch (JsonSerializationException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ReadStatus(string lineOfData)
+        {
+            try
+            {
+                TwitterStatus resultStatus = Twitterizer.Core.SerializationHelper<TwitterStatus>.Deserialize(
+                    Encoding.UTF8.GetBytes(lineOfData));
+
+                if (resultStatus == null || resultStatus.IsEmpty || resultStatus.Id <= 0)
+                {
+                    return false;
+                }
+
+                if (this.OnStatusReceived != null)
+                {
+                    this.OnStatusReceived(resultStatus);
+                }
+            }
+            catch (SerializationException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ReadStatusDeleted(string lineOfData)
+        {
+            try
+            {
+                JObject deserializedObject = (JObject)JsonConvert.DeserializeObject(lineOfData);
+
+                if (deserializedObject == null || deserializedObject.SelectToken("delete") == null || deserializedObject.SelectToken("delete").SelectToken("status") == null)
+                    return false;
+
+                TwitterStatus resultStatus = JsonConvert.DeserializeObject<TwitterStatus>(deserializedObject.SelectToken("delete").SelectToken("status").ToString());
+
+                if (resultStatus != null && resultStatus.Id > 0 && this.OnStatusDeleted != null)
+                {
+                    this.OnStatusDeleted(resultStatus);
+                }
+            }
+            catch (SerializationException) 
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Starts the stream.
         /// </summary>
         private void StartStream(string streamUri)
         {
-            if (this.OnStatus == null)
-            {
-                throw new ApplicationException("The OnStatus event must be handled.");
-            }
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri(streamUri), HTTPVerb.GET, this.Tokens);
 
-            this.request = WebRequest.Create(streamUri);
-            this.request.Method = "POST";
+            WebRequest request;
+            request = builder.PrepareRequest();
 
-            this.request.Credentials = new NetworkCredential(this.Username, this.Password);
-            this.request.BeginGetResponse(
+            request.BeginGetResponse(
                 ar =>
                 {
                     var req = (WebRequest)ar.AsyncState;
@@ -173,10 +288,11 @@ namespace Twitterizer.Streaming
                             {
                                 TwitterStatus resultObject = Twitterizer.Core.SerializationHelper<TwitterStatus>.Deserialize(
                                     Encoding.UTF8.GetBytes(reader.ReadLine()));
+                                
 
-                                if (resultObject != null && resultObject.Id > 0)
+                                if (resultObject != null && resultObject.Id > 0 && this.OnStatusReceived != null)
                                 {
-                                    this.OnStatus(resultObject);
+                                    this.OnStatusReceived(resultObject);
                                 }
                             }
                             catch (System.Runtime.Serialization.SerializationException)
@@ -185,7 +301,9 @@ namespace Twitterizer.Streaming
                         }
                     }
                 },
-                this.request);
+                request);
+
+            request.Abort();
         }
 
         /// <summary>
@@ -202,7 +320,6 @@ namespace Twitterizer.Streaming
         public void Dispose()
         {
             this.stopReceived = true;
-            this.request.Abort();
         }
     }
 }

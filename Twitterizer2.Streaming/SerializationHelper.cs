@@ -68,11 +68,6 @@ namespace Twitterizer.Core
             try
             {
                 T resultObject = default(T);
-#if DEBUG
-                Debug.WriteLine("----------- RESPONSE -----------");
-                Debug.WriteLine(Encoding.UTF8.GetString(webResponseData));
-                Debug.WriteLine("----------- END -----------");
-#endif
 
                 // Deserialize the results.
                 if (deserializationHandler == null)

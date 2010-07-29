@@ -149,7 +149,7 @@ namespace Twitterizer
             if (value == null || value.First == null || value.First.First == null)
                 return null;
 
-            TwitterUserCollection result = JsonConvert.DeserializeObject<TwitterUserCollection>(value.First.First.ToString());
+            TwitterUserCollection result = JsonConvert.DeserializeObject<TwitterUserCollection>(value.First.ToString());
             result.NextCursor = value.SelectToken("next_cursor").Value<long>();
             result.PreviousCursor = value.SelectToken("previous_cursor").Value<long>();
 

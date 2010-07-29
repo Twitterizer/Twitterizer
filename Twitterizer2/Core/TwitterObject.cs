@@ -36,6 +36,9 @@ namespace Twitterizer.Core
     using System.Xml.Serialization;
     using Twitterizer;
 
+    public delegate void TwitterAsyncCallback<T>(T result)
+            where T : TwitterObject;
+
     /// <summary>
     /// The base object class
     /// </summary>

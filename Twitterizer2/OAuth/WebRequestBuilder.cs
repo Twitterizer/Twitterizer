@@ -127,6 +127,16 @@ namespace Twitterizer
 
             this.Parameters = new Dictionary<string, string>();
             this.OAuthParameters = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(this.RequestUri.Query))
+            {
+                foreach (Match item in Regex.Matches(this.RequestUri.Query, @"(?<key>[^&?=]+)=(?<value>[^&?=]+)"))
+                {
+                    this.Parameters.Add(item.Groups["key"].Value, item.Groups["value"].Value);
+                }
+
+                this.RequestUri = new Uri(this.RequestUri.AbsoluteUri.Replace(this.RequestUri.Query, ""));
+            }
         }
 
         /// <summary>

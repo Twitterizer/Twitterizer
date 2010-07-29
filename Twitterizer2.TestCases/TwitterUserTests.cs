@@ -2,7 +2,9 @@
 {
     using NUnit.Framework;
     using Twitterizer;
-    
+    using System.Diagnostics;
+    using System;
+
     [TestFixture]
     public class TwitterUserTests
     {
@@ -61,6 +63,26 @@
             options.ScreenNames.Add("twit_er_izer");
 
             TwitterUserCollection users = TwitterUser.Lookup(tokens, options);
+        }
+
+        public static void AsyncTest()
+        {
+            TwitterUser.Show("username", null, (TwitterUser user) =>
+            {
+                Console.Write(user.Name);
+            });
+
+            TwitterUser.Show("username", null, AsyncCallback);
+        }
+
+        public static void AsyncCallback(TwitterUser user)
+        {
+
+        }
+
+        private static void DoSomethingClever(TwitterUser result)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -34,9 +34,9 @@
 namespace Twitterizer
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Globalization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
@@ -46,6 +46,22 @@ namespace Twitterizer
     [Serializable]
     public class TwitterUser : Core.TwitterObject
     {
+        public static void Show(string username, OptionalProperties options, Action<TwitterUser> function)
+        {
+            Func<string, OptionalProperties, TwitterUser> methodToCall = new Func<string, OptionalProperties, TwitterUser>(Show);
+
+            AsyncOperation operation = AsyncOperationManager.CreateOperation(null);
+            methodToCall.BeginInvoke(
+                username,
+                options,
+                (AsyncCallback)((IAsyncResult result) =>
+                    {
+                        function(methodToCall.EndInvoke(result));
+                    }), 
+                null);
+        }
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterUser"/> class.
         /// </summary>

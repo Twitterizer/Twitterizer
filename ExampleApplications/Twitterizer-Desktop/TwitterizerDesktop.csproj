@@ -93,6 +93,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Twitterizer2.dll</HintPath>
     </Reference>
+    <Reference Include="WebRequestBuilder">
+      <HintPath>F:\Users\Ricky\Desktop\WebRequestBuilder.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate.cs">

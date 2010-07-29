@@ -418,7 +418,7 @@
             </summary>
             <value>The request parameters.</value>
         </member>
-        <member name="M:Twitterizer.Core.TwitterCommand`1.#ctor(Twitterizer.Core.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
+        <member name="M:Twitterizer.Core.TwitterCommand`1.#ctor(Twitterizer.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.Core.TwitterCommand`1"/> class.
             </summary>
@@ -464,15 +464,6 @@
             <param name="cacheKeyBuilder">The cache key builder.</param>
             <param name="cache">The cache.</param>
             <param name="resultObject">The result object.</param>
-        </member>
-        <member name="M:Twitterizer.Core.TwitterCommand`1.BuildRequestAndGetResponse(System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            Builds the request.
-            </summary>
-            <param name="queryParameters">The query parameters.</param>
-            <returns>
-            A <see cref="T:System.Net.HttpWebRequest"/> class.
-            </returns>
         </member>
         <member name="P:Twitterizer.Core.TwitterCommand`1.OptionalProperties">
             <summary>
@@ -541,7 +532,7 @@
             <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
             <tocexclude />
         </member>
-        <member name="M:Twitterizer.Core.CursorPagedCommand`1.#ctor(Twitterizer.Core.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
+        <member name="M:Twitterizer.Core.CursorPagedCommand`1.#ctor(Twitterizer.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.Core.CursorPagedCommand`1"/> class.
             </summary>
@@ -1039,26 +1030,6 @@
             </summary>
             <value>The search query.</value>
         </member>
-        <member name="T:Twitterizer.Core.HTTPVerb">
-            <summary>
-            Enumeration of the supported HTTP verbs supported by the <see cref="T:Twitterizer.Core.CommandPerformer`1"/>
-            </summary>
-        </member>
-        <member name="F:Twitterizer.Core.HTTPVerb.GET">
-            <summary>
-            The HTTP GET method is used to retrieve data.
-            </summary>
-        </member>
-        <member name="F:Twitterizer.Core.HTTPVerb.POST">
-            <summary>
-            The HTTP POST method is used to transmit data.
-            </summary>
-        </member>
-        <member name="F:Twitterizer.Core.HTTPVerb.DELETE">
-            <summary>
-            The HTTP DELETE method is used to indicate that a resource should be deleted.
-            </summary>
-        </member>
         <member name="T:Twitterizer.TwitterErrorDetails">
             <summary>
             Twitter Error Details class
@@ -1156,7 +1127,7 @@
             </summary>
             <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
         </member>
-        <member name="M:Twitterizer.Core.PagedCommand`1.#ctor(Twitterizer.Core.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
+        <member name="M:Twitterizer.Core.PagedCommand`1.#ctor(Twitterizer.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.Core.PagedCommand`1"/> class.
             </summary>
@@ -1171,7 +1142,7 @@
             </summary>
             <value>The page number.</value>
         </member>
-        <member name="M:Twitterizer.Commands.PagedTimelineCommand`1.#ctor(Twitterizer.Core.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
+        <member name="M:Twitterizer.Commands.PagedTimelineCommand`1.#ctor(Twitterizer.HTTPVerb,System.String,Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.Commands.PagedTimelineCommand`1"/> class.
             </summary>
@@ -2306,88 +2277,6 @@
             Access tokens returned by the Twitter API
             </returns>
         </member>
-        <member name="M:Twitterizer.OAuthUtility.ExecuteRequest(System.String,System.Collections.Generic.Dictionary{System.String,System.String},Twitterizer.Core.HTTPVerb,System.String,System.String,System.String,System.String,System.Net.WebProxy)">
-            <summary>
-            Creates and executes an OAuth signed HTTP request.
-            </summary>
-            <param name="baseUrl">The base URL.</param>
-            <param name="parameters">The parameters.</param>
-            <param name="verb">The HTTP verb to perform.</param>
-            <param name="consumerKey">The consumer key.</param>
-            <param name="consumerSecret">The consumer secret.</param>
-            <param name="token">The access or request token.</param>
-            <param name="tokenSecret">The token secret.</param>
-            <returns>
-            A new instance of the <see cref="T:System.Net.HttpWebRequest"/> class.
-            </returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.PrepareOAuthParameters(System.String,System.Collections.Generic.Dictionary{System.String,System.String},Twitterizer.Core.HTTPVerb,System.String,System.String,System.String,System.String)">
-            <summary>
-            Prepares the OAuth parameters.
-            </summary>
-            <param name="baseUrl">The base URL.</param>
-            <param name="parameters">The parameters.</param>
-            <param name="verb">The verb.</param>
-            <param name="consumerKey">The consumer key.</param>
-            <param name="consumerSecret">The consumer secret.</param>
-            <param name="token">The token.</param>
-            <param name="tokenSecret">The token secret.</param>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.GenerateGetQueryString(System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            Generates the query string for HTTP GET requests.
-            </summary>
-            <param name="parameters">The parameters.</param>
-            <returns>
-            A string of all parameters prepared for use in a querystring.
-            </returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.GenerateAuthorizationHeader(System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            Generates the authorization header.
-            </summary>
-            <param name="newParameters">The new parameters.</param>
-            <returns>A string value of all OAuth parameters formatted for use in the Authorization HTTP header.</returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.GenerateTimeStamp">
-            <summary>
-            Generate the timestamp for the signature        
-            </summary>
-            <returns>A timestamp value in a string.</returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.GenerateNonce">
-            <summary>
-            Generate a nonce
-            </summary>
-            <returns>A random number between 123400 and 9999999 in a string.</returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.AddSignatureToParameters(System.Uri,System.Collections.Generic.Dictionary{System.String,System.String},Twitterizer.Core.HTTPVerb,System.String,System.String)">
-            <summary>
-            Generates and adds a signature to parameters.
-            </summary>
-            <param name="url">The base URL.</param>
-            <param name="parameters">The parameters.</param>
-            <param name="verb">The HTTP verb to perform.</param>
-            <param name="consumerSecret">The consumer secret.</param>
-            <param name="tokenSecret">The token secret.</param>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.NormalizeUrl(System.Uri)">
-            <summary>
-            Normalizes the URL.
-            </summary>
-            <param name="url">The URL to normalize.</param>
-            <returns>The normalized url string.</returns>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.UrlEncode(System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            URLs the encode.
-            </summary>
-            <param name="parameters">The parameters.</param>
-            <returns>A string of all the <paramref name="parameters"/> keys and value pairs with the values encoded.</returns>
-        </member>
         <member name="T:Twitterizer.Commands.FollowersCommand">
             <summary>
             The command to obtain followers of a user.
@@ -2952,6 +2841,149 @@
             </summary>
             <param name="value">The value.</param>
             <returns></returns>
+        </member>
+        <member name="T:Twitterizer.HTTPVerb">
+            <summary>
+            Enumeration of the supported HTTP verbs supported by the <see cref="T:Twitterizer.Core.CommandPerformer`1"/>
+            </summary>
+        </member>
+        <member name="F:Twitterizer.HTTPVerb.GET">
+            <summary>
+            The HTTP GET method is used to retrieve data.
+            </summary>
+        </member>
+        <member name="F:Twitterizer.HTTPVerb.POST">
+            <summary>
+            The HTTP POST method is used to transmit data.
+            </summary>
+        </member>
+        <member name="F:Twitterizer.HTTPVerb.DELETE">
+            <summary>
+            The HTTP DELETE method is used to indicate that a resource should be deleted.
+            </summary>
+        </member>
+        <member name="T:Twitterizer.WebRequestBuilder">
+            <summary>
+            The Web Request Builder class.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.#ctor(System.Uri,Twitterizer.HTTPVerb)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.WebRequestBuilder"/> class.
+            </summary>
+            <param name="requestUri">The request URI.</param>
+            <param name="verb">The verb.</param>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.#ctor(System.Uri,Twitterizer.HTTPVerb,Twitterizer.OAuthTokens)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.WebRequestBuilder"/> class.
+            </summary>
+            <param name="requestUri">The request URI.</param>
+            <param name="verb">The verb.</param>
+            <param name="tokens">The tokens.</param>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.ExecuteRequest">
+            <summary>
+            Executes the request.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.PrepareRequest">
+            <summary>
+            Prepares the request. It is not nessisary to call this method unless additional configuration is required.
+            </summary>
+            <returns>A <see cref="T:System.Net.HttpWebRequest"/> object fully configured and ready for execution.</returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.RebuildRequestUriWithParameters">
+            <summary>
+            Rebuilds the request URI with parameters.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.SetupOAuth">
+            <summary>
+            Sets up the OAuth request details.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.GenerateTimeStamp">
+            <summary>
+            Generate the timestamp for the signature        
+            </summary>
+            <returns>A timestamp value in a string.</returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.GenerateNonce">
+            <summary>
+            Generate a nonce
+            </summary>
+            <returns>A random number between 123400 and 9999999 in a string.</returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.NormalizeUrl(System.Uri)">
+            <summary>
+            Normalizes the URL.
+            </summary>
+            <param name="url">The URL to normalize.</param>
+            <returns>The normalized url string.</returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.UrlEncode(System.String)">
+            <summary>
+            Encodes a value for inclusion in a URL querystring.
+            </summary>
+            <param name="value">The value to Url encode</param>
+            <returns>Returns a Url encoded string</returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.UrlEncode(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Encodes a series of key/value pairs for inclusion in a URL querystring.
+            </summary>
+            <param name="parameters">The parameters.</param>
+            <returns>A string of all the <paramref name="parameters"/> keys and value pairs with the values encoded.</returns>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.GenerateAuthorizationHeader">
+            <summary>
+            Generates the authorization header.
+            </summary>
+            <returns>The string value of the HTTP header to be included for OAuth requests.</returns>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.RequestUri">
+            <summary>
+            Gets or sets the request URI.
+            </summary>
+            <value>The request URI.</value>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.Parameters">
+            <summary>
+            Gets or sets the parameters.
+            </summary>
+            <value>The parameters.</value>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.OAuthParameters">
+            <summary>
+            Gets or sets the OAuth parameters.
+            </summary>
+            <value>The O auth parameters.</value>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.Verb">
+            <summary>
+            Gets or sets the verb.
+            </summary>
+            <value>The verb.</value>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.Tokens">
+            <summary>
+            Gets or sets the oauth tokens.
+            </summary>
+            <value>The tokens.</value>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.Proxy">
+            <summary>
+            Gets or sets the proxy.
+            </summary>
+            <value>The proxy.</value>
+        </member>
+        <member name="P:Twitterizer.WebRequestBuilder.UseOAuth">
+            <summary>
+            Gets or sets a value indicating whether the request will be signed with an OAuth authorization header.
+            </summary>
+            <value><c>true</c> if [use O auth]; otherwise, <c>false</c>.</value>
         </member>
         <member name="T:Twitterizer.Commands.UserTimelineCommand">
             <summary>
