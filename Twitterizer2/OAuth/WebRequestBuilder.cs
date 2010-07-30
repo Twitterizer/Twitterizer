@@ -70,6 +70,11 @@ namespace Twitterizer
     public sealed class WebRequestBuilder
     {
         /// <summary>
+        /// The HTTP Authorization realm.
+        /// </summary>
+        public string Realm = "http://api.twitter.com/";
+
+        /// <summary>
         /// Gets or sets the request URI.
         /// </summary>
         /// <value>The request URI.</value>
@@ -391,7 +396,8 @@ namespace Twitterizer
         /// <returns>The string value of the HTTP header to be included for OAuth requests.</returns>
         public string GenerateAuthorizationHeader()
         {
-            StringBuilder authHeaderBuilder = new StringBuilder("OAuth realm=\"Twitter API\"");
+            StringBuilder authHeaderBuilder = new StringBuilder();
+            authHeaderBuilder.AppendFormat("OAuth realm=\"{0}\"", Realm);
 
             var sortedParameters = from p in this.OAuthParameters
                                    where p.Key.StartsWith("oauth_") &&
@@ -415,5 +421,7 @@ namespace Twitterizer
             return authHeaderBuilder.ToString();
         }
         #endregion
+
+
     }
 }

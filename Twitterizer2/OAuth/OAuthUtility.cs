@@ -301,5 +301,18 @@ namespace Twitterizer
 
             return GetAccessToken(consumerKey, consumerSecret, requestToken, verifier);
         }
+
+        public static void AddOAuthEchoHeader(WebRequest request, OAuthTokens tokens)
+        {
+            WebRequestBuilder builder = new WebRequestBuilder(
+                new Uri("https://api.twitter.com/1/account/verify_credentials.json"), 
+                HTTPVerb.POST,
+                tokens);
+
+            builder.PrepareRequest();
+
+            request.Headers.Add("X-Verify-Credentials-Authorization", builder.GenerateAuthorizationHeader());
+            request.Headers.Add("X-Auth-Service-Provider", "https://api.twitter.com/1/account/verify_credentials.json");
+        }
     }
 }
