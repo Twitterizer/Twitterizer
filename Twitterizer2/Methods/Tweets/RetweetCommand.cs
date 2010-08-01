@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// The retweet command class.
     /// </summary>
     [AuthorizedCommandAttribute]
+    [Serializable]
     internal sealed class RetweetCommand : TwitterCommand<TwitterStatus>
     {
         /// <summary>

@@ -34,12 +34,14 @@
 
 namespace Twitterizer.Commands
 {
+    using System;
     using System.Globalization;
     using Twitterizer.Core;
 
     /// <summary>
     /// The reverse geocode command class. Performs a reverse geocode lookup.
     /// </summary>
+    [Serializable]
     internal class ReverseGeocodeCommand : TwitterCommand<TwitterPlaceCollection>
     {
         /// <summary>

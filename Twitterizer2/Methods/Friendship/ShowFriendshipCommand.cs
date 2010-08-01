@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// The show friendship command class.
     /// </summary>
     [AuthorizedCommandAttribute]
+    [Serializable]
     internal sealed class ShowFriendshipCommand : Core.TwitterCommand<TwitterRelationship>
     {
         /// <summary>

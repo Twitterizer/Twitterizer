@@ -41,6 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The ListFavoritesCommand class. Returns the 20 most recent favorite statuses for the authenticating user or user specified by the ID parameter in the requested format.
     /// </summary>
+    [Serializable]
     internal sealed class ListFavoritesCommand : TwitterCommand<TwitterStatusCollection>
     {
         /// <summary>

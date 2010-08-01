@@ -39,6 +39,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Lookup Users command class.
     /// </summary>
+    [Serializable]
     internal sealed class LookupUsersCommand : Core.TwitterCommand<TwitterUserCollection>
     {
         /// <summary>

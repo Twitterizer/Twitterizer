@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// Add a member to a list. The authenticated user must own the list to be able to add members to it. Lists are limited to having 500 members.
     /// </summary>
     [AuthorizedCommand]
+    [Serializable]
     internal class AddListMemberCommand : TwitterCommand<TwitterList>
     {
         /// <summary>

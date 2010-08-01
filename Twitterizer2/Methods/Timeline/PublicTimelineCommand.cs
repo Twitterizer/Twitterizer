@@ -39,6 +39,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Public Timeline Command class
     /// </summary>
+    [Serializable]
     internal sealed class PublicTimelineCommand :
         Core.TwitterCommand<TwitterStatusCollection>
     {

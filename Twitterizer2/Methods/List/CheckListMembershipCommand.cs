@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// Check if a user is a member of the specified list.
     /// </summary>
     [AuthorizedCommand]
+    [Serializable]
     internal class CheckListMembershipCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>

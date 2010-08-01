@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// Removes the specified member from the list. The authenticated user must be the list's owner to remove members from the list.
     /// </summary>
     [AuthorizedCommand]
+    [Serializable]
     internal class RemoveListMemberCommand : TwitterCommand<TwitterList>
     {
         /// <summary>

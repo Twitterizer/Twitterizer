@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
+    [Serializable]
     internal sealed class SearchCommand : TwitterCommand<TwitterSearchResultCollection>
     {
         #region Constructors

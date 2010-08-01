@@ -43,6 +43,7 @@ namespace Twitterizer.Commands
     /// The create list command class
     /// </summary>
     [AuthorizedCommandAttribute]
+    [Serializable]
     internal sealed class CreateListCommand : TwitterCommand<TwitterList>
     {
         /// <summary>

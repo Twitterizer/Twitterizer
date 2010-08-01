@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// Sets one or more hex values that control the color scheme of the authenticating user's profile page on twitter.com
     /// </summary>
     [AuthorizedCommand]
+    [Serializable]
     internal class UpdateProfileColorsCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>

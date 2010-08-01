@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// The Send Direct Message Command class
     /// </summary>
     [AuthorizedCommandAttribute]
+    [Serializable]
     internal sealed class SendDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
         /// <summary>

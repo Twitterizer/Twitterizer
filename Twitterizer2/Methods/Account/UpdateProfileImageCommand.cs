@@ -37,6 +37,7 @@ namespace Twitterizer.Commands
     using System;
     using Twitterizer.Core;
 
+    [Serializable]
     internal class UpdateProfileImageCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>

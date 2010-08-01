@@ -41,6 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
+    [Serializable]
     internal sealed class CurrentTrendsCommand : TwitterCommand<TwitterTrendCollection>
     {
         #region Constructors

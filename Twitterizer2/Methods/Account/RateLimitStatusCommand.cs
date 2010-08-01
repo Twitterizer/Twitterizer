@@ -39,6 +39,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The rate limit status command class.
     /// </summary>
+    [Serializable]
     internal sealed class RateLimitStatusCommand : TwitterCommand<TwitterRateLimitStatus>
     {
         /// <summary>

@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
     /// The command to update the user's status. (a.k.a. post a new tweet)
     /// </summary>
     [AuthorizedCommandAttribute]
+    [Serializable]
     internal sealed class UpdateStatusCommand : TwitterCommand<TwitterStatus>
     {
         /// <summary>
