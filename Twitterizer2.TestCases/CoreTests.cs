@@ -16,19 +16,30 @@
         public static void Serialization()
         {
             Assembly twitterizerAssembly = Assembly.GetAssembly(typeof(TwitterUser));
-            foreach (Type type in twitterizerAssembly.GetExportedTypes())
+            var objectTypesToCheck = from t in twitterizerAssembly.GetExportedTypes()
+                               where !t.IsAbstract &&
+                               !t.IsInterface &&
+                               (
+                                t.GetInterfaces().Contains(twitterizerAssembly.GetType("Twitterizer.Core.ITwitterObject")) ||
+                                t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Entities.TwitterEntity"))
+                               )
+                               select t;
+
+            var commandTypesToCheck = from t in twitterizerAssembly.GetTypes()
+                                      where
+                                     //!t.IsAbstract &&
+                                     //!t.IsInterface &&
+                                     (
+                                      t.GetInterfaces().Contains(twitterizerAssembly.GetType("Twitterizer.Core.ICommand`1")) ||
+                                      t.GetInterfaces().Contains(twitterizerAssembly.GetType("Twitterizer.Core.TwitterCommand`1")) ||
+                                      t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Commands.PagedTimelineCommand`1")) ||
+                                      t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Core.PagedCommand`1")) ||
+                                      t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Core.CursorPagedCommand`1"))
+                                     )
+                                     select t;
+
+            foreach (Type type in objectTypesToCheck.Union(commandTypesToCheck))
             {
-                // Skip abstract classes and interfaces
-                if (type.IsAbstract || type.IsInterface)
-                    continue;
-
-                // Check if the type inherits from my common interface or inherits another common base class
-                if (
-                    !type.GetInterfaces().Contains(twitterizerAssembly.GetType("Twitterizer.Core.ITwitterObject")) &&
-                    !type.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Entities.TwitterEntity"))
-                    )
-                    continue;
-
                 Console.WriteLine(string.Format("Inspecting: {0}", type.FullName));
 
                 // Check that the object itself is marked as serializable
