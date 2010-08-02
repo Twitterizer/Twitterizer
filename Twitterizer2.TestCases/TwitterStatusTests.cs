@@ -43,13 +43,13 @@ namespace Twitterizer2.TestCases
             OAuthTokens tokens = Configuration.GetTokens();
 
             StatusUpdateOptions options = new StatusUpdateOptions();
-            options.UseSSL = true;
 
             TwitterStatus newStatus = TwitterStatus.Update(tokens, "Performing Twitterizer testing ...", options);
-            Assert.IsNotNull(newStatus);
+            Assert.That(!newStatus.IsEmpty);
+            Assert.That(newStatus.Id > 0);
 
             TwitterStatus deletedStatus = newStatus.Delete(tokens);
-            Assert.IsNotNull(deletedStatus);
+            Assert.That(!deletedStatus.IsEmpty);
             Assert.That(newStatus.Id == deletedStatus.Id);
         }
 

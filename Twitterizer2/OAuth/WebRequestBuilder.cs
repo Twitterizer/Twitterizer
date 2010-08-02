@@ -70,9 +70,14 @@ namespace Twitterizer
     public sealed class WebRequestBuilder
     {
         /// <summary>
+        /// When the request uses HTTP Post, this value is sent as the content length.
+        /// </summary>
+        private long postContentLength = 0;
+
+        /// <summary>
         /// The HTTP Authorization realm.
         /// </summary>
-        public string Realm = "http://api.twitter.com/";
+        public string Realm = "Twitter API";
 
         /// <summary>
         /// Gets or sets the request URI.
@@ -189,31 +194,33 @@ namespace Twitterizer
         public HttpWebRequest PrepareRequest()
         {
             SetupOAuth();
-            RebuildRequestUriWithParameters();
+            AddQueryStringParametersToUri();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
-            request.Method = this.Verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetAssembly(typeof(WebRequestBuilder)).GetName().Version.ToString());
-
-            if (this.UseOAuth)
-                request.Headers.Add("Authorization", GenerateAuthorizationHeader());
-
             if (this.Proxy != null)
                 request.Proxy = Proxy;
-
-            if (this.Verb == HTTPVerb.POST)
+            request.Method = this.Verb.ToString();
+            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetAssembly(typeof(WebRequestBuilder)).GetName().Version.ToString());
+            request.ServicePoint.Expect100Continue = false;
+            
+            if (this.UseOAuth)
             {
-                request.ContentType = "application/x-www-form-urlencoded";
+                request.Headers.Add("Authorization", GenerateAuthorizationHeader());
             }
 
+            AddFormFieldValuesToRequest(request);
+            
             return request;
         }
 
         /// <summary>
-        /// Rebuilds the request URI with parameters.
+        /// Adds the parameters to request uri.
         /// </summary>
-        private void RebuildRequestUriWithParameters()
+        private void AddQueryStringParametersToUri()
         {
+            if (this.Verb != HTTPVerb.GET)
+                return;
+
             StringBuilder requestParametersBuilder = new StringBuilder(this.RequestUri.AbsoluteUri);
             requestParametersBuilder.Append(this.RequestUri.Query.Length == 0 ? "?" : "&");
 
@@ -222,10 +229,41 @@ namespace Twitterizer
                 requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode(item.Value));
             }
 
-            if (requestParametersBuilder.Length > 0)
+            if (requestParametersBuilder.Length == 0)
+                return;
+
+            requestParametersBuilder.Remove(requestParametersBuilder.Length - 1, 1);
+
+            this.RequestUri = new Uri(requestParametersBuilder.ToString());
+        }
+
+        /// <summary>
+        /// Adds the form field values to request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        private void AddFormFieldValuesToRequest(WebRequest request)
+        {
+            if (!(new[] { HTTPVerb.DELETE, HTTPVerb.POST }).Contains(this.Verb))
+                return;
+
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            StringBuilder requestParametersBuilder = new StringBuilder();
+            foreach (KeyValuePair<string, string> item in this.Parameters)
             {
-                this.RequestUri = new Uri(requestParametersBuilder.ToString());
+                requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, item.Value);
             }
+
+            if (requestParametersBuilder.Length == 0)
+                return;
+
+            requestParametersBuilder.Remove(requestParametersBuilder.Length - 1, 1);
+
+            byte[] formData = Encoding.UTF8.GetBytes(requestParametersBuilder.ToString());
+            request.ContentLength = formData.Length;
+            System.IO.Stream requestStream = request.GetRequestStream();
+            requestStream.Write(formData, 0, formData.Length);
+            requestStream.Close();
         }
         
         #region OAuth Helper Methods
@@ -258,17 +296,19 @@ namespace Twitterizer
                 this.OAuthParameters.Add("oauth_token_secret", this.Tokens.AccessTokenSecret);
             }
 
-            var nonSecretParameters = from p in this.OAuthParameters
+            var nonSecretParameters = (from p in this.OAuthParameters
                                       where !(p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
                                             !p.Key.EndsWith("_verifier", StringComparison.OrdinalIgnoreCase))
-                                      select p;
+                                      select p).Union(this.Parameters);
+
+            Uri urlForSigning = this.RequestUri;
 
             // Create the base string. This is the string that will be hashed for the signature.
             string signatureBaseString = string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}&{1}&{2}",
                 this.Verb.ToString().ToUpper(CultureInfo.InvariantCulture),
-                UrlEncode(NormalizeUrl(this.RequestUri)),
+                UrlEncode(NormalizeUrl(urlForSigning)),
                 UrlEncode(nonSecretParameters));
 
             // Create our hash key (you might say this is a password)
