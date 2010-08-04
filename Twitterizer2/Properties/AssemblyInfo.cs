@@ -34,7 +34,6 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -53,7 +52,7 @@ using System.Security.Permissions;
 [assembly: AssemblyCopyright("2010 Patrick 'Ricky' Smith (www.ricky-dev.com)")]
 [assembly: AssemblyTrademark("")]
 //[assembly: SecurityRules(SecurityRuleSet.Level1)]
-[assembly: AllowPartiallyTrustedCallers()]
+[assembly: AllowPartiallyTrustedCallers]
 
 [assembly: CLSCompliant(true)]
 

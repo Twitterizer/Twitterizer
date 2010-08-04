@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -19,12 +18,12 @@ using System.Security;
 [assembly: AssemblyProduct("Twitterizer")]
 [assembly: AssemblyCopyright("2010 Patrick 'Ricky' Smith (www.ricky-dev.com)")]
 [assembly: AssemblyTrademark("")]
-[assembly: AllowPartiallyTrustedCallers()]
+[assembly: AllowPartiallyTrustedCallers]
 
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("3a6ff82c-1894-4cb1-b54a-b22260580975")]
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.1.*")]
+[assembly: AssemblyFileVersion("1.0.1.0")]
