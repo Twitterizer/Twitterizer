@@ -19,20 +19,20 @@ namespace Twitterizer2.TestCases
             OAuthTokens tokens = Configuration.GetTokens();
 
             // See if the friendship exists (it should not)
-            TwitterRelationship friendship = TwitterFriendship.Show(tokens, "rickydev");
+            TwitterRelationship friendship = TwitterFriendship.Show(tokens, "rickydev").ResponseObject;
 
             // If it exists, delete it.
-            if (friendship != null && friendship.Target.IsFollowing.Value)
+            if (friendship.Target.IsFollowing != null && friendship.Target.IsFollowing.Value)
             {
                 DeleteFriendship(tokens, friendship);
             }
 
             // Create the friendship
-            TwitterUser followedUser = TwitterFriendship.Create(tokens, "rickydev");
+            TwitterUser followedUser = TwitterFriendship.Create(tokens, "rickydev").ResponseObject;
             Assert.IsNotNull(followedUser);
 
             // Get the friendship details (maybe again)
-            friendship = TwitterFriendship.Show(tokens, "rickydev");
+            friendship = TwitterFriendship.Show(tokens, "rickydev").ResponseObject;
             Assert.IsNotNull(friendship);
             Assert.IsNotNull(friendship.Target);
 
@@ -42,7 +42,7 @@ namespace Twitterizer2.TestCases
 
         private static void DeleteFriendship(OAuthTokens tokens, TwitterRelationship friendship)
         {
-            TwitterUser unfollowedUser = friendship.Delete(tokens);
+            TwitterUser unfollowedUser = friendship.Delete(tokens).ResponseObject;
             Assert.IsNotNull(unfollowedUser);
         }
     }

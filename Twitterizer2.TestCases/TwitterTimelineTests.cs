@@ -2,7 +2,6 @@
 {
     using Twitterizer;
     using NUnit.Framework;
-    using System.Globalization;
 
     [TestFixture]
     public static class TwitterTimelineTests
@@ -12,7 +11,7 @@
         [Test]
         public static void PublicTimeline()
         {
-            TwitterStatusCollection timeline = TwitterTimeline.PublicTimeline();
+            TwitterResponse<TwitterStatusCollection> timeline = TwitterTimeline.PublicTimeline();
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 

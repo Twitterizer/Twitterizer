@@ -38,43 +38,36 @@ namespace Twitterizer
     using System.Diagnostics;
     using System.Drawing;
     using Newtonsoft.Json;
-    using Twitterizer.Core;
+    using Core;
 
     /// <include file='TwitterUser.xml' path='TwitterUser/TwitterUser/*'/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("@{ScreenName}")]
     [Serializable]
-    public class TwitterUser : Core.TwitterObject
+    public class TwitterUser : TwitterObject
     {
-        public static void Show(string username, OptionalProperties options, Action<TwitterUser> function)
+        /// <summary>
+        /// Shows the specified username.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="function">The function.</param>
+        public static void Show(string username, OptionalProperties options, Action<TwitterResponse<TwitterUser>> function)
         {
-            Func<string, OptionalProperties, TwitterUser> methodToCall = new Func<string, OptionalProperties, TwitterUser>(Show);
+            Func<string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = Show;
 
-            AsyncOperation operation = AsyncOperationManager.CreateOperation(null);
             methodToCall.BeginInvoke(
                 username,
                 options,
-                (AsyncCallback)((IAsyncResult result) =>
-                    {
-                        function(methodToCall.EndInvoke(result));
-                    }), 
+                result => function(methodToCall.EndInvoke(result)), 
                 null);
-        }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterUser"/> class.
-        /// </summary>
-        public TwitterUser()
-            : base()
-        {
         }
 
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
         /// </summary>
         /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
-        internal virtual bool IsEmpty { get { return false; } }
+        internal new virtual bool IsEmpty { get { return false; } }
 
         #region Properties
         /// <summary>
@@ -339,7 +332,7 @@ namespace Twitterizer
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokensAndOptions"]/*'/>
-        public static TwitterUser Show(OAuthTokens tokens, decimal id, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> Show(OAuthTokens tokens, decimal id, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, id, string.Empty, options);
 
@@ -348,28 +341,28 @@ namespace Twitterizer
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithOptions"]/*'/>
-        public static TwitterUser Show(decimal id, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> Show(decimal id, OptionalProperties options)
         {
             return Show(null, id, options);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokens"]/*'/>
-        public static TwitterUser Show(OAuthTokens tokens, decimal id)
+        public static TwitterResponse<TwitterUser> Show(OAuthTokens tokens, decimal id)
         {
             return Show(tokens, id, null);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByID"]/*'/>
-        public static TwitterUser Show(decimal id)
+        public static TwitterResponse<TwitterUser> Show(decimal id)
         {
             return Show(null, id, null);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokensAndOptions"]/*'/>
-        public static TwitterUser Show(OAuthTokens tokens, string username, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> Show(OAuthTokens tokens, string username, OptionalProperties options)
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, 0, username, options);
 
@@ -378,47 +371,47 @@ namespace Twitterizer
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithOptions"]/*'/>
-        public static TwitterUser Show(string username, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> Show(string username, OptionalProperties options)
         {
             return Show(null, username, options);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokens"]/*'/>
-        public static TwitterUser Show(OAuthTokens tokens, string username)
+        public static TwitterResponse<TwitterUser> Show(OAuthTokens tokens, string username)
         {
             return Show(tokens, username, null);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsername"]/*'/>
-        public static TwitterUser Show(string username)
+        public static TwitterResponse<TwitterUser> Show(string username)
         {
             return Show(null, username, null);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="WithTokensAndOptions"]/*'/>
-        public static TwitterUserCollection Search(OAuthTokens tokens, string query, UserSearchOptions options)
+        public static TwitterResponse<TwitterUserCollection> Search(OAuthTokens tokens, string query, UserSearchOptions options)
         {
             Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
 
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
 
-            if (result != null)
-                result.PagedCommand = command;
+            if (result.ResponseObject != null)
+                result.ResponseObject.PagedCommand = command;
 
             return result;
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="WithTokens"]/*'/>
-        public static TwitterUserCollection Search(OAuthTokens tokens, string query)
+        public static TwitterResponse<TwitterUserCollection> Search(OAuthTokens tokens, string query)
         {
             return Search(tokens, query, null);
         }
 
-        public static TwitterUserCollection Lookup(OAuthTokens tokens, LookupUsersOptions options)
+        public static TwitterResponse<TwitterUserCollection> Lookup(OAuthTokens tokens, LookupUsersOptions options)
         {
             Commands.LookupUsersCommand command = new Commands.LookupUsersCommand(tokens, options);
 
@@ -434,7 +427,7 @@ namespace Twitterizer
         /// <returns>
         /// The user, with updated data, as a <see cref="TwitterUser"/>
         /// </returns>
-        public static TwitterUser UpdateProfileColors(OAuthTokens tokens, UpdateProfileColorsOptions options)
+        public static TwitterResponse<TwitterUser> UpdateProfileColors(OAuthTokens tokens, UpdateProfileColorsOptions options)
         {
             Commands.UpdateProfileColorsCommand command = new Twitterizer.Commands.UpdateProfileColorsCommand(tokens, options);
 
@@ -450,8 +443,9 @@ namespace Twitterizer
         /// <returns>
         /// The user, with updated data, as a <see cref="TwitterUser"/>
         /// </returns>
-        public static TwitterUser UpdateProfileImage(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
         {
+            throw new NotImplementedException();
             Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
 
             return CommandPerformer<TwitterUser>.PerformAction(command);
@@ -465,8 +459,9 @@ namespace Twitterizer
         /// <returns>
         /// The user, with updated data, as a <see cref="TwitterUser"/>
         /// </returns>
-        public static TwitterUser UpdateProfileImage(OAuthTokens tokens, TwitterImage image)
+        public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, TwitterImage image)
         {
+            throw new NotImplementedException();
             return UpdateProfileImage(tokens, image, null);
         }
         #endregion

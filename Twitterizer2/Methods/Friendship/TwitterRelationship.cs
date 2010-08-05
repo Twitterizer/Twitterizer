@@ -152,7 +152,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful. Returns a string describing the failure condition when unsuccessful.
         /// </returns>
-        public TwitterUser Delete(OAuthTokens tokens)
+        public TwitterResponse<TwitterUser> Delete(OAuthTokens tokens)
         {
             Commands.DeleteFriendshipCommand command = new Twitterizer.Commands.DeleteFriendshipCommand(tokens, this.Target.Id, string.Empty, null);
 

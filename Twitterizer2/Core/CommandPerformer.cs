@@ -40,7 +40,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The business object the performer should return.</typeparam>
     /// <tocexclude />
     internal static class CommandPerformer<T>
-        where T : ITwitterObject
+        where T : class, ITwitterObject, new()
     {
         /// <summary>
         /// Performs the action.
@@ -49,22 +49,11 @@ namespace Twitterizer.Core
         /// <returns>The parsed result of the action.</returns>
         /// <seealso cref="Twitterizer.Core.TwitterCommand{T}"/>
         /// <seealso cref="Twitterizer.Core.TwitterObject"/>
-        public static T PerformAction(ICommand<T> command)
+        public static TwitterResponse<T> PerformAction(ICommand<T> command)
         {
             command.Init();
 
-            T result = default(T);
-
-            try
-            {
-                result = command.ExecuteCommand();
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
-
-            return result;
+            return command.ExecuteCommand();
         }
     }
 }

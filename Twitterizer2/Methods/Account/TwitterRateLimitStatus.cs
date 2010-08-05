@@ -97,10 +97,10 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens, OptionalProperties options)
+        public static TwitterResponse<TwitterRateLimitStatus> GetStatus(OAuthTokens tokens, OptionalProperties options)
         {
             Commands.RateLimitStatusCommand command = new Twitterizer.Commands.RateLimitStatusCommand(tokens, options);
-            TwitterRateLimitStatus result = Core.CommandPerformer<TwitterRateLimitStatus>.PerformAction(command);
+            TwitterResponse<TwitterRateLimitStatus> result = Core.CommandPerformer<TwitterRateLimitStatus>.PerformAction(command);
 
             return result;
         }
@@ -112,7 +112,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens)
+        public static TwitterResponse<TwitterRateLimitStatus> GetStatus(OAuthTokens tokens)
         {
             return GetStatus(tokens, null);
         }
@@ -123,7 +123,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus()
+        public static TwitterResponse<TwitterRateLimitStatus> GetStatus()
         {
             return GetStatus(null, null);
         }

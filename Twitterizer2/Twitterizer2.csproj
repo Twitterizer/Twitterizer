@@ -242,6 +242,7 @@
     <Compile Include="Methods\User\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="Methods\User\TwitterUser.cs" />
+    <Compile Include="TwitterResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

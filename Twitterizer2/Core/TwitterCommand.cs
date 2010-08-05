@@ -50,7 +50,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The business object the command should return.</typeparam>
     [Serializable]
     internal abstract class TwitterCommand<T> : ICommand<T>
-        where T : class, ITwitterObject, new()
+        where T : class, ITwitterObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
@@ -120,8 +120,10 @@ namespace Twitterizer.Core
         /// Executes the command.
         /// </summary>
         /// <returns>The results of the command.</returns>
-        public T ExecuteCommand()
+        public TwitterResponse<T> ExecuteCommand()
         {
+            TwitterResponse<T> twitterResponse = new TwitterResponse<T>();
+
             if (this.OptionalProperties.UseSSL)
             {
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
@@ -150,7 +152,7 @@ namespace Twitterizer.Core
                 else if (attribute.GetType() == typeof(RateLimitedAttribute))
                 {
                     // Get the rate limiting status
-                    if (TwitterRateLimitStatus.GetStatus(this.Tokens).RemainingHits == 0)
+                    if (TwitterRateLimitStatus.GetStatus(this.Tokens).ResponseObject.RemainingHits == 0)
                     {
                         throw new TwitterizerException("You are being rate limited.");
                     }
@@ -181,18 +183,23 @@ namespace Twitterizer.Core
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
                     Debug.WriteLine("Found in cache", "Twitterizer2");
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
-                    return (T)cache[cacheKeyBuilder.ToString()];
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri),
+                                    "Twitterizer2");
+
+                    return new TwitterResponse<T>()
+                               {
+                                   ResponseObject = (T)cache[cacheKeyBuilder.ToString()],
+                                   ResponseCached = true
+                               };
                 }
             }
+            
 
             // Declare the variable to be returned
-            T resultObject = default(T);
+            twitterResponse.ResponseObject = default(T);
+            twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
             RequestStatus requestStatus = null;
             RateLimiting rateLimiting = null;
-
-            // This must be set for all twitter request.
-            System.Net.ServicePointManager.Expect100Continue = false;
 
             byte[] responseData = null;
 
@@ -222,6 +229,7 @@ namespace Twitterizer.Core
                     response.StatusCode,
                     response.ContentType,
                     rateLimiting);
+                twitterResponse.RateLimiting = rateLimiting;
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
             }
@@ -232,7 +240,7 @@ namespace Twitterizer.Core
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse exceptionResponse = wex.Response as HttpWebResponse;
 
-                if (wex.Response == null)
+                if (exceptionResponse == null)
                 {
                     throw;
                 }
@@ -247,35 +255,28 @@ namespace Twitterizer.Core
                         exceptionResponse.StatusCode,
                         exceptionResponse.ContentType,
                         rateLimiting);
+                twitterResponse.RateLimiting = rateLimiting;
 
                 RequestStatus.UpdateRequestStatus(requestStatus);
 
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
-                return new T() { IsEmpty = true, RequestStatus = requestStatus, RateLimiting = rateLimiting };
-            }
-            finally
-            {
-                // Set this back to the default so it doesn't affect other .net code.
-                System.Net.ServicePointManager.Expect100Continue = true;
+                
+
+                return twitterResponse;
             }
 
-            resultObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
+            twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
 
-            this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
-
-            if (resultObject == null)
-                resultObject = new T();
+            this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
-            resultObject.Tokens = this.Tokens;
-            resultObject.RequestStatus = requestStatus;
-            resultObject.RateLimiting = rateLimiting;
+            twitterResponse.Tokens = this.Tokens;
 
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
-            return resultObject;
+            return twitterResponse;
         }
 
         /// <summary>

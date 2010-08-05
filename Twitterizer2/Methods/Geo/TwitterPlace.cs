@@ -116,7 +116,7 @@ namespace Twitterizer
         /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options.</param>
         /// <returns>A collection of matched <see cref="Twitterizer.TwitterPlace"/> items.</returns>
-        public static TwitterPlaceCollection Lookup(double latitude, double longitude, TwitterPlaceLookupOptions options)
+        public static TwitterResponse<TwitterPlaceCollection> Lookup(double latitude, double longitude, TwitterPlaceLookupOptions options)
         {
             Commands.ReverseGeocodeCommand command = new Twitterizer.Commands.ReverseGeocodeCommand(latitude, longitude, options);
 
@@ -129,7 +129,7 @@ namespace Twitterizer
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
         /// <returns>A collection of matched <see cref="Twitterizer.TwitterPlace"/> items.</returns>
-        public static TwitterPlaceCollection Lookup(double latitude, double longitude)
+        public static TwitterResponse<TwitterPlaceCollection> Lookup(double latitude, double longitude)
         {
             return Lookup(latitude, longitude, null);
         }

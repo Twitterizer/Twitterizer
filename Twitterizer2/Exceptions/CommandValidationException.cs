@@ -46,7 +46,7 @@ namespace Twitterizer
     /// <typeparam name="T">The command type, derived from ITwitterObject.</typeparam>
     [Serializable]
     public class CommandValidationException<T> : Exception, ISerializable
-        where T : ITwitterObject
+        where T : class, ITwitterObject, new()
     {
         #region Constructors
         /// <summary>

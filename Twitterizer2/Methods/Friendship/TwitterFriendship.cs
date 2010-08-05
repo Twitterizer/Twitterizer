@@ -34,11 +34,7 @@
 
 namespace Twitterizer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using Twitterizer.Core;
+    using Core;
 
     /// <summary>
     /// Provides interaction with the Twitter API to obtain and manage relationships between users.
@@ -54,13 +50,14 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterUserCollection Followers(OAuthTokens tokens, FollowersOptions options)
+        public static TwitterResponse<TwitterUserCollection> Followers(OAuthTokens tokens, FollowersOptions options)
         {
             Commands.FollowersCommand command = new Commands.FollowersCommand(tokens, options);
 
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            TwitterResponse<TwitterUserCollection> result = CommandPerformer<TwitterUserCollection>.PerformAction(command);
 
-            result.CursorPagedCommand = command;
+            if (result.ResponseObject != null)
+                result.ResponseObject.CursorPagedCommand = command;
 
             return result;
         }
@@ -72,7 +69,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterUserCollection Followers(OAuthTokens tokens)
+        public static TwitterResponse<TwitterUserCollection> Followers(OAuthTokens tokens)
         {
             return Followers(tokens, null);
         }
@@ -84,7 +81,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterUserCollection Followers(FollowersOptions options)
+        public static TwitterResponse<TwitterUserCollection> Followers(FollowersOptions options)
         {
             return Followers(null, options);
         }
@@ -101,12 +98,13 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        public static TwitterUserCollection Friends(OAuthTokens tokens, FriendsOptions options)
+        public static TwitterResponse<TwitterUserCollection> Friends(OAuthTokens tokens, FriendsOptions options)
         {
             Commands.FriendsCommand command = new Commands.FriendsCommand(tokens, options);
 
-            TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            result.CursorPagedCommand = command;
+            TwitterResponse<TwitterUserCollection> result = CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            if (result.ResponseObject != null)
+                result.ResponseObject.CursorPagedCommand = command;
 
             return result;
         }
@@ -119,7 +117,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        public static TwitterUserCollection Friends(OAuthTokens tokens)
+        public static TwitterResponse<TwitterUserCollection> Friends(OAuthTokens tokens)
         {
             return Friends(tokens, null);
         }
@@ -132,7 +130,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
-        public static TwitterUserCollection Friends(FriendsOptions options)
+        public static TwitterResponse<TwitterUserCollection> Friends(FriendsOptions options)
         {
             return Friends(null, options);
         }
@@ -148,7 +146,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the followed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Create(OAuthTokens tokens, decimal userId)
+        public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, decimal userId)
         {
             return Create(tokens, userId, null);
         }
@@ -162,7 +160,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the followed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Create(OAuthTokens tokens, decimal userId, CreateFriendshipOptions options)
+        public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, decimal userId, CreateFriendshipOptions options)
         {
             Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(tokens, userId, options);
             return CommandPerformer<TwitterUser>.PerformAction(command);
@@ -176,7 +174,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the followed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Create(OAuthTokens tokens, string userName)
+        public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, string userName)
         {
             return Create(tokens, userName, null);
         }
@@ -190,7 +188,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the followed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Create(OAuthTokens tokens, string userName, CreateFriendshipOptions options)
+        public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, string userName, CreateFriendshipOptions options)
         {
             Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(tokens, userName, options);
             return CommandPerformer<TwitterUser>.PerformAction(command);
@@ -208,7 +206,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Delete(OAuthTokens tokens, decimal userId)
+        public static TwitterResponse<TwitterUser> Delete(OAuthTokens tokens, decimal userId)
         {
            return Delete(tokens, userId, null);
         }
@@ -222,10 +220,10 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Delete(OAuthTokens tokens, decimal userId, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> Delete(OAuthTokens tokens, decimal userId, OptionalProperties options)
         {
             Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens, userId, string.Empty, options);
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer<TwitterUser>.PerformAction(command);
         }
 
         /// <summary>
@@ -236,7 +234,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Delete(OAuthTokens tokens, string userName)
+        public static TwitterResponse<TwitterUser> Delete(OAuthTokens tokens, string userName)
         {
             return Delete(tokens, userName, null);
         }
@@ -250,7 +248,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful.
         /// </returns>
-        public static TwitterUser Delete(OAuthTokens tokens, string userName, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> Delete(OAuthTokens tokens, string userName, OptionalProperties options)
         {
             Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens, 0, userName, options);
             return Core.CommandPerformer<TwitterUser>.PerformAction(command);
@@ -265,7 +263,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="targetUserId">The target user id.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, decimal targetUserId)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, decimal targetUserId)
         {
             return Show(tokens, targetUserId, null);
         }
@@ -277,7 +275,7 @@ namespace Twitterizer
         /// <param name="targetUserId">The target user id.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, decimal targetUserId, OptionalProperties options)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, decimal targetUserId, OptionalProperties options)
         {
             return Show(tokens, 0, targetUserId, options);
         }
@@ -289,7 +287,7 @@ namespace Twitterizer
         /// <param name="sourceUseId">The source user id.</param>
         /// <param name="targetUserId">The target user id.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, decimal sourceUseId, decimal targetUserId)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, decimal sourceUseId, decimal targetUserId)
         {
             return Show(tokens, sourceUseId, targetUserId, null);
         }
@@ -302,7 +300,7 @@ namespace Twitterizer
         /// <param name="targetUserId">The target user id.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, decimal sourceUseId, decimal targetUserId, OptionalProperties options)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, decimal sourceUseId, decimal targetUserId, OptionalProperties options)
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(
                 tokens, 
@@ -321,7 +319,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="targetUserName">The target user name.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, string targetUserName)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, string targetUserName)
         {
             return Show(tokens, string.Empty, targetUserName, null);
         }
@@ -333,7 +331,7 @@ namespace Twitterizer
         /// <param name="targetUserName">The target user name.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, string targetUserName, OptionalProperties options)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, string targetUserName, OptionalProperties options)
         {
             return Show(tokens, string.Empty, targetUserName, options);
         }
@@ -345,7 +343,7 @@ namespace Twitterizer
         /// <param name="sourceUserName">The source user name.</param>
         /// <param name="targetUserName">The target user name.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, string sourceUserName, string targetUserName)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, string sourceUserName, string targetUserName)
         {
             return Show(tokens, sourceUserName, targetUserName, null);
         }
@@ -358,7 +356,7 @@ namespace Twitterizer
         /// <param name="targetUserName">The target user name.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterRelationship"/> instance.</returns>
-        public static TwitterRelationship Show(OAuthTokens tokens, string sourceUserName, string targetUserName, OptionalProperties options)
+        public static TwitterResponse<TwitterRelationship> Show(OAuthTokens tokens, string sourceUserName, string targetUserName, OptionalProperties options)
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens, 0, sourceUserName, 0, targetUserName, options);
 
@@ -373,7 +371,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRelationship"/> instance.
         /// </returns>
-        public static TwitterRelationship Show(decimal sourceUseId, decimal targetUserId)
+        public static TwitterResponse<TwitterRelationship> Show(decimal sourceUseId, decimal targetUserId)
         {
             return Show(null, sourceUseId, targetUserId, null);
         }
@@ -386,7 +384,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRelationship"/> instance.
         /// </returns>
-        public static TwitterRelationship Show(string sourceUserName, string targetUserName)
+        public static TwitterResponse<TwitterRelationship> Show(string sourceUserName, string targetUserName)
         {
             return Show(null, sourceUserName, targetUserName, null);
         }

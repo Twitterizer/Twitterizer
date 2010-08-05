@@ -164,7 +164,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="text">The status text.</param>
         /// <returns>A <see cref="TwitterStatus"/> object of the newly created status.</returns>
-        public static TwitterStatus Update(OAuthTokens tokens, string text)
+        public static TwitterResponse<TwitterStatus> Update(OAuthTokens tokens, string text)
         {
             return Update(tokens, text, null);
         }
@@ -178,7 +178,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatus"/> object of the newly created status.
         /// </returns>
-        public static TwitterStatus Update(OAuthTokens tokens, string text, StatusUpdateOptions options)
+        public static TwitterResponse<TwitterStatus> Update(OAuthTokens tokens, string text, StatusUpdateOptions options)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(new Commands.UpdateStatusCommand(tokens, text, options));
         }
@@ -192,7 +192,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatus"/> object of the deleted status.
         /// </returns>
-        public static TwitterStatus Delete(OAuthTokens tokens, decimal id, OptionalProperties options)
+        public static TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens, decimal id, OptionalProperties options)
         {
             Commands.DeleteStatusCommand command = new Twitterizer.Commands.DeleteStatusCommand(tokens, id, options);
 
@@ -205,7 +205,7 @@ namespace Twitterizer
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="id">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> object of the deleted status.</returns>
-        public static TwitterStatus Delete(OAuthTokens tokens, decimal id)
+        public static TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens, decimal id)
         {
             return Delete(tokens, id, null);
         }
@@ -217,7 +217,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus Show(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+        public static TwitterResponse<TwitterStatus> Show(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(new Commands.ShowStatusCommand(tokens, statusId, options));
         }
@@ -228,7 +228,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus Show(OAuthTokens tokens, decimal statusId)
+        public static TwitterResponse<TwitterStatus> Show(OAuthTokens tokens, decimal statusId)
         {
             return Show(tokens, statusId, null);
         }
@@ -238,7 +238,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static TwitterStatus Show(decimal statusId)
+        public static TwitterResponse<TwitterStatus> Show(decimal statusId)
         {
             return Show(null, statusId);
         }
@@ -250,7 +250,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
-        public static TwitterStatus Retweet(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+        public static TwitterResponse<TwitterStatus> Retweet(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(
                 new Commands.RetweetCommand(tokens, statusId, options));
@@ -262,7 +262,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
-        public static TwitterStatus Retweet(OAuthTokens tokens, decimal statusId)
+        public static TwitterResponse<TwitterStatus> Retweet(OAuthTokens tokens, decimal statusId)
         {
             return Retweet(tokens, statusId, null);
         }
@@ -276,7 +276,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId, RetweetsOptions options)
+        public static TwitterResponse<TwitterStatusCollection> Retweets(OAuthTokens tokens, decimal statusId, RetweetsOptions options)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
                 new Commands.RetweetsCommand(tokens, statusId, options));
@@ -288,7 +288,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection Retweets(OAuthTokens tokens, decimal statusId)
+        public static TwitterResponse<TwitterStatusCollection> Retweets(OAuthTokens tokens, decimal statusId)
         {
             return Retweets(tokens, statusId, null);
         }
@@ -301,7 +301,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatus"/> representing the newly created tweet.
         /// </returns>
-        public TwitterStatus Retweet(OAuthTokens tokens, OptionalProperties options)
+        public TwitterResponse<TwitterStatus> Retweet(OAuthTokens tokens, OptionalProperties options)
         {
             return Retweet(tokens, this.Id, options);
         }
@@ -313,7 +313,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatus"/> representing the newly created tweet.
         /// </returns>
-        public TwitterStatus Retweet(OAuthTokens tokens)
+        public TwitterResponse<TwitterStatus> Retweet(OAuthTokens tokens)
         {
             return Retweet(tokens, this.Id, null);
         }
@@ -326,7 +326,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatus"/> object of the deleted status.
         /// </returns>
-        public TwitterStatus Delete(OAuthTokens tokens, OptionalProperties options)
+        public TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens, OptionalProperties options)
         {
             return Delete(tokens, this.Id, options);
         }
@@ -338,7 +338,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatus"/> object of the deleted status.
         /// </returns>
-        public TwitterStatus Delete(OAuthTokens tokens)
+        public TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens)
         {
             return Delete(tokens, this.Id, null);
         }

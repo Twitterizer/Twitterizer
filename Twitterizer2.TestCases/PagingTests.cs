@@ -14,7 +14,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.Mentions(tokens);
+            TwitterStatusCollection results = TwitterTimeline.Mentions(tokens).ResponseObject;
             
             int pagenumber = 1;
             string firstStatusText = results[0].Text;
@@ -26,7 +26,7 @@
                 if (pagenumber > 1)
                     Assert.That(results[0].Text != firstStatusText);
 
-                results = results.NextPage();
+                results = results.NextPage().ResponseObject;
 
                 pagenumber++;
             }
@@ -42,7 +42,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.UserTimeline(tokens);
+            TwitterStatusCollection results = TwitterTimeline.UserTimeline(tokens).ResponseObject;
 
             int pagenumber = 1;
             string firstStatusText = results[0].Text;
@@ -54,7 +54,7 @@
                 if (pagenumber > 1)
                     Assert.That(results[0].Text != firstStatusText);
 
-                results = results.NextPage();
+                results = results.NextPage().ResponseObject;
 
                 pagenumber++;
             }
@@ -70,7 +70,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.FriendTimeline(tokens);
+            TwitterStatusCollection results = TwitterTimeline.FriendTimeline(tokens).ResponseObject;
 
             int pagenumber = 1;
             string firstStatusText = results[0].Text;
@@ -82,7 +82,7 @@
                 if (pagenumber > 1)
                     Assert.That(results[0].Text != firstStatusText);
 
-                results = results.NextPage();
+                results = results.NextPage().ResponseObject;
 
                 pagenumber++;
             }
@@ -98,7 +98,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.HomeTimeline(tokens);
+            TwitterStatusCollection results = TwitterTimeline.HomeTimeline(tokens).ResponseObject;
 
             int pagenumber = 1;
             string firstStatusText = results[0].Text;
@@ -110,7 +110,7 @@
                 if (pagenumber > 1)
                     Assert.That(results[0].Text != firstStatusText);
 
-                results = results.NextPage();
+                results = results.NextPage().ResponseObject;
 
                 pagenumber++;
             }
@@ -129,7 +129,7 @@
             TwitterUserCollection followers = TwitterFriendship.Followers(tokens, new FollowersOptions()
             {
                 ScreenName = "twitterapi"
-            });
+            }).ResponseObject;
 
             int pagenumber = 1;
             decimal firstId = followers[0].Id;
@@ -141,7 +141,7 @@
                 if (pagenumber > 1)
                     Assert.That(followers[0].Id != firstId);
 
-                followers = followers.NextPage();
+                followers = followers.NextPage().ResponseObject;
 
                 pagenumber++;
             }

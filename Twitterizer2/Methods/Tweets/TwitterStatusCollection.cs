@@ -53,7 +53,7 @@ namespace Twitterizer
         /// Gets the next page.
         /// </summary>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public TwitterStatusCollection NextPage()
+        public TwitterResponse<TwitterStatusCollection> NextPage()
         {
             if (this.Command == null || this.Command.Page < 0)
             {
@@ -64,8 +64,10 @@ namespace Twitterizer
                 (PagedCommand<TwitterStatusCollection>)this.Command.Clone();
             newCommand.Page += 1;
 
-            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
-            result.Command = newCommand;
+            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
+            if (result.ResponseObject != null)
+                result.ResponseObject.Command = newCommand;
+
             return result;
         }
 
@@ -73,7 +75,7 @@ namespace Twitterizer
         /// Gets the previous page.
         /// </summary>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public TwitterStatusCollection PreviousPage()
+        public TwitterResponse<TwitterStatusCollection> PreviousPage()
         {
             if (this.Command == null || this.Command.Page <= 1)
             {
@@ -89,8 +91,11 @@ namespace Twitterizer
                 return null;
             }
 
-            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
-            result.Command = newCommand;
+            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
+            
+            if (result.ResponseObject != null)
+                result.ResponseObject.Command = newCommand;
+            
             return result;
         }
     }

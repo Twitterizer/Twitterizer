@@ -41,7 +41,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The Type of the BaseObject that the command returns</typeparam>
     /// <tocexclude />
     public interface ICommand<T>
-        where T : ITwitterObject
+        where T : class, ITwitterObject
     {
         /// <summary>
         /// Gets the request parameters.
@@ -59,6 +59,6 @@ namespace Twitterizer.Core
         /// </summary>
         /// <returns>The results of the command.</returns>
         /// <see cref="Twitterizer.Core.TwitterObject"/>
-        T ExecuteCommand();
+        TwitterResponse<T> ExecuteCommand();
     }
 }

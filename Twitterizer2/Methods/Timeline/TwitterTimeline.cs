@@ -48,15 +48,15 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
-        public static TwitterStatusCollection HomeTimeline(OAuthTokens tokens, TimelineOptions options)
+        public static TwitterResponse<TwitterStatusCollection> HomeTimeline(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens, options);
 
-            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
-            if (result != null)
+            if (result.ResponseObject != null)
             {
-                result.Command = command;
+                result.ResponseObject.Command = command;
             }
 
             return result;
@@ -64,14 +64,14 @@ namespace Twitterizer
 
         /// <param name="tokens">The tokens.</param>
         /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
-        public static TwitterStatusCollection HomeTimeline(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> HomeTimeline(OAuthTokens tokens)
         {
             return HomeTimeline(tokens, null);
         }
 
         /// <param name="options">The options.</param>
         /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
-        public static TwitterStatusCollection HomeTimeline(TimelineOptions options)
+        public static TwitterResponse<TwitterStatusCollection> HomeTimeline(TimelineOptions options)
         {
             return HomeTimeline(null, options);
         }
@@ -84,14 +84,15 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection UserTimeline(
+        public static TwitterResponse<TwitterStatusCollection> UserTimeline(
             OAuthTokens tokens,
             UserTimelineOptions options)
         {
             Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, options);
 
-            TwitterStatusCollection result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-            result.Command = command;
+            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            if (result.ResponseObject != null)
+                result.ResponseObject.Command = command;
 
             return result;
         }
@@ -103,7 +104,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection UserTimeline(
+        public static TwitterResponse<TwitterStatusCollection> UserTimeline(
             OAuthTokens tokens)
         {
             return UserTimeline(tokens, null);
@@ -116,7 +117,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection UserTimeline(
+        public static TwitterResponse<TwitterStatusCollection> UserTimeline(
             UserTimelineOptions options)
         {
             return UserTimeline(null, options);
@@ -126,7 +127,7 @@ namespace Twitterizer
         /// Gets the public timeline.
         /// </summary>
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
-        public static TwitterStatusCollection PublicTimeline()
+        public static TwitterResponse<TwitterStatusCollection> PublicTimeline()
         {
             return PublicTimeline(null);
         }
@@ -138,10 +139,10 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/>.
         /// </returns>
-        public static TwitterStatusCollection PublicTimeline(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OAuthTokens tokens)
         {
             Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens);
-            TwitterStatusCollection result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            TwitterResponse<TwitterStatusCollection> result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
             return result;
         }
@@ -151,7 +152,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
-        public static TwitterStatusCollection FriendTimeline(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> FriendTimeline(OAuthTokens tokens)
         {
             return FriendTimeline(tokens, null);
         }
@@ -162,13 +163,13 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
-        public static TwitterStatusCollection FriendTimeline(OAuthTokens tokens, TimelineOptions options)
+        public static TwitterResponse<TwitterStatusCollection> FriendTimeline(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(tokens, options);
-            TwitterStatusCollection result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            TwitterResponse<TwitterStatusCollection> result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
-            if (result != null)
-                result.Command = command;
+            if (result.ResponseObject != null)
+                result.ResponseObject.Command = command;
 
             return result;
         }
@@ -179,7 +180,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection RetweetsOfMe(OAuthTokens tokens, RetweetsOfMeOptions options)
+        public static TwitterResponse<TwitterStatusCollection> RetweetsOfMe(OAuthTokens tokens, RetweetsOfMeOptions options)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
                 new Commands.RetweetsOfMeCommand(tokens, options));
@@ -192,7 +193,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection RetweetsOfMe(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> RetweetsOfMe(OAuthTokens tokens)
         {
             return RetweetsOfMe(tokens, null);
         }
@@ -203,7 +204,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection RetweetedByMe(OAuthTokens tokens, TimelineOptions options)
+        public static TwitterResponse<TwitterStatusCollection> RetweetedByMe(OAuthTokens tokens, TimelineOptions options)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
                 new Commands.RetweetedByMeCommand(tokens, options));
@@ -216,7 +217,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection RetweetedByMe(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> RetweetedByMe(OAuthTokens tokens)
         {
             return RetweetedByMe(tokens, null);
         }
@@ -227,7 +228,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection RetweetedToMe(OAuthTokens tokens, TimelineOptions options)
+        public static TwitterResponse<TwitterStatusCollection> RetweetedToMe(OAuthTokens tokens, TimelineOptions options)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
                 new Commands.RetweetedToMeCommand(tokens, options));
@@ -240,7 +241,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection RetweetedToMe(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> RetweetedToMe(OAuthTokens tokens)
         {
             return RetweetedToMe(tokens, null);
         }
@@ -251,13 +252,13 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public static TwitterStatusCollection Mentions(OAuthTokens tokens, TimelineOptions options)
+        public static TwitterResponse<TwitterStatusCollection> Mentions(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.MentionsCommand command = new Commands.MentionsCommand(tokens, options);
-            TwitterStatusCollection results = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            TwitterResponse<TwitterStatusCollection> results = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
-            if (results != null)
-                results.Command = command;
+            if (results.ResponseObject != null)
+                results.ResponseObject.Command = command;
 
             return results;
         }
@@ -269,7 +270,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterStatusCollection"/> instance.
         /// </returns>
-        public static TwitterStatusCollection Mentions(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> Mentions(OAuthTokens tokens)
         {
             return Mentions(tokens, null);
         }
