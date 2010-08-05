@@ -34,10 +34,8 @@
 namespace Twitterizer
 {
     using System;
-    using System.Globalization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
-    using System.ComponentModel;
 
     /// <summary>
     /// The Twitter Rate Limit Status class
@@ -51,7 +49,6 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="TwitterRateLimitStatus"/> class.
         /// </summary>
         public TwitterRateLimitStatus()
-            : base()
         {
         }
 
@@ -95,22 +92,18 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The OAuth tokens.</param>
         /// <param name="options">The options.</param>
-        /// <param name="options">The callback or anonymous funtion.</param>
+        /// <param name="function">The callback or anonymous funtion.</param>
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
         public static void GetStatus(OAuthTokens tokens, OptionalProperties options, Action<TwitterRateLimitStatus> function)
         {
-            Func<OAuthTokens, OptionalProperties, TwitterRateLimitStatus> methodToCall = new Func<OAuthTokens, OptionalProperties, TwitterRateLimitStatus>(GetStatus);
+            Func<OAuthTokens, OptionalProperties, TwitterRateLimitStatus> methodToCall = GetStatus;
 
-            AsyncOperation operation = AsyncOperationManager.CreateOperation(null);
             methodToCall.BeginInvoke(
                 tokens,
                 options,
-                (AsyncCallback)((IAsyncResult result) =>
-                {
-                    function(methodToCall.EndInvoke(result));
-                }),
+                result => function(methodToCall.EndInvoke(result)),
                 null);
         }
 
