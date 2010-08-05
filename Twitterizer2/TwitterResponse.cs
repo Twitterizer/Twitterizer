@@ -8,7 +8,7 @@ namespace Twitterizer
     /// <typeparam name="T"></typeparam>
     [Serializable]
     public class TwitterResponse<T>
-        where T : class, Core.ITwitterObject
+        where T : Core.ITwitterObject
     {
         /// <summary>
         /// Gets or sets the response object.

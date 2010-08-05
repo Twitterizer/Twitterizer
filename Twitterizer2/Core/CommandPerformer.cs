@@ -40,7 +40,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The business object the performer should return.</typeparam>
     /// <tocexclude />
     internal static class CommandPerformer<T>
-        where T : class, ITwitterObject, new()
+        where T : ITwitterObject
     {
         /// <summary>
         /// Performs the action.

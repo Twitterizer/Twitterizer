@@ -45,25 +45,6 @@ namespace Twitterizer
     [Serializable]
     public class TwitterDirectMessage : TwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterDirectMessage"/> class.
-        /// </summary>
-        public TwitterDirectMessage() : base() 
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterDirectMessage"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        public TwitterDirectMessage(OAuthTokens tokens) 
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets or sets the direct message id.
@@ -242,24 +223,14 @@ namespace Twitterizer
         /// <summary>
         /// Deletes this direct message.
         /// </summary>
-        /// <returns>
-        /// A <see cref="TwitterDirectMessage"/> instance.
-        /// </returns>
-        public TwitterResponse<TwitterDirectMessage> Delete()
-        {
-            return this.Delete(null);
-        }
-
-        /// <summary>
-        /// Deletes this direct message.
-        /// </summary>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterDirectMessage"/> instance.
         /// </returns>
-        public TwitterResponse<TwitterDirectMessage> Delete(OptionalProperties options)
+        public TwitterResponse<TwitterDirectMessage> Delete(OAuthTokens tokens, OptionalProperties options)
         {
-            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id, options);
+            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(tokens, this.Id, options);
 
             TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 

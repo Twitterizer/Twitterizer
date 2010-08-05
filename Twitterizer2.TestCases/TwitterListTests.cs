@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Twitterizer;
 
 namespace Twitterizer2.TestCases
@@ -18,7 +14,7 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public void GetList()
         {
-            TwitterList list = TwitterList.GetList(Configuration.GetTokens(), userName, listName, null);
+            TwitterList list = TwitterList.GetList(Configuration.GetTokens(), userName, listName, null).ResponseObject;
 
             Assert.IsNotNull(list);
         }
@@ -29,7 +25,7 @@ namespace Twitterizer2.TestCases
         public void GetStatuses()
         {
             ListStatusesOptions options = new ListStatusesOptions();
-            TwitterStatusCollection statuses = TwitterList.GetStatuses(Configuration.GetTokens(), userName, listName, options);
+            TwitterStatusCollection statuses = TwitterList.GetStatuses(Configuration.GetTokens(), userName, listName, options).ResponseObject;
 
             Assert.IsNotNull(statuses);
             Assert.IsNotEmpty(statuses);
@@ -40,15 +36,14 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public void GetMembers()
         {
-            TwitterUserCollection usersInTheList = TwitterList.GetMembers(Configuration.GetTokens(), userName, listName);
+            TwitterUserCollection usersInTheList = TwitterList.GetMembers(Configuration.GetTokens(), userName, listName).ResponseObject;
 
             Assert.IsNotNull(usersInTheList);
-            Assert.That(!usersInTheList.IsEmpty);
 
             // Attempt to page through the results.
             if (usersInTheList.Count == 20)
             {
-                usersInTheList = usersInTheList.NextPage();
+                usersInTheList = usersInTheList.NextPage().ResponseObject;
             }
         }
 
@@ -57,7 +52,7 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public static void GetSubscriptions()
         {
-            TwitterListCollection lists = TwitterList.GetSubscriptions(Configuration.GetTokens(), userName);
+            TwitterListCollection lists = TwitterList.GetSubscriptions(Configuration.GetTokens(), userName).ResponseObject;
 
             Assert.IsNotNull(lists);
         }
@@ -67,7 +62,7 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public static void GetMemberships()
         {
-            TwitterListCollection lists = TwitterList.GetMemberships(Configuration.GetTokens(), userName);
+            TwitterListCollection lists = TwitterList.GetMemberships(Configuration.GetTokens(), userName).ResponseObject;
 
             Assert.IsNotNull(lists);
         }

@@ -37,7 +37,7 @@ namespace Twitterizer.Core
     using Twitterizer;
 
     public delegate void TwitterAsyncCallback<T>(T result)
-            where T : TwitterObject;
+            where T : ITwitterObject;
 
     /// <summary>
     /// The base object class
@@ -54,25 +54,5 @@ namespace Twitterizer.Core
         /// The format that all twitter search api dates are in.
         /// </summary>
         protected const string SearchDateFormat = "ddd, dd MMM yyyy HH:mm:ss +zz00";
-
-        /// <summary>
-        /// Gets or sets information about the user's rate usage.
-        /// </summary>
-        /// <value>The rate limiting object.</value>
-        public RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        [XmlIgnore, SoapIgnore]
-        public OAuthTokens Tokens { get; set; }
-
-        /// <summary>
-        /// Gets details about the request attempted.
-        /// </summary>
-        /// <value>The last request status.</value>
-        [XmlIgnore, SoapIgnore]
-        public RequestStatus RequestStatus { get; set; }
     }
 }

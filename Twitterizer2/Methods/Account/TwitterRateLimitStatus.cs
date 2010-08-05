@@ -45,26 +45,6 @@ namespace Twitterizer
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterRateLimitStatus : TwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRateLimitStatus"/> class.
-        /// </summary>
-        public TwitterRateLimitStatus()
-            : base()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRateLimitStatus"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        protected TwitterRateLimitStatus(OAuthTokens tokens)
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-        #endregion
-
         #region API Properties
         /// <summary>
         /// Gets or sets the remaining hits.

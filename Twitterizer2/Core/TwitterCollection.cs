@@ -43,54 +43,8 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The type of object stored in the collection.</typeparam>
     [Serializable]
-    public abstract class TwitterCollection<T> : Collection<T>, ITwitterObject
-        where T : ITwitterObject
+    public abstract class TwitterCollection<T> : Collection<T>
+        where T : class, ITwitterObject
     {
-        /// <summary>
-        /// The oauth tokens
-        /// </summary>
-        private OAuthTokens tokens;
-
-        /// <summary>
-        /// Gets or sets information about the user's rate usage.
-        /// </summary>
-        /// <value>The rate limiting object.</value>
-        public RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        [XmlIgnore, SoapIgnore]
-        public OAuthTokens Tokens
-        {
-            get
-            {
-                return this.tokens;
-            }
-
-            set
-            {
-                this.tokens = value;
-
-                foreach (T item in this)
-                {
-                    item.Tokens = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets details about the request attempted.
-        /// </summary>
-        /// <value>The last request status.</value>
-        [XmlIgnore, SoapIgnore]
-        public RequestStatus RequestStatus { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is empty.
-        /// </summary>
-        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
-        public new bool IsEmpty { get; set; }
     }
 }

@@ -70,16 +70,6 @@
         [Category("Read-Only")]
         public static void SSL()
         {
-            OptionalProperties sslOptions = new OptionalProperties()
-            {
-                UseSSL = true
-            };
-
-            OptionalProperties options = new OptionalProperties()
-            {
-                UseSSL = false
-            };
-
             TwitterResponse<TwitterUser> sslUser = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = true });
             Assert.That(sslUser.RequestUrl.StartsWith("https://"));
             
@@ -88,7 +78,7 @@
 
             TwitterResponse<TwitterStatusCollection> timeline = TwitterTimeline.HomeTimeline(Configuration.GetTokens(), new TimelineOptions() { UseSSL = true });
             Assert.That(timeline.RequestUrl.StartsWith("https://"));
-            Assert.That(RequestStatus.LastRequestStatus.FullPath.StartsWith("https://"));
+            Assert.That(user.RequestUrl.StartsWith("https://"));
         }
     }
 }

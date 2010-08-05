@@ -41,7 +41,7 @@ namespace Twitterizer
     /// The TwitterUserCollection class.
     /// </summary>
     [System.Serializable]
-    public class TwitterUserCollection : TwitterCollection<TwitterUser>
+    public class TwitterUserCollection : TwitterCollection<TwitterUser>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the next cursor.

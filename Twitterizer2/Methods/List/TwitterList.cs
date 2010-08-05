@@ -47,26 +47,6 @@ namespace Twitterizer
     [Serializable]
     public class TwitterList : TwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterList"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        public TwitterList(OAuthTokens tokens) 
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterList"/> class.
-        /// </summary>
-        public TwitterList()
-            : base()
-        {
-        }
-        #endregion
-
         #region API properties
         /// <summary>
         /// Gets or sets the id.

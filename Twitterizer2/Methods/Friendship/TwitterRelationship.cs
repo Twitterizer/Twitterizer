@@ -57,26 +57,6 @@ namespace Twitterizer
         /// </summary>
         private TwitterUser target;
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        public TwitterRelationship(OAuthTokens tokens) 
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRelationship"/> class.
-        /// </summary>
-        public TwitterRelationship()
-            : base()
-        {
-        }
-        #endregion
-
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
@@ -86,11 +66,6 @@ namespace Twitterizer
         {
             get
             {
-                if (!this.source.IsEmpty)
-                {
-                    this.source.Tokens = this.Tokens;
-                }
-
                 return this.source;
             }
 
@@ -109,11 +84,6 @@ namespace Twitterizer
         {
             get
             {
-                if (!this.target.IsEmpty)
-                {
-                    this.target.Tokens = this.Tokens;
-                }
-
                 return this.target;
             }
 

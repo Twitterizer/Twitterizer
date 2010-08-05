@@ -42,7 +42,7 @@ namespace Twitterizer
     [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
     [DebuggerDisplay("{User.ScreenName}/{Text}")]
-    public class TwitterStatus : TwitterObject
+    public class TwitterStatus : ITwitterObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStatus"/> class.

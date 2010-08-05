@@ -43,7 +43,7 @@ namespace Twitterizer
     /// The twitter list collection class.
     /// </summary>
     [Serializable]
-    public class TwitterListCollection : Core.TwitterCollection<TwitterList>
+    public class TwitterListCollection : Core.TwitterCollection<TwitterList>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the next cursor.

@@ -50,7 +50,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The business object the command should return.</typeparam>
     [Serializable]
     internal abstract class TwitterCommand<T> : ICommand<T>
-        where T : class, ITwitterObject
+        where T : ITwitterObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
@@ -198,7 +198,6 @@ namespace Twitterizer.Core
             // Declare the variable to be returned
             twitterResponse.ResponseObject = default(T);
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
-            RequestStatus requestStatus = null;
             RateLimiting rateLimiting = null;
 
             byte[] responseData = null;
@@ -222,16 +221,10 @@ namespace Twitterizer.Core
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
-                // Build the request status (holds details about the last request) and update the singleton
-                requestStatus = RequestStatus.BuildRequestStatus(
-                    responseData,
-                    response.ResponseUri.AbsoluteUri,
-                    response.StatusCode,
-                    response.ContentType,
-                    rateLimiting);
-                twitterResponse.RateLimiting = rateLimiting;
+                // Lookup the status code and set the status accordingly
+                SetStatusCode(twitterResponse, response.StatusCode, rateLimiting);
 
-                RequestStatus.UpdateRequestStatus(requestStatus);
+                twitterResponse.RateLimiting = rateLimiting;
             }
             catch (WebException wex)
             {
@@ -249,16 +242,11 @@ namespace Twitterizer.Core
 
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
-                requestStatus = RequestStatus.BuildRequestStatus(
-                        responseData,
-                        exceptionResponse.ResponseUri.AbsoluteUri,
-                        exceptionResponse.StatusCode,
-                        exceptionResponse.ContentType,
-                        rateLimiting);
+                // Lookup the status code and set the status accordingly
+                SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
+
                 twitterResponse.RateLimiting = rateLimiting;
-
-                RequestStatus.UpdateRequestStatus(requestStatus);
-
+                
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
@@ -277,6 +265,38 @@ namespace Twitterizer.Core
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
             return twitterResponse;
+        }
+
+        /// <summary>
+        /// Sets the status code.
+        /// </summary>
+        /// <param name="twitterResponse">The twitter response.</param>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="rateLimiting">The rate limiting.</param>
+        private static void SetStatusCode(TwitterResponse<T> twitterResponse, HttpStatusCode statusCode, RateLimiting rateLimiting)
+        {
+            switch (statusCode)
+            {
+                case HttpStatusCode.OK:
+                    twitterResponse.Result = RequestResult.Success;
+                    break;
+
+                case HttpStatusCode.BadRequest:
+                    twitterResponse.Result = rateLimiting.Remaining == 0 ? RequestResult.RateLimited : RequestResult.BadRequest;
+                    break;
+
+                case HttpStatusCode.Unauthorized:
+                    twitterResponse.Result = RequestResult.Unauthorized;
+                    break;
+
+                case HttpStatusCode.NotFound:
+                    twitterResponse.Result = RequestResult.FileNotFound;
+                    break;
+
+                default:
+                    twitterResponse.Result = RequestResult.Unknown;
+                    break;
+            }
         }
 
         /// <summary>

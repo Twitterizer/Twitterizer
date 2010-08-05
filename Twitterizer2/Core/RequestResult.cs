@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterSearchResultCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RequestStatus.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,34 +29,59 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter search result collection class</summary>
+// <summary>The twitter status class. Provides information about the last request made.</summary>
 //-----------------------------------------------------------------------
-
-using Twitterizer.Core;
 
 namespace Twitterizer
 {
-    using System;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-
     /// <summary>
-    /// The Twitter Search Result Collection class
+    /// Describes the result status of a request
     /// </summary>
-    [Serializable]
-    public class TwitterSearchResultCollection : Core.TwitterCollection<TwitterSearchResult>, ITwitterObject
+    public enum RequestResult
     {
         /// <summary>
-        /// Deserializes the specified value.
+        /// The request was completed successfully
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        internal static TwitterSearchResultCollection Deserialize(JObject value)
-        {
-            if (value == null || value.First == null || value.First.First == null)
-                return null;
+        Success,
 
-            return JsonConvert.DeserializeObject<TwitterSearchResultCollection>(value.First.First.ToString());
-        }
+        /// <summary>
+        /// The URI requested is invalid or the resource requested, such as a user, does not exists.
+        /// </summary>
+        FileNotFound,
+
+        /// <summary>
+        /// The request was invalid.  An accompanying error message will explain why.
+        /// </summary>
+        BadRequest,
+
+        /// <summary>
+        /// Authentication credentials were missing or incorrect.
+        /// </summary>
+        Unauthorized,
+
+        /// <summary>
+        /// Returned by the Search API when an invalid format is specified in the request.
+        /// </summary>
+        NotAcceptable,
+
+        /// <summary>
+        /// The authorized user, or client IP address, is being rate limited.
+        /// </summary>
+        RateLimited,
+
+        /// <summary>
+        /// Twitter is currently down.
+        /// </summary>
+        TwitterIsDown,
+
+        /// <summary>
+        /// Twitter is online, but is overloaded. Try again later.
+        /// </summary>
+        TwitterIsOverloaded,
+
+        /// <summary>
+        /// Something unexpected happened. See the error message for additional information.
+        /// </summary>
+        Unknown
     }
 }

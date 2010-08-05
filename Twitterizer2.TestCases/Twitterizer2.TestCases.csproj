@@ -95,7 +95,25 @@
     <Compile Include="TwitterFriendshipTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TwitterGeoTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterListTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterSearchTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TwitterStatusTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterTimelineTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterTrendTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterUserTests.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
