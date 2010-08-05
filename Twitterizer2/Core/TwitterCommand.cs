@@ -37,7 +37,6 @@ namespace Twitterizer.Core
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.IO;
     using System.Net;
     using System.Text;
     using System.Web;
@@ -64,7 +63,7 @@ namespace Twitterizer.Core
             this.RequestParameters = new Dictionary<string, string>();
             this.Verb = method;
             this.Tokens = tokens;
-            this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
+            this.OptionalProperties = optionalProperties ?? new OptionalProperties();
 
             this.SetCommandUri(endPoint);
         }
@@ -198,9 +197,9 @@ namespace Twitterizer.Core
             // Declare the variable to be returned
             twitterResponse.ResponseObject = default(T);
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
-            RateLimiting rateLimiting = null;
+            RateLimiting rateLimiting;
 
-            byte[] responseData = null;
+            byte[] responseData;
 
             try
             {
@@ -239,6 +238,7 @@ namespace Twitterizer.Core
                 }
 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
+                twitterResponse.Content = Encoding.UTF8.GetString(responseData);
 
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
