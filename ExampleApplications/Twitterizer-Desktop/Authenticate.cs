@@ -67,7 +67,8 @@ namespace Twitterizer_Desktop
         {
             OAuthTokenResponse requestAccessTokens = OAuthUtility.GetRequestToken(
                 ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerKey"],
-                ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerSecret"]);
+                ConfigurationManager.AppSettings["Twitterizer.Desktop.ConsumerSecret"],
+                "oob");
 
             this.requestToken = requestAccessTokens.Token;
 

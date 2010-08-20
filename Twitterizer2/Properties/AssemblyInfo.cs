@@ -65,4 +65,4 @@ using System.Security;
 [assembly: Guid("e8e37171-9c87-46e0-9e2e-c16c3ff570a5")]
 
 [assembly: AssemblyVersion("2.2.1.*")]
-[assembly: AssemblyFileVersion("2.2.1.1")]
+[assembly: AssemblyFileVersion("2.2.1.2")]

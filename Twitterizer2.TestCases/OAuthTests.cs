@@ -16,9 +16,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            WebProxy proxy = new WebProxy("http://localhost:8888");
-
-            OAuthTokenResponse response = OAuthUtility.GetRequestToken(tokens.ConsumerKey, tokens.ConsumerSecret, string.Empty, proxy);
+            OAuthTokenResponse response = OAuthUtility.GetRequestToken(tokens.ConsumerKey, tokens.ConsumerSecret, string.Empty);
 
             Assert.IsNotNull(response);
             Assert.IsNotNullOrEmpty(response.Token);

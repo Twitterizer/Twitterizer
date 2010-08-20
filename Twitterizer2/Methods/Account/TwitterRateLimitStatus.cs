@@ -99,7 +99,7 @@ namespace Twitterizer
         public static void GetStatus(OAuthTokens tokens, OptionalProperties options, Action<TwitterRateLimitStatus> function)
         {
             Func<OAuthTokens, OptionalProperties, TwitterRateLimitStatus> methodToCall = GetStatus;
-
+            
             methodToCall.BeginInvoke(
                 tokens,
                 options,
