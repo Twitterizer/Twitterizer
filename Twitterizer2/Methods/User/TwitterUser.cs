@@ -234,6 +234,20 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "url")]
         public string Website { get; set; }
 
+        /// <summary>
+        /// Gets or sets the listed count.
+        /// </summary>
+        /// <value>The listed count.</value>
+        [JsonProperty(PropertyName = "listed_count")]
+        public int ListedCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [follow request sent].
+        /// </summary>
+        /// <value><c>true</c> if [follow request sent]; otherwise, <c>false</c>.</value>
+        [JsonProperty(PropertyName = "follow_request_sent")]
+        public bool? FollowRequestSent { get; set; }
+
         #region Profile Layout Properties
         /// <summary>
         /// Gets or sets the color of the profile background.

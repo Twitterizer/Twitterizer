@@ -156,6 +156,20 @@ namespace Twitterizer
         [JsonProperty(PropertyName  = "entities")]
         [JsonConverter(typeof(Entities.TwitterEntityCollection.Converter))]
         public Entities.TwitterEntityCollection Entities { get; set; }
+
+        /// <summary>
+        /// Gets or sets the retweet count.
+        /// </summary>
+        /// <value>The retweet count.</value>
+        [JsonProperty(PropertyName = "retweet_count")]
+        public int? RetweetCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TwitterStatus"/> is retweeted.
+        /// </summary>
+        /// <value><c>true</c> if retweeted; otherwise, <c>false</c>.</value>
+        [JsonProperty(PropertyName = "retweeted")]
+        public bool Retweeted { get; set; }
         #endregion
 
         /// <summary>
