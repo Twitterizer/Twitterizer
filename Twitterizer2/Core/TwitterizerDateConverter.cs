@@ -57,31 +57,17 @@ namespace Twitterizer
         /// <returns>The parsed value as a DateTime, or null.</returns>
         public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            try
-            {
-                if (reader.Value == null || reader.Value.GetType() != typeof(string))
-                    return new DateTime();
+            if (reader.Value == null || reader.Value.GetType() != typeof(string))
+                return new DateTime();
 
-                DateTime parsedDate;
+            DateTime parsedDate;
 
-                if (DateTime.TryParseExact(
-                       (string)reader.Value,
-                       DateFormat,
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out parsedDate))
-                {
-                    return parsedDate;
-                }
-                else
-                {
-                    return new DateTime();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return DateTime.TryParseExact(
+                (string)reader.Value,
+                DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out parsedDate) ? parsedDate : new DateTime();
         }
 
         /// <summary>

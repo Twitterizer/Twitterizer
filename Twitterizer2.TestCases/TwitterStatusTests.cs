@@ -44,7 +44,7 @@ namespace Twitterizer2.TestCases
 
             StatusUpdateOptions options = new StatusUpdateOptions();
 
-            TwitterStatus newStatus = TwitterStatus.Update(tokens, "Performing Twitterizer testing ...", options);
+            TwitterStatus newStatus = TwitterStatus.Update(tokens, "Performing Twitterizer testing ... yes?test=1", options);
             Assert.That(!newStatus.IsEmpty);
             Assert.That(newStatus.Id > 0);
 
