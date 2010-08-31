@@ -146,10 +146,10 @@ namespace Twitterizer
         /// <returns></returns>
         internal static TwitterUserCollection DeserializeWrapper(JObject value)
         {
-            if (value == null || value.First == null || value.First.First == null)
+            if (value == null || value.SelectToken("users") == null)
                 return null;
 
-            TwitterUserCollection result = JsonConvert.DeserializeObject<TwitterUserCollection>(value.First.ToString());
+            TwitterUserCollection result = JsonConvert.DeserializeObject<TwitterUserCollection>(value.SelectToken("users").ToString());
             result.NextCursor = value.SelectToken("next_cursor").Value<long>();
             result.PreviousCursor = value.SelectToken("previous_cursor").Value<long>();
 
