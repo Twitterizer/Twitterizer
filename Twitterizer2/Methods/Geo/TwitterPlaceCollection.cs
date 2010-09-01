@@ -44,7 +44,7 @@ namespace Twitterizer
     [Serializable]
     [JsonConverter(typeof(TwitterPlaceCollection.Converter))]
     [JsonObject]
-    public class TwitterPlaceCollection : TwitterCollection<TwitterPlace>
+    public class TwitterPlaceCollection : TwitterCollection<TwitterPlace>, ITwitterObject
     {
         /// <summary>
         /// Converts json data to a <see cref="TwitterPlaceCollection"/>.

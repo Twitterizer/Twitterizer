@@ -16,7 +16,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            OAuthTokenResponse response = OAuthUtility.GetRequestToken(tokens.ConsumerKey, tokens.ConsumerSecret, string.Empty);
+            OAuthTokenResponse response = OAuthUtility.GetRequestToken(tokens.ConsumerKey, tokens.ConsumerSecret, "oob");
 
             Assert.IsNotNull(response);
             Assert.IsNotNullOrEmpty(response.Token);
@@ -27,9 +27,9 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatus result = TwitterStatus.Update(tokens, "I am testing. Please ignore this. protocol://host/page?key=value&key2=value2");
-            Assert.IsNotNull(result);
-            Assert.That(result.Id > 0);
+            TwitterResponse<TwitterStatus> result = TwitterStatus.Update(tokens, "I am testing. Please ignore this. protocol://host/page?key=value&key2=value2");
+            Assert.IsNotNull(result.ResponseObject);
+            Assert.That(result.ResponseObject.Id > 0);
         }
 
         [Test]

@@ -17,7 +17,7 @@
                 MaxResults = 2
             };
 
-            TwitterPlaceCollection places = TwitterPlace.Lookup(30.475012, -84.35509, options);
+            TwitterPlaceCollection places = TwitterPlace.Lookup(30.475012, -84.35509, options).ResponseObject;
 
             Assert.IsNotNull(places);
             Assert.IsNotEmpty(places);

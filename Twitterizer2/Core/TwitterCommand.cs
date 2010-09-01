@@ -37,7 +37,6 @@ namespace Twitterizer.Core
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.IO;
     using System.Net;
     using System.Text;
     using System.Web;
@@ -50,7 +49,7 @@ namespace Twitterizer.Core
     /// <typeparam name="T">The business object the command should return.</typeparam>
     [Serializable]
     internal abstract class TwitterCommand<T> : ICommand<T>
-        where T : class, ITwitterObject, new()
+        where T : ITwitterObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterCommand&lt;T&gt;"/> class.
@@ -64,7 +63,7 @@ namespace Twitterizer.Core
             this.RequestParameters = new Dictionary<string, string>();
             this.Verb = method;
             this.Tokens = tokens;
-            this.OptionalProperties = optionalProperties == null ? new OptionalProperties() : optionalProperties;
+            this.OptionalProperties = optionalProperties ?? new OptionalProperties();
 
             this.SetCommandUri(endPoint);
         }
@@ -120,8 +119,10 @@ namespace Twitterizer.Core
         /// Executes the command.
         /// </summary>
         /// <returns>The results of the command.</returns>
-        public T ExecuteCommand()
+        public TwitterResponse<T> ExecuteCommand()
         {
+            TwitterResponse<T> twitterResponse = new TwitterResponse<T>();
+
             if (this.OptionalProperties.UseSSL)
             {
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
@@ -150,7 +151,7 @@ namespace Twitterizer.Core
                 else if (attribute.GetType() == typeof(RateLimitedAttribute))
                 {
                     // Get the rate limiting status
-                    if (TwitterRateLimitStatus.GetStatus(this.Tokens).RemainingHits == 0)
+                    if (TwitterRateLimitStatus.GetStatus(this.Tokens).ResponseObject.RemainingHits == 0)
                     {
                         throw new TwitterizerException("You are being rate limited.");
                     }
@@ -181,20 +182,24 @@ namespace Twitterizer.Core
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
                     Debug.WriteLine("Found in cache", "Twitterizer2");
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri), "Twitterizer2");
-                    return (T)cache[cacheKeyBuilder.ToString()];
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri),
+                                    "Twitterizer2");
+
+                    return new TwitterResponse<T>()
+                               {
+                                   ResponseObject = (T)cache[cacheKeyBuilder.ToString()],
+                                   ResponseCached = true
+                               };
                 }
             }
+            
 
             // Declare the variable to be returned
-            T resultObject = default(T);
-            RequestStatus requestStatus = null;
-            RateLimiting rateLimiting = null;
+            twitterResponse.ResponseObject = default(T);
+            twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
+            RateLimiting rateLimiting;
 
-            // This must be set for all twitter request.
-            System.Net.ServicePointManager.Expect100Continue = false;
-
-            byte[] responseData = null;
+            byte[] responseData;
 
             try
             {
@@ -215,15 +220,10 @@ namespace Twitterizer.Core
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
-                // Build the request status (holds details about the last request) and update the singleton
-                requestStatus = RequestStatus.BuildRequestStatus(
-                    responseData,
-                    response.ResponseUri.AbsoluteUri,
-                    response.StatusCode,
-                    response.ContentType,
-                    rateLimiting);
+                // Lookup the status code and set the status accordingly
+                SetStatusCode(twitterResponse, response.StatusCode, rateLimiting);
 
-                RequestStatus.UpdateRequestStatus(requestStatus);
+                twitterResponse.RateLimiting = rateLimiting;
             }
             catch (WebException wex)
             {
@@ -232,50 +232,71 @@ namespace Twitterizer.Core
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse exceptionResponse = wex.Response as HttpWebResponse;
 
-                if (wex.Response == null)
+                if (exceptionResponse == null)
                 {
                     throw;
                 }
 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
+                twitterResponse.Content = Encoding.UTF8.GetString(responseData);
 
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
-                requestStatus = RequestStatus.BuildRequestStatus(
-                        responseData,
-                        exceptionResponse.ResponseUri.AbsoluteUri,
-                        exceptionResponse.StatusCode,
-                        exceptionResponse.ContentType,
-                        rateLimiting);
+                // Lookup the status code and set the status accordingly
+                SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
 
-                RequestStatus.UpdateRequestStatus(requestStatus);
-
+                twitterResponse.RateLimiting = rateLimiting;
+                
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
-                return new T() { IsEmpty = true, RequestStatus = requestStatus, RateLimiting = rateLimiting };
-            }
-            finally
-            {
-                // Set this back to the default so it doesn't affect other .net code.
-                System.Net.ServicePointManager.Expect100Continue = true;
+                
+
+                return twitterResponse;
             }
 
-            resultObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
+            twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
 
-            this.AddResultToCache(cacheKeyBuilder, cache, resultObject);
-
-            if (resultObject == null)
-                resultObject = new T();
+            this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
-            resultObject.Tokens = this.Tokens;
-            resultObject.RequestStatus = requestStatus;
-            resultObject.RateLimiting = rateLimiting;
+            twitterResponse.Tokens = this.Tokens;
 
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
 
-            return resultObject;
+            return twitterResponse;
+        }
+
+        /// <summary>
+        /// Sets the status code.
+        /// </summary>
+        /// <param name="twitterResponse">The twitter response.</param>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="rateLimiting">The rate limiting.</param>
+        private static void SetStatusCode(TwitterResponse<T> twitterResponse, HttpStatusCode statusCode, RateLimiting rateLimiting)
+        {
+            switch (statusCode)
+            {
+                case HttpStatusCode.OK:
+                    twitterResponse.Result = RequestResult.Success;
+                    break;
+
+                case HttpStatusCode.BadRequest:
+                    twitterResponse.Result = rateLimiting.Remaining == 0 ? RequestResult.RateLimited : RequestResult.BadRequest;
+                    break;
+
+                case HttpStatusCode.Unauthorized:
+                    twitterResponse.Result = RequestResult.Unauthorized;
+                    break;
+
+                case HttpStatusCode.NotFound:
+                    twitterResponse.Result = RequestResult.FileNotFound;
+                    break;
+
+                default:
+                    twitterResponse.Result = RequestResult.Unknown;
+                    break;
+            }
         }
 
         /// <summary>

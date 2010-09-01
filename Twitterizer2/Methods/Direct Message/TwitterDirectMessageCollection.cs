@@ -41,7 +41,7 @@ namespace Twitterizer
     /// The Direct Message Collection class
     /// </summary>
     [Serializable]
-    public class TwitterDirectMessageCollection : TwitterCollection<TwitterDirectMessage>
+    public class TwitterDirectMessageCollection : TwitterCollection<TwitterDirectMessage>, ITwitterObject
     {
     }
 }

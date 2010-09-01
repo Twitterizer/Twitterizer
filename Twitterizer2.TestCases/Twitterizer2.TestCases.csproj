@@ -88,21 +88,42 @@
     <Compile Include="..\Twitterizer2\Core\SerializationHelper.cs">
       <Link>SerializationHelper.cs</Link>
     </Compile>
-    <Compile Include="CoreTests.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Issue120.cs" />
-    <Compile Include="OAuthTests.cs" />
-    <Compile Include="PagingTests.cs" />
+    <Compile Include="CoreTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OAuthTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PagingTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TwitterFriendshipTests.cs" />
-    <Compile Include="TwitterGeoTests.cs" />
-    <Compile Include="TwitterListTests.cs" />
-    <Compile Include="TwitterSearchTests.cs" />
-    <Compile Include="TwitterStatusTests.cs" />
-    <Compile Include="TwitterStreamTests.cs" />
-    <Compile Include="TwitterTimelineTests.cs" />
-    <Compile Include="TwitterTrendTests.cs" />
-    <Compile Include="TwitterUserTests.cs" />
+    <Compile Include="TwitterFriendshipTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterGeoTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterListTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterSearchTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterStatusTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterTimelineTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterTrendTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwitterUserTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="TestSettings.config">

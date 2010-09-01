@@ -57,7 +57,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         /// <returns>The favorite status when successful.</returns>
-        public static TwitterStatus Create(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+        public static TwitterResponse<TwitterStatus> Create(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(
                 new Commands.CreateFavoriteCommand(tokens, statusId, options));
@@ -69,7 +69,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <returns>The favorite status when successful.</returns>
-        public static TwitterStatus Create(OAuthTokens tokens, decimal statusId)
+        public static TwitterResponse<TwitterStatus> Create(OAuthTokens tokens, decimal statusId)
         {
             return Create(tokens, statusId, null);
         }
@@ -81,7 +81,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         /// <returns>The un-favorited status in the requested format when successful.</returns>
-        public static TwitterStatus Delete(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+        public static TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
             return CommandPerformer<TwitterStatus>.PerformAction(
                 new Commands.DeleteFavoriteCommand(tokens, statusId, options));
@@ -95,7 +95,7 @@ namespace Twitterizer
         /// <returns>
         /// The un-favorited status in the requested format when successful.
         /// </returns>
-        public static TwitterStatus Delete(OAuthTokens tokens, decimal statusId)
+        public static TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens, decimal statusId)
         {
             return Delete(tokens, statusId, null);
         }
@@ -106,7 +106,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>The 20 most recent favorite statuses</returns>
-        public static TwitterStatusCollection List(OAuthTokens tokens, ListFavoritesOptions options)
+        public static TwitterResponse<TwitterStatusCollection> List(OAuthTokens tokens, ListFavoritesOptions options)
         {
             return CommandPerformer<TwitterStatusCollection>.PerformAction(
                 new Commands.ListFavoritesCommand(tokens, options));
@@ -117,7 +117,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <returns>The 20 most recent favorite statuses</returns>
-        public static TwitterStatusCollection List(OAuthTokens tokens)
+        public static TwitterResponse<TwitterStatusCollection> List(OAuthTokens tokens)
         {
             return List(tokens, null);
         }

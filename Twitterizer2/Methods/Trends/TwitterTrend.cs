@@ -69,7 +69,7 @@ namespace Twitterizer
         /// <returns>
         /// A collection of <see cref="Twitterizer.TwitterTrend"/> objects.
         /// </returns>
-        public static TwitterTrendCollection Current(CurrentTrendsOptions options)
+        public static TwitterResponse<TwitterTrendCollection> Current(CurrentTrendsOptions options)
         {
             Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(options);
 
@@ -82,7 +82,7 @@ namespace Twitterizer
         /// <returns>
         /// A collection of <see cref="Twitterizer.TwitterTrend"/> objects.
         /// </returns>
-        public static TwitterTrendCollection Current()
+        public static TwitterResponse<TwitterTrendCollection> Current()
         {
             return Current(null);
         }

@@ -117,9 +117,12 @@
   <ItemGroup>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
-    <Compile Include="Core\TwitterEmptyObject.cs" />
+    <Compile Include="Core\ITwitterObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\TwitterImage.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
+    <Compile Include="Exceptions\TwitterErrorDetails.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
     <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
@@ -208,11 +211,9 @@
     <Compile Include="Core\PagedCommand.cs" />
     <Compile Include="Methods\User\ShowUserCommand.cs" />
     <Compile Include="Core\TwitterObject.cs" />
-    <Compile Include="Core\ITwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
-    <Compile Include="Core\RequestStatus.cs" />
+    <Compile Include="Core\RequestResult.cs" />
     <Compile Include="Exceptions\CommandValidationException.cs" />
-    <Compile Include="Exceptions\TwitterErrorDetails.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="Methods\User\UserSearchOptions.cs" />
     <Compile Include="OAuth\OAuthTokenResponse.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Methods\User\TwitterUserCollection.cs" />
     <Compile Include="Exceptions\TwitterizerException.cs" />
     <Compile Include="Methods\User\TwitterUser.cs" />
+    <Compile Include="TwitterResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />
@@ -295,7 +297,8 @@
     <PostBuildEvent>IF '$(ConfigurationName)'=='Release' mkdir "$(SolutionDir)Release\"
 IF '$(ConfigurationName)'=='Release' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
 IF '$(ConfigurationName)'=='Release' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
-IF '$(ConfigurationName)'=='Release' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
+IF '$(ConfigurationName)'=='Release' del "$(SolutionDir)Release\*.tmp"
+IF '$(ConfigurationName)'=='Release' copy "$(SolutionDir)GettingStarted.txt" "$(SolutionDir)Release\"</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>

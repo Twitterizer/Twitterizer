@@ -44,25 +44,6 @@ namespace Twitterizer
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterRateLimitStatus : TwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRateLimitStatus"/> class.
-        /// </summary>
-        public TwitterRateLimitStatus()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterRateLimitStatus"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        protected TwitterRateLimitStatus(OAuthTokens tokens)
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-        #endregion
-
         #region API Properties
         /// <summary>
         /// Gets or sets the remaining hits.
@@ -96,9 +77,9 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static void GetStatus(OAuthTokens tokens, OptionalProperties options, Action<TwitterRateLimitStatus> function)
+        public static void GetStatus(OAuthTokens tokens, OptionalProperties options, Action<TwitterResponse<TwitterRateLimitStatus>> function)
         {
-            Func<OAuthTokens, OptionalProperties, TwitterRateLimitStatus> methodToCall = GetStatus;
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = GetStatus;
             
             methodToCall.BeginInvoke(
                 tokens,
@@ -115,10 +96,10 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens, OptionalProperties options)
+        public static TwitterResponse<TwitterRateLimitStatus> GetStatus(OAuthTokens tokens, OptionalProperties options)
         {
             Commands.RateLimitStatusCommand command = new Twitterizer.Commands.RateLimitStatusCommand(tokens, options);
-            TwitterRateLimitStatus result = Core.CommandPerformer<TwitterRateLimitStatus>.PerformAction(command);
+            TwitterResponse<TwitterRateLimitStatus> result = Core.CommandPerformer<TwitterRateLimitStatus>.PerformAction(command);
 
             return result;
         }
@@ -130,7 +111,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus(OAuthTokens tokens)
+        public static TwitterResponse<TwitterRateLimitStatus> GetStatus(OAuthTokens tokens)
         {
             return GetStatus(tokens, null);
         }
@@ -141,7 +122,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterRateLimitStatus"/> instance.
         /// </returns>
-        public static TwitterRateLimitStatus GetStatus()
+        public static TwitterResponse<TwitterRateLimitStatus> GetStatus()
         {
             return GetStatus(null, null);
         }

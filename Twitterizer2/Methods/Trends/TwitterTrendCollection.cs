@@ -32,6 +32,8 @@
 // <summary>The twitter trend collection class.</summary>
 //-----------------------------------------------------------------------
 
+using Twitterizer.Core;
+
 namespace Twitterizer
 {
     using System;
@@ -42,7 +44,7 @@ namespace Twitterizer
     /// </summary>
     [JsonConverter(typeof(TwitterTrendCollection.Converter))]
     [Serializable]
-    public class TwitterTrendCollection : Core.TwitterCollection<TwitterTrend>
+    public class TwitterTrendCollection : Core.TwitterCollection<TwitterTrend>, ITwitterObject
     {
         /// <summary>
         /// The Json converter class for the TwitterTrendCollection object

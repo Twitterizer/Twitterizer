@@ -48,7 +48,7 @@ namespace Twitterizer
     [XmlRoot("hash")]
     [Serializable]
     [DebuggerDisplay("@{ErrorMessage}")]
-    public class TwitterErrorDetails : ITwitterObject
+    public class TwitterErrorDetails : TwitterObject
     {
         /// <summary>
         /// Gets or sets the request path.
@@ -65,61 +65,5 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "error")]
         [XmlElement("error")]
         public string ErrorMessage { get; set; }
-
-        #region ITwitterObject Members
-
-        /// <summary>
-        /// Gets or sets information about the user's rate usage.
-        /// </summary>
-        /// <value>The rate limiting object.</value>
-        public RateLimiting RateLimiting
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        public OAuthTokens Tokens
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        RequestStatus ITwitterObject.RequestStatus
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is empty.
-        /// </summary>
-        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
-        public new bool IsEmpty { get { return false; } set { } }
     }
 }

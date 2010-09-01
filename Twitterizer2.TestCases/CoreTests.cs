@@ -48,10 +48,6 @@
                 // Get the parameter-less constructor, if there is one
                 ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
 
-                // If there isn't a parameter-less constructor, skip the type
-                if (constructor == null)
-                    continue;
-
                 // Instantiate the type by invoking the constructor
                 object objectToSerialize = constructor.Invoke(null);
 
@@ -74,25 +70,15 @@
         [Category("Read-Only")]
         public static void SSL()
         {
-            OptionalProperties sslOptions = new OptionalProperties()
-            {
-                UseSSL = true
-            };
-
-            OptionalProperties options = new OptionalProperties()
-            {
-                UseSSL = false
-            };
-
-            TwitterUser sslUser = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = true });
-            Assert.That(sslUser.RequestStatus.FullPath.StartsWith("https://"));
+            TwitterResponse<TwitterUser> sslUser = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = true });
+            Assert.That(sslUser.RequestUrl.StartsWith("https://"));
             
-            TwitterUser user = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = false });
-            Assert.That(user.RequestStatus.FullPath.StartsWith("http://"));
+            TwitterResponse<TwitterUser> user = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = false });
+            Assert.That(user.RequestUrl.StartsWith("http://"));
 
-            TwitterStatusCollection timeline = TwitterTimeline.HomeTimeline(Configuration.GetTokens(), new TimelineOptions() { UseSSL = true });
-            Assert.That(timeline.RequestStatus.FullPath.StartsWith("https://"));
-            Assert.That(RequestStatus.LastRequestStatus.FullPath.StartsWith("https://"));
+            TwitterResponse<TwitterStatusCollection> timeline = TwitterTimeline.HomeTimeline(Configuration.GetTokens(), new TimelineOptions() { UseSSL = true });
+            Assert.That(timeline.RequestUrl.StartsWith("https://"));
+            Assert.That(user.RequestUrl.StartsWith("https://"));
         }
     }
 }

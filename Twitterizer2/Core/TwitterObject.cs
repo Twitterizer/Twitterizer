@@ -37,7 +37,7 @@ namespace Twitterizer.Core
     using Twitterizer;
 
     public delegate void TwitterAsyncCallback<T>(T result)
-            where T : TwitterObject;
+            where T : ITwitterObject;
 
     /// <summary>
     /// The base object class
@@ -45,14 +45,6 @@ namespace Twitterizer.Core
     [System.Serializable]
     public class TwitterObject : ITwitterObject
     {
-        public static TwitterObject Empty = new TwitterObject() { IsEmpty = true };
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is empty.
-        /// </summary>
-        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
-        public new bool IsEmpty { get; set; }
-
         /// <summary>
         /// The format that all twitter dates are in.
         /// </summary>
@@ -62,61 +54,5 @@ namespace Twitterizer.Core
         /// The format that all twitter search api dates are in.
         /// </summary>
         protected const string SearchDateFormat = "ddd, dd MMM yyyy HH:mm:ss +zz00";
-
-        /// <summary>
-        /// Gets or sets information about the user's rate usage.
-        /// </summary>
-        /// <value>The rate limiting object.</value>
-        public RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        [XmlIgnore, SoapIgnore]
-        public OAuthTokens Tokens { get; set; }
-
-        /// <summary>
-        /// Gets details about the request attempted.
-        /// </summary>
-        /// <value>The last request status.</value>
-        [XmlIgnore, SoapIgnore]
-        public RequestStatus RequestStatus { get; set; }
-
-        /// <summary>
-        /// Implements the operator ==.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator ==(TwitterObject obj1, TwitterObject obj2)
-        {
-			if (object.Equals(obj1, null) || object.Equals(obj2, null))
-			{
-				return object.Equals(obj1, null) && object.Equals(obj2, null);
-			}
-
-            if (object.ReferenceEquals(obj1, obj2))
-                return true;
-
-            if (obj1.IsEmpty && object.ReferenceEquals(obj2, TwitterObject.Empty))
-                return true;
-
-            if (obj2.IsEmpty && object.ReferenceEquals(obj1, TwitterObject.Empty))
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Implements the operator !=.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator !=(TwitterObject obj1, TwitterObject obj2)
-        {
-            return !(obj1 == obj2);
-        }
     }
 }

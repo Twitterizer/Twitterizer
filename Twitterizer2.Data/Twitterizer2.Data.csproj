@@ -129,6 +129,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>IF NOT '$(ConfigurationName)'=='CCNET' copy "$(TargetPath)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
+    <PostBuildEvent>IF NOT '$(ConfigurationName)'=='CCNET' mkdir "$(SolutionDir)Release\"
+IF NOT '$(ConfigurationName)'=='CCNET' copy "$(TargetPath)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

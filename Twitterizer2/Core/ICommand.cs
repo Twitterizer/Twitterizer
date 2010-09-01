@@ -59,6 +59,6 @@ namespace Twitterizer.Core
         /// </summary>
         /// <returns>The results of the command.</returns>
         /// <see cref="Twitterizer.Core.TwitterObject"/>
-        T ExecuteCommand();
+        TwitterResponse<T> ExecuteCommand();
     }
 }

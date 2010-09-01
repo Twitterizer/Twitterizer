@@ -213,7 +213,7 @@ namespace Twitterizer.Streaming
                 TwitterStatus resultStatus = Twitterizer.Core.SerializationHelper<TwitterStatus>.Deserialize(
                     Encoding.UTF8.GetBytes(lineOfData));
 
-                if (resultStatus == null || resultStatus.IsEmpty || resultStatus.Id <= 0)
+                if (resultStatus == null || resultStatus.Id <= 0)
                 {
                     return false;
                 }

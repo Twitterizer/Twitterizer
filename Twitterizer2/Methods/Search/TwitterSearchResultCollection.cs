@@ -32,6 +32,8 @@
 // <summary>The twitter search result collection class</summary>
 //-----------------------------------------------------------------------
 
+using Twitterizer.Core;
+
 namespace Twitterizer
 {
     using System;
@@ -42,7 +44,7 @@ namespace Twitterizer
     /// The Twitter Search Result Collection class
     /// </summary>
     [Serializable]
-    public class TwitterSearchResultCollection : Core.TwitterCollection<TwitterSearchResult>
+    public class TwitterSearchResultCollection : Core.TwitterCollection<TwitterSearchResult>, ITwitterObject
     {
         /// <summary>
         /// Deserializes the specified value.

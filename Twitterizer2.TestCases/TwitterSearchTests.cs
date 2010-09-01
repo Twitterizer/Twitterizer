@@ -14,7 +14,7 @@
             SearchOptions options = new SearchOptions();
             options.NumberPerPage = 19;
 
-            TwitterSearchResultCollection results = TwitterSearch.Search("from:twit_er_izer OR twitterizer OR @twit_er_izer", options);
+            TwitterSearchResultCollection results = TwitterSearch.Search("from:twit_er_izer OR twitterizer OR @twit_er_izer", options).ResponseObject;
 
             Assert.IsNotNull(results);
             Assert.IsNotEmpty(results);
@@ -29,9 +29,9 @@
             SearchOptions options = new SearchOptions();
             options.GeoCode = "30.4413,-84.2809,20mi";
 
-            TwitterSearchResultCollection results = TwitterSearch.Search("tallahassee", options);
+            TwitterSearchResultCollection results = TwitterSearch.Search("tallahassee", options).ResponseObject;
 
-            Assert.False(results.IsEmpty != false);
+            Assert.IsNotNull(results);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Twitterizer
     /// The TwitterUserCollection class.
     /// </summary>
     [System.Serializable]
-    public class TwitterUserCollection : TwitterCollection<TwitterUser>
+    public class TwitterUserCollection : TwitterCollection<TwitterUser>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the next cursor.
@@ -78,7 +78,7 @@ namespace Twitterizer
         /// </summary>
         /// <returns>A <see cref="TwitterUserCollection"/> instance.</returns>
         /// <value>The next page.</value>
-        public TwitterUserCollection NextPage()
+        public TwitterResponse<TwitterUserCollection> NextPage()
         {
             if (this.PagedCommand != null)
             {
@@ -86,8 +86,11 @@ namespace Twitterizer
                     (PagedCommand<TwitterUserCollection>)this.PagedCommand.Clone();
                 newCommand.Page += 1;
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                result.PagedCommand = newCommand;
+                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+                
+                if (result.ResponseObject != null)
+                    result.ResponseObject.PagedCommand = newCommand;
+                
                 return result;
             }
             else if (this.CursorPagedCommand != null)
@@ -96,8 +99,9 @@ namespace Twitterizer
                     (CursorPagedCommand<TwitterUserCollection>)this.CursorPagedCommand.Clone();
                 newCommand.Cursor = this.NextCursor;
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                result.CursorPagedCommand = newCommand;
+                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+                if (result.ResponseObject != null)
+                    result.ResponseObject.CursorPagedCommand = newCommand;
                 return result;
             }
             else
@@ -111,7 +115,7 @@ namespace Twitterizer
         /// </summary>
         /// <returns>A <see cref="TwitterUserCollection"/> instance.</returns>
         /// <value>The previous page.</value>
-        public TwitterUserCollection PreviousPage()
+        public TwitterResponse<TwitterUserCollection> PreviousPage()
         {
             if (this.PagedCommand != null)
             {
@@ -119,8 +123,11 @@ namespace Twitterizer
                     (PagedCommand<TwitterUserCollection>)this.PagedCommand.Clone();
                 newCommand.Page -= 1;
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                result.PagedCommand = newCommand;
+                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+                
+                if (result.ResponseObject != null)
+                    result.ResponseObject.PagedCommand = newCommand;
+                
                 return result;
             }
             else if (this.CursorPagedCommand != null)
@@ -129,8 +136,11 @@ namespace Twitterizer
                     (CursorPagedCommand<TwitterUserCollection>)this.CursorPagedCommand.Clone();
                 newCommand.Cursor = this.PreviousCursor;
 
-                TwitterUserCollection result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                result.CursorPagedCommand = newCommand;
+                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+                
+                if (result.ResponseObject != null)
+                    result.ResponseObject.CursorPagedCommand = newCommand;
+                
                 return result;
             }
             else

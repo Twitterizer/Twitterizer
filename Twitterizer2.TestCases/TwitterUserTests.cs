@@ -2,7 +2,6 @@
 {
     using NUnit.Framework;
     using Twitterizer;
-    using System.Diagnostics;
     using System;
 
     [TestFixture]
@@ -15,7 +14,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterUser user = TwitterUser.Show(tokens, "twit_er_izer");
+            TwitterUser user = TwitterUser.Show(tokens, "twit_er_izer").ResponseObject;
             Assert.IsNotNull(user);
             Assert.That(!string.IsNullOrEmpty(user.ScreenName));
 
@@ -30,7 +29,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterUserCollection results = TwitterUser.Search(tokens, "twit_er_izer");
+            TwitterUserCollection results = TwitterUser.Search(tokens, "twit_er_izer").ResponseObject;
             Assert.IsNotNull(results);
             Assert.IsNotEmpty(results);
         }
@@ -44,7 +43,7 @@
             OAuthTokens tokens = Configuration.GetTokens();
 
             TwitterImage newProfileImage = TwitterImage.ReadFromDisk("Paper_Cup.jpg");
-            TwitterUser updatedUser = TwitterUser.UpdateProfileImage(tokens, newProfileImage, null);
+            TwitterUser updatedUser = TwitterUser.UpdateProfileImage(tokens, newProfileImage, null).ResponseObject;
 
             Assert.IsNotNull(updatedUser);
         }
@@ -62,27 +61,26 @@
             options.ScreenNames.Add("trixtur");
             options.ScreenNames.Add("twit_er_izer");
 
-            TwitterUserCollection users = TwitterUser.Lookup(tokens, options);
+            TwitterUserCollection users = TwitterUser.Lookup(tokens, options).ResponseObject;
         }
 
         public static void AsyncTest()
         {
-            TwitterUser.Show("username", null, (TwitterUser user) =>
-            {
-                Console.Write(user.Name);
-            });
+            // First example, uses lambda expression
+            TwitterUser.Show(
+                null,           // tokens
+                "username",     // screen_name
+                null,           // optional parameters
+                new TimeSpan(0, 0, 5, 0), // async timeout
+                response => Console.Write(response.ResponseObject.Name));
 
-            TwitterUser.Show("username", null, AsyncCallback);
+            // Second example, uses a callback method
+            TwitterUser.Show(null, "username", null, new TimeSpan(0, 0, 5, 0), ShowUserCompleted);
         }
 
-        public static void AsyncCallback(TwitterUser user)
+        public static void ShowUserCompleted(TwitterResponse<TwitterUser> user)
         {
-
-        }
-
-        private static void DoSomethingClever(TwitterUser result)
-        {
-            throw new System.NotImplementedException();
+            Console.WriteLine(user.ResponseObject.Name);
         }
     }
 }

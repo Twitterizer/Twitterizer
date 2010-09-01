@@ -40,28 +40,5 @@ namespace Twitterizer.Core
     /// <tocexclude />
     public interface ITwitterObject
     {
-        /// <summary>
-        /// Gets or sets information about the user's rate usage.
-        /// </summary>
-        /// <value>The rate limiting object.</value>
-        RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oauth tokens.
-        /// </summary>
-        /// <value>The oauth tokens.</value>
-        OAuthTokens Tokens { get; set; }
-
-        /// <summary>
-        /// Gets details about the request attempted.
-        /// </summary>
-        /// <value>The last request status.</value>
-        RequestStatus RequestStatus { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is empty.
-        /// </summary>
-        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
-        bool IsEmpty { get; set; }
     }
 }

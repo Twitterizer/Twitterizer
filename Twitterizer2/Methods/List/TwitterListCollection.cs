@@ -43,7 +43,7 @@ namespace Twitterizer
     /// The twitter list collection class.
     /// </summary>
     [Serializable]
-    public class TwitterListCollection : Core.TwitterCollection<TwitterList>
+    public class TwitterListCollection : Core.TwitterCollection<TwitterList>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the next cursor.
@@ -80,7 +80,7 @@ namespace Twitterizer
         /// </summary>
         /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
         /// <value>The next page.</value>
-        public TwitterListCollection NextPage()
+        public TwitterResponse<TwitterListCollection> NextPage()
         {
             CursorPagedCommand<TwitterListCollection> newCommand =
                 (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
@@ -94,7 +94,7 @@ namespace Twitterizer
         /// </summary>
         /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
         /// <value>The previous page.</value>
-        public TwitterListCollection PreviousPage()
+        public TwitterResponse<TwitterListCollection> PreviousPage()
         {
             CursorPagedCommand<TwitterListCollection> newCommand =
                 (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();

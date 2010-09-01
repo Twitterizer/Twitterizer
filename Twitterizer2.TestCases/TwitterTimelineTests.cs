@@ -2,7 +2,6 @@
 {
     using Twitterizer;
     using NUnit.Framework;
-    using System.Globalization;
 
     [TestFixture]
     public static class TwitterTimelineTests
@@ -12,7 +11,7 @@
         [Test]
         public static void PublicTimeline()
         {
-            TwitterStatusCollection timeline = TwitterTimeline.PublicTimeline();
+            TwitterStatusCollection timeline = TwitterTimeline.PublicTimeline().ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
@@ -24,7 +23,7 @@
         [Test]
         public static void UserTimeline()
         {
-            TwitterStatusCollection timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens());
+            TwitterStatusCollection timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens()).ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
@@ -34,10 +33,10 @@
             User_Options.ScreenName = "twitterapi";
             User_Options.Count = 8;
 
-            timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens(), User_Options);
+            timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens(), User_Options).ResponseObject;
             Assert.That(timeline.Count <= 8);
 
-            timeline = TwitterTimeline.UserTimeline(User_Options);
+            timeline = TwitterTimeline.UserTimeline(User_Options).ResponseObject;
             Assert.That(timeline.Count <= 8);
         }
 
@@ -48,7 +47,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.FriendTimeline(tokens);
+            TwitterStatusCollection timeline = TwitterTimeline.FriendTimeline(tokens).ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
@@ -62,7 +61,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.RetweetsOfMe(tokens);
+            TwitterStatusCollection timeline = TwitterTimeline.RetweetsOfMe(tokens).ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
@@ -76,7 +75,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.RetweetedByMe(tokens);
+            TwitterStatusCollection timeline = TwitterTimeline.RetweetedByMe(tokens).ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
@@ -90,7 +89,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.RetweetedToMe(tokens);
+            TwitterStatusCollection timeline = TwitterTimeline.RetweetedToMe(tokens).ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
@@ -104,7 +103,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.Mentions(tokens);
+            TwitterStatusCollection timeline = TwitterTimeline.Mentions(tokens).ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 

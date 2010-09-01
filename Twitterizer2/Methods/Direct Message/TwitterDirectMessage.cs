@@ -45,25 +45,6 @@ namespace Twitterizer
     [Serializable]
     public class TwitterDirectMessage : TwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterDirectMessage"/> class.
-        /// </summary>
-        public TwitterDirectMessage() : base() 
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterDirectMessage"/> class.
-        /// </summary>
-        /// <param name="tokens">OAuth access tokens.</param>
-        public TwitterDirectMessage(OAuthTokens tokens) 
-            : base()
-        {
-            this.Tokens = tokens;
-        }
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets or sets the direct message id.
@@ -134,7 +115,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <returns>A <see cref="TwitterDirectMessageCollection"/> instance.</returns>
-        public static TwitterDirectMessageCollection DirectMessages(OAuthTokens tokens)
+        public static TwitterResponse<TwitterDirectMessageCollection> DirectMessages(OAuthTokens tokens)
         {
             return DirectMessages(tokens, null);
         }
@@ -147,7 +128,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static TwitterDirectMessageCollection DirectMessages(OAuthTokens tokens, DirectMessagesOptions options)
+        public static TwitterResponse<TwitterDirectMessageCollection> DirectMessages(OAuthTokens tokens, DirectMessagesOptions options)
         {
             return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesCommand(tokens, options));
         }
@@ -159,7 +140,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens)
+        public static TwitterResponse<TwitterDirectMessageCollection> DirectMessagesSent(OAuthTokens tokens)
         {
             return DirectMessagesSent(tokens, null);
         }
@@ -174,11 +155,11 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessage"/> instance.
         /// </returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options)
+        public static TwitterResponse<TwitterDirectMessage> Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, userId, options);
 
-            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 
             return result;
         }
@@ -192,7 +173,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessage"/> instance.
         /// </returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, decimal userId, string text)
+        public static TwitterResponse<TwitterDirectMessage> Send(OAuthTokens tokens, decimal userId, string text)
         {
             return Send(tokens, userId, text, null);
         }
@@ -205,11 +186,11 @@ namespace Twitterizer
         /// <param name="text">The message text.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
+        public static TwitterResponse<TwitterDirectMessage> Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options)
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, screenName, options);
 
-            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 
             return result;
         }
@@ -221,7 +202,7 @@ namespace Twitterizer
         /// <param name="screenName">The user's screen name.</param>
         /// <param name="text">The message text.</param>
         /// <returns>A <see cref="TwitterDirectMessage"/> object of the created direct message.</returns>
-        public static TwitterDirectMessage Send(OAuthTokens tokens, string screenName, string text)
+        public static TwitterResponse<TwitterDirectMessage> Send(OAuthTokens tokens, string screenName, string text)
         {
             return Send(tokens, screenName, text, null);
         }
@@ -234,7 +215,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static TwitterDirectMessageCollection DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
+        public static TwitterResponse<TwitterDirectMessageCollection> DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
         {
             return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
         }
@@ -242,26 +223,16 @@ namespace Twitterizer
         /// <summary>
         /// Deletes this direct message.
         /// </summary>
-        /// <returns>
-        /// A <see cref="TwitterDirectMessage"/> instance.
-        /// </returns>
-        public TwitterDirectMessage Delete()
-        {
-            return this.Delete(null);
-        }
-
-        /// <summary>
-        /// Deletes this direct message.
-        /// </summary>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterDirectMessage"/> instance.
         /// </returns>
-        public TwitterDirectMessage Delete(OptionalProperties options)
+        public TwitterResponse<TwitterDirectMessage> Delete(OAuthTokens tokens, OptionalProperties options)
         {
-            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(this.Tokens, this.Id, options);
+            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(tokens, this.Id, options);
 
-            TwitterDirectMessage result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
 
             return result;
         }

@@ -48,7 +48,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterSearchResultCollection"/> instance.
         /// </returns>
-        public static TwitterSearchResultCollection Search(string query)
+        public static TwitterResponse<TwitterSearchResultCollection> Search(string query)
         {
             return Search(query, null);
         }
@@ -61,11 +61,11 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterSearchResultCollection"/> instance.
         /// </returns>
-        public static TwitterSearchResultCollection Search(string query, SearchOptions options)
+        public static TwitterResponse<TwitterSearchResultCollection> Search(string query, SearchOptions options)
         {
             Commands.SearchCommand command = new Twitterizer.Commands.SearchCommand(null, query, options);
 
-            TwitterSearchResultCollection results =
+            TwitterResponse<TwitterSearchResultCollection> results =
                 Core.CommandPerformer<TwitterSearchResultCollection>.PerformAction(command);
 
             return results;
