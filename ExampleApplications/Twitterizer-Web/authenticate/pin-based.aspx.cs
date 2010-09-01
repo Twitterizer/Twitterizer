@@ -48,7 +48,8 @@ public partial class authenticate_pin_based : System.Web.UI.Page
         {
             OAuthTokenResponse tokens = OAuthUtility.GetRequestToken(
                 ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKey"],
-                ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"]);
+                ConfigurationManager.AppSettings["Twitterizer2.Example.ConsumerKeySecret"],
+                "oob");
 
             this.RequestHyperLink.NavigateUrl = OAuthUtility.BuildAuthorizationUri(tokens.Token).AbsoluteUri;
 

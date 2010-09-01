@@ -2191,22 +2191,16 @@
 
         '-- TODO: Save the access token to a database, session, xml file, or whereever my user data is stored.
       </code>
-    </example><seealso cref="T:Twitterizer.OAuthTokenResponse"/><seealso cref="M:Twitterizer.OAuthUtility.GetRequestToken(System.String,System.String)"/><seealso cref="M:Twitterizer.OAuthUtility.GetAccessToken(System.String,System.String,System.String,System.String)"/><seealso cref="M:Twitterizer.OAuthUtility.BuildAuthorizationUri(System.String)"/>
+    </example><seealso cref="T:Twitterizer.OAuthTokenResponse"/><seealso cref="!:Twitterizer.OAuthUtility.GetRequestToken(string,string)"/><seealso cref="M:Twitterizer.OAuthUtility.GetAccessToken(System.String,System.String,System.String,System.String)"/><seealso cref="M:Twitterizer.OAuthUtility.BuildAuthorizationUri(System.String)"/>
         </member>
-        <member name="F:Twitterizer.OAuthUtility.SignatureType">
+        <member name="M:Twitterizer.OAuthUtility.GetRequestToken(System.String,System.String,System.String)">
             <summary>
-            The name of the signature type twiter uses.
-            </summary>
-        </member>
-        <member name="M:Twitterizer.OAuthUtility.GetRequestToken(System.String,System.String)">
-            <summary>
-            Gets a new OAuth request token from the twitter api.
+            Gets the request token.
             </summary>
             <param name="consumerKey">The consumer key.</param>
             <param name="consumerSecret">The consumer secret.</param>
-            <returns>
-            A new <see cref="T:Twitterizer.OAuthTokenResponse"/> instance.
-            </returns>
+            <param name="callbackAddress">The callback address.</param>
+            <returns></returns>
         </member>
         <member name="M:Twitterizer.OAuthUtility.GetRequestToken(System.String,System.String,System.String,System.Net.WebProxy)">
             <summary>
@@ -2215,6 +2209,7 @@
             <param name="consumerKey">The consumer key.</param>
             <param name="consumerSecret">The consumer secret.</param>
             <param name="callbackAddress">Address of the callback.</param>
+            <param name="proxy">The proxy.</param>
             <returns>
             A new <see cref="T:Twitterizer.OAuthTokenResponse"/> instance.
             </returns>
@@ -2276,6 +2271,13 @@
             <returns>
             Access tokens returned by the Twitter API
             </returns>
+        </member>
+        <member name="M:Twitterizer.OAuthUtility.AddOAuthEchoHeader(System.Net.WebRequest,Twitterizer.OAuthTokens)">
+            <summary>
+            Adds the OAuth Echo header to the supplied web request.
+            </summary>
+            <param name="request">The request.</param>
+            <param name="tokens">The tokens.</param>
         </member>
         <member name="T:Twitterizer.Commands.FollowersCommand">
             <summary>
@@ -2867,6 +2869,21 @@
             The Web Request Builder class.
             </summary>
         </member>
+        <member name="F:Twitterizer.WebRequestBuilder.Realm">
+            <summary>
+            The HTTP Authorization realm.
+            </summary>
+        </member>
+        <member name="F:Twitterizer.WebRequestBuilder.OAuthParametersToIncludeInHeader">
+            <summary>
+            OAuth Parameters key names to include in the Authorization header.
+            </summary>
+        </member>
+        <member name="F:Twitterizer.WebRequestBuilder.SecretParameters">
+            <summary>
+            Parameters that may appear in the list, but should never be included in the header or the request.
+            </summary>
+        </member>
         <member name="M:Twitterizer.WebRequestBuilder.#ctor(System.Uri,Twitterizer.HTTPVerb)">
             <summary>
             Initializes a new instance of the <see cref="T:Twitterizer.WebRequestBuilder"/> class.
@@ -2894,10 +2911,16 @@
             </summary>
             <returns>A <see cref="T:System.Net.HttpWebRequest"/> object fully configured and ready for execution.</returns>
         </member>
-        <member name="M:Twitterizer.WebRequestBuilder.RebuildRequestUriWithParameters">
+        <member name="M:Twitterizer.WebRequestBuilder.AddQueryStringParametersToUri">
             <summary>
-            Rebuilds the request URI with parameters.
+            Adds the parameters to request uri.
             </summary>
+        </member>
+        <member name="M:Twitterizer.WebRequestBuilder.AddFormFieldValuesToRequest(System.Net.WebRequest)">
+            <summary>
+            Adds the form field values to request.
+            </summary>
+            <param name="request">The request.</param>
         </member>
         <member name="M:Twitterizer.WebRequestBuilder.SetupOAuth">
             <summary>
@@ -2954,12 +2977,6 @@
             Gets or sets the parameters.
             </summary>
             <value>The parameters.</value>
-        </member>
-        <member name="P:Twitterizer.WebRequestBuilder.OAuthParameters">
-            <summary>
-            Gets or sets the OAuth parameters.
-            </summary>
-            <value>The O auth parameters.</value>
         </member>
         <member name="P:Twitterizer.WebRequestBuilder.Verb">
             <summary>
@@ -4959,6 +4976,17 @@
             Initializes a new instance of the <see cref="T:Twitterizer.TwitterRateLimitStatus"/> class.
             </summary>
             <param name="tokens">OAuth access tokens.</param>
+        </member>
+        <member name="M:Twitterizer.TwitterRateLimitStatus.GetStatus(Twitterizer.OAuthTokens,Twitterizer.OptionalProperties,System.Action{Twitterizer.TwitterRateLimitStatus})">
+            <summary>
+            Gets the rate limiting status status for the authenticated user asynchronously.
+            </summary>
+            <param name="tokens">The OAuth tokens.</param>
+            <param name="options">The options.</param>
+            <param name="function">The callback or anonymous funtion.</param>
+            <returns>
+            A <see cref="T:Twitterizer.TwitterRateLimitStatus"/> instance.
+            </returns>
         </member>
         <member name="M:Twitterizer.TwitterRateLimitStatus.GetStatus(Twitterizer.OAuthTokens,Twitterizer.OptionalProperties)">
             <summary>

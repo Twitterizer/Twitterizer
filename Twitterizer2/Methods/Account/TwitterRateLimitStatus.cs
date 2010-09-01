@@ -34,7 +34,6 @@
 namespace Twitterizer
 {
     using System;
-    using System.Globalization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
@@ -68,6 +67,26 @@ namespace Twitterizer
         [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime ResetTime { get; set; }
         #endregion
+
+        /// <summary>
+        /// Gets the rate limiting status status for the authenticated user asynchronously.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="function">The callback or anonymous funtion.</param>
+        /// <returns>
+        /// A <see cref="TwitterRateLimitStatus"/> instance.
+        /// </returns>
+        public static void GetStatus(OAuthTokens tokens, OptionalProperties options, Action<TwitterResponse<TwitterRateLimitStatus>> function)
+        {
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = GetStatus;
+            
+            methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result => function(methodToCall.EndInvoke(result)),
+                null);
+        }
 
         /// <summary>
         /// Gets the rate limiting status status for the authenticated user.

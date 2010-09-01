@@ -156,7 +156,7 @@ namespace Twitterizer
         /// <returns></returns>
         internal static TwitterUserCollection DeserializeWrapper(JObject value)
         {
-            if (value.SelectToken("users") == null)
+            if (value == null || value.SelectToken("users") == null)
                 return null;
 
             TwitterUserCollection result = JsonConvert.DeserializeObject<TwitterUserCollection>(value.SelectToken("users").ToString());
