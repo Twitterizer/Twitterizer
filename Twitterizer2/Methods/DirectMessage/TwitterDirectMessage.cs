@@ -57,6 +57,7 @@ namespace Twitterizer
         /// Gets or sets the sender id.
         /// </summary>
         /// <value>The sender id.</value>
+        [JsonProperty(PropertyName = "sender_id")]
         public decimal SenderId { get; set; }
 
         /// <summary>

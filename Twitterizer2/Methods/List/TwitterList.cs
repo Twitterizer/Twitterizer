@@ -360,7 +360,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
         /// </returns>
-        public static TwitterResponse<TwitterList> AddMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd, OptionalProperties options)
+        public static TwitterResponse<TwitterList> AddMember(OAuthTokens tokens, string ownerUsername, string listId, decimal userIdToAdd, OptionalProperties options)
         {
             Commands.AddListMemberCommand command = new Twitterizer.Commands.AddListMemberCommand(tokens, ownerUsername, listId, userIdToAdd, options);
 
@@ -377,7 +377,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
         /// </returns>
-        public static TwitterResponse<TwitterList> AddMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd)
+        public static TwitterResponse<TwitterList> AddMember(OAuthTokens tokens, string ownerUsername, string listId, decimal userIdToAdd)
         {
             return AddMember(tokens, ownerUsername, listId, userIdToAdd, null);
         }
