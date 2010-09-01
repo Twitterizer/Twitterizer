@@ -237,5 +237,23 @@ namespace Twitterizer
 
             return result;
         }
+
+        /// <summary>
+        /// Deletes this direct message.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="id">The direct message id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessage"/> instance.
+        /// </returns>
+        public static TwitterResponse<TwitterDirectMessage> Delete(OAuthTokens tokens, decimal id, OptionalProperties options)
+        {
+            Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(tokens, id, options);
+
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+
+            return result;
+        }
     }
 }
