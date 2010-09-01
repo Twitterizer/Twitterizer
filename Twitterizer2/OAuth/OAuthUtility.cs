@@ -35,7 +35,6 @@
 namespace Twitterizer
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Net;
@@ -121,7 +120,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the access token from pin.
+        /// Gets the access token.
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
@@ -136,7 +135,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the access token from pin.
+        /// Gets the access token.
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
@@ -196,40 +195,6 @@ namespace Twitterizer
             response.UserId = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value, CultureInfo.CurrentCulture);
             response.ScreenName = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
             return response;
-        }
-
-        /// <summary>
-        /// This is a different Url Encode implementation since the default .NET one outputs the percent encoding in lower case.
-        /// While this is not a problem with the percent encoding spec, it is used in upper case throughout OAuth
-        /// </summary>
-        /// <param name="value">The value to Url encode</param>
-        /// <returns>Returns a Url encoded string</returns>
-        [SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "Return type is not a URL.")]
-        public static string EncodeForUrl(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return string.Empty;
-            }
-
-            value = HttpUtility.UrlEncode(value).Replace("+", "%20");
-
-            // UrlEncode escapes with lowercase characters (e.g. %2f) but oAuth needs %2F
-            value = Regex.Replace(value, "(%[0-9a-f][0-9a-f])", c => c.Value.ToUpper());
-
-            // these characters are not escaped by UrlEncode() but needed to be escaped
-            value = value
-                .Replace("(", "%28")
-                .Replace(")", "%29")
-                .Replace("$", "%24")
-                .Replace("!", "%21")
-                .Replace("*", "%2A")
-                .Replace("'", "%27");
-
-            // these characters are escaped by UrlEncode() but will fail if unescaped!
-            value = value.Replace("%7E", "~");
-
-            return value;
         }
         #endregion
 
