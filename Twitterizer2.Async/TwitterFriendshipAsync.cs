@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterUserAsync.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterFriendshipAsync.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,34 +28,33 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The TwitterUserAsync class</summary>
+// <author>David Golden</author>
+// <summary>The TwitterFriendshipAsync class</summary>
 //-----------------------------------------------------------------------
 using System;
 using Twitterizer;
 
 namespace Twitterizer2
 {
-    public static class TwitterUserAsync
+    public static class TwitterFriendshipAsync
     {
         /// <summary>
-        /// Shows the specified username.
+        /// Allows the authenticating users to follow the user specified in the userName parameter.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="options">The options.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="options">The options.</param>   
         /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns></returns>
-        public static IAsyncResult Show(OAuthTokens tokens, string username, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterUser>> function)
+        /// <param name="function">The callback function.</param>        
+        public static IAsyncResult Create(OAuthTokens tokens, string userName, CreateFriendshipOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterUser>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterUser.Show;
+            Func<OAuthTokens, string, CreateFriendshipOptions, TwitterResponse<TwitterUser>> methodToCall = TwitterFriendship.Create;
 
             return methodToCall.BeginInvoke(
                 tokens,
-                username,
+                userName,
                 options,
-                result =>
+                result => 
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
                     function(methodToCall.EndInvoke(result));
@@ -64,26 +63,52 @@ namespace Twitterizer2
         }
 
         /// <summary>
-        /// Shows the specified username.
+        /// Allows the authenticating users to unfollow the user specified in the ID parameter.
         /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="options">The options.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userName">The username.</param>
+        /// <param name="options">The options.</param>  
         /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns></returns>
-        public static IAsyncResult Show(string username, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterUser>> function)
+        /// <param name="function">The callback function.</param>
+        public static IAsyncResult Delete(OAuthTokens tokens, string userName, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterUser>> function)
         {
-            Func<string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterUser.Show;
+            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterFriendship.Delete;
 
-            return methodToCall.BeginInvoke(                
-                username,
+            return methodToCall.BeginInvoke(
+                tokens,
+                userName,
                 options,
-                result =>
+                result => 
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
                     function(methodToCall.EndInvoke(result));
                 },
                 null);
         }
+
+        /// <summary>
+        /// Returns detailed information about the relationship between two users.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="targetUserName">The target user name.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The callback function.</param>
+        public static IAsyncResult Show(OAuthTokens tokens, string targetUserName, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterRelationship>> function)
+        {
+            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterRelationship>> methodToCall = TwitterFriendship.Show;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                targetUserName,
+                options,
+                result => 
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
     }
 }

@@ -217,6 +217,13 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "follow_request_sent")]
         public bool? FollowRequestSent { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the user is verified.
+        /// </summary>
+        /// <value><c>true</c> if the user is verified; otherwise, <c>false</c>.</value>
+        [JsonProperty(PropertyName = "verified")]
+        public bool? Verified { get; set; }
+
         #region Profile Layout Properties
         /// <summary>
         /// Gets or sets the color of the profile background.
