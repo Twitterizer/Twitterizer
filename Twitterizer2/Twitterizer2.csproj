@@ -123,9 +123,12 @@
     <Compile Include="Core\TwitterImage.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />
+    <Compile Include="Methods\Account\TwitterAccount.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
     <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
+    <Compile Include="Methods\Account\VerifyCredentialsCommand.cs" />
+    <Compile Include="Methods\Account\VerifyCredentialsOptions.cs" />
     <Compile Include="Methods\DirectMessage\DeleteDirectMessageCommand.cs" />
     <Compile Include="Methods\DirectMessage\DirectMessagesCommand.cs" />
     <Compile Include="Methods\DirectMessage\DirectMessagesOptions.cs" />
