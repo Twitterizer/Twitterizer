@@ -220,7 +220,7 @@ namespace Twitterizer
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
             }
 
-            AddFormFieldValuesToRequest(request);
+            //AddFormFieldValuesToRequest(request);
             
             return request;
         }
@@ -230,9 +230,6 @@ namespace Twitterizer
         /// </summary>
         private void AddQueryStringParametersToUri()
         {
-            if (this.Verb != HTTPVerb.GET)
-                return;
-
             StringBuilder requestParametersBuilder = new StringBuilder(this.RequestUri.AbsoluteUri);
             requestParametersBuilder.Append(this.RequestUri.Query.Length == 0 ? "?" : "&");
 
@@ -260,6 +257,9 @@ namespace Twitterizer
         /// <param name="request">The request.</param>
         private void AddFormFieldValuesToRequest(WebRequest request)
         {
+            throw new NotImplementedException("Multipart form data is not yet supported by the WebRequestBuilder.");
+
+/*
             if (!(new[] { HTTPVerb.DELETE, HTTPVerb.POST }).Contains(this.Verb))
                 return;
 
@@ -287,6 +287,7 @@ namespace Twitterizer
             System.IO.Stream requestStream = request.GetRequestStream();
             requestStream.Write(formData, 0, formData.Length);
             requestStream.Close();
+*/
         }
         
         #region OAuth Helper Methods
@@ -319,9 +320,28 @@ namespace Twitterizer
                 this.Parameters.Add("oauth_token_secret", this.Tokens.AccessTokenSecret);
             }
 
+            string signature = GenerateSignature();
+
+            // Add the signature to the oauth parameters
+            this.Parameters.Add("oauth_signature", signature);
+        }
+
+        /// <summary>
+        /// Generates the signature.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateSignature()
+        {
             var nonSecretParameters = (from p in this.Parameters
-                                      where !SecretParameters.Contains(p.Key)
-                                      select p);
+                                       where !SecretParameters.Contains(p.Key)
+                                       select p);
+
+            var baseStringParameters =
+                (from p in this.Parameters
+                 where !(p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
+                         p.Key.StartsWith("oauth_", StringComparison.OrdinalIgnoreCase) &&
+                         !p.Key.EndsWith("_verifier", StringComparison.OrdinalIgnoreCase))
+                 select p);
 
             Uri urlForSigning = this.RequestUri;
 
@@ -331,22 +351,20 @@ namespace Twitterizer
                 "{0}&{1}&{2}",
                 this.Verb.ToString().ToUpper(CultureInfo.InvariantCulture),
                 UrlEncode(NormalizeUrl(urlForSigning)),
-                UrlEncode(nonSecretParameters));
+                UrlEncode(baseStringParameters));
 
             // Create our hash key (you might say this is a password)
             string key = string.Format(
-                    CultureInfo.InvariantCulture,
-                    "{0}&{1}",
-                    UrlEncode(this.Tokens.ConsumerSecret),
-                    UrlEncode(this.Tokens.AccessTokenSecret));
+                CultureInfo.InvariantCulture,
+                "{0}&{1}",
+                UrlEncode(this.Tokens.ConsumerSecret),
+                UrlEncode(this.Tokens.AccessTokenSecret));
 
 
             // Generate the hash
             HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(key));
             byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
-
-            // Add the signature to the oauth parameters
-            this.Parameters.Add("oauth_signature", Convert.ToBase64String(signatureBytes));
+            return Convert.ToBase64String(signatureBytes);
         }
 
         /// <summary>
