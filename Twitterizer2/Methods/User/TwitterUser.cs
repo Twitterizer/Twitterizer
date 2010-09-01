@@ -45,31 +45,6 @@ namespace Twitterizer
     [Serializable]
     public class TwitterUser : TwitterObject
     {
-        /// <summary>
-        /// Shows the specified username.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="options">The options.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns></returns>
-        public static IAsyncResult Show(OAuthTokens tokens, string username, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterUser>> function)
-        {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = Show;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                username,
-                options,
-                result =>
-                    {
-                        result.AsyncWaitHandle.WaitOne(timeout);
-                        function(methodToCall.EndInvoke(result));
-                    },
-                null);
-        }
-
         #region Properties
         /// <summary>
         /// Gets or sets the User ID.

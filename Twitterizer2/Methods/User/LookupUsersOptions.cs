@@ -3,6 +3,9 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
+    /// <summary>
+    /// Provides optional parameters for user lookup methods.
+    /// </summary>
     public class LookupUsersOptions : OptionalProperties
     {
         /// <summary>

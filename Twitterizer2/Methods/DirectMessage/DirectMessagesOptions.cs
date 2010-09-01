@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DirectMessagesOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,50 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain the public timeline</summary>
+// <summary>The direct messages options class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Commands
+
+namespace Twitterizer
 {
     using System;
-    using Twitterizer.Core;
 
     /// <summary>
-    /// The Public Timeline Command class
+    /// The direct messages options class. Provides a payload for the <see cref="Twitterizer.Commands.DirectMessagesCommand"/> command.
     /// </summary>
     [Serializable]
-    internal sealed class PublicTimelineCommand :
-        Core.TwitterCommand<TwitterStatusCollection>
+    public sealed class DirectMessagesOptions : OptionalProperties
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="DirectMessagesOptions"/> class.
         /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="options">The options.</param>
-        public PublicTimelineCommand(OAuthTokens tokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "statuses/public_timeline.json", tokens, options)
+        public DirectMessagesOptions()
+            : base()
         {
+            this.Page = 1;
         }
-        #endregion
 
-       /// <summary>
-        /// Initializes the command.
+        /// <summary>
+        /// Gets or sets the minimum (earliest) status id to request.
         /// </summary>
-        public override void Init()
-        {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
-        }
+        /// <value>The since id.</value>
+        public decimal SinceStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max (latest) status id to request.
+        /// </summary>
+        /// <value>The max id.</value>
+        public decimal MaxStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of messages to request.
+        /// </summary>
+        /// <value>The number of messages to request.</value>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// Gets or sets the page number to request.
+        /// </summary>
+        /// <value>The page number.</value>
+        public int Page { get; set; }
     }
 }

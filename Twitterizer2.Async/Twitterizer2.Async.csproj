@@ -8,8 +8,8 @@
     <ProjectGuid>{566E5F16-088A-4AB5-967A-A05BA636AF75}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Twitterizer2.Async</RootNamespace>
-    <AssemblyName>Twitterizer2</AssemblyName>
+    <RootNamespace>Twitterizer2</RootNamespace>
+    <AssemblyName>Twitterizer2.Asynchronous</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -29,6 +29,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TwitterAccountAsync.cs" />
+    <Compile Include="TwitterTimelineAsync.cs" />
+    <Compile Include="TwitterUserAsync.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">

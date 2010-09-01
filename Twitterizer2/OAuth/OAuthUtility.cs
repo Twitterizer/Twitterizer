@@ -83,7 +83,7 @@ namespace Twitterizer
 
             if (string.IsNullOrEmpty(callbackAddress))
             {
-                throw new ArgumentNullException("callbackAddress", "It is recommended that you always provide a callback url when obtaining a request token.");
+                throw new ArgumentNullException("callbackAddress", @"You must always provide a callback url when obtaining a request token. For PIN-based authentication, use ""oob"" as the callback url.");
             }
 
             WebRequestBuilder builder = new WebRequestBuilder(

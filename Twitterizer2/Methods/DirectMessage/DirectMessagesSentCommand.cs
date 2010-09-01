@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DirectMessagesSentCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,74 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain the public timeline</summary>
+// <summary>The Direct Messages Sent Command class.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
+    using Twitterizer;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The Public Timeline Command class
+    /// The Direct Messages Sent Command class
     /// </summary>
+    [AuthorizedCommand]
     [Serializable]
-    internal sealed class PublicTimelineCommand :
-        Core.TwitterCommand<TwitterStatusCollection>
+    internal sealed class DirectMessagesSentCommand : PagedCommand<TwitterDirectMessageCollection>
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="DirectMessagesSentCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
-        public PublicTimelineCommand(OAuthTokens tokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "statuses/public_timeline.json", tokens, options)
+        public DirectMessagesSentCommand(OAuthTokens tokens, DirectMessagesSentOptions options)
+            : base(HTTPVerb.GET, "direct_messages/sent.json", tokens, options)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
-        #endregion
 
-       /// <summary>
+        /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
+            if (this.Page <= 0)
+                this.Page = 1;
+
+            DirectMessagesSentOptions options = this.OptionalProperties as DirectMessagesSentOptions;
+
+            if (options != null)
+            {
+                if (options.SinceStatusId > 0)
+                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.MaxStatusId > 0)
+                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.Count > 0)
+                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+                if (this.Page <= 1 && options.Page > 1)
+                    this.Page = options.Page;
+            }
+
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InstalledUICulture));
+        }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
+        /// </returns>
+        internal override TwitterCommand<TwitterDirectMessageCollection> Clone()
+        {
+            return new DirectMessagesSentCommand(this.Tokens, this.OptionalProperties as DirectMessagesSentOptions);
         }
     }
 }

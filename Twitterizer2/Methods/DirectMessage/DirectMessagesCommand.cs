@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DirectMessagesCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,69 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain the public timeline</summary>
+// <summary>The Direct Messages Command class.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
+    using Twitterizer;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The Public Timeline Command class
+    /// The Direct Messages Command
     /// </summary>
-    [Serializable]
-    internal sealed class PublicTimelineCommand :
-        Core.TwitterCommand<TwitterStatusCollection>
+    [AuthorizedCommandAttribute]
+    internal sealed class DirectMessagesCommand : PagedCommand<TwitterDirectMessageCollection>
     {
+        /// <summary>
+        /// The base address to the API method.
+        /// </summary>
+        private const string Path = "direct_messages.json";
+
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="DirectMessagesCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
-        public PublicTimelineCommand(OAuthTokens tokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "statuses/public_timeline.json", tokens, options)
+        public DirectMessagesCommand(OAuthTokens tokens, DirectMessagesOptions options)
+            : base(HTTPVerb.GET, Path, tokens, options)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
         }
         #endregion
 
-       /// <summary>
+        /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
+            if (this.Page <= 0)
+                this.Page = 1;
+
+            DirectMessagesOptions options = this.OptionalProperties as DirectMessagesOptions;
+
+            if (options != null)
+            {
+                if (options.SinceStatusId > 0)
+                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.MaxStatusId > 0)
+                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+                if (options.Count > 0)
+                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+                if (this.Page <= 1 && options.Page > 1)
+                    this.Page = options.Page;
+            }
+
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

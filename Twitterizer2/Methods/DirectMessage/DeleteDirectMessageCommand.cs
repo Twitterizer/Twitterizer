@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DeleteDirectMessageCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,56 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain the public timeline</summary>
+// <summary>The Delete Direct Message Command class.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer.Commands
 {
     using System;
+    using System.Globalization;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The Public Timeline Command class
+    /// The Delete Direct Message Command class.
     /// </summary>
+    [AuthorizedCommand]
     [Serializable]
-    internal sealed class PublicTimelineCommand :
-        Core.TwitterCommand<TwitterStatusCollection>
+    internal sealed class DeleteDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
+        /// Initializes a new instance of the <see cref="DeleteDirectMessageCommand"/> class.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
+        /// <param name="id">The status id.</param>
         /// <param name="options">The options.</param>
-        public PublicTimelineCommand(OAuthTokens tokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "statuses/public_timeline.json", tokens, options)
+        public DeleteDirectMessageCommand(OAuthTokens tokens, decimal id, OptionalProperties options)
+            : base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture, "direct_messages/destroy/{0}.json", id), tokens, options)
         {
+            if (id <= 0)
+            {
+                throw new ArgumentException("The message id is invalid", "id");
+            }
+
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+
+            this.Id = id;
         }
         #endregion
 
-       /// <summary>
+        /// <summary>
+        /// Gets or sets the status id.
+        /// </summary>
+        /// <value>The status id.</value>
+        public decimal Id { get; set; }
+
+        /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
         }
     }
 }

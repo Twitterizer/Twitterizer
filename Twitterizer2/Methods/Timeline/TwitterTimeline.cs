@@ -62,29 +62,6 @@ namespace Twitterizer
             return result;
         }
 
-        /// <summary>
-        /// Homes the timeline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns></returns>
-        public static IAsyncResult HomeTimeline(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterStatusCollection>> function)
-        {
-            Func<OAuthTokens, TimelineOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = HomeTimeline;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                    {
-                        result.AsyncWaitHandle.WaitOne(timeout);
-                        function(methodToCall.EndInvoke(result));
-                    },
-                null);
-        }
-
         /// <param name="tokens">The tokens.</param>
         /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
         public static TwitterResponse<TwitterStatusCollection> HomeTimeline(OAuthTokens tokens)
@@ -100,7 +77,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the user time line.
+        /// Returns the 20 most recent statuses posted by the authenticating user. It is also possible to request another user's timeline by using the screen_name or user_id parameter.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <param name="options">The options.</param>
@@ -121,7 +98,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the user time line.
+        /// Returns the 20 most recent statuses posted by the authenticating user. It is also possible to request another user's timeline by using the screen_name or user_id parameter.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <returns>
@@ -134,7 +111,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the user time line.
+        /// Returns the 20 most recent statuses posted by the authenticating user. It is also possible to request another user's timeline by using the screen_name or user_id parameter.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <returns>
@@ -164,7 +141,19 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OAuthTokens tokens)
         {
-            Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens);
+            return PublicTimeline(tokens, null);
+        }
+
+        /// <summary>
+        /// Gets the public timeline.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/>.
+        /// </returns>
+        public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OAuthTokens tokens, OptionalProperties options)
+        {
+            Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens, options);
             TwitterResponse<TwitterStatusCollection> result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
             return result;

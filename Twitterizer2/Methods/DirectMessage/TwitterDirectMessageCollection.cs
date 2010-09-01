@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PublicTimelineCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterDirectMessageCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,19 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command to obtain the public timeline</summary>
+// <summary>The Direct Message Collection class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Commands
+
+namespace Twitterizer
 {
-    using System;
     using Twitterizer.Core;
+    using System;
 
     /// <summary>
-    /// The Public Timeline Command class
+    /// The Direct Message Collection class
     /// </summary>
     [Serializable]
-    internal sealed class PublicTimelineCommand :
-        Core.TwitterCommand<TwitterStatusCollection>
+    public class TwitterDirectMessageCollection : TwitterCollection<TwitterDirectMessage>, ITwitterObject
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PublicTimelineCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="options">The options.</param>
-        public PublicTimelineCommand(OAuthTokens tokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "statuses/public_timeline.json", tokens, options)
-        {
-        }
-        #endregion
-
-       /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            // Enable opt-in beta for entities
-            this.RequestParameters.Add("include_entities", "true");
-        }
     }
 }

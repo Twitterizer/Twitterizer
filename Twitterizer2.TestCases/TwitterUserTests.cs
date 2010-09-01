@@ -61,26 +61,34 @@
             options.ScreenNames.Add("trixtur");
             options.ScreenNames.Add("twit_er_izer");
 
-            TwitterUserCollection users = TwitterUser.Lookup(tokens, options).ResponseObject;
+            var result = TwitterUser.Lookup(tokens, options);
+
+            Assert.That(result.Result == RequestResult.Success);
+            Assert.IsNotNull(result.ResponseObject);
         }
 
+        [Test]
         public static void AsyncTest()
         {
             // First example, uses lambda expression
-            TwitterUser.Show(
+            IAsyncResult asyncResult = TwitterUserAsync.Show(
                 null,           // tokens
-                "username",     // screen_name
+                "twit_er_izer",     // screen_name
                 null,           // optional parameters
                 new TimeSpan(0, 0, 5, 0), // async timeout
-                response => Console.Write(response.ResponseObject.Name));
+                response => Console.WriteLine(response.ResponseObject.Status.Text));
 
             // Second example, uses a callback method
-            TwitterUser.Show(null, "username", null, new TimeSpan(0, 0, 5, 0), ShowUserCompleted);
+            IAsyncResult asyncResult2 = TwitterUserAsync.Show(null, "twitterapi", null, new TimeSpan(0, 0, 5, 0), ShowUserCompleted);
+
+            // Block the current thread until the other threads are completed
+            asyncResult.AsyncWaitHandle.WaitOne();
+            asyncResult2.AsyncWaitHandle.WaitOne();
         }
 
-        public static void ShowUserCompleted(TwitterResponse<TwitterUser> user)
+        private static void ShowUserCompleted(TwitterResponse<TwitterUser> user)
         {
-            Console.WriteLine(user.ResponseObject.Name);
+            Console.WriteLine(user.ResponseObject.Status.Text);
         }
     }
 }

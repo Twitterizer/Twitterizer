@@ -27,7 +27,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<TwitterStatus> result = TwitterStatus.Update(tokens, "I am testing. Please ignore this. protocol://host/page?key=value&key2=value2");
+            TwitterResponse<TwitterStatus> result = TwitterStatus.Update(tokens, "I am testing. Please ignore this. protocol://host/page?key=value&key2=value2" + new Random().Next(1000).ToString());
             Assert.IsNotNull(result.ResponseObject);
             Assert.That(result.ResponseObject.Id > 0);
         }
