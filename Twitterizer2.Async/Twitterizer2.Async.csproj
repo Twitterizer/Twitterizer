@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}</ProjectGuid>
+    <ProjectGuid>{566E5F16-088A-4AB5-967A-A05BA636AF75}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Twitterizer.OAuth</RootNamespace>
-    <AssemblyName>Twitterizer.OAuth</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Twitterizer2.Async</RootNamespace>
+    <AssemblyName>Twitterizer2</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,23 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Twitterizer2\OAuth\OAuthTokens.cs">
-      <Link>OAuthTokens.cs</Link>
-    </Compile>
-    <Compile Include="..\Twitterizer2\OAuth\WebRequestBuilder.cs">
-      <Link>WebRequestBuilder.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="README.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">
+      <Project>{2FDC3492-6B9E-4771-9755-7892C9CB1E96}</Project>
+      <Name>Twitterizer2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF '$(ConfigurationName)'=='Release' mkdir "$(SolutionDir)Release\"
-IF '$(ConfigurationName)'=='Release' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
+    <PostBuildEvent>IF '$(ConfigurationName)'=='Release' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

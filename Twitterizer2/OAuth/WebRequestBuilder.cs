@@ -70,11 +70,6 @@ namespace Twitterizer
     public sealed class WebRequestBuilder
     {
         /// <summary>
-        /// When the request uses HTTP Post, this value is sent as the content length.
-        /// </summary>
-        private long postContentLength = 0;
-
-        /// <summary>
         /// The HTTP Authorization realm.
         /// </summary>
         public string Realm = "Twitter API";
@@ -90,12 +85,6 @@ namespace Twitterizer
         /// </summary>
         /// <value>The parameters.</value>
         public Dictionary<string, string> Parameters { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the OAuth parameters.
-        /// </summary>
-        /// <value>The O auth parameters.</value>
-        public Dictionary<string, string> OAuthParameters { get; private set; }
 
         /// <summary>
         /// Gets or sets the verb.
@@ -122,6 +111,31 @@ namespace Twitterizer
         public bool UseOAuth { get; private set; }
 
         /// <summary>
+        /// OAuth Parameters key names to include in the Authorization header.
+        /// </summary>
+        private static readonly string[] OAuthParametersToIncludeInHeader = new[]
+                                                          {
+                                                              "oauth_version",
+                                                              "oauth_nonce",
+                                                              "oauth_timestamp",
+                                                              "oauth_signature_method",
+                                                              "oauth_consumer_key",
+                                                              "oauth_token"
+                                                              // Leave signature omitted from the list, it is added manually
+                                                              // "oauth_signature",
+                                                          };
+
+        /// <summary>
+        /// Parameters that may appear in the list, but should never be included in the header or the request.
+        /// </summary>
+        private static readonly string[] SecretParameters = new[]
+                                                                {
+                                                                    "oauth_consumer_secret",
+                                                                    "oauth_token_secret",
+                                                                    "oauth_signature"
+                                                                };
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
@@ -136,17 +150,15 @@ namespace Twitterizer
             this.UseOAuth = false;
 
             this.Parameters = new Dictionary<string, string>();
-            this.OAuthParameters = new Dictionary<string, string>();
 
-            if (!string.IsNullOrEmpty(this.RequestUri.Query))
+            if (string.IsNullOrEmpty(this.RequestUri.Query)) return;
+
+            foreach (Match item in Regex.Matches(this.RequestUri.Query, @"(?<key>[^&?=]+)=(?<value>[^&?=]+)"))
             {
-                foreach (Match item in Regex.Matches(this.RequestUri.Query, @"(?<key>[^&?=]+)=(?<value>[^&?=]+)"))
-                {
-                    this.Parameters.Add(item.Groups["key"].Value, item.Groups["value"].Value);
-                }
-
-                this.RequestUri = new Uri(this.RequestUri.AbsoluteUri.Replace(this.RequestUri.Query, ""));
+                this.Parameters.Add(item.Groups["key"].Value, item.Groups["value"].Value);
             }
+
+            this.RequestUri = new Uri(this.RequestUri.AbsoluteUri.Replace(this.RequestUri.Query, ""));
         }
 
         /// <summary>
@@ -200,7 +212,7 @@ namespace Twitterizer
             if (this.Proxy != null)
                 request.Proxy = Proxy;
             request.Method = this.Verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetAssembly(typeof(WebRequestBuilder)).GetName().Version.ToString());
+            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetAssembly(typeof(WebRequestBuilder)).GetName().Version);
             request.ServicePoint.Expect100Continue = false;
             
             if (this.UseOAuth)
@@ -224,7 +236,12 @@ namespace Twitterizer
             StringBuilder requestParametersBuilder = new StringBuilder(this.RequestUri.AbsoluteUri);
             requestParametersBuilder.Append(this.RequestUri.Query.Length == 0 ? "?" : "&");
 
-            foreach (KeyValuePair<string, string> item in this.Parameters)
+            var fieldsToInclude = from p in this.Parameters
+                                  where !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+                                        !SecretParameters.Contains(p.Key)
+                                  select p;
+
+            foreach (KeyValuePair<string, string> item in fieldsToInclude)
             {
                 requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode(item.Value));
             }
@@ -249,7 +266,13 @@ namespace Twitterizer
             request.ContentType = "application/x-www-form-urlencoded";
 
             StringBuilder requestParametersBuilder = new StringBuilder();
-            foreach (KeyValuePair<string, string> item in this.Parameters)
+
+            var fieldsToInclude = from p in this.Parameters
+                                  where !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+                                        !SecretParameters.Contains(p.Key)
+                                  select p;
+
+            foreach (KeyValuePair<string, string> item in fieldsToInclude)
             {
                 requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, item.Value);
             }
@@ -279,27 +302,26 @@ namespace Twitterizer
             }
             
             // Add the OAuth parameters
-            this.OAuthParameters.Add("oauth_version", "1.0");
-            this.OAuthParameters.Add("oauth_nonce", GenerateNonce());
-            this.OAuthParameters.Add("oauth_timestamp", GenerateTimeStamp());
-            this.OAuthParameters.Add("oauth_signature_method", "HMAC-SHA1");
-            this.OAuthParameters.Add("oauth_consumer_key", this.Tokens.ConsumerKey);
-            this.OAuthParameters.Add("oauth_consumer_secret", this.Tokens.ConsumerSecret);
+            this.Parameters.Add("oauth_version", "1.0");
+            this.Parameters.Add("oauth_nonce", GenerateNonce());
+            this.Parameters.Add("oauth_timestamp", GenerateTimeStamp());
+            this.Parameters.Add("oauth_signature_method", "HMAC-SHA1");
+            this.Parameters.Add("oauth_consumer_key", this.Tokens.ConsumerKey);
+            this.Parameters.Add("oauth_consumer_secret", this.Tokens.ConsumerSecret);
 
             if (!string.IsNullOrEmpty(this.Tokens.AccessToken))
             {
-                this.OAuthParameters.Add("oauth_token", this.Tokens.AccessToken);
+                this.Parameters.Add("oauth_token", this.Tokens.AccessToken);
             }
 
             if (!string.IsNullOrEmpty(this.Tokens.AccessTokenSecret))
             {
-                this.OAuthParameters.Add("oauth_token_secret", this.Tokens.AccessTokenSecret);
+                this.Parameters.Add("oauth_token_secret", this.Tokens.AccessTokenSecret);
             }
 
-            var nonSecretParameters = (from p in this.OAuthParameters
-                                      where !(p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
-                                            !p.Key.EndsWith("_verifier", StringComparison.OrdinalIgnoreCase))
-                                      select p).Union(this.Parameters);
+            var nonSecretParameters = (from p in this.Parameters
+                                      where !SecretParameters.Contains(p.Key)
+                                      select p);
 
             Uri urlForSigning = this.RequestUri;
 
@@ -324,7 +346,7 @@ namespace Twitterizer
             byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
 
             // Add the signature to the oauth parameters
-            this.OAuthParameters.Add("oauth_signature", Convert.ToBase64String(signatureBytes));
+            this.Parameters.Add("oauth_signature", Convert.ToBase64String(signatureBytes));
         }
 
         /// <summary>
@@ -439,12 +461,8 @@ namespace Twitterizer
             StringBuilder authHeaderBuilder = new StringBuilder();
             authHeaderBuilder.AppendFormat("OAuth realm=\"{0}\"", Realm);
 
-            var sortedParameters = from p in this.OAuthParameters
-                                   where p.Key.StartsWith("oauth_") &&
-                                        !p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
-                                         p.Key != "oauth_signature" &&
-                                         p.Key != "oauth_verifier" &&
-                                        !string.IsNullOrEmpty(p.Value)
+            var sortedParameters = from p in this.Parameters
+                                   where OAuthParametersToIncludeInHeader.Contains(p.Key)
                                    orderby p.Key, UrlEncode(p.Value)
                                    select p;
 
@@ -456,7 +474,7 @@ namespace Twitterizer
                     UrlEncode(item.Value));
             }
 
-            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", UrlEncode(this.OAuthParameters["oauth_signature"]));
+            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", UrlEncode(this.Parameters["oauth_signature"]));
 
             return authHeaderBuilder.ToString();
         }

@@ -62,6 +62,29 @@ namespace Twitterizer
             return result;
         }
 
+        /// <summary>
+        /// Homes the timeline.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult HomeTimeline(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterStatusCollection>> function)
+        {
+            Func<OAuthTokens, TimelineOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = HomeTimeline;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                    {
+                        result.AsyncWaitHandle.WaitOne(timeout);
+                        function(methodToCall.EndInvoke(result));
+                    },
+                null);
+        }
+
         /// <param name="tokens">The tokens.</param>
         /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
         public static TwitterResponse<TwitterStatusCollection> HomeTimeline(OAuthTokens tokens)

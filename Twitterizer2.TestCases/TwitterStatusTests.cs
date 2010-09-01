@@ -70,5 +70,15 @@ namespace Twitterizer2.TestCases
 
             TwitterStatus.Update(fakeTokens, "This shouldn't work");
         }
+
+        [Test]
+        public static void UpdateWithURLParameters()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<TwitterStatus> response = TwitterStatus.Update(tokens, WebRequestBuilder.UrlEncode("This is a test. http://example.com/test?param=value"));
+            Assert.IsNotNull(response.ResponseObject);
+
+        }
     }
 }

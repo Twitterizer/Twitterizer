@@ -46,25 +46,14 @@ namespace Twitterizer
     /// <include file='OAuthUtility.xml' path='OAuthUtility/OAuthUtility/*'/>
     public static class OAuthUtility
     {
-        /// <summary>
-        /// The name of the signature type twiter uses.
-        /// </summary>
-        private const string SignatureType = "HMAC-SHA1";
-
         #region Public Methods
         /// <summary>
-        /// Gets a new OAuth request token from the twitter api.
+        /// Gets the request token.
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
-        /// <returns>
-        /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
-        /// </returns>
-        public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret)
-        {
-            return GetRequestToken(consumerKey, consumerSecret, string.Empty);
-        }
-
+        /// <param name="callbackAddress">The callback address.</param>
+        /// <returns></returns>
         public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress)
         {
             return GetRequestToken(consumerKey, consumerSecret, callbackAddress, null);
@@ -76,6 +65,7 @@ namespace Twitterizer
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
         /// <param name="callbackAddress">Address of the callback.</param>
+        /// <param name="proxy">The proxy.</param>
         /// <returns>
         /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
         /// </returns>
@@ -91,38 +81,43 @@ namespace Twitterizer
                 throw new ArgumentNullException("consumerSecret");
             }
 
+            if (string.IsNullOrEmpty(callbackAddress))
+            {
+                throw new ArgumentNullException("callbackAddress", "It is recommended that you always provide a callback url when obtaining a request token.");
+            }
+
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/oauth/request_token"),
                 HTTPVerb.POST,
-                new OAuthTokens() { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
-
-            builder.Proxy = proxy;
+                new OAuthTokens {ConsumerKey = consumerKey, ConsumerSecret = consumerSecret}) {Proxy = proxy};
 
             if (!string.IsNullOrEmpty(callbackAddress))
             {
                 builder.Parameters.Add("oauth_callback", callbackAddress);
             }
 
-            string responseBody;
+            string responseBody = null;
 
             try
             {
                 HttpWebResponse webResponse = builder.ExecuteRequest();
-                responseBody = new StreamReader(webResponse.GetResponseStream()).ReadToEnd();
+                Stream responseStream = webResponse.GetResponseStream();
+                if (responseStream != null) responseBody = new StreamReader(responseStream).ReadToEnd();
             }
             catch (WebException wex)
             {
                 throw new TwitterizerException(wex.Message, wex);
             }
 
-            Match matchedValues = Regex.Match(responseBody, @"oauth_token=(?<token>[^&]+)|oauth_token_secret=(?<secret>[^&]+)|oauth_verifier=(?<verifier>[^&]+)");
+            Match matchedValues = Regex.Match(responseBody,
+                                              @"oauth_token=(?<token>[^&]+)|oauth_token_secret=(?<secret>[^&]+)|oauth_verifier=(?<verifier>[^&]+)");
 
-            return new OAuthTokenResponse()
-            {
-                Token = matchedValues.Groups["token"].Value,
-                TokenSecret = matchedValues.Groups["secret"].Value,
-                VerificationString = matchedValues.Groups["verifier"].Value
-            };
+            return new OAuthTokenResponse
+                       {
+                           Token = matchedValues.Groups["token"].Value,
+                           TokenSecret = matchedValues.Groups["secret"].Value,
+                           VerificationString = matchedValues.Groups["verifier"].Value
+                       };
         }
 
         /// <summary>
@@ -170,8 +165,8 @@ namespace Twitterizer
 
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/oauth/access_token"),
-                HTTPVerb.POST,
-                new OAuthTokens() { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
+                HTTPVerb.GET,
+                new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
 
             builder.Proxy = proxy;
 
@@ -179,6 +174,8 @@ namespace Twitterizer
             {
                 builder.Parameters.Add("oauth_verifier", verifier);
             }
+
+            builder.Parameters.Add("oauth_token", requestToken);
 
             string responseBody;
 
@@ -302,6 +299,11 @@ namespace Twitterizer
             return GetAccessToken(consumerKey, consumerSecret, requestToken, verifier);
         }
 
+        /// <summary>
+        /// Adds the OAuth Echo header to the supplied web request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="tokens">The tokens.</param>
         public static void AddOAuthEchoHeader(WebRequest request, OAuthTokens tokens)
         {
             WebRequestBuilder builder = new WebRequestBuilder(

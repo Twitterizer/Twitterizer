@@ -6,7 +6,7 @@
     <StartArguments>..\..\..\Twitterizer2.nunit</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <PublishUrlHistory />
     <InstallUrlHistory />
     <SupportUrlHistory />

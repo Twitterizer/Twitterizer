@@ -66,19 +66,21 @@
 
         public static void AsyncTest()
         {
-            TwitterUser.Show("username", null, response => Console.Write(response.ResponseObject.Name));
+            // First example, uses lambda expression
+            TwitterUser.Show(
+                null,           // tokens
+                "username",     // screen_name
+                null,           // optional parameters
+                new TimeSpan(0, 0, 5, 0), // async timeout
+                response => Console.Write(response.ResponseObject.Name));
 
-            TwitterUser.Show("username", null, AsyncCallback);
+            // Second example, uses a callback method
+            TwitterUser.Show(null, "username", null, new TimeSpan(0, 0, 5, 0), ShowUserCompleted);
         }
 
-        public static void AsyncCallback(TwitterResponse<TwitterUser> user)
+        public static void ShowUserCompleted(TwitterResponse<TwitterUser> user)
         {
             Console.WriteLine(user.ResponseObject.Name);
-        }
-
-        private static void DoSomethingClever(TwitterUser result)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

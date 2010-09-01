@@ -297,7 +297,8 @@
     <PostBuildEvent>IF '$(ConfigurationName)'=='Release' mkdir "$(SolutionDir)Release\"
 IF '$(ConfigurationName)'=='Release' copy "$(SolutionDir)*.license.txt" "$(TargetDir)"
 IF '$(ConfigurationName)'=='Release' copy "$(TargetDir)*.*" "$(SolutionDir)Release\"
-IF '$(ConfigurationName)'=='Release' del "$(SolutionDir)Release\*.tmp"</PostBuildEvent>
+IF '$(ConfigurationName)'=='Release' del "$(SolutionDir)Release\*.tmp"
+IF '$(ConfigurationName)'=='Release' copy "$(SolutionDir)GettingStarted.txt" "$(SolutionDir)Release\"</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>

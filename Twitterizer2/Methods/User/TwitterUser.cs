@@ -34,7 +34,6 @@
 namespace Twitterizer
 {
     using System;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Drawing;
     using Newtonsoft.Json;
@@ -49,17 +48,25 @@ namespace Twitterizer
         /// <summary>
         /// Shows the specified username.
         /// </summary>
+        /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
-        public static void Show(string username, OptionalProperties options, Action<TwitterResponse<TwitterUser>> function)
+        /// <returns></returns>
+        public static IAsyncResult Show(OAuthTokens tokens, string username, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterUser>> function)
         {
-            Func<string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = Show;
+            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = Show;
 
-            methodToCall.BeginInvoke(
+            return methodToCall.BeginInvoke(
+                tokens,
                 username,
                 options,
-                result => function(methodToCall.EndInvoke(result)), 
+                result =>
+                    {
+                        result.AsyncWaitHandle.WaitOne(timeout);
+                        function(methodToCall.EndInvoke(result));
+                    },
                 null);
         }
 
