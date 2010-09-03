@@ -393,7 +393,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
         /// </returns>
-        public static TwitterResponse<TwitterList> RemoveMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd, OptionalProperties options)
+        public static TwitterResponse<TwitterList> RemoveMember(OAuthTokens tokens, string ownerUsername, string listId, decimal userIdToAdd, OptionalProperties options)
         {
             Commands.RemoveListMemberCommand command = new Twitterizer.Commands.RemoveListMemberCommand(tokens, ownerUsername, listId, userIdToAdd, options);
 
@@ -410,7 +410,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterList"/> representing the list the user was added to, or <c>null</c>.
         /// </returns>
-        public static TwitterResponse<TwitterList> RemoveMember(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userIdToAdd)
+        public static TwitterResponse<TwitterList> RemoveMember(OAuthTokens tokens, string ownerUsername, string listId, decimal userIdToAdd)
         {
             return RemoveMember(tokens, ownerUsername, listId, userIdToAdd, null);
         }
@@ -426,7 +426,7 @@ namespace Twitterizer
         /// <returns>
         /// The user's details, if they are a member of the list, otherwise <c>null</c>.
         /// </returns>
-        public static TwitterResponse<TwitterUser> CheckMembership(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userId, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> CheckMembership(OAuthTokens tokens, string ownerUsername, string listId, decimal userId, OptionalProperties options)
         {
             Commands.CheckListMembershipCommand command = new Twitterizer.Commands.CheckListMembershipCommand(
                 tokens,
@@ -448,7 +448,7 @@ namespace Twitterizer
         /// <returns>
         /// The user's details, if they are a member of the list, otherwise <c>null</c>.
         /// </returns>
-        public static TwitterResponse<TwitterUser> CheckMembership(OAuthTokens tokens, string ownerUsername, decimal listId, decimal userId)
+        public static TwitterResponse<TwitterUser> CheckMembership(OAuthTokens tokens, string ownerUsername, string listId, decimal userId)
         {
             return CheckMembership(tokens, ownerUsername, listId, userId, null);
         }
