@@ -77,7 +77,7 @@
     <WorkingPath>
     </WorkingPath>
     <KeepLogFile>False</KeepLogFile>
-    <CleanIntermediates>False</CleanIntermediates>
+    <CleanIntermediates>True</CleanIntermediates>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
