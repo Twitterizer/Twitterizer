@@ -1,7 +1,7 @@
 ﻿using System;
 using Twitterizer;
 
-namespace Twitterizer2
+namespace Twitterizer
 {
     public static class TwitterDirectMessageAsync
     {

@@ -8,7 +8,7 @@
     <ProjectGuid>{566E5F16-088A-4AB5-967A-A05BA636AF75}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Twitterizer2</RootNamespace>
+    <RootNamespace>Twitterizer</RootNamespace>
     <AssemblyName>Twitterizer2.Asynchronous</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

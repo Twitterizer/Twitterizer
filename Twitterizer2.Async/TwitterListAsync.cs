@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Twitterizer;
 
-namespace Twitterizer2
+namespace Twitterizer
 {
     public static class TwitterListAsync
     {

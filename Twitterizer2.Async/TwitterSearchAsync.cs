@@ -32,7 +32,7 @@
 // <summary>The asynchronous twitter search class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer2
+namespace Twitterizer
 {
     using System;
     using Twitterizer;

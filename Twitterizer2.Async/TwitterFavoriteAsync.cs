@@ -31,7 +31,7 @@
 // <author>Ricky Smith</author>
 // <summary>The asynchronous twitter favorite class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer2
+namespace Twitterizer
 {
     using System;
     using Twitterizer;

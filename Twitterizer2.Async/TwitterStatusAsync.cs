@@ -31,7 +31,7 @@
 // <author>Ricky Smith</author>
 // <summary>The asynchronous Twitter Status class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer2
+namespace Twitterizer
 {
     using System;
     using Twitterizer;

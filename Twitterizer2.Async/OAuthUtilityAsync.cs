@@ -31,7 +31,7 @@
 // <author>Ricky Smith</author>
 // <summary>Provides simple methods to simplify OAuth interaction.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer2
+namespace Twitterizer
 {
     using System;
     using System.Net;
