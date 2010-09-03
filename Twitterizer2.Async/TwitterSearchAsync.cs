@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterSearch.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterSearchAsync.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,41 +29,37 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter search class</summary>
+// <summary>The asynchronous twitter search class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer
+namespace Twitterizer2
 {
     using System;
+    using Twitterizer;
 
-    /// <summary>
-    /// The Twitter Search Class
-    /// </summary>
-    public static class TwitterSearch
+    public static class TwitterSearchAsync
     {
         /// <summary>
         /// Searches Twitter with the the specified query.
         /// </summary>
         /// <param name="query">The query.</param>
-        /// <returns>
-        /// A <see cref="TwitterSearchResultCollection"/> instance.
-        /// </returns>
-        public static TwitterResponse<TwitterSearchResultCollection> Search(string query)
-        {
-            return Search(query, null);
-        }
-
-        /// <summary>
-        /// Searches Twitter with the the specified query.
-        /// </summary>
-        /// <param name="query">The query.</param>
         /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterSearchResultCollection"/> instance.
-        /// </returns>
-        public static TwitterResponse<TwitterSearchResultCollection> Search(string query, SearchOptions options)
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Search(string query, SearchOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterSearchResultCollection>> function)
         {
-            return Search(null, query, options);
+            Func<string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
+
+            return methodToCall.BeginInvoke(
+                query,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
         }
 
         /// <summary>
@@ -72,19 +68,23 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="query">The query.</param>
         /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterSearchResultCollection"/> instance.
-        /// </returns>
-        public static TwitterResponse<TwitterSearchResultCollection> Search(OAuthTokens tokens, string query, SearchOptions options)
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Search(OAuthTokens tokens, string query, SearchOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterSearchResultCollection>> function)
         {
-            Commands.SearchCommand command = new Twitterizer.Commands.SearchCommand(tokens, query, options);
+            Func<OAuthTokens, string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
 
-            TwitterResponse<TwitterSearchResultCollection> results =
-                Core.CommandPerformer<TwitterSearchResultCollection>.PerformAction(command);
-
-            return results;
+            return methodToCall.BeginInvoke(
+                tokens,
+                query,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
         }
-
-
     }
 }
