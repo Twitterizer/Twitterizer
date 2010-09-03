@@ -44,14 +44,6 @@ namespace Twitterizer
     [DebuggerDisplay("{User.ScreenName}/{Text}")]
     public class TwitterStatus : ITwitterObject
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterStatus"/> class.
-        /// </summary>
-        public TwitterStatus()
-            : base()
-        {
-        }
-
         #region Properties
         /// <summary>
         /// Gets or sets the status id.
@@ -173,7 +165,7 @@ namespace Twitterizer
         #endregion
 
         /// <summary>
-        /// Updates the authenticated user's status to the supplied text.
+        /// Updates the authenticating user's status. A status update with text identical to the authenticating user's text identical to the authenticating user's current status will be ignored to prevent duplicates.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="text">The status text.</param>
@@ -184,7 +176,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Updates the specified tokens.
+        /// Updates the authenticating user's status. A status update with text identical to the authenticating user's text identical to the authenticating user's current status will be ignored to prevent duplicates.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="text">The status text.</param>
