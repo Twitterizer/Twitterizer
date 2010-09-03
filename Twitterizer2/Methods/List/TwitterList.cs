@@ -162,7 +162,7 @@ namespace Twitterizer
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterList"/> instance.</returns>
-        public static TwitterResponse<TwitterList> Update(OAuthTokens tokens, string username, long listId, UpdateListOptions options)
+        public static TwitterResponse<TwitterList> Update(OAuthTokens tokens, string username, string listId, UpdateListOptions options)
         {
             Commands.UpdateListCommand command = new Twitterizer.Commands.UpdateListCommand(tokens, username, listId, options);
 

@@ -408,6 +408,12 @@ namespace Twitterizer
             return Search(tokens, query, null);
         }
 
+        /// <summary>
+        /// Return up to 100 users worth of extended information, specified by either ID, screen name, or combination of the two.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
         public static TwitterResponse<TwitterUserCollection> Lookup(OAuthTokens tokens, LookupUsersOptions options)
         {
             Commands.LookupUsersCommand command = new Commands.LookupUsersCommand(tokens, options);

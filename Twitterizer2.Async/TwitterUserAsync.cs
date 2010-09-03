@@ -39,6 +39,54 @@ namespace Twitterizer2
     public static class TwitterUserAsync
     {
         /// <summary>
+        /// Return up to 100 users worth of extended information, specified by either ID, screen name, or combination of the two.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Lookup(OAuthTokens tokens, LookupUsersOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterUserCollection>> function)
+        {
+            Func<OAuthTokens, LookupUsersOptions, TwitterResponse<TwitterUserCollection>> methodToCall = TwitterUser.Lookup;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Runs a search for users similar to Find People button on Twitter.com. The results returned by people search on Twitter.com are the same as those returned by this API request.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Search(OAuthTokens tokens, string query, UserSearchOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterUserCollection>> function)
+        {
+            Func<OAuthTokens, string, UserSearchOptions, TwitterResponse<TwitterUserCollection>> methodToCall = TwitterUser.Search;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                query,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
         /// Shows the specified username.
         /// </summary>
         /// <param name="tokens">The tokens.</param>

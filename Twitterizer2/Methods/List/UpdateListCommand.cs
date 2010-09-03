@@ -53,16 +53,16 @@ namespace Twitterizer.Commands
         /// <param name="username">The username.</param>
         /// <param name="id">The list id.</param>
         /// <param name="options">The options.</param>
-        public UpdateListCommand(OAuthTokens tokens, string username, long id, UpdateListOptions options)
+        public UpdateListCommand(OAuthTokens tokens, string username, string id, UpdateListOptions options)
             : base(
                 HTTPVerb.GET, 
                 string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, id), 
                 tokens, 
                 options)
         {
-            if (Tokens == null)
+            if (tokens == null)
             {
-                throw new ArgumentNullException("requestTokens");
+                throw new ArgumentNullException("tokens");
             }
 
             if (string.IsNullOrEmpty(username))
@@ -70,7 +70,7 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("username");
             }
 
-            if (id < 0)
+            if (string.IsNullOrEmpty(id))
             {
                 throw new ArgumentNullException("id");
             }
