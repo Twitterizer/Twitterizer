@@ -47,7 +47,7 @@ namespace Twitterizer2.TestCases
             TwitterStatus deletedStatus = newStatus.Delete(tokens).ResponseObject;
             Assert.That(newStatus.Id == deletedStatus.Id);
         }
-
+        
         [Category("Core")]
         [Test]
         [ExpectedException(ExpectedException=typeof(ArgumentException))]
@@ -76,7 +76,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<TwitterStatus> response = TwitterStatus.Update(tokens, WebRequestBuilder.UrlEncode("This is a test. http://example.com/test?param=value"));
+            TwitterResponse<TwitterStatus> response = TwitterStatus.Update(tokens, "This is a test. http://example.com/test?param=value");
             Assert.IsNotNull(response.ResponseObject);
 
         }

@@ -58,9 +58,9 @@ namespace Twitterizer2.TestCases
 
             Assert.AreEqual(signature, "ndQStX289rIMyZR5dErSinLK/bQ=");
 
-            builder.Parameters.Add("text", "this is a test http://example.com/test?key=value&key2");
+            builder.Parameters.Add("text", "this is a test http://example.com/test?key=value&key%202");
             signature = builder.GenerateSignature();
-            Assert.AreEqual(signature, "kJPoeB85sop1rkkyu9OJ/CWO5QE=");
+            Assert.AreEqual(signature, "PHxr1TDR4fbecl6cfiEBkLR9UbU=");
 
             builder.Verb = HTTPVerb.POST;
             signature = builder.GenerateSignature();
