@@ -35,5 +35,12 @@ A)
 		All of the functionality found in this library is available within Twitterizer2.dll.
 		This file is not necessary for most projects.
 
+	Twitterizer2lite.dll
+		This is a slimmed down version of the Twitterizer2.dll file built with the client profile as the target framework.
+		It will lack some extra pieces of functionality, such as the built-in data caching and support for application 
+		configuration settings.
+		_DO_NOT_ include this file in your project if you are using Twitterizer2.dll. 
+		This file is not necessary for most projects.
+
 Q) What about the license files?
 A) The license files must accompany the dlls. That means that they must be distributed along with your application.

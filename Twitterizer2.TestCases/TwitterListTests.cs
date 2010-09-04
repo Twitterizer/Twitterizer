@@ -66,5 +66,35 @@ namespace Twitterizer2.TestCases
 
             Assert.IsNotNull(lists);
         }
+
+        [Test]
+        public static void CreateAddAndDelete()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            string listName = "test-list-ignore";
+            TwitterUser myUser = TwitterAccount.VerifyCredentials(tokens).ResponseObject;
+            var userIdToAdd = TwitterUser.Show(tokens, userName).ResponseObject.Id;
+
+            var listResponse = TwitterList.GetList(tokens, myUser.ScreenName, listName);
+            if (listResponse.Result == RequestResult.FileNotFound)
+            {
+                // Create the new list
+                listResponse = TwitterList.New(tokens, myUser.ScreenName, listName, false, "Testing Twitterizer");
+                Assert.That(listResponse.Result == RequestResult.Success);
+            }
+
+            // Add a user
+            var addMemberResponse = TwitterList.AddMember(tokens, myUser.ScreenName, listName, userIdToAdd);
+            Assert.That(addMemberResponse.Result == RequestResult.Success);
+
+            // Remove the user
+            var removeMemberResponse = TwitterList.RemoveMember(tokens, myUser.ScreenName, listName, userIdToAdd);
+            Assert.That(removeMemberResponse.Result == RequestResult.Success);
+
+            // Delete the list
+            listResponse = TwitterList.Delete(tokens, myUser.ScreenName, listName, null);
+            Assert.That(listResponse.Result == RequestResult.Success);
+        }
     }
 }

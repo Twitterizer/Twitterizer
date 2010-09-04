@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="userId">The user id.</param>
         /// <param name="options">The options.</param>
         public RemoveListMemberCommand(OAuthTokens requestTokens, string ownerUsername, string listId, decimal userId, OptionalProperties options)
-            : base(HTTPVerb.DELETE, string.Format(CultureInfo.CurrentCulture, "/{0}/{1}/members.json", ownerUsername, listId), requestTokens, options)
+            : base(HTTPVerb.DELETE, string.Format(CultureInfo.CurrentCulture, "{0}/{1}/members.json", ownerUsername, listId), requestTokens, options)
         {
             if (requestTokens == null)
             {
@@ -90,7 +90,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));
+            this.RequestParameters.Add("id", this.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));
         }
     }
 }

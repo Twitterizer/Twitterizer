@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="userId">The user id.</param>
         /// <param name="options">The options.</param>
         public CheckListMembershipCommand(OAuthTokens requestTokens, string ownerUsername, string listId, decimal userId, OptionalProperties options)
-            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "/{0}/{1}/members/{2}.json", ownerUsername, listId), requestTokens, options)
+            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/{1}/members/{2}.json", ownerUsername, listId), requestTokens, options)
         {
             if (requestTokens == null)
             {

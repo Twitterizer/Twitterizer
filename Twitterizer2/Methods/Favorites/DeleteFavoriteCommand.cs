@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         public DeleteFavoriteCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options)
-            : base(HTTPVerb.POST, "/favorites/destroy.json", tokens, options)
+            : base(HTTPVerb.POST, "favorites/destroy.json", tokens, options)
         {
             if (statusId <= 0)
             {

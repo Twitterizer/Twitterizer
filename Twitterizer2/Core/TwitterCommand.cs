@@ -324,6 +324,9 @@ namespace Twitterizer.Core
         /// <param name="endPoint">The end point.</param>
         protected void SetCommandUri(string endPoint)
         {
+            if (endPoint.StartsWith("/"))
+                throw new ArgumentException("The API endpoint cannot begin with a forward slash. This will result in 404 errors and headaches.", "endPoint");
+
             this.Uri = new Uri(string.Concat(this.OptionalProperties.APIBaseAddress, endPoint));
         }
 

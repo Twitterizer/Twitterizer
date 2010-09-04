@@ -155,6 +155,20 @@ namespace Twitterizer
         }
 
         /// <summary>
+        /// Creates a new list for the authenticated user. Accounts are limited to 20 lists.
+        /// </summary>
+        /// <param name="tokens">The oauth tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="name">The list name.</param>
+        /// <param name="isPublic">if set to <c>true</c> creates a public list.</param>
+        /// <param name="description">The description.</param>
+        /// <returns>A <see cref="TwitterList"/> instance.</returns>
+        public static TwitterResponse<TwitterList> New(OAuthTokens tokens, string username, string name, bool isPublic, string description)
+        {
+            return New(tokens, username, name, isPublic, description, null);
+        }
+
+        /// <summary>
         /// Updates the specified list.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
@@ -217,6 +231,20 @@ namespace Twitterizer
             Commands.GetListCommand command = new Twitterizer.Commands.GetListCommand(tokens, username, listIdOrSlug, options);
 
             return Core.CommandPerformer<TwitterList>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<TwitterList> GetList(OAuthTokens tokens, string username, string listIdOrSlug)
+        {
+            return GetList(tokens, username, listIdOrSlug, null);
         }
 
         /// <summary>
