@@ -60,11 +60,11 @@ namespace Twitterizer2.TestCases
 
             builder.Parameters.Add("text", "this is a test http://example.com/test?key=value&key%202");
             signature = builder.GenerateSignature();
-            Assert.AreEqual(signature, "PHxr1TDR4fbecl6cfiEBkLR9UbU=");
+            Assert.AreEqual(signature, "MUUsZ/iV/FXxBRPdyxRkNKqEShw=");
 
             builder.Verb = HTTPVerb.POST;
             signature = builder.GenerateSignature();
-            Assert.AreEqual(signature, "xBt9QMoM+wlC2RNoS4ZOOLLCMow=");
+            Assert.AreEqual(signature, "wtbXMN5BwtH8r2/G/Rwqdp7HMnU=");
         }
     }
 }
