@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C188B5C8-E361-4869-9800-CE23133F3B2C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TwitterizerLite</RootNamespace>
+    <AssemblyName>Twitterizer2lite</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;LITE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE;LITE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Twitterizer2\Attributes\AuthorizedCommandAttribute.cs">
+      <Link>AuthorizedCommandAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Attributes\RateLimitedAttribute.cs">
+      <Link>RateLimitedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\CommandPerformer.cs">
+      <Link>CommandPerformer.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\ConversionUtility.cs">
+      <Link>ConversionUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\CursorPagedCommand.cs">
+      <Link>CursorPagedCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\ICommand.cs">
+      <Link>ICommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\ITwitterObject.cs">
+      <Link>ITwitterObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\NamespaceDoc.cs">
+      <Link>NamespaceDoc.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\OptionalProperties.cs">
+      <Link>OptionalProperties.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\PagedCommand.cs">
+      <Link>PagedCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\RateLimit.cs">
+      <Link>RateLimit.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\RequestResult.cs">
+      <Link>RequestResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\SerializationHelper.cs">
+      <Link>SerializationHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterCollection.cs">
+      <Link>TwitterCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterCommand.cs">
+      <Link>TwitterCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterImage.cs">
+      <Link>TwitterImage.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterizerDateConverter.cs">
+      <Link>TwitterizerDateConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterObject.cs">
+      <Link>TwitterObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Exceptions\CommandValidationException.cs">
+      <Link>CommandValidationException.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Exceptions\TwitterErrorDetails.cs">
+      <Link>TwitterErrorDetails.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Exceptions\TwitterizerException.cs">
+      <Link>TwitterizerException.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Information.cs">
+      <Link>Information.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\RateLimitStatusCommand.cs">
+      <Link>RateLimitStatusCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\TwitterAccount.cs">
+      <Link>TwitterAccount.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\TwitterRateLimitStatus.cs">
+      <Link>TwitterRateLimitStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileColorsCommand.cs">
+      <Link>UpdateProfileColorsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileColorsOptions.cs">
+      <Link>UpdateProfileColorsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileImageCommand.cs">
+      <Link>UpdateProfileImageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsCommand.cs">
+      <Link>VerifyCredentialsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsOptions.cs">
+      <Link>VerifyCredentialsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\DeleteDirectMessageCommand.cs">
+      <Link>DeleteDirectMessageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\DirectMessagesCommand.cs">
+      <Link>DirectMessagesCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\DirectMessagesOptions.cs">
+      <Link>DirectMessagesOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\DirectMessagesSentCommand.cs">
+      <Link>DirectMessagesSentCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\DirectMessagesSentOptions.cs">
+      <Link>DirectMessagesSentOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\SendDirectMessageCommand.cs">
+      <Link>SendDirectMessageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\TwitterDirectMessage.cs">
+      <Link>TwitterDirectMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\TwitterDirectMessageCollection.cs">
+      <Link>TwitterDirectMessageCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Favorites\CreateFavoriteCommand.cs">
+      <Link>CreateFavoriteCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Favorites\DeleteFavoriteCommand.cs">
+      <Link>DeleteFavoriteCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Favorites\ListFavoritesCommand.cs">
+      <Link>ListFavoritesCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Favorites\ListFavoritesOptions.cs">
+      <Link>ListFavoritesOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Favorites\TwitterFavorite.cs">
+      <Link>TwitterFavorite.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\CreateFriendshipCommand.cs">
+      <Link>CreateFriendshipCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\CreateFriendshipOptions.cs">
+      <Link>CreateFriendshipOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\DeleteFriendshipCommand.cs">
+      <Link>DeleteFriendshipCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\ShowFriendshipCommand.cs">
+      <Link>ShowFriendshipCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\TwitterFriendship.cs">
+      <Link>TwitterFriendship.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\TwitterRelationship.cs">
+      <Link>TwitterRelationship.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\Coordinate.cs">
+      <Link>Coordinate.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\ReverseGeocodeCommand.cs">
+      <Link>ReverseGeocodeCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\TwitterBoundingBox.cs">
+      <Link>TwitterBoundingBox.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\TwitterGeo.cs">
+      <Link>TwitterGeo.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\TwitterPlace.cs">
+      <Link>TwitterPlace.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\TwitterPlaceCollection.cs">
+      <Link>TwitterPlaceCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Geo\TwitterPlaceLookupOptions.cs">
+      <Link>TwitterPlaceLookupOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\AddListMemberCommand.cs">
+      <Link>AddListMemberCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\CheckListMembershipCommand.cs">
+      <Link>CheckListMembershipCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\CreateListCommand.cs">
+      <Link>CreateListCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\DeleteListCommand.cs">
+      <Link>DeleteListCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListCommand.cs">
+      <Link>GetListCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListMembersCommand.cs">
+      <Link>GetListMembersCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListMembersOptions.cs">
+      <Link>GetListMembersOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListsCommand.cs">
+      <Link>GetListsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListSubscriptionsCommand.cs">
+      <Link>GetListSubscriptionsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\ListMembershipsCommand.cs">
+      <Link>ListMembershipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\ListStatusesCommand.cs">
+      <Link>ListStatusesCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\ListStatusesOptions.cs">
+      <Link>ListStatusesOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\RemoveListMemberCommand.cs">
+      <Link>RemoveListMemberCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\TwitterList.cs">
+      <Link>TwitterList.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\TwitterListCollection.cs">
+      <Link>TwitterListCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\UpdateListCommand.cs">
+      <Link>UpdateListCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\UpdateListOptions.cs">
+      <Link>UpdateListOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Search\SearchCommand.cs">
+      <Link>SearchCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Search\SearchOptions.cs">
+      <Link>SearchOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Search\TwitterSearch.cs">
+      <Link>TwitterSearch.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Search\TwitterSearchResult.cs">
+      <Link>TwitterSearchResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Search\TwitterSearchResultCollection.cs">
+      <Link>TwitterSearchResultCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\FriendsTimelineCommand.cs">
+      <Link>FriendsTimelineCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\HomeTimelineCommand.cs">
+      <Link>HomeTimelineCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\MentionsCommand.cs">
+      <Link>MentionsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\PagedTimelineCommand.cs">
+      <Link>PagedTimelineCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\PublicTimelineCommand.cs">
+      <Link>PublicTimelineCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\RetweetedByMeCommand.cs">
+      <Link>RetweetedByMeCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\RetweetedToMeCommand.cs">
+      <Link>RetweetedToMeCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\TimelineOptions.cs">
+      <Link>TimelineOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\TwitterTimeline.cs">
+      <Link>TwitterTimeline.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\UserTimelineCommand.cs">
+      <Link>UserTimelineCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Timeline\UserTimelineOptions.cs">
+      <Link>UserTimelineOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Trends\CurrentTrendsCommand.cs">
+      <Link>CurrentTrendsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Trends\CurrentTrendsOptions.cs">
+      <Link>CurrentTrendsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Trends\TwitterTrend.cs">
+      <Link>TwitterTrend.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Trends\TwitterTrendCollection.cs">
+      <Link>TwitterTrendCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\DeleteStatusCommand.cs">
+      <Link>DeleteStatusCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterEntity.cs">
+      <Link>TwitterEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterEntityCollection.cs">
+      <Link>TwitterEntityCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterHashTagEntity.cs">
+      <Link>TwitterHashTagEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterMentionEntity.cs">
+      <Link>TwitterMentionEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterUrlEntity.cs">
+      <Link>TwitterUrlEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\RetweetCommand.cs">
+      <Link>RetweetCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\RetweetsCommand.cs">
+      <Link>RetweetsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\RetweetsOfMeCommand.cs">
+      <Link>RetweetsOfMeCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\RetweetsOfMeOptions.cs">
+      <Link>RetweetsOfMeOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\RetweetsOptions.cs">
+      <Link>RetweetsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\ShowStatusCommand.cs">
+      <Link>ShowStatusCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\StatusUpdateOptions.cs">
+      <Link>StatusUpdateOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\TwitterStatus.cs">
+      <Link>TwitterStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\TwitterStatusCollection.cs">
+      <Link>TwitterStatusCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\UpdateStatusCommand.cs">
+      <Link>UpdateStatusCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\FollowersCommand.cs">
+      <Link>FollowersCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\FollowersOptions.cs">
+      <Link>FollowersOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\FriendsCommand.cs">
+      <Link>FriendsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\FriendsOptions.cs">
+      <Link>FriendsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\LookupUsersCommand.cs">
+      <Link>LookupUsersCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\LookupUsersOptions.cs">
+      <Link>LookupUsersOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\ShowUserCommand.cs">
+      <Link>ShowUserCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\TwitterUser.cs">
+      <Link>TwitterUser.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\TwitterUserCollection.cs">
+      <Link>TwitterUserCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\UserSearchCommand.cs">
+      <Link>UserSearchCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\UserSearchOptions.cs">
+      <Link>UserSearchOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\OAuth\OAuthTokenResponse.cs">
+      <Link>OAuthTokenResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\OAuth\OAuthTokens.cs">
+      <Link>OAuthTokens.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\OAuth\OAuthUtility.cs">
+      <Link>OAuthUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\OAuth\WebRequestBuilder.cs">
+      <Link>WebRequestBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\OAuth\XAuthUtility.cs">
+      <Link>XAuthUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\TwitterResponse.cs">
+      <Link>TwitterResponse.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Externals\json.net\Newtonsoft.Json.csproj">
+      <Project>{A9AE40FF-1A21-414A-9FE7-3BE13644CC6D}</Project>
+      <Name>Newtonsoft.Json</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

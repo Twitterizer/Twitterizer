@@ -40,7 +40,9 @@ namespace Twitterizer.Core
     using System.Net;
     using System.Text;
     using System.Web;
+#if !LITE
     using System.Web.Caching;
+#endif
     using Twitterizer;
 
     /// <summary>
@@ -159,6 +161,7 @@ namespace Twitterizer.Core
 
             }
 
+#if !LITE
             // Variables and objects needed for caching
             StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
             if (this.Tokens != null)
@@ -167,15 +170,19 @@ namespace Twitterizer.Core
             }
 
             Cache cache = HttpRuntime.Cache;
+#endif
 
             // Prepare the query parameters
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> item in this.RequestParameters)
             {
                 queryParameters.Add(item.Key, item.Value);
+#if !LITE
                 cacheKeyBuilder.AppendFormat("|{0}={1}", item.Key, item.Value);
+#endif
             }
 
+#if !LITE
             // Lookup the cached item and return it
             if (this.Verb == HTTPVerb.GET && this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
             {
@@ -193,7 +200,7 @@ namespace Twitterizer.Core
                 }
             }
             
-
+#endif
             // Declare the variable to be returned
             twitterResponse.ResponseObject = default(T);
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
@@ -257,7 +264,10 @@ namespace Twitterizer.Core
 
             twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
 
+
+#if !LITE
             this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
+#endif
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             twitterResponse.Tokens = this.Tokens;
@@ -344,6 +354,7 @@ namespace Twitterizer.Core
             return rateLimiting;
         }
 
+#if !LITE
         /// <summary>
         /// Adds the result to cache.
         /// </summary>
@@ -367,5 +378,6 @@ namespace Twitterizer.Core
                 Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
             }
         }
-    }
+#endif
+        }
 }

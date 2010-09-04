@@ -232,6 +232,7 @@ namespace Twitterizer
             return new Uri(parameters.ToString());
         }
 
+        #if !LITE
         /// <summary>
         /// Gets the access token during callback.
         /// </summary>
@@ -263,6 +264,7 @@ namespace Twitterizer
 
             return GetAccessToken(consumerKey, consumerSecret, requestToken, verifier);
         }
+#endif
 
         /// <summary>
         /// Adds the OAuth Echo header to the supplied web request.
