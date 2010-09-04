@@ -50,10 +50,10 @@ namespace Twitterizer
             // Set the default values for the properties
             this.UseSSL = false;
             this.APIBaseAddress = "http://api.twitter.com/1/";
-            this.CacheTimespan = new TimeSpan(0, 5, 0);
 
 #if !LITE
             this.CacheOutput = false;
+            this.CacheTimespan = new TimeSpan(0, 5, 0);
             this.ReadConfigurationSettings();
 #endif
         }
@@ -73,12 +73,10 @@ namespace Twitterizer
 #if !LITE
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
         public bool CacheOutput { get; set; }
-#endif
 
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
         public TimeSpan CacheTimespan { get; set; }
 
-#if !LITE
         /// <summary>
         /// Reads the configuration settings.
         /// </summary>
