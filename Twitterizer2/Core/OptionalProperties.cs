@@ -49,11 +49,13 @@ namespace Twitterizer
         {
             // Set the default values for the properties
             this.UseSSL = false;
-            this.CacheOutput = false;
             this.APIBaseAddress = "http://api.twitter.com/1/";
             this.CacheTimespan = new TimeSpan(0, 5, 0);
 
+#if !LITE
+            this.CacheOutput = false;
             this.ReadConfigurationSettings();
+#endif
         }
 
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="UseSSL"]/*'/>
@@ -68,17 +70,21 @@ namespace Twitterizer
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
         public WebProxy Proxy { get; set; }
 
+#if !LITE
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
         public bool CacheOutput { get; set; }
+#endif
 
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
         public TimeSpan CacheTimespan { get; set; }
 
+#if !LITE
         /// <summary>
         /// Reads the configuration settings.
         /// </summary>
         private void ReadConfigurationSettings()
         {
+
             System.Collections.Specialized.NameValueCollection appSettings = ConfigurationManager.AppSettings;
 
             // Get the enable caching configuration setting
@@ -105,5 +111,6 @@ namespace Twitterizer
                 this.UseSSL = true;
             }
         }
-    }
+#endif
+        }
 }
