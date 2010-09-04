@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{09A4B653-29C4-467A-A1FE-BA74C0D70978}"
 	ProjectSection(SolutionItems) = preProject
+		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CustomDictionary.xml = CustomDictionary.xml
 		GettingStarted.txt = GettingStarted.txt
 	EndProjectSection
@@ -97,7 +98,6 @@ Global
 		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
 		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
 		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{488BB0D8-2A49-4074-BE6F-1100AF6E5D62}.Release|x86-Only.ActiveCfg = Release|Any CPU
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.CCNET|Any CPU.Build.0 = Release|Any CPU

@@ -59,6 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\OAuth\OAuthTokens.cs">
       <Link>OAuthTokens.cs</Link>
     </Compile>
