@@ -199,6 +199,12 @@
     <Compile Include="..\Twitterizer2\Methods\Friendship\DeleteFriendshipCommand.cs">
       <Link>DeleteFriendshipCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\FollowersIdsCommand.cs">
+      <Link>FollowersIdsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\FriendsIdsCommand.cs">
+      <Link>FriendsIdsCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Friendship\ShowFriendshipCommand.cs">
       <Link>ShowFriendshipCommand.cs</Link>
     </Compile>
@@ -207,6 +213,12 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Friendship\TwitterRelationship.cs">
       <Link>TwitterRelationship.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\UserIdCollection.cs">
+      <Link>UserIdCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\UsersIdsOptions.cs">
+      <Link>UsersIdsOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Geo\Coordinate.cs">
       <Link>Coordinate.cs</Link>

@@ -81,6 +81,7 @@
       <Link>SerializationHelper.cs</Link>
     </Compile>
     <Compile Include="Configuration.cs" />
+    <Compile Include="UserIdListTests.cs" />
     <Compile Include="Issue120.cs" />
     <Compile Include="CoreTests.cs">
       <SubType>Code</SubType>

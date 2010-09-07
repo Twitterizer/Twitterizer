@@ -139,6 +139,10 @@
     <Compile Include="Methods\Favorites\ListFavoritesCommand.cs" />
     <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
     <Compile Include="Methods\Favorites\TwitterFavorite.cs" />
+    <Compile Include="Methods\Friendship\FriendsIdsCommand.cs" />
+    <Compile Include="Methods\Friendship\UserIdCollection.cs" />
+    <Compile Include="Methods\Friendship\FollowersIdsCommand.cs" />
+    <Compile Include="Methods\Friendship\UsersIdsOptions.cs" />
     <Compile Include="Methods\Friendship\CreateFriendshipCommand.cs" />
     <Compile Include="Methods\Friendship\CreateFriendshipOptions.cs" />
     <Compile Include="Methods\Friendship\TwitterFriendship.cs" />

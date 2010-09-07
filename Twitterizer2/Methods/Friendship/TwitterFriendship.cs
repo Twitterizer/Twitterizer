@@ -390,5 +390,71 @@ namespace Twitterizer
         }
 
         #endregion
+
+        #region User IDs lists
+        
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is friends with.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<UserIdCollection> FriendsIds(OAuthTokens tokens, UsersIdsOptions options)
+        {
+            Commands.FriendsIdsCommand command = new Commands.FriendsIdsCommand(tokens, options);
+            TwitterResponse<UserIdCollection> result = Core.CommandPerformer<UserIdCollection>.PerformAction(command);
+
+            if (result.ResponseObject != null)
+                result.ResponseObject.Command = command;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is friends with.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<UserIdCollection> FriendsIds(OAuthTokens tokens)
+        {
+            return FriendsIds(tokens, null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is following.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<UserIdCollection> FollowersIds(OAuthTokens tokens, UsersIdsOptions options)
+        {
+            Commands.FollowersIdsCommand command = new Commands.FollowersIdsCommand(tokens, options);
+            TwitterResponse<UserIdCollection> result = Core.CommandPerformer<UserIdCollection>.PerformAction(command);
+
+            if (result.ResponseObject != null)
+                result.ResponseObject.Command = command;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is following.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<UserIdCollection> FollowersIds(OAuthTokens tokens)
+        {
+            return FollowersIds(tokens, null);
+        }
+
+        #endregion
     }
 }
