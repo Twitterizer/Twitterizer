@@ -51,7 +51,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="callbackAddress">The callback address.</param>
+        /// <param name="callbackAddress">The callback address. For PIN-based authentication "oob" should be supplied.</param>
         /// <returns></returns>
         public static OAuthTokenResponse GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress)
         {
@@ -63,7 +63,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="consumerKey">The consumer key.</param>
         /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="callbackAddress">Address of the callback.</param>
+        /// <param name="callbackAddress">The callback address. For PIN-based authentication "oob" should be supplied.</param>
         /// <param name="proxy">The proxy.</param>
         /// <returns>
         /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
