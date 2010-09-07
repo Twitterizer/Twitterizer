@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterListCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="UserIdCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,20 +28,16 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
+// <author>Edgardo Vega</author>
 // <summary>The twitter list collection class.</summary>
 //-----------------------------------------------------------------------
-
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-
 namespace Twitterizer
 {
     using System;
     using Twitterizer.Core;
     using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
-    using System.Diagnostics;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// The twitter list collection class.
