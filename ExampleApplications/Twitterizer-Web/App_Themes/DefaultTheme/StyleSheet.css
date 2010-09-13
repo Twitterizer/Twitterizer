@@ -103,3 +103,27 @@ a.Title
 {
     text-decoration: none;
 }
+
+div.codesample
+{
+    padding: 8px 8px;
+    margin: 16px 8px;
+    border: 1px solid #E8E8E8;
+}
+
+.ResultLabelSuccess
+.ResultLabelFailed
+{
+    margin-left: 16px;
+    font-weight: bold;
+}
+
+.ResultLabelFailed
+{
+    color:Red;
+}
+
+.ResultLabelSuccess
+{
+    color:Green;
+}

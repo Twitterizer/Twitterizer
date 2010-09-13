@@ -41,52 +41,16 @@ public partial class _Default : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!this.IsPostBack)
+        if (!IsPostBack)
         {
-            this.Trace.Write("Start TwitterUser.GetHomeTimeline");
-            this.HomePageStatuses = TwitterTimeline.HomeTimeline(Master.Tokens);
-            this.Trace.Write("End TwitterUser.GetHomeTimeline");
-            this.DataBind();
-
-            ViewState.Add("homePageStatuses", this.HomePageStatuses);
-        }
-        else
-        {
-            this.HomePageStatuses = ViewState["homePageStatuses"] as TwitterStatusCollection;
+            ConsumerKeyTextBox.Text = Session["consumerkey"] as string ?? string.Empty;
+            ConsumerSecretTextBox.Text = Session["consumersecret"] as string ?? string.Empty;
         }
     }
 
-    protected void NextPageLinkButton_Click(object sender, EventArgs e)
+    protected void SaveConsumerTokenButton_Click(object sender, EventArgs e)
     {
-        this.HomePageStatuses = this.HomePageStatuses.NextPage();
-        ViewState["homePageStatuses"] = this.HomePageStatuses;
-        this.DataBind();
-    }
-
-    protected void UpdateButton_Click(object sender, EventArgs e)
-    {
-        if (string.IsNullOrEmpty(this.UpdateTextBox.Text))
-        {
-            StatusUpdateLabel.Text = "You have to enter something first.<br/>";
-            return;
-        }
-
-        if (this.UpdateTextBox.Text.Length > 140)
-        {
-            StatusUpdateLabel.Text = "Your tweet is too long.<br/>";
-            return;
-        }
-
-        if (TwitterStatus.Update(this.Master.Tokens, this.UpdateTextBox.Text) != null)
-        {
-            StatusUpdateLabel.Text = "Your tweet has been posted successfully.<br/>";
-
-            this.HomePageStatuses = TwitterTimeline.HomeTimeline(Master.Tokens);
-            this.DataBind();
-        }
-        else
-        {
-            StatusUpdateLabel.Text = "Your tweet could not be posted.";
-        }
+        Session["consumerkey"] = ConsumerKeyTextBox.Text.Trim();
+        Session["consumersecret"] = ConsumerSecretTextBox.Text.Trim();
     }
 }

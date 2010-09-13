@@ -40,72 +40,8 @@ namespace Twitterizer.ExampleWeb
 
     public partial class MasterPage : System.Web.UI.MasterPage
     {
-        /// <summary>
-        /// Gets the tokens.
-        /// </summary>
-        /// <value>The tokens.</value>
-        public OAuthTokens Tokens
-        {
-            get
-            {
-                OAuthTokens tokens = Session["OAuthTokens"] as OAuthTokens;
-
-                if (tokens == null)
-                {
-                    Response.Redirect("~/authenticate/", true);
-                }
-
-                return tokens;
-            }
-        }
-
-        /// <summary>
-        /// Gets the user id.
-        /// </summary>
-        /// <value>The user id.</value>
-        public decimal UserId
-        {
-            get
-            {
-                if (Session["UserId"] != null)
-                    return (decimal)Session["UserId"];
-
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Gets the user's screen name
-        /// </summary>
-        /// <value>The screen name.</value>
-        public string ScreenName
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(Session["Username"] as string))
-                    return (string)Session["Username"];
-
-                return string.Empty;
-            }
-        }
-
-        public string LinkifyText(string text)
-        {
-            string pathToUserPage = string.Format("{0}/user.aspx", Request.Path);
-
-            text = System.Text.RegularExpressions.Regex.Replace(text, @"@([^ ]+)", string.Format(@"@<a href=""{0}?username=$1"" ref=""nofollow"" target=""_blank"">$1</a>", pathToUserPage));
-            text = System.Text.RegularExpressions.Regex.Replace(text, @"(?<addr>http://[^ ]+|www\.[^ ]+)", @"<a href=""${addr}"" ref=""nofollow"" target=""_blank"">$1</a>");
-
-            return text;
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["OAuthTokens"] != null)
-            {
-                TwitterRateLimitStatus status = TwitterRateLimitStatus.GetStatus(this.Tokens);
-                this.RemainingRequestsLabel.Text = string.Format("{0} requests remaining.", status.RemainingHits);
-            }
         }
     }
 }

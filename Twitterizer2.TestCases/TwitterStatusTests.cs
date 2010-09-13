@@ -80,5 +80,14 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(response.ResponseObject);
 
         }
+
+        [Test]
+        public static void UpdateWithPercentEnding()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<TwitterStatus> response = TwitterStatus.Update(tokens, "See this? This would break Hammock ... (#twitterizer wins) %%%");
+            Assert.IsNotNull(response.ResponseObject);
+        }
     }
 }

@@ -4,34 +4,36 @@
 <%@ MasterType TypeName="Twitterizer.ExampleWeb.MasterPage" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageBodyContentPlaceHolder">
     <h2>
-        What's Happening?</h2>
-    <div style="width: 750px;">
-        <asp:Label runat="server" ID="StatusUpdateLabel" />
-        <asp:TextBox runat="server" ID="UpdateTextBox" TextMode="MultiLine" Rows="2" Columns="90" />
-        <br />
-        <asp:Button ID="UpdateButton" runat="server" Text="Tweet" Style="float: right; height: 26px;"
-            OnClick="UpdateButton_Click" /></div>
-    <h2>
         Home</h2>
-    <asp:DataList runat="server" ID="homeDataList" DataSource='<%# HomePageStatuses %>'
-        EnableViewState="false">
-        <ItemTemplate>
-            <a href="user.aspx?id=<%# Eval("User.Id") %>">
-                <asp:Image runat="server" ImageUrl='<%# Eval("User.ProfileImageLocation") %>' CssClass="ProfilePictureSmall"
-                    Style="float: left; padding: 8px 8px 8px 8px;" /></a>
-            <div style="font-size: smaller;">
-                <%# string.Format("{0:D} {0:t}", Eval("CreatedDate")) %></div>
-            <asp:Literal runat="server" Visible='<%# Eval("RetweetedStatus") != null %>'>
-                <span style="background-image: url(http://s.twimg.com/a/1270236195/images/sprite-icons.png);
-                    background-position: -128px -64px; background-repeat: no-repeat; display: inline-block;
-                    height: 14px; position: relative; top: 2px; width: 18px;"></span>
-            </asp:Literal>
-            <a href="user.aspx?id=<%# Eval("User.Id") %>">
-                <%# Eval("User.ScreenName") %></a>&nbsp;<%# this.Master.LinkifyText((string)Eval("Text"))%><br />
-            <div style="font-size: smaller;">
-                via
-                <%# Eval("Source") %></div>
-        </ItemTemplate>
-    </asp:DataList>
-    <asp:LinkButton runat="server" ID="NextPageLinkButton" Text="Next Page" OnClick="NextPageLinkButton_Click" />
+    This site will provide you with an overview of the OAuth process, as it applies
+    to Twitterizer, and give you a few examples of how you can use Twitterizer to guide
+    your users through the authorization/authentication process.
+    <br />
+    <br />
+    The process, in extremely simple terms, progresses as follows:<br />
+    <ol>
+        <li>Your application obtains a &quot;request token.&quot; This token is discarded at
+            the end of the process. </li>
+        <li>The user leaves your site and visits the authentication url. This will probably
+            be done through a response.redirect, but there are a few options for this.</li>
+        <li>The user arrives back at your site at a callback url that your application provides
+            in step 1.</li>
+        <li>Your application exchanges the request token for an access token.</li>
+    </ol>
+    <p>
+        In order to execute any examples, we&#39;ll need your consumer token:<br />
+        Consumer Key: <asp:TextBox ID="ConsumerKeyTextBox" runat="server" Width="259px"></asp:TextBox>
+        <br />
+        Consumer Secret: <asp:TextBox ID="ConsumerSecretTextBox" runat="server" Width="259px"></asp:TextBox>
+        <asp:Button ID="SaveConsumerTokenButton" runat="server" Text="Save" 
+            onclick="SaveConsumerTokenButton_Click" />
+    </p>
+    <p>
+        You should NEVER give these values out. In fact, I highly suggest you inspect 
+        the source code of this example website before you provide your token and run 
+        any examples. You don&#39;t know who I am!</p>
+    <p>
+        If you click on an example link and are given a 401 exception, come back here 
+        and double check your consumer token value.</p>
+    
 </asp:Content>
