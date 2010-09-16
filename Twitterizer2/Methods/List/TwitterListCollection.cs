@@ -84,6 +84,10 @@ namespace Twitterizer
         {
             CursorPagedCommand<TwitterListCollection> newCommand =
                 (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
+
+            if (newCommand.Cursor == 0)
+                return null;
+            
             newCommand.Cursor = this.NextCursor;
 
             return CommandPerformer<TwitterListCollection>.PerformAction(newCommand);
@@ -98,6 +102,10 @@ namespace Twitterizer
         {
             CursorPagedCommand<TwitterListCollection> newCommand =
                 (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
+            
+            if (newCommand.Cursor == 0)
+                return null;
+
             newCommand.Cursor = this.PreviousCursor;
 
             return Core.CommandPerformer<TwitterListCollection>.PerformAction(newCommand);

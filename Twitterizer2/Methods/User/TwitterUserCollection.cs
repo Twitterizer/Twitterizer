@@ -80,10 +80,19 @@ namespace Twitterizer
         /// <value>The next page.</value>
         public TwitterResponse<TwitterUserCollection> NextPage()
         {
+            if (this.CursorPagedCommand == null && this.PagedCommand == null)
+            {
+                throw new System.NotSupportedException("Paging is not supported for this API call.");
+            }
+
             if (this.PagedCommand != null)
             {
+                if (this.PagedCommand.Page <= 0)
+                    return null;
+
                 PagedCommand<TwitterUserCollection> newCommand =
                     (PagedCommand<TwitterUserCollection>)this.PagedCommand.Clone();
+
                 newCommand.Page += 1;
 
                 TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
@@ -93,21 +102,25 @@ namespace Twitterizer
                 
                 return result;
             }
-            else if (this.CursorPagedCommand != null)
-            {
-                CursorPagedCommand<TwitterUserCollection> newCommand =
-                    (CursorPagedCommand<TwitterUserCollection>)this.CursorPagedCommand.Clone();
-                newCommand.Cursor = this.NextCursor;
 
-                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                if (result.ResponseObject != null)
-                    result.ResponseObject.CursorPagedCommand = newCommand;
-                return result;
-            }
-            else
+
+            CursorPagedCommand<TwitterUserCollection> newCursorCommand =
+                (CursorPagedCommand<TwitterUserCollection>) this.CursorPagedCommand.Clone();
+
+            if (newCursorCommand.Cursor == 0)
             {
-                throw new System.NotSupportedException("Paging is not supported for this API call.");
+                return null;
             }
+
+            newCursorCommand.Cursor = this.NextCursor;
+
+            TwitterResponse<TwitterUserCollection> cursorResult =
+                Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCursorCommand);
+
+            if (cursorResult.ResponseObject != null)
+                cursorResult.ResponseObject.CursorPagedCommand = newCursorCommand;
+
+            return cursorResult;
         }
 
         /// <summary>
@@ -117,36 +130,51 @@ namespace Twitterizer
         /// <value>The previous page.</value>
         public TwitterResponse<TwitterUserCollection> PreviousPage()
         {
-            if (this.PagedCommand != null)
-            {
-                PagedCommand<TwitterUserCollection> newCommand =
-                    (PagedCommand<TwitterUserCollection>)this.PagedCommand.Clone();
-                newCommand.Page -= 1;
-
-                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                
-                if (result.ResponseObject != null)
-                    result.ResponseObject.PagedCommand = newCommand;
-                
-                return result;
-            }
-            else if (this.CursorPagedCommand != null)
-            {
-                CursorPagedCommand<TwitterUserCollection> newCommand =
-                    (CursorPagedCommand<TwitterUserCollection>)this.CursorPagedCommand.Clone();
-                newCommand.Cursor = this.PreviousCursor;
-
-                TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
-                
-                if (result.ResponseObject != null)
-                    result.ResponseObject.CursorPagedCommand = newCommand;
-                
-                return result;
-            }
-            else
+            if (this.CursorPagedCommand == null && this.PagedCommand == null)
             {
                 throw new System.NotSupportedException("Paging is not supported for this API call.");
             }
+
+            if (this.PagedCommand != null)
+            {
+                PagedCommand<TwitterUserCollection> newCommand =
+                    (PagedCommand<TwitterUserCollection>) this.PagedCommand.Clone();
+
+                if (newCommand.Page <= 0)
+                {
+                    return null;
+                }
+
+                newCommand.Page -= 1;
+
+                TwitterResponse<TwitterUserCollection> result =
+                    Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCommand);
+
+                if (result.ResponseObject != null)
+                    result.ResponseObject.PagedCommand = newCommand;
+
+                return result;
+            }
+
+
+            CursorPagedCommand<TwitterUserCollection> newCursorCommand =
+                (CursorPagedCommand<TwitterUserCollection>) this.CursorPagedCommand.Clone();
+
+            if (newCursorCommand.Cursor <= 0)
+            {
+                return null;
+            }
+
+            newCursorCommand.Cursor = this.PreviousCursor;
+
+            TwitterResponse<TwitterUserCollection> cursorResult =
+                Core.CommandPerformer<TwitterUserCollection>.PerformAction(newCursorCommand);
+
+            if (cursorResult.ResponseObject != null)
+                cursorResult.ResponseObject.CursorPagedCommand = newCursorCommand;
+
+            return cursorResult;
+
         }
 
         /// <summary>

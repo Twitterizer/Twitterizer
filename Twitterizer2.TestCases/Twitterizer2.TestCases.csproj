@@ -122,6 +122,7 @@
   <ItemGroup>
     <None Include="TestSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
