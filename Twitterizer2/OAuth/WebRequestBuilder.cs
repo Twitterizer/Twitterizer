@@ -336,13 +336,6 @@ namespace Twitterizer
                                        where !SecretParameters.Contains(p.Key)
                                        select p);
 
-            var baseStringParameters =
-                (from p in this.Parameters
-                 where !(p.Key.EndsWith("_secret", StringComparison.OrdinalIgnoreCase) &&
-                         p.Key.StartsWith("oauth_", StringComparison.OrdinalIgnoreCase) &&
-                         !p.Key.EndsWith("_verifier", StringComparison.OrdinalIgnoreCase))
-                 select p);
-
             Uri urlForSigning = this.RequestUri;
 
             // Create the base string. This is the string that will be hashed for the signature.
@@ -351,7 +344,7 @@ namespace Twitterizer
                 "{0}&{1}&{2}",
                 this.Verb.ToString().ToUpper(CultureInfo.InvariantCulture),
                 UrlEncode(NormalizeUrl(urlForSigning)),
-                UrlEncode(baseStringParameters));
+                UrlEncode(nonSecretParameters));
 
             // Create our hash key (you might say this is a password)
             string key = string.Format(
