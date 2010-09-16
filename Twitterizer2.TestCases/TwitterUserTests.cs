@@ -1,4 +1,6 @@
-﻿namespace Twitterizer2.TestCases
+﻿using System.Collections.ObjectModel;
+
+namespace Twitterizer2.TestCases
 {
     using NUnit.Framework;
     using Twitterizer;
@@ -63,6 +65,28 @@
 
             var result = TwitterUser.Lookup(tokens, options);
 
+            Assert.That(result.Result == RequestResult.Success);
+            Assert.IsNotNull(result.ResponseObject);
+        }
+
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Test]
+        public static void LookupUsersById()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+
+
+            Collection<decimal> userIds = new Collection<decimal>
+                                              {
+                                                  14725805, // digitallyborn
+                                                  16144513, // twit_er_izer
+                                                  6253282 // twitterapi
+                                              };
+            
+            var result = TwitterUser.Lookup(tokens, new LookupUsersOptions { UserIds = userIds });
+            
             Assert.That(result.Result == RequestResult.Success);
             Assert.IsNotNull(result.ResponseObject);
         }

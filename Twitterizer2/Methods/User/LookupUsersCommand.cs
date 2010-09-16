@@ -78,7 +78,8 @@ namespace Twitterizer.Commands
             }
 
             if (options.UserIds.Count > 0)
-                this.RequestParameters.Add("user_id", string.Join(",", options.UserIds.Cast<string>().ToArray()));
+                this.RequestParameters.Add("user_id",
+                                           string.Join(",", options.UserIds.Where(id => id > 0).Select(id => id.ToString()).ToArray()));
 
             if (options.ScreenNames.Count > 0)
                 this.RequestParameters.Add("screen_name", string.Join(",", options.ScreenNames.ToArray()));
