@@ -110,7 +110,7 @@ namespace Twitterizer
         public TwitterBoundingBox BoundingBox { get; set; }
 
         /// <summary>
-        /// Lookups the specified latitude.
+        /// Retrieves a place based on the specified coordinates.
         /// </summary>
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
@@ -124,7 +124,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Lookups the specified latitude.
+        /// Retrieves a place based on the specified coordinates.
         /// </summary>
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
