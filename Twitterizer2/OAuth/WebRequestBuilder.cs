@@ -120,7 +120,8 @@ namespace Twitterizer
                                                               "oauth_timestamp",
                                                               "oauth_signature_method",
                                                               "oauth_consumer_key",
-                                                              "oauth_token"
+                                                              "oauth_token",
+                                                              "oauth_verifier"
                                                               // Leave signature omitted from the list, it is added manually
                                                               // "oauth_signature",
                                                           };
