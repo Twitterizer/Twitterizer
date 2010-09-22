@@ -370,6 +370,9 @@
     <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterUrlEntity.cs">
       <Link>TwitterUrlEntity.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\RelatedResultsCommand.cs">
+      <Link>RelatedResultsCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\RetweetCommand.cs">
       <Link>RetweetCommand.cs</Link>
     </Compile>
@@ -390,6 +393,12 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\StatusUpdateOptions.cs">
       <Link>StatusUpdateOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\TwitterRelatedTweets.cs">
+      <Link>TwitterRelatedTweets.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\TwitterRelatedTweetsCollection.cs">
+      <Link>TwitterRelatedTweetsCollection.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\TwitterStatus.cs">
       <Link>TwitterStatus.cs</Link>

@@ -34,10 +34,11 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer.Core;
-    using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Twitterizer.Core;
 
     /// <summary>
     /// The twitter list collection class.
@@ -138,5 +139,11 @@ namespace Twitterizer
 
             return result;
         }
+
+        /// <summary>
+        /// Gets or sets the annotations.
+        /// </summary>
+        /// <value>The annotations.</value>
+        public Dictionary<string, string> Annotations { get; set; }
     }
 }

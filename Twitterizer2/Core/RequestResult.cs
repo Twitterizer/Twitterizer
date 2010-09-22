@@ -80,6 +80,11 @@ namespace Twitterizer
         TwitterIsOverloaded,
 
         /// <summary>
+        /// The request failed due to a connection issue or timeout.
+        /// </summary>
+        ConnectionFailure,
+
+        /// <summary>
         /// Something unexpected happened. See the error message for additional information.
         /// </summary>
         Unknown

@@ -89,5 +89,18 @@ namespace Twitterizer2.TestCases
             TwitterResponse<TwitterStatus> response = TwitterStatus.Update(tokens, "See this? This would break Hammock ... (#twitterizer wins) %%%");
             Assert.IsNotNull(response.ResponseObject);
         }
+
+        [Test]
+        public static void RelatedTweets()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<TwitterRelatedTweetsCollection> response =
+                TwitterStatus.RelatedResultsShow(tokens, 25166473830);
+
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotEmpty(response.ResponseObject);
+        }
     }
 }

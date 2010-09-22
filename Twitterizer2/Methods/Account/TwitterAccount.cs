@@ -31,6 +31,8 @@
 // <author>Ricky Smith</author>
 // <summary>The TwitterAccount class.</summary>
 //-----------------------------------------------------------------------
+using Twitterizer.Commands;
+
 namespace Twitterizer
 {
     /// <summary>

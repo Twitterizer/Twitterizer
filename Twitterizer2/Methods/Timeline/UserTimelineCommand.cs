@@ -58,7 +58,7 @@ namespace Twitterizer.Commands
                 throw new ArgumentException("You must supply either OAuth tokens or identify a user in the TimelineOptions class.");
             }
 
-            if (options != null && string.IsNullOrEmpty(options.ScreenName) && options.UserId <= 0)
+            if (options != null && tokens == null && string.IsNullOrEmpty(options.ScreenName) && options.UserId <= 0)
             {
                 throw new ArgumentException("You must specify a user's screen name or id for unauthorized requests.");
             }

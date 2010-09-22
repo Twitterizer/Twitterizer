@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="RelatedResultsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -26,26 +26,58 @@
 //  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
 //  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
-//  POSSIBILITY OF SUCH DAMAGE.
+//  POSSIBILITY OF SUCpH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <author>Edgardo Vega and Ricky Smith</author>
+// <summary>The related results command.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer.Commands
 {
     using System;
-    using System.Collections.ObjectModel;
-    using System.Xml.Serialization;
+    using System.Globalization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The base class for object collections.
+    /// The Related Results Command.
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
-    [Serializable]
-    public abstract class TwitterCollection<T> : Collection<T>
-        where T : class, ITwitterObject
+    [AuthorizedCommandAttribute]
+    internal sealed class RelatedResultsCommand : TwitterCommand<TwitterRelatedTweetsCollection>
     {
-        public System.Collections.Generic.Dictionary<string, string> Annotations { get; set; }
+        /// <summary>
+        /// The base address to the API method.
+        /// </summary>
+        private const string Path = "related_results/show/{0}.json";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RelatedResultsCommand"/> class.
+        /// </summary>
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        public RelatedResultsCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+            : base(
+                HTTPVerb.GET,
+                string.Format(CultureInfo.InvariantCulture, Path, statusId),
+                tokens,
+                options)
+        {
+            if (statusId <= 0)
+            {
+                throw new ArgumentException("Status ID is invalid", "statusId");
+            }
+
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
+        }
+
+        /// <summary>
+        /// Initializes the command.
+        /// </summary>
+        public override void Init()
+        {
+        }      
     }
 }

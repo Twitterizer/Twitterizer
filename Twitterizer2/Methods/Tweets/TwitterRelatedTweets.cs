@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterRelatedTweets.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,23 +29,49 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <summary>The related tweets object.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Core
+namespace Twitterizer
 {
     using System;
-    using System.Collections.ObjectModel;
-    using System.Xml.Serialization;
+    using System.Diagnostics;
+    using Newtonsoft.Json;
 
     /// <summary>
-    /// The base class for object collections.
+    /// The related tweets object. Represents the result from the related_results/show/:id.json endpoint.
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
+    /// <seealso cref="Twitterizer.Commands.RelatedResultsCommand"/>
+    [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
-    public abstract class TwitterCollection<T> : Collection<T>
-        where T : class, ITwitterObject
+    [DebuggerDisplay("{GroupName}/{ResultType}")]
+    public class TwitterRelatedTweets : Core.TwitterObject
     {
-        public System.Collections.Generic.Dictionary<string, string> Annotations { get; set; }
+        /// <summary>
+        /// Gets or sets the results.
+        /// </summary>
+        /// <value>The results.</value>
+        [JsonProperty(PropertyName = "results")]
+        public TwitterStatusCollection Results { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the result.
+        /// </summary>
+        /// <value>The type of the result.</value>
+        [JsonProperty(PropertyName = "resultType")]
+        public string ResultType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the group.
+        /// </summary>
+        /// <value>The name of the group.</value>
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the score.
+        /// </summary>
+        /// <value>The score.</value>
+        [JsonProperty(PropertyName = "score")]
+        public decimal Score { get; set; }
     }
 }

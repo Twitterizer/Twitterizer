@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterRelatedTweetsCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,23 +29,15 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <summary>The collection of TwitterRelatedTweets objects.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer.Core
+namespace Twitterizer
 {
     using System;
-    using System.Collections.ObjectModel;
-    using System.Xml.Serialization;
-
-    /// <summary>
-    /// The base class for object collections.
-    /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
+    using Twitterizer.Core;
+    
     [Serializable]
-    public abstract class TwitterCollection<T> : Collection<T>
-        where T : class, ITwitterObject
+    public class TwitterRelatedTweetsCollection : TwitterCollection<TwitterRelatedTweets>, ITwitterObject
     {
-        public System.Collections.Generic.Dictionary<string, string> Annotations { get; set; }
     }
 }

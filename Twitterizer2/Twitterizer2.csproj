@@ -179,8 +179,11 @@
     <Compile Include="Methods\Tweets\Entities\TwitterHashTagEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterMentionEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterUrlEntity.cs" />
+    <Compile Include="Methods\Tweets\RelatedResultsCommand.cs" />
+    <Compile Include="Methods\Tweets\TwitterRelatedTweets.cs" />
     <Compile Include="Methods\Tweets\RetweetsOfMeOptions.cs" />
     <Compile Include="Methods\Tweets\RetweetsOptions.cs" />
+    <Compile Include="Methods\Tweets\TwitterRelatedTweetsCollection.cs" />
     <Compile Include="Methods\User\FollowersOptions.cs" />
     <Compile Include="Methods\User\FriendsCommand.cs" />
     <Compile Include="Methods\Timeline\FriendsTimelineCommand.cs" />

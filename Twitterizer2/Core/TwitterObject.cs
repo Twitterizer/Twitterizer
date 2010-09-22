@@ -33,8 +33,8 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer.Core
 {
-    using System.Xml.Serialization;
-    using Twitterizer;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     public delegate void TwitterAsyncCallback<T>(T result)
             where T : ITwitterObject;
@@ -54,5 +54,12 @@ namespace Twitterizer.Core
         /// The format that all twitter search api dates are in.
         /// </summary>
         protected const string SearchDateFormat = "ddd, dd MMM yyyy HH:mm:ss +zz00";
+
+        /// <summary>
+        /// Annotations are additional pieces of data, supplied by Twitter clients, in a non-structured dictionary.
+        /// </summary>
+        /// <value>The annotations.</value>
+        [JsonProperty(PropertyName = "annotations")]
+        public Dictionary<string, string> Annotations { get; set; }
     }
 }

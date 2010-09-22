@@ -42,7 +42,7 @@ namespace Twitterizer
     [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
     [DebuggerDisplay("{User.ScreenName}/{Text}")]
-    public class TwitterStatus : ITwitterObject
+    public class TwitterStatus : TwitterObject
     {
         #region Properties
         /// <summary>
@@ -347,6 +347,33 @@ namespace Twitterizer
         public TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens)
         {
             return Delete(tokens, this.Id, null);
+        }
+
+        /// <summary>
+        /// Shows Related Results of a tweet. Requires the id parameter of the tweet you are getting results for.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
+        public static TwitterResponse<TwitterRelatedTweetsCollection> RelatedResultsShow(OAuthTokens tokens, decimal statusId)
+        {
+            return CommandPerformer<TwitterRelatedTweetsCollection>.PerformAction(
+                new Commands.RelatedResultsCommand(tokens, statusId, null));
+        }
+
+
+        /// <summary>
+        /// Shows Related Results of a tweet. Requires the id parameter of the tweet you are getting results for.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
+        public static TwitterResponse<TwitterRelatedTweetsCollection> RelatedResultsShow(OAuthTokens tokens, decimal statusId, OptionalProperties options)
+        {
+            return CommandPerformer<TwitterRelatedTweetsCollection>.PerformAction(
+                new Commands.RelatedResultsCommand(tokens, statusId, options));
         }
     }
 }

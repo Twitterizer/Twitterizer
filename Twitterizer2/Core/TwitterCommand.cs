@@ -38,6 +38,7 @@ namespace Twitterizer.Core
     using System.Diagnostics;
     using System.Globalization;
     using System.Net;
+    using System.Linq;
     using System.Text;
     using System.Web;
 #if !LITE
@@ -236,6 +237,16 @@ namespace Twitterizer.Core
             {
                 Trace.TraceError(wex.Message);
 
+                if (new[]
+                        {
+                            WebExceptionStatus.Timeout, 
+                            WebExceptionStatus.ConnectFailure,
+                            WebExceptionStatus.ConnectionClosed
+                        }.Contains(wex.Status))
+                {
+                    twitterResponse.Result = RequestResult.ConnectionFailure;
+                }
+
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
                 HttpWebResponse exceptionResponse = wex.Response as HttpWebResponse;
 
@@ -245,9 +256,10 @@ namespace Twitterizer.Core
                 }
 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
-                twitterResponse.Content = Encoding.UTF8.GetString(responseData);
+                    twitterResponse.Content = Encoding.UTF8.GetString(responseData);
 
-                rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
+                    rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
+                
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);

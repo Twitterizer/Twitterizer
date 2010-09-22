@@ -19,7 +19,7 @@
             int pagenumber = 1;
             string firstStatusText = results[0].Text;
 
-            while (results != null && pagenumber < 3)
+            while (results != null && results.Count > 0)
             {
                 Assert.IsNotEmpty(results);
 
@@ -30,8 +30,6 @@
 
                 pagenumber++;
             }
-
-            Assert.That(pagenumber > 1);
         }
 
         [Test]
@@ -41,25 +39,25 @@
         public static void UserTimeline()
         {
             OAuthTokens tokens = Configuration.GetTokens();
-
-            TwitterStatusCollection results = TwitterTimeline.UserTimeline(tokens).ResponseObject;
-
             int pagenumber = 1;
-            string firstStatusText = results[0].Text;
 
-            while (results != null && pagenumber < 3)
+            TwitterResponse<TwitterStatusCollection> results = TwitterTimeline.UserTimeline(tokens,
+                                                                                            new UserTimelineOptions()
+                                                                                                {Count = 100});
+
+            string firstStatusText = results.ResponseObject[0].Text;
+
+            while (results.ResponseObject != null && results.ResponseObject.Count > 0 && results.RateLimiting.Remaining > 0)
             {
-                Assert.IsNotEmpty(results);
+                Assert.IsNotEmpty(results.ResponseObject);
 
                 if (pagenumber > 1)
-                    Assert.That(results[0].Text != firstStatusText);
+                    Assert.That(results.ResponseObject[0].Text != firstStatusText);
 
-                results = results.NextPage().ResponseObject;
+                results = results.ResponseObject.NextPage();
 
                 pagenumber++;
             }
-
-            Assert.That(pagenumber > 1);
         }
 
         [Test]

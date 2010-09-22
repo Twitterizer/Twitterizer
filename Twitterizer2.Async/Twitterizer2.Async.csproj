@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterAccountAsync.cs" />
     <Compile Include="TwitterListAsync.cs" />
+    <Compile Include="TwitterPlaceAsync.cs" />
     <Compile Include="TwitterSearchAsync.cs" />
     <Compile Include="TwitterStatusAsync.cs" />
     <Compile Include="TwitterTimelineAsync.cs" />

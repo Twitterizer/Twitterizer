@@ -1,4 +1,6 @@
-﻿namespace Twitterizer2.TestCases
+﻿using System;
+
+namespace Twitterizer2.TestCases
 {
     using Twitterizer;
     using NUnit.Framework;
@@ -23,11 +25,18 @@
         [Test]
         public static void UserTimeline()
         {
-            TwitterStatusCollection timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens()).ResponseObject;
+IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
+    Configuration.GetTokens(),
+    new UserTimelineOptions(),
+    new TimeSpan(0, 2, 0),
+    result =>
+        {
+            TwitterStatusCollection timeline = result.ResponseObject;
             Assert.IsNotNull(timeline);
             Assert.IsNotEmpty(timeline);
 
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            Assert.That(timeline.Count > 0 && timeline.Count <= 20,
+                        "Timeline should contain between 0 and 20 items.");
 
             UserTimelineOptions User_Options = new UserTimelineOptions();
             User_Options.ScreenName = "twitterapi";
@@ -38,6 +47,9 @@
 
             timeline = TwitterTimeline.UserTimeline(User_Options).ResponseObject;
             Assert.That(timeline.Count <= 8);
+        });
+
+            asyncResult.AsyncWaitHandle.WaitOne();
         }
 
         [Category("Read-Only")]
