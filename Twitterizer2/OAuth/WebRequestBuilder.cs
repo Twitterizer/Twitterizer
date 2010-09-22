@@ -96,7 +96,7 @@ namespace Twitterizer
         /// Gets or sets the oauth tokens.
         /// </summary>
         /// <value>The tokens.</value>
-        public OAuthTokens Tokens { get; set; }
+        public OAuthTokens Tokens { private get; set; }
 
         /// <summary>
         /// Gets or sets the proxy.
