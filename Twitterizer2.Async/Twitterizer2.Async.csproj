@@ -73,6 +73,7 @@
     <Compile Include="TwitterSearchAsync.cs" />
     <Compile Include="TwitterStatusAsync.cs" />
     <Compile Include="TwitterTimelineAsync.cs" />
+    <Compile Include="TwitterTrendsAsync.cs" />
     <Compile Include="TwitterUserAsync.cs" />
   </ItemGroup>
   <ItemGroup>
