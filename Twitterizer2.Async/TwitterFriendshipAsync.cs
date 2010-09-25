@@ -110,5 +110,94 @@ namespace Twitterizer
                 null);
         }
 
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is friends with.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult FriendsIds(OAuthTokens tokens, UsersIdsOptions options, TimeSpan timeout, Action<TwitterResponse<UserIdCollection>> function)
+        {
+            Func<OAuthTokens, UsersIdsOptions, TwitterResponse<UserIdCollection>> methodToCall = TwitterFriendship.FriendsIds;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is friends with.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult FriendsIds(OAuthTokens tokens, TimeSpan timeout, Action<TwitterResponse<UserIdCollection>> function)
+        {
+            Func<OAuthTokens, UsersIdsOptions, TwitterResponse<UserIdCollection>> methodToCall = TwitterFriendship.FriendsIds;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                null,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is following.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult FollowersIds(OAuthTokens tokens, UsersIdsOptions options, TimeSpan timeout, Action<TwitterResponse<UserIdCollection>> function)
+        {
+            Func<OAuthTokens, UsersIdsOptions, TwitterResponse<UserIdCollection>> methodToCall = TwitterFriendship.FollowersIds;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is following.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult FollowersIds(OAuthTokens tokens, TimeSpan timeout, Action<TwitterResponse<UserIdCollection>> function)
+        {
+            Func<OAuthTokens, UsersIdsOptions, TwitterResponse<UserIdCollection>> methodToCall = TwitterFriendship.FollowersIds;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                null,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
     }
 }

@@ -129,7 +129,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
         public static TwitterResponse<TwitterStatusCollection> PublicTimeline()
         {
-            return PublicTimeline(null);
+            return PublicTimeline((OAuthTokens)null);
         }
 
         /// <summary>
@@ -142,6 +142,18 @@ namespace Twitterizer
         public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OAuthTokens tokens)
         {
             return PublicTimeline(tokens, null);
+        }
+
+        /// <summary>
+        /// Gets the public timeline.
+        /// </summary>
+        /// <param name="options">The properties.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatusCollection"/>.
+        /// </returns>
+        public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OptionalProperties options)
+        {
+            return PublicTimeline(null, options);
         }
 
         /// <summary>

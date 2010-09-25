@@ -131,6 +131,28 @@ namespace Twitterizer
         }
 
         /// <summary>
+        /// Gets the public timeline.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult PublicTimeline(OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterStatusCollection>> function)
+        {
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterStatusCollection>> methodToCall = TwitterTimeline.PublicTimeline;
+
+            return methodToCall.BeginInvoke(
+                null,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
         /// Returns the 20 most recent retweets posted by the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
