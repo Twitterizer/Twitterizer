@@ -53,12 +53,12 @@ namespace Twitterizer.Entities
         /// Gets or sets the start index.
         /// </summary>
         /// <value>The start index.</value>
-        public long StartIndex { get; set; }
+        public int StartIndex { get; set; }
 
         /// <summary>
         /// Gets or sets the end index.
         /// </summary>
         /// <value>The end index.</value>
-        public long EndIndex { get; set; }
+        public int EndIndex { get; set; }
     }
 }

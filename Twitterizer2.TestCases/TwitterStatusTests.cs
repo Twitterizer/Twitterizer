@@ -1,6 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
+
+using System.Linq;
 using Twitterizer;
+using Twitterizer.Entities;
+
 using System.Diagnostics;
 
 namespace Twitterizer2.TestCases
@@ -101,6 +105,45 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotEmpty(response.ResponseObject);
+        }
+
+        [Test]
+        public static void DetectEntities()
+        {
+            // Get the public timeline
+            TwitterResponse<TwitterStatusCollection> timelineResult = TwitterTimeline.PublicTimeline();
+
+            // Get the first tweet with entities
+            TwitterStatus tweet = timelineResult.ResponseObject.Where(x => x.Entities != null && x.Entities.OfType<TwitterMentionEntity>().Count() > 0).First();
+            
+            // Make sure that we got the tweet successfully
+            Assert.IsNotNull(tweet);
+
+            // Get the hashtags
+            var hashTags = from entities in tweet.Entities.OfType<TwitterHashTagEntity>()
+                            select entities;
+
+            // Get the mentions (@screenname within the text)
+            var mentions = from entities in tweet.Entities.OfType<TwitterMentionEntity>()
+                            select entities;
+
+            // Get urls
+            var urls = from entities in tweet.Entities.OfType<TwitterUrlEntity>()
+                        select entities;
+
+            // Get the tweet text to be modified
+            string modifiedTweetText = tweet.Text;
+
+            // Loop through the mentions from the back of the text to the beginning (to retain the index)
+            foreach (TwitterMentionEntity mention in mentions.OrderBy(m => m.StartIndex).Reverse())
+            {
+                string linkText = string.Format("<a href=\"http://twitter.com/{0}\">@{0}</a>", mention.ScreenName);
+
+                modifiedTweetText = string.Concat(
+                    modifiedTweetText.Substring(0, mention.StartIndex),
+                    linkText,
+                    modifiedTweetText.Substring(mention.EndIndex));
+            }
         }
     }
 }

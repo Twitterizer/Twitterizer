@@ -11,13 +11,13 @@ namespace Twitterizer
         where T : Core.ITwitterObject
     {
         /// <summary>
-        /// Gets or sets the response object.
+        /// Gets or sets the object that represents the data returned by the request to Twitter.
         /// </summary>
         /// <value>The response object.</value>
         public T ResponseObject { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the result.
+        /// Gets or sets the result of the request.
         /// </summary>
         /// <value>The result.</value>
         public RequestResult Result { get; set; }
@@ -29,33 +29,33 @@ namespace Twitterizer
         public string RequestUrl { get; set; }
 
         /// <summary>
-        /// Gets the response body.
+        /// Gets the raw json or xml response provided by Twitter.
         /// </summary>
         /// <value>The response body.</value>
         public string Content { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the error message.
+        /// Gets or sets the error message returned by the Twitter.
         /// </summary>
         /// <value>The error message.</value>
         public string ErrorMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets the tokens.
+        /// Gets or sets the oauth tokens provided for the request.
         /// </summary>
         /// <value>The tokens.</value>
         internal OAuthTokens Tokens { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [response cached].
+        /// Gets or sets a value indicating whether the response was retrieved from a cache.
         /// </summary>
         /// <value><c>true</c> if [response cached]; otherwise, <c>false</c>.</value>
         public Boolean ResponseCached { get; set; }
 
         /// <summary>
-        /// Gets or sets the rate limiting.
+        /// Gets or sets the rate limiting details.
         /// </summary>
-        /// <value>The rate limiting.</value>
+        /// <value>The rate limiting object.</value>
         public RateLimiting RateLimiting { get; set; }
     }
 }

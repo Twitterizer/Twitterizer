@@ -150,11 +150,49 @@ namespace Twitterizer
         public Entities.TwitterEntityCollection Entities { get; set; }
 
         /// <summary>
-        /// Gets or sets the retweet count.
+        /// Gets or sets the retweet count string.
         /// </summary>
         /// <value>The retweet count.</value>
         [JsonProperty(PropertyName = "retweet_count")]
-        public int? RetweetCount { get; set; }
+        public string RetweetCountString { get; set; }
+
+        /// <summary>
+        /// Gets the retweet count.
+        /// </summary>
+        /// <value>The retweet count.</value>
+        public int? RetweetCount
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.RetweetCountString)) return null;
+
+                int parsedResult = 0;
+
+                if (
+                    this.RetweetCountString.EndsWith("+") &&
+                    !int.TryParse(this.RetweetCountString.Substring(0, this.RetweetCountString.Length - 1), out parsedResult)
+                    )
+                {
+                    return null;
+                }
+
+                return parsedResult;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating that the number of retweets exceeds the reported value in RetweetCount. For example, "more than 100"
+        /// </summary>
+        /// <value>The retweet count plus indicator.</value>
+        public bool? RetweetCountPlus
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.RetweetCountString)) return null;
+
+                return this.RetweetCountString.EndsWith("+");
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="TwitterStatus"/> is retweeted.

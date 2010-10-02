@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6d32fcd8-2036-42bf-a261-8e91ae45e8d3" revisionNumber="1">
+  <developerSampleDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <autoOutline />
+    </introduction>
+    <requirements>
+      All of the following examples assume that your application has already obtained an access token. If not, please visit <link xlink:href="008da98c-7349-46d6-b09e-af9f8906eb47" />
+    </requirements>
+    <section address="Basic">
+      <title>Basic Usage</title>
+      <content>
+        <para>In every method, you have the opportunity to evaluate the success of every request and, if there is a failure, determine how best to proceed.</para>
+
+        <code language="cs">
+          TwitterResponse&lt;TwitterUser&gt; userResponse = TwitterUser.Show(tokens, &quot;twitterapi&quot;);
+          if (userResponse.Result == RequestResult.Success)
+          {
+          	DisplayUserDetails(userResponse.ResponseObject);
+          }
+          else
+          {
+          	LogErrorDetails(userResponse.RequestUrl, userResponse.ErrorMessage, userResponse.Content);
+          	DisplayErrorMessageToUser(userResponse.ErrorMessage);
+          }
+        </code>
+
+        <code language="vb">
+          Dim userResponse As TwitterResponse(Of TwitterUser) = TwitterUser.Show(tokens, &quot;twitterapi&quot;)
+          If (userResponse.Result = RequestResult.Success) Then
+          	DisplayUserDetails(userResponse.ResponseObject)
+          Else
+          	LogErrorDetails(userResponse.RequestUrl, userResponse.ErrorMessage, userResponse.Content)
+          	DisplayErrorMessageToUser(userResponse.ErrorMessage)
+          End If
+        </code>
+      </content>
+    </section>
+    <section address="GetUser">
+      <title>Getting a User's details.</title>
+      <content>
+        <code language="cs">
+        TwitterResponse&lt;TwitterUser&gt; userResponse = TwitterUser.Show(&quot;twitterapi&quot;);
+        </code>
+      </content>
+    </section>
+  </developerSampleDocument>
+</topic>

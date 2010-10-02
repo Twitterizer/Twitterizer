@@ -152,9 +152,9 @@ namespace Twitterizer.Entities
                     {
                         reader.Read();
                         reader.Read();
-                        entity.StartIndex = (long)reader.Value;
+                        entity.StartIndex = Convert.ToInt32((long)reader.Value);
                         reader.Read();
-                        entity.EndIndex = (long)reader.Value;
+                        entity.EndIndex = Convert.ToInt32((long)reader.Value);
                     }
 
                     if (reader.TokenType == JsonToken.EndObject && entity != null)
