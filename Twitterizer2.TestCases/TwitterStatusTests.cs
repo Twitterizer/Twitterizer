@@ -145,5 +145,27 @@ namespace Twitterizer2.TestCases
                     modifiedTweetText.Substring(mention.EndIndex));
             }
         }
+
+        [Test]
+        public static void GroupFavorites()
+        {
+            // Get the first list, from @twit_er_izer
+            TwitterResponse<TwitterStatusCollection> request1 = TwitterFavorite.List(new ListFavoritesOptions
+            {
+                UserNameOrId = "twit_er_izer"
+            });
+
+            // Get the second list, from @mschilling
+            TwitterResponse<TwitterStatusCollection> request2 = TwitterFavorite.List(new ListFavoritesOptions
+            {
+                UserNameOrId = "mschilling"
+            });
+
+            var combinedList = from t in request1.ResponseObject.Union(request2.ResponseObject)
+                               group t by t.Id into g
+                               select g.First();
+            
+            
+        }
     }
 }

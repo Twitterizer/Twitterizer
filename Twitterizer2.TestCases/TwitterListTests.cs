@@ -25,10 +25,10 @@ namespace Twitterizer2.TestCases
         public void GetStatuses()
         {
             ListStatusesOptions options = new ListStatusesOptions();
-            TwitterStatusCollection statuses = TwitterList.GetStatuses(Configuration.GetTokens(), userName, listName, options).ResponseObject;
+            TwitterResponse<TwitterStatusCollection> statuses = TwitterList.GetStatuses(Configuration.GetTokens(), userName, listName, options);
 
             Assert.IsNotNull(statuses);
-            Assert.IsNotEmpty(statuses);
+            Assert.That(statuses.Result == RequestResult.Success);
         }
 
         [Test]
@@ -36,15 +36,26 @@ namespace Twitterizer2.TestCases
         [Category("REST")]
         public void GetMembers()
         {
-            TwitterUserCollection usersInTheList = TwitterList.GetMembers(Configuration.GetTokens(), userName, listName).ResponseObject;
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<TwitterList> list = TwitterList.GetList(tokens, "ghc", "ghc10-attendees");
+            TwitterResponse<TwitterUserCollection> usersInTheList = TwitterList.GetMembers(tokens, "ghc", "ghc10-attendees");
 
             Assert.IsNotNull(usersInTheList);
+            Assert.That(usersInTheList.Result == RequestResult.Success);
+
+            int countedMembers = usersInTheList.ResponseObject.Count;
 
             // Attempt to page through the results.
-            if (usersInTheList.Count == 20)
+            while (usersInTheList != null && usersInTheList.ResponseObject.Count > 0)
             {
-                usersInTheList = usersInTheList.NextPage().ResponseObject;
+                usersInTheList = usersInTheList.ResponseObject.NextPage();
+                
+                if (usersInTheList != null)
+                    countedMembers += usersInTheList.ResponseObject.Count;
             }
+
+            Assert.That(countedMembers == list.ResponseObject.NumberOfMembers);
         }
 
         [Test]

@@ -121,5 +121,15 @@ namespace Twitterizer
         {
             return List(tokens, null);
         }
+
+        /// <summary>
+        /// Returns the 20 most recent favorite statuses for the authenticating user or user specified by the ID parameter in the requested format.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <returns>The 20 most recent favorite statuses</returns>
+        public static TwitterResponse<TwitterStatusCollection> List(ListFavoritesOptions options)
+        {
+            return List(null, options);
+        }
     }
 }
