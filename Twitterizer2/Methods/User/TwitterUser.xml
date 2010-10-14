@@ -34,7 +34,7 @@
         OptionalProperties options = new OptionalProperties();
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(tokens, userId, options);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(tokens, userId, options);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
@@ -44,7 +44,7 @@
         Dim options As new OptionalProperties()
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(tokens, userId, options)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(tokens, userId, options)
       </code>
       <seealso cref="Twitterizer.OAuthTokens" />
       <seealso cref="Twitterizer.OptionalProperties" />
@@ -58,12 +58,12 @@
       <code lang="cs">
         // Declare the user's id variable
         decimal userId = 1;
-        
+
         // Declare the options object for configuration settings
         OptionalProperties options = new OptionalProperties();
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(userId, options);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(userId, options);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
@@ -73,7 +73,7 @@
         Dim options As new OptionalProperties()
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(userId, options)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(userId, options)
       </code>
     </example>
     <seealso cref="Twitterizer.OptionalProperties" />
@@ -88,14 +88,14 @@
         decimal userId = 1;
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(tokens, userId);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(tokens, userId);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
         Dim userId As decimal = 1
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(tokens, userId)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(tokens, userId)
       </code>
     </example>
     <seealso cref="Twitterizer.OAuthTokens" />
@@ -109,14 +109,14 @@
         decimal userId = 1;
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(userId);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(userId);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
         Dim userId As decimal = 1
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(userId)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(userId)
       </code>
     </example>
   </Show>
@@ -134,7 +134,7 @@
         OptionalProperties options = new OptionalProperties();
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(tokens, userName, options);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(tokens, userName, options);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
@@ -144,7 +144,7 @@
         Dim options As new OptionalProperties()
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(tokens, UserName, options)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(tokens, UserName, options)
       </code>
       <seealso cref="Twitterizer.OAuthTokens" />
       <seealso cref="Twitterizer.OptionalProperties" />
@@ -161,14 +161,14 @@
         string userName = "twit_er_izer";
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(tokens, userName);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(tokens, userName);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
         Dim UserName As String = "twit_er_izer"
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(tokens, UserName, options)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(tokens, UserName, options)
       </code>
       <seealso cref="Twitterizer.OAuthTokens" />
     </example>
@@ -186,7 +186,7 @@
         OptionalProperties options = new OptionalProperties();
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(userName, options);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(userName, options);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
@@ -196,7 +196,7 @@
         Dim options As new OptionalProperties()
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(UserName, options)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(UserName, options)
       </code>
       <seealso cref="Twitterizer.OptionalProperties" />
     </example>
@@ -211,14 +211,14 @@
         string userName = "twit_er_izer";
 
         // Declare our user variable and fetch the user's details
-        TwitterUser user = TwitterUser.Show(userName);
+        TwitterResponse&lt;TwitterUser&gt; user = TwitterUser.Show(userName);
       </code>
       <code lang="vb">
         '-- Declare the user's id variable
         Dim UserName As String = "twit_er_izer"
 
         '-- Declare our user variable and fetch the user's details
-        Dim user As TwitterUser = TwitterUser.Show(UserName)
+        Dim user As TwitterResponse(Of TwitterUser) = TwitterUser.Show(UserName)
       </code>
     </example>
   </Show>
@@ -254,7 +254,7 @@
         options.Page = 2;
 
         // Perform the search
-        TwitterUserCollection searchResults = TwitterUser.Search(oauthTokens, query, options);
+        TwitterResponse&lt;TwitterUserCollection&gt; searchResults = TwitterUser.Search(oauthTokens, query, options);
       </code>
       <code lang="vb">
         '-- Declare the search query
@@ -266,7 +266,7 @@
         options.Page = 2
 
         '-- Perform the search
-        Dim searchResults As TwitterUserCollection = TwitterUser.Search(oauthTokens, query, options)
+        Dim searchResults As TwitterResponse(Of TwitterUserCollection) = TwitterUser.Search(oauthTokens, query, options)
       </code>
     </example>
     
@@ -284,14 +284,14 @@
         string query = "from:twit_er_izer @twitterapi";
 
         // Perform the search
-        TwitterUserCollection searchResults = TwitterUser.Search(oauthTokens, query);
+        TwitterResponse&lt;TwitterUserCollection&gt; searchResults = TwitterUser.Search(oauthTokens, query);
       </code>
       <code lang="vb">
         '-- Declare the search query
         Dim Query As String = "from:twit_er_izer @twitterapi"
 
         '-- Perform the search
-        Dim searchResults As TwitterUserCollection = TwitterUser.Search(oauthTokens, query)
+        Dim searchResults As TwitterResponse(Of TwitterUserCollection) = TwitterUser.Search(oauthTokens, query)
       </code>
     </example>
 
