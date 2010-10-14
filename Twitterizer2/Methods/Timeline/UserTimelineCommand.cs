@@ -41,7 +41,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The user timeline command.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class UserTimelineCommand :
         PagedTimelineCommand<TwitterStatusCollection>
     {

@@ -42,7 +42,9 @@ namespace Twitterizer.Commands
     /// The Mentions Command class
     /// </summary>
     [AuthorizedCommandAttribute]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class MentionsCommand : PagedTimelineCommand<TwitterStatusCollection>
     {
         /// <summary>
@@ -64,7 +66,11 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            TimelineOptions options = (TimelineOptions)this.OptionalProperties;
+            TimelineOptions options = this.OptionalProperties as TimelineOptions;
+
+            if (options == null)
+                return;
+
             TimelineOptions.Init<TwitterStatusCollection>(this, options);
         }
 

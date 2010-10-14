@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The timeline options class. Provides optional parameters for timeline methods.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class TimelineOptions : OptionalProperties
     {
         /// <summary>
