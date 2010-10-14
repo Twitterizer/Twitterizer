@@ -54,6 +54,31 @@ namespace Twitterizer
         }
 
         /// <summary>
+        /// Returns a list of the 20 most recent direct messages sent to the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns>
+        /// A <see cref="TwitterDirectMessageCollection"/> instance.
+        /// </returns>
+        public static IAsyncResult DirectMessages(OAuthTokens tokens, DirectMessagesOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterDirectMessageCollection>> function)
+        {
+            Func<OAuthTokens, DirectMessagesOptions, TwitterResponse<TwitterDirectMessageCollection>> methodToCall = TwitterDirectMessage.DirectMessages;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
         /// Sends a new direct message to the specified user from the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>

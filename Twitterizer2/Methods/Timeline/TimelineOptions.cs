@@ -84,5 +84,33 @@ namespace Twitterizer
         /// </summary>
         /// <value><c>true</c> if [include retweets]; otherwise, <c>false</c>.</value>
         public bool IncludeRetweets { get; set; }
+
+        /// <summary>
+        /// Initializes the specified command.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="command">The command.</param>
+        /// <param name="options">The options.</param>
+        internal static void Init<T>(Core.TwitterCommand<T> command, TimelineOptions options)
+            where T : Core.ITwitterObject
+        {
+            if (options.Count > 0)
+                command.RequestParameters.Add("count", options.Count.ToString());
+
+            if (options.IncludeRetweets)
+                command.RequestParameters.Add("include_rts", "true");
+
+            if (options.MaxStatusId > 0)
+                command.RequestParameters.Add("max_id", options.MaxStatusId.ToString());
+
+            if (options.Page > 0)
+                command.RequestParameters.Add("page", options.Page.ToString());
+
+            if (options.SinceStatusId > 0)
+                command.RequestParameters.Add("since_id", options.SinceStatusId.ToString());
+
+            if (options.SkipUser)
+                command.RequestParameters.Add("trim_user", "true");
+        }
     }
 }

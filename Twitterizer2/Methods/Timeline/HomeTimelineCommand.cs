@@ -59,6 +59,15 @@ namespace Twitterizer.Commands
         }
 
         /// <summary>
+        /// Inits this instance.
+        /// </summary>
+        public override void Init()
+        {
+            TimelineOptions options = (TimelineOptions)this.OptionalProperties;
+            TimelineOptions.Init<TwitterStatusCollection>(this, options);
+        }
+
+        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns>A cloned command object.</returns>
