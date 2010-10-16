@@ -42,7 +42,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The create list command class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class SearchCommand : TwitterCommand<TwitterSearchResultCollection>
     {
         #region Constructors
@@ -77,7 +79,11 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+#if !SILVERLIGHT
             CultureInfo unitedStatesEnglishCulture = CultureInfo.GetCultureInfo("en-us");
+#else
+            CultureInfo unitedStatesEnglishCulture = CultureInfo.InvariantCulture;
+#endif
 
             this.RequestParameters.Add("q", this.Query);
 

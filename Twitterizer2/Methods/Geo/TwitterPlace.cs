@@ -42,7 +42,9 @@ namespace Twitterizer
     /// The twitter place class. Represents a place or area.
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [System.Diagnostics.DebuggerDisplay("{FullName} ({Id})")]
     public sealed class TwitterPlace : TwitterObject
     {

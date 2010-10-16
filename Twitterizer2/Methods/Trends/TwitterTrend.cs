@@ -41,7 +41,9 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterTrend class.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterTrend : TwitterObject
     {
         /// <summary>

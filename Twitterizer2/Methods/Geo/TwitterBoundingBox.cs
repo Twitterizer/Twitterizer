@@ -42,7 +42,9 @@ namespace Twitterizer
     /// The twitter bounding box class. Represents a series of latitude and longitude coordinates that represents an area.
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterBoundingBox : TwitterObject
     {
         /// <summary>

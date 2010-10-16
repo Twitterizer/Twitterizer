@@ -41,7 +41,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The command to obtain followers of a user.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class FollowersCommand :
         Core.CursorPagedCommand<TwitterUserCollection>
     {

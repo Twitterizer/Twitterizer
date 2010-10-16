@@ -42,7 +42,9 @@ namespace Twitterizer.Commands
     /// The Paged Timeline Command class. Provides common functionality for all of the paged timeline command classes.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal abstract class PagedTimelineCommand<T> : PagedCommand<TwitterStatusCollection>
         where T : ITwitterObject
     {

@@ -43,7 +43,9 @@ namespace Twitterizer
     /// <summary>
     /// The Twitter Search Result Collection class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterSearchResultCollection : Core.TwitterCollection<TwitterSearchResult>, ITwitterObject
     {
         /// <summary>

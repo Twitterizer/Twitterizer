@@ -40,7 +40,9 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterStatusCollection class.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterStatusCollection : TwitterCollection<TwitterStatus>, ITwitterObject
     {
         /// <summary>

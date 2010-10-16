@@ -54,7 +54,10 @@ using System.Security;
 [assembly: AssemblyVersion("2.3.0.*")]
 [assembly: AssemblyFileVersion("2.3.0.0")]
 
+#if !SILVERLIGHT
 [assembly: AllowPartiallyTrustedCallers]
+#endif
+
 [assembly: CLSCompliant(true)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

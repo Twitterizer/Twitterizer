@@ -43,7 +43,9 @@ namespace Twitterizer.Commands
     /// The Show User Command
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/get/users/show</remarks>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class ShowUserCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>

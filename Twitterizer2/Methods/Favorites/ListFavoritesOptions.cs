@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The list favorites options class. Provides a payload for optional parameters of the ListFavoritesCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class ListFavoritesOptions : OptionalProperties
     {
         /// <summary>

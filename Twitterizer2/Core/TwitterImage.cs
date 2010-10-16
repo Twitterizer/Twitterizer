@@ -6,7 +6,9 @@
     /// <summary>
     /// The image type that is being uploaded.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public enum TwitterImageImageType
     {
         /// <summary>
@@ -28,7 +30,9 @@
     /// <summary>
     /// Represents an image for uploading. Used to upload new profile and background images.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterImage
     {
         /// <summary>
@@ -99,7 +103,7 @@
                     newImage.ImageType = TwitterImageImageType.PNG;
                     break;
                 default:
-                    throw new ApplicationException("File is not a recognized type. Must be jpg, png, or gif.");
+                    throw new Exception("File is not a recognized type. Must be jpg, png, or gif.");
             }
 
             return newImage;

@@ -121,5 +121,27 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
 
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
+
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Test]
+        public static void SinceID()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterStatusCollection timeline = TwitterTimeline.HomeTimeline(tokens).ResponseObject;
+
+            Assert.IsNotNull(timeline);
+            Assert.IsNotEmpty(timeline);
+
+            decimal mostRecentId = timeline[0].Id;
+
+            TwitterStatusCollection timeline2 = TwitterTimeline.HomeTimeline(tokens, new TimelineOptions()
+            {
+                SinceStatusId = mostRecentId
+            }).ResponseObject;
+
+            
+        }
     }
 }

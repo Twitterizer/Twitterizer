@@ -39,7 +39,9 @@ namespace Twitterizer
     using System.Net;
 
     /// <include file='OptionalProperties.xml' path='OptionalProperties/OptionalProperties/*'/>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class OptionalProperties
     {
         /// <summary>
@@ -51,7 +53,7 @@ namespace Twitterizer
             this.UseSSL = false;
             this.APIBaseAddress = "http://api.twitter.com/1/";
 
-#if !LITE
+#if !LITE && !SILVERLIGHT
             this.CacheOutput = false;
             this.CacheTimespan = new TimeSpan(0, 5, 0);
             this.ReadConfigurationSettings();
@@ -67,10 +69,12 @@ namespace Twitterizer
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="APIBaseAddress"]/*'/>
         public string APIBaseAddress { get; set; }
 
+#if !SILVERLIGHT
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
         public WebProxy Proxy { get; set; }
+#endif
 
-#if !LITE
+#if !LITE && !SILVERLIGHT
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
         public bool CacheOutput { get; set; }
 

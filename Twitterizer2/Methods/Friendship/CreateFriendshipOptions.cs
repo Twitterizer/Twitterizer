@@ -38,7 +38,9 @@ namespace Twitterizer
     /// <summary>
     /// The Create Friendship Options class
     /// </summary>
-    [Serializable]
+#if !SILVERLIGHT
+    [System.Serializable]
+#endif
     public sealed class CreateFriendshipOptions : OptionalProperties
     {
          /// <summary>

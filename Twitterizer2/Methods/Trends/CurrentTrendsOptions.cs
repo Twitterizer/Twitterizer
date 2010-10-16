@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The current trends options class. Provides a payload for optional parameters for the CurrentTrendsCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class CurrentTrendsOptions : OptionalProperties
     {
         /// <summary>

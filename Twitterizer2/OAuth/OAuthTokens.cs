@@ -35,7 +35,9 @@
 namespace Twitterizer
 {
     /// <include file='OAuthTokens.xml' path='OAuthTokens/OAuthTokens/*'/>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class OAuthTokens
     {
         /// <summary>

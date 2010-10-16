@@ -40,7 +40,9 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterFavorite class. Provides static methods for manipulating favorite tweets.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public sealed class TwitterFavorite : TwitterObject
     {
         /// <summary>

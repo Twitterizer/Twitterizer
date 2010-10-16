@@ -41,7 +41,9 @@ namespace Twitterizer
     /// <summary>
     /// The Twitter Search Result class.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterSearchResult : Core.TwitterObject
     {

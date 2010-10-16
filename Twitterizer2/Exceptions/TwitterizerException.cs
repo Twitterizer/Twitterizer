@@ -35,6 +35,7 @@ namespace Twitterizer
     using System;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Runtime.Serialization;
     using System.Text;
@@ -44,7 +45,9 @@ namespace Twitterizer
     /// The Twitterizer Exception
     /// </summary>
     /// <seealso cref="System.Net.WebException"/>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterizerException : WebException
     {
         #region Constructors
@@ -85,9 +88,9 @@ namespace Twitterizer
 
                 byte[] responseData = ConversionUtility.ReadStream(responseStream);
 
-                this.ResponseBody = Encoding.UTF8.GetString(responseData);
+                this.ResponseBody = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
-#if DEBUG
+#if DEBUG && !SILVERLIGHT
                 System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
                 System.Diagnostics.Debug.Write(this.ResponseBody);
                 System.Diagnostics.Debug.WriteLine("----------- END -----------");
@@ -98,6 +101,7 @@ namespace Twitterizer
                 {
                     this.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData, null);
                 }
+#if !SILVERLIGHT
                 else if (response.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
                 {
                     // Try to deserialize as XML (specifically OAuth requests)
@@ -106,19 +110,8 @@ namespace Twitterizer
 
                     this.ErrorDetails = ds.Deserialize(new MemoryStream(responseData)) as TwitterErrorDetails;
                 }
+#endif
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
-        /// </summary>
-        /// <param name="info">The object that holds the serialized object data.</param>
-        /// <param name="context">The contextual information about the source or destination.</param>
-        protected TwitterizerException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
         }
         #endregion
 
@@ -189,7 +182,7 @@ namespace Twitterizer
                     reportBuilder.AppendFormat(
                         "{0} = \"{1}\"",
                         this.Response.Headers.AllKeys[i],
-                        this.Response.Headers[i]);
+                        this.Response.Headers[this.Response.Headers.AllKeys[i]]);
                 }
 
                 return reportBuilder.ToString();
@@ -204,20 +197,20 @@ namespace Twitterizer
         {
             this.RateLimiting = new RateLimiting();
 
-            if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Limit")))
+            if (!response.Headers.AllKeys.Contains("X-RateLimit-Limit"))
             {
-                this.RateLimiting.Total = int.Parse(response.Headers.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
+                this.RateLimiting.Total = int.Parse(response.Headers["X-RateLimit-Limit"], CultureInfo.InvariantCulture);
             }
 
-            if (!string.IsNullOrEmpty(response.Headers.Get("X-RateLimit-Remaining")))
+            if (!response.Headers.AllKeys.Contains("X-RateLimit-Remaining"))
             {
-                this.RateLimiting.Remaining = int.Parse(response.Headers.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
+                this.RateLimiting.Remaining = int.Parse(response.Headers["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
             {
                 this.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(response.Headers.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture));
+                    .AddSeconds(double.Parse(response.Headers["X-RateLimit-Reset"], CultureInfo.InvariantCulture));
             }
         }
     }

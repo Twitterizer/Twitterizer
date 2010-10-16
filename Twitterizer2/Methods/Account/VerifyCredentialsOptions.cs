@@ -38,7 +38,9 @@ namespace Twitterizer
     /// <summary>
     /// The Verify Credentials Options class. Provides a payload for optional parameters for the Verify Credentials Command.
     /// </summary>
-    [Serializable]
+#if !SILVERLIGHT
+    [System.Serializable]
+#endif
     public class VerifyCredentialsOptions : OptionalProperties
     {
         /// <summary>

@@ -39,7 +39,9 @@ namespace Twitterizer.Entities
     /// <summary>
     /// Represents mention of a user within a <see cref="TwitterStatus.Text"/> value.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterMentionEntity : TwitterEntity
     {
         /// <summary>

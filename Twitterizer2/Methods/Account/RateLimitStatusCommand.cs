@@ -39,7 +39,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The rate limit status command class.
     /// </summary>
-    [Serializable]
+#if !SILVERLIGHT
+    [System.Serializable]
+#endif
     internal sealed class RateLimitStatusCommand : TwitterCommand<TwitterRateLimitStatus>
     {
         /// <summary>

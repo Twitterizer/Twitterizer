@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The friends options class. Provides a payload for optional parameters of the <see cref="Twitterizer.Commands.FriendsCommand"/> class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class FriendsOptions : OptionalProperties
     {
         /// <summary>

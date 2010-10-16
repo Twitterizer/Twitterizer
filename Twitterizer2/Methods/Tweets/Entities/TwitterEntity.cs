@@ -39,7 +39,9 @@ namespace Twitterizer.Entities
     /// <summary>
     /// The base class for twitter entities that describe tweet text. 
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterEntity
     {
         /// <summary>

@@ -39,7 +39,9 @@ namespace Twitterizer.Entities
     /// <summary>
     /// Represents a pre-parsed hash tag in a <see cref="Twitterizer.TwitterStatus.Text"/> value.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterHashTagEntity : TwitterEntity
     {
         /// <summary>

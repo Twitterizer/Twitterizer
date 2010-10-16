@@ -44,7 +44,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The get lists command class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class GetListsCommand : CursorPagedCommand<TwitterListCollection>
     {
         /// <summary>

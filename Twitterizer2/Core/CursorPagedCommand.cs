@@ -40,7 +40,9 @@ namespace Twitterizer.Core
     /// </summary>
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
     /// <tocexclude />
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal abstract class CursorPagedCommand<T> : TwitterCommand<T>
         where T : ITwitterObject
     {

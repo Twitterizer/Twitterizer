@@ -40,7 +40,9 @@ namespace Twitterizer
     /// <summary>
     /// The Direct Message Collection class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterDirectMessageCollection : TwitterCollection<TwitterDirectMessage>, ITwitterObject
     {
     }

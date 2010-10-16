@@ -39,7 +39,9 @@ namespace Twitterizer
     /// <summary>
     /// The direct messages options class. Provides a payload for the <see cref="Twitterizer.Commands.DirectMessagesCommand"/> command.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public sealed class DirectMessagesOptions : OptionalProperties
     {
         /// <summary>

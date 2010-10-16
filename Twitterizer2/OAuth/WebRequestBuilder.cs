@@ -41,7 +41,9 @@ namespace Twitterizer
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
+#if !SILVERLIGHT
     using System.Web;
+#endif
 
     /// <summary>
     /// Enumeration of the supported HTTP verbs supported by the <see cref="Twitterizer.Core.CommandPerformer{T}"/>
@@ -98,11 +100,13 @@ namespace Twitterizer
         /// <value>The tokens.</value>
         public OAuthTokens Tokens { private get; set; }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Gets or sets the proxy.
         /// </summary>
         /// <value>The proxy.</value>
         public WebProxy Proxy { get; set; }
+#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the request will be signed with an OAuth authorization header.
@@ -197,7 +201,15 @@ namespace Twitterizer
         {
             HttpWebRequest request = PrepareRequest();
 
+#if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
+#else
+            IAsyncResult asyncResult = request.BeginGetRequestStream(param => {
+                param.AsyncWaitHandle.WaitOne();
+            }, null);
+
+            return (HttpWebResponse)request.EndGetResponse(asyncResult);
+#endif
         }
 
         /// <summary>
@@ -210,19 +222,23 @@ namespace Twitterizer
             AddQueryStringParametersToUri();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
+
+#if !SILVERLIGHT
             if (this.Proxy != null)
                 request.Proxy = Proxy;
+#endif
+
             request.Method = this.Verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetAssembly(typeof(WebRequestBuilder)).GetName().Version);
+            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            
+#if !SILVERLIGHT
             request.ServicePoint.Expect100Continue = false;
             
             if (this.UseOAuth)
             {
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
             }
-
-            //AddFormFieldValuesToRequest(request);
-            
+#endif
             return request;
         }
 
@@ -234,10 +250,13 @@ namespace Twitterizer
             StringBuilder requestParametersBuilder = new StringBuilder(this.RequestUri.AbsoluteUri);
             requestParametersBuilder.Append(this.RequestUri.Query.Length == 0 ? "?" : "&");
 
-            var fieldsToInclude = from p in this.Parameters
-                                  where !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
-                                        !SecretParameters.Contains(p.Key)
-                                  select p;
+
+            Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>((Dictionary<string, string>)this.Parameters.Select(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+                                         !SecretParameters.Contains(p.Key)));
+
+#if SILVERLIGHT
+            fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());
+#endif
 
             foreach (KeyValuePair<string, string> item in fieldsToInclude)
             {
@@ -356,8 +375,8 @@ namespace Twitterizer
 
 
             // Generate the hash
-            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(key));
-            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
+            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.Unicode.GetBytes(key));
+            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.Unicode.GetBytes(signatureBaseString));
             return Convert.ToBase64String(signatureBytes);
         }
 

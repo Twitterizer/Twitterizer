@@ -35,14 +35,18 @@ namespace Twitterizer
 {
     using System;
     using System.Diagnostics;
+#if !SILVERLIGHT
     using System.Drawing;
+#endif
     using Newtonsoft.Json;
     using Core;
 
     /// <include file='TwitterUser.xml' path='TwitterUser/TwitterUser/*'/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("@{ScreenName}")]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterUser : TwitterObject
     {
         #region Properties
@@ -232,6 +236,7 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "profile_background_color")]
         public string ProfileBackgroundColorString { get; set; }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Gets the color of the profile background.
         /// </summary>
@@ -243,7 +248,7 @@ namespace Twitterizer
                 return ConversionUtility.FromTwitterString(this.ProfileBackgroundColorString);
             }
         }
-
+#endif
         /// <summary>
         /// Gets or sets a value indicating whether this user's profile background image is tiled.
         /// </summary>
@@ -260,6 +265,7 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "profile_link_color")]
         public string ProfileLinkColorString { get; set; }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Gets the color of the profile link.
         /// </summary>
@@ -271,6 +277,7 @@ namespace Twitterizer
                 return ConversionUtility.FromTwitterString(this.ProfileLinkColorString);
             }
         }
+#endif
 
         /// <summary>
         /// Gets or sets the profile background image location.
@@ -286,6 +293,7 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "profile_text_color")]
         public string ProfileTextColorString { get; set; }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Gets the color of the profile text.
         /// </summary>
@@ -297,6 +305,7 @@ namespace Twitterizer
                 return ConversionUtility.FromTwitterString(this.ProfileTextColorString);
             }
         }
+#endif
 
         /// <summary>
         /// Gets or sets the profile image location.
@@ -312,6 +321,7 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "profile_sidebar_border_color")]
         public string ProfileSidebarBorderColorString { get; set; }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Gets the color of the profile sidebar border.
         /// </summary>
@@ -323,6 +333,7 @@ namespace Twitterizer
                 return ConversionUtility.FromTwitterString(this.ProfileSidebarBorderColorString);
             }
         }
+#endif
         #endregion
 
         #endregion

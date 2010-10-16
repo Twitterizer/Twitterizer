@@ -44,7 +44,9 @@ namespace Twitterizer
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [DebuggerDisplay("TwitterRelationship = {Source} -> {Target}")]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterRelationship : TwitterObject
     {
         /// <summary>

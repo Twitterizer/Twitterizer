@@ -65,7 +65,7 @@ namespace Twitterizer.Core
         public static T Deserialize(byte[] webResponseData, DeserializationHandler deserializationHandler)
         {
             T resultObject;
-#if DEBUG
+#if DEBUG && !SILVERLIGHT
             Debug.WriteLine("----------- RESPONSE -----------");
             Debug.WriteLine(Encoding.UTF8.GetString(webResponseData));
             Debug.WriteLine("----------- END -----------");
@@ -74,11 +74,11 @@ namespace Twitterizer.Core
             // Deserialize the results.
             if (deserializationHandler == null)
             {
-                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData));
+                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length));
             }
             else
             {
-                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData)));
+                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length)));
             }
 
             return resultObject;

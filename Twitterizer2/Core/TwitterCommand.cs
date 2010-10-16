@@ -40,8 +40,10 @@ namespace Twitterizer.Core
     using System.Net;
     using System.Linq;
     using System.Text;
+#if !SILVERLIGHT
     using System.Web;
-#if !LITE
+#endif
+#if !LITE && !SILVERLIGHT
     using System.Web.Caching;
 #endif
     using Twitterizer;
@@ -50,7 +52,9 @@ namespace Twitterizer.Core
     /// The base command class.
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal abstract class TwitterCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
@@ -162,7 +166,7 @@ namespace Twitterizer.Core
 
             }
 
-#if !LITE
+#if !LITE && !SILVERLIGHT
             // Variables and objects needed for caching
             StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
             if (this.Tokens != null)
@@ -178,12 +182,12 @@ namespace Twitterizer.Core
             foreach (KeyValuePair<string, string> item in this.RequestParameters)
             {
                 queryParameters.Add(item.Key, item.Value);
-#if !LITE
+#if !LITE && !SILVERLIGHT
                 cacheKeyBuilder.AppendFormat("|{0}={1}", item.Key, item.Value);
 #endif
             }
 
-#if !LITE
+#if !LITE && !SILVERLIGHT
             // Lookup the cached item and return it
             if (this.Verb == HTTPVerb.GET && this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
             {
@@ -213,8 +217,10 @@ namespace Twitterizer.Core
             {
                 WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens);
 
+#if !SILVERLIGHT
                 if (this.OptionalProperties != null)
                     requestBuilder.Proxy = this.OptionalProperties.Proxy;
+#endif
 
                 foreach (var item in queryParameters)
                 {
@@ -224,6 +230,9 @@ namespace Twitterizer.Core
                 HttpWebResponse response = requestBuilder.ExecuteRequest();
 
                 responseData = ConversionUtility.ReadStream(response.GetResponseStream());
+                twitterResponse.Content = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
+
+                twitterResponse.RequestUrl = requestBuilder.RequestUri.AbsoluteUri;
 
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
@@ -235,13 +244,13 @@ namespace Twitterizer.Core
             }
             catch (WebException wex)
             {
-                Trace.TraceError(wex.Message);
-
                 if (new[]
                         {
+#if !SILVERLIGHT
                             WebExceptionStatus.Timeout, 
-                            WebExceptionStatus.ConnectFailure,
-                            WebExceptionStatus.ConnectionClosed
+                            WebExceptionStatus.ConnectionClosed,
+#endif
+                            WebExceptionStatus.ConnectFailure
                         }.Contains(wex.Status))
                 {
                     twitterResponse.Result = RequestResult.ConnectionFailure;
@@ -256,20 +265,20 @@ namespace Twitterizer.Core
                 }
 
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
-                    twitterResponse.Content = Encoding.UTF8.GetString(responseData);
+                twitterResponse.Content = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
-                    rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
-                
+                rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
+
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
 
                 twitterResponse.RateLimiting = rateLimiting;
-                
+
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
-                
+
 
                 return twitterResponse;
             }
@@ -277,7 +286,7 @@ namespace Twitterizer.Core
             twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
 
 
-#if !LITE
+#if !LITE && !SILVERLIGHT
             this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
 #endif
 
@@ -351,25 +360,25 @@ namespace Twitterizer.Core
         {
             RateLimiting rateLimiting = new RateLimiting();
 
-            if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Limit")))
+            if (!responseHeaders.AllKeys.Contains("X-RateLimit-Limit"))
             {
-                rateLimiting.Total = int.Parse(responseHeaders.Get("X-RateLimit-Limit"), CultureInfo.InvariantCulture);
+                rateLimiting.Total = int.Parse(responseHeaders["X-RateLimit-Limit"], CultureInfo.InvariantCulture);
             }
 
-            if (!string.IsNullOrEmpty(responseHeaders.Get("X-RateLimit-Remaining")))
+            if (!responseHeaders.AllKeys.Contains("X-RateLimit-Remaining"))
             {
-                rateLimiting.Remaining = int.Parse(responseHeaders.Get("X-RateLimit-Remaining"), CultureInfo.InvariantCulture);
+                rateLimiting.Remaining = int.Parse(responseHeaders["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
             {
-                rateLimiting.ResetDate = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(responseHeaders.Get("X-RateLimit-Reset"), CultureInfo.InvariantCulture)), DateTimeKind.Utc));
+                rateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
+                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Local);
             }
             return rateLimiting;
         }
 
-#if !LITE
+#if !LITE && !SILVERLIGHT
         /// <summary>
         /// Adds the result to cache.
         /// </summary>

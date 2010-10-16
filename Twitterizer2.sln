@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Addon Assemblies", "Addon A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2lite", "Twitterizer2lite\Twitterizer2lite.csproj", "{C188B5C8-E361-4869-9800-CE23133F3B2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Silverlight", "Twitterizer2.Silverlight\Twitterizer2.Silverlight.csproj", "{73DA9258-F437-4948-A15E-F775B72A4923}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CCNET|Any CPU = CCNET|Any CPU
@@ -151,6 +153,21 @@ Global
 		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Release|x86-Only.ActiveCfg = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|Any CPU.Build.0 = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73DA9258-F437-4948-A15E-F775B72A4923}.Release|x86-Only.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

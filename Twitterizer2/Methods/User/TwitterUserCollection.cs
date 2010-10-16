@@ -40,7 +40,9 @@ namespace Twitterizer
     /// <summary>
     /// The TwitterUserCollection class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class TwitterUserCollection : TwitterCollection<TwitterUser>, ITwitterObject
     {
         /// <summary>

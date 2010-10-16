@@ -39,7 +39,9 @@ namespace Twitterizer.Core
     /// The IPagedCommand interface.
     /// </summary>
     /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal abstract class PagedCommand<T> : TwitterCommand<T>
         where T : ITwitterObject
     {

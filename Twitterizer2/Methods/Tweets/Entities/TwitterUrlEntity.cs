@@ -39,7 +39,9 @@ namespace Twitterizer.Entities
     /// <summary>
     /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterUrlEntity : TwitterEntity
     {
         /// <summary>

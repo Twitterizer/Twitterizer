@@ -35,8 +35,9 @@ namespace Twitterizer
 {
     using System;
     using Twitterizer.Core;
-    
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterRelatedTweetsCollection : TwitterCollection<TwitterRelatedTweets>, ITwitterObject
     {
     }

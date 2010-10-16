@@ -42,7 +42,9 @@ namespace Twitterizer.Core
     /// The base class for object collections.
     /// </summary>
     /// <typeparam name="T">The type of object stored in the collection.</typeparam>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public abstract class TwitterCollection<T> : Collection<T>
         where T : class, ITwitterObject
     {

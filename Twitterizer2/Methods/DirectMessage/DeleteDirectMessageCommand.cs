@@ -41,7 +41,9 @@ namespace Twitterizer.Commands
     /// The Delete Direct Message Command class.
     /// </summary>
     [AuthorizedCommand]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class DeleteDirectMessageCommand : TwitterCommand<TwitterDirectMessage>
     {
         #region Constructors

@@ -37,7 +37,9 @@ namespace Twitterizer.Commands
     using System;
     using Twitterizer.Core;
 
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal class UpdateProfileImageCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>

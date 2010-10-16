@@ -36,7 +36,9 @@ namespace Twitterizer
     /// <summary>
     /// The followers options class. Provides a payload for optional parameters of the FollowersCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class FollowersOptions : OptionalProperties
     {
         /// <summary>

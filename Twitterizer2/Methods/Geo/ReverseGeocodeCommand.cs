@@ -41,7 +41,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The reverse geocode command class. Performs a reverse geocode lookup.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal class ReverseGeocodeCommand : TwitterCommand<TwitterPlaceCollection>
     {
         /// <summary>

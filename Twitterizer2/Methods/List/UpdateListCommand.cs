@@ -42,7 +42,9 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The update list command class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class UpdateListCommand : TwitterCommand<TwitterList>
     {
         #region Constructors

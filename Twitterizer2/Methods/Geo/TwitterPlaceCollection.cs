@@ -41,7 +41,9 @@ namespace Twitterizer
     /// <summary>
     /// The Twitter Place Collection class. A collection of <see cref="TwitterPlace"/> objects.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [JsonConverter(typeof(TwitterPlaceCollection.Converter))]
     [JsonObject]
     public class TwitterPlaceCollection : TwitterCollection<TwitterPlace>, ITwitterObject

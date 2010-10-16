@@ -38,7 +38,9 @@ namespace Twitterizer
     /// <summary>
     /// Provides data about the user's current rate limiting.
     /// </summary>
-    [Serializable]
+#if !SILVERLIGHT
+    [System.Serializable]
+#endif
     public class RateLimiting
     {
         /// <summary>

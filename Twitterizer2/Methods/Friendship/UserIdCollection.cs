@@ -43,7 +43,9 @@ namespace Twitterizer
     /// <summary>
     /// The twitter list collection class.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class UserIdCollection : Collection<decimal>, ITwitterObject
     {
         /// <summary>

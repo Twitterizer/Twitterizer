@@ -45,7 +45,7 @@ namespace Twitterizer
         /// <returns>The assembly version string in the format (#.#.#.#)</returns>
         public static string AssemblyVersion()
         {
-            return System.Reflection.Assembly.GetAssembly(typeof(Information)).GetName().Version.ToString();
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

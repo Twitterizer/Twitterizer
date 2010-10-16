@@ -42,7 +42,9 @@ namespace Twitterizer
     /// <summary>
     /// The twitter list collection class.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterListCollection : Core.TwitterCollection<TwitterList>, ITwitterObject
     {
         /// <summary>

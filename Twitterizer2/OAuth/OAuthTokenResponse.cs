@@ -38,7 +38,9 @@ namespace Twitterizer
     /// <summary>
     /// Values returned by Twitter when getting a request token or an access token.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class OAuthTokenResponse
     {
         /// <summary>

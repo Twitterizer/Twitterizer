@@ -41,7 +41,9 @@ namespace Twitterizer
     /// <summary>
     /// Represents a single point on planet earth.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class Coordinate
     {
         /// <summary>

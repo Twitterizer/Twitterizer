@@ -42,7 +42,9 @@ namespace Twitterizer.Core
     /// <summary>
     /// The base object class
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class TwitterObject : ITwitterObject
     {
         /// <summary>

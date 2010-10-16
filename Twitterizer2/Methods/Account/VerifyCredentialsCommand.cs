@@ -40,7 +40,9 @@ namespace Twitterizer.Commands
     /// The verify credentials command class.
     /// </summary>
     [AuthorizedCommand]
-    [Serializable]
+#if !SILVERLIGHT
+    [System.Serializable]
+#endif
     internal class VerifyCredentialsCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>

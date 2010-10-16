@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The user search options class. Provides a payload for optional parameters of the UserSearchCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class UserSearchOptions : OptionalProperties
     {
         /// <summary>

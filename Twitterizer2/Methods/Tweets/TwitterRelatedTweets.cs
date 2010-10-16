@@ -42,7 +42,9 @@ namespace Twitterizer
     /// </summary>
     /// <seealso cref="Twitterizer.Commands.RelatedResultsCommand"/>
     [JsonObject(MemberSerialization.OptIn)]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [DebuggerDisplay("{GroupName}/{ResultType}")]
     public class TwitterRelatedTweets : Core.TwitterObject
     {

@@ -41,7 +41,9 @@ namespace Twitterizer.Entities
     /// <summary>
     /// Represents multiple <see cref="Twitterizer.Entities.TwitterEntity"/> objects.
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterEntityCollection : Collection<TwitterEntity>
     {
         /// <summary>

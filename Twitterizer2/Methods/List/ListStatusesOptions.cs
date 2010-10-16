@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The list statuses options class. Provides a payload for the ListStatusesCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public sealed class ListStatusesOptions : OptionalProperties
     {
         /// <summary>

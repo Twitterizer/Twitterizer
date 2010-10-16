@@ -42,7 +42,9 @@ namespace Twitterizer.Commands
     /// The command class to delete a status update.
     /// </summary>
     [AuthorizedCommandAttribute]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class DeleteStatusCommand : TwitterCommand<TwitterStatus>
     {
         #region Constructors

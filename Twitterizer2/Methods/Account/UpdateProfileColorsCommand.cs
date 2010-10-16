@@ -35,14 +35,18 @@
 namespace Twitterizer.Commands
 {
     using System;
+#if !SILVERLIGHT
     using System.Drawing;
+#endif
     using Twitterizer.Core;
 
     /// <summary>
     /// Sets one or more hex values that control the color scheme of the authenticating user's profile page on twitter.com
     /// </summary>
     [AuthorizedCommand]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal class UpdateProfileColorsCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>
@@ -73,27 +77,47 @@ namespace Twitterizer.Commands
 
             if (options.BackgroundColor != null)
             {
+#if !SILVERLIGHT
                 this.RequestParameters.Add("profile_background_color", ColorTranslator.ToHtml(options.BackgroundColor));
+#else
+                this.RequestParameters.Add("profile_background_color", options.BackgroundColor);
+#endif
             }
 
             if (options.TextColor != null)
             {
+#if !SILVERLIGHT
                 this.RequestParameters.Add("profile_text_color", ColorTranslator.ToHtml(options.TextColor));
+#else
+                this.RequestParameters.Add("profile_text_color", options.TextColor);
+#endif
             }
 
             if (options.LinkColor != null)
             {
+#if !SILVERLIGHT
                 this.RequestParameters.Add("profile_link_color", ColorTranslator.ToHtml(options.LinkColor));
+#else
+                this.RequestParameters.Add("profile_link_color", options.LinkColor);
+#endif
             }
 
             if (options.SidebarFillColor != null)
             {
+#if !SILVERLIGHT
                 this.RequestParameters.Add("profile_sidebar_fill_color", ColorTranslator.ToHtml(options.SidebarFillColor));
+#else
+                this.RequestParameters.Add("profile_sidebar_fill_color", options.SidebarFillColor);
+#endif
             }
 
             if (options.SidebarBorderColor != null)
             {
+#if !SILVERLIGHT
                 this.RequestParameters.Add("profile_sidebar_border_color", ColorTranslator.ToHtml(options.SidebarBorderColor));
+#else
+                this.RequestParameters.Add("profile_sidebar_border_color", options.SidebarBorderColor);
+#endif
             }
         }
     }

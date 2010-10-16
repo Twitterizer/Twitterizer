@@ -43,7 +43,9 @@ namespace Twitterizer.Commands
     /// The Direct Messages Sent Command class
     /// </summary>
     [AuthorizedCommand]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     internal sealed class DirectMessagesSentCommand : PagedCommand<TwitterDirectMessageCollection>
     {
         /// <summary>
@@ -85,7 +87,7 @@ namespace Twitterizer.Commands
                     this.Page = options.Page;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InstalledUICulture));
+            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

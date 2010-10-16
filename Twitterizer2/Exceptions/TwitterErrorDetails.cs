@@ -46,7 +46,9 @@ namespace Twitterizer
     /// <remarks>Often, twitter returns error details in the body of response. This class represents the data structure of the error for deserialization.</remarks>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [XmlRoot("hash")]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [DebuggerDisplay("@{ErrorMessage}")]
     public class TwitterErrorDetails : TwitterObject
     {

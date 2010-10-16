@@ -39,7 +39,9 @@ namespace Twitterizer
     /// <summary>
     /// The Status Update Options class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public sealed class StatusUpdateOptions : OptionalProperties
     {
         /// <summary>

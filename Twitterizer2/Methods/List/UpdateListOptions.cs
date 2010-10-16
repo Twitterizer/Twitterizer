@@ -37,7 +37,9 @@ namespace Twitterizer
     /// <summary>
     /// The UpdateListOptions class. Provides a payload for optional parameters for the UpdaetListCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class UpdateListOptions : OptionalProperties
     {
         /// <summary>

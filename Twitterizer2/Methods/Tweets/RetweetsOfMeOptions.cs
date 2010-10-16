@@ -39,7 +39,9 @@ namespace Twitterizer
     /// <summary>
     /// The Retweets of Me options class. Provides optional parameters for the RetweetsOfMeCommand class.
     /// </summary>
+#if !SILVERLIGHT
     [System.Serializable]
+#endif
     public class RetweetsOfMeOptions : OptionalProperties
     {
         /// <summary>

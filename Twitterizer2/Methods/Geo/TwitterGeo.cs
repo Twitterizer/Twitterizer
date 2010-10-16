@@ -67,7 +67,9 @@ namespace Twitterizer
     /// <summary>
     /// Represents a geological area
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterGeo
     {
         /// <summary>

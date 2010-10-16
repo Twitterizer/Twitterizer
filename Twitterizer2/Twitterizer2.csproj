@@ -224,7 +224,6 @@
     <Compile Include="Core\TwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Core\RequestResult.cs" />
-    <Compile Include="Exceptions\CommandValidationException.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="Methods\User\UserSearchOptions.cs" />
     <Compile Include="OAuth\OAuthTokenResponse.cs" />

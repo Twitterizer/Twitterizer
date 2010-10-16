@@ -40,7 +40,9 @@ namespace Twitterizer
     /// <summary>
     /// The Twitter Rate Limit Status class
     /// </summary>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class TwitterRateLimitStatus : TwitterObject
     {

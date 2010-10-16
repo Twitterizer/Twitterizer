@@ -34,7 +34,9 @@
 
 namespace Twitterizer
 {
+#if !SILVERLIGHT
     using System.Drawing;
+#endif
     using System.IO;
     using System.Text.RegularExpressions;
 
@@ -44,6 +46,7 @@ namespace Twitterizer
     /// <tocexclude />
     internal static class ConversionUtility
     {
+#if !SILVERLIGHT
         /// <summary>
         /// Converts the color string to a <see cref="System.Drawing.Color"/>
         /// </summary>
@@ -63,6 +66,7 @@ namespace Twitterizer
 
             return Color.FromName(value);
         }
+#endif
 
         /// <summary>
         /// Reads the stream into a byte array.

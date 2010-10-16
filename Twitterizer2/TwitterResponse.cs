@@ -6,7 +6,9 @@ namespace Twitterizer
     /// The twitter response class provides details of the response from an api call to the twitter api.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterResponse<T>
         where T : Core.ITwitterObject
     {

@@ -44,7 +44,9 @@ namespace Twitterizer
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [DebuggerDisplay("TwitterList = {FullName}")]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class TwitterList : TwitterObject
     {
         #region API properties

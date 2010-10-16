@@ -40,7 +40,9 @@ namespace Twitterizer
 
     /// <include file='TwitterStatus.xml' path='TwitterStatus/TwitterStatus/*'/>
     [JsonObject(MemberSerialization.OptIn)]
+#if !SILVERLIGHT
     [Serializable]
+#endif
     [DebuggerDisplay("{User.ScreenName}/{Text}")]
     public class TwitterStatus : TwitterObject
     {
