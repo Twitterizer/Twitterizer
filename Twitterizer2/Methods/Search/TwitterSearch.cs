@@ -77,6 +77,9 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterSearchResultCollection> Search(OAuthTokens tokens, string query, SearchOptions options)
         {
+            if (options == null)
+                options = new SearchOptions();
+
             Commands.SearchCommand command = new Twitterizer.Commands.SearchCommand(tokens, query, options);
 
             TwitterResponse<TwitterSearchResultCollection> results =

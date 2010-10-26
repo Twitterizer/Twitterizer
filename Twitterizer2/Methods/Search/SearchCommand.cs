@@ -57,7 +57,7 @@ namespace Twitterizer.Commands
         public SearchCommand(OAuthTokens requestTokens, string query, SearchOptions options)
             : base(HTTPVerb.GET, "search.json", requestTokens, options)
         {
-            if (string.IsNullOrEmpty(query))
+            if (string.IsNullOrEmpty(query) && options == null && string.IsNullOrEmpty(options.Locale))
             {
                 throw new ArgumentNullException("query");
             }

@@ -25,31 +25,28 @@ namespace Twitterizer2.TestCases
         [Test]
         public static void UserTimeline()
         {
-IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
-    Configuration.GetTokens(),
-    new UserTimelineOptions(),
-    new TimeSpan(0, 2, 0),
-    result =>
-        {
-            TwitterStatusCollection timeline = result.ResponseObject;
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
+            IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
+                Configuration.GetTokens(),
+                new UserTimelineOptions(),
+                new TimeSpan(0, 2, 0),
+                result =>
+                {
+                    TwitterStatusCollection timeline = result.ResponseObject;
 
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20,
-                        "Timeline should contain between 0 and 20 items.");
+                    PerformCommonTimelineTests(result);
+                });
+
+            asyncResult.AsyncWaitHandle.WaitOne();
 
             UserTimelineOptions User_Options = new UserTimelineOptions();
             User_Options.ScreenName = "twitterapi";
             User_Options.Count = 8;
 
-            timeline = TwitterTimeline.UserTimeline(Configuration.GetTokens(), User_Options).ResponseObject;
-            Assert.That(timeline.Count <= 8);
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.UserTimeline(Configuration.GetTokens(), User_Options);
+            PerformCommonTimelineTests(timelineResponse);
 
-            timeline = TwitterTimeline.UserTimeline(User_Options).ResponseObject;
-            Assert.That(timeline.Count <= 8);
-        });
-
-            asyncResult.AsyncWaitHandle.WaitOne();
+            timelineResponse = TwitterTimeline.UserTimeline(User_Options);
+            PerformCommonTimelineTests(timelineResponse);
         }
 
         [Category("Read-Only")]
@@ -59,11 +56,8 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.FriendTimeline(tokens).ResponseObject;
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
-
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.FriendTimeline(tokens);
+            PerformCommonTimelineTests(timelineResponse);
         }
 
         [Category("Read-Only")]
@@ -73,11 +67,8 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.RetweetsOfMe(tokens).ResponseObject;
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
-
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.RetweetsOfMe(tokens);
+            PerformCommonTimelineTests(timelineResponse);
         }
 
         [Category("Read-Only")]
@@ -87,11 +78,8 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.RetweetedByMe(tokens).ResponseObject;
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
-
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.RetweetedByMe(tokens);
+            PerformCommonTimelineTests(timelineResponse);
         }
 
         [Category("Read-Only")]
@@ -101,11 +89,9 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.RetweetedToMe(tokens).ResponseObject;
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.RetweetedToMe(tokens);
 
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            PerformCommonTimelineTests(timelineResponse);
         }
 
         [Category("Read-Only")]
@@ -115,11 +101,8 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.Mentions(tokens).ResponseObject;
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
-
-            Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.Mentions(tokens);
+            PerformCommonTimelineTests(timelineResponse);
         }
 
         [Category("Read-Only")]
@@ -129,19 +112,25 @@ IAsyncResult asyncResult = TwitterTimelineAsync.UserTimeline(
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection timeline = TwitterTimeline.HomeTimeline(tokens).ResponseObject;
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.Mentions(tokens);
 
-            Assert.IsNotNull(timeline);
-            Assert.IsNotEmpty(timeline);
+            PerformCommonTimelineTests(timelineResponse);
 
-            decimal mostRecentId = timeline[0].Id;
+            decimal mostRecentId = timelineResponse.ResponseObject[0].Id;
 
-            TwitterStatusCollection timeline2 = TwitterTimeline.HomeTimeline(tokens, new TimelineOptions()
+            TwitterResponse<TwitterStatusCollection> timeline2 = TwitterTimeline.Mentions(tokens, new TimelineOptions()
             {
                 SinceStatusId = mostRecentId
-            }).ResponseObject;
+            });
 
-            
+            PerformCommonTimelineTests(timeline2);
+        }
+
+        private static void PerformCommonTimelineTests(TwitterResponse<TwitterStatusCollection> timelineResponse)
+        {
+            Assert.IsNotNull(timelineResponse);
+            Assert.That(timelineResponse.Result == RequestResult.Success, timelineResponse.ErrorMessage);
+            Assert.IsNotNull(timelineResponse.ResponseObject);
         }
     }
 }

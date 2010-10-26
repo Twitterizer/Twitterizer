@@ -14,11 +14,18 @@
             SearchOptions options = new SearchOptions();
             options.NumberPerPage = 19;
 
-            TwitterSearchResultCollection results = TwitterSearch.Search("from:twit_er_izer OR twitterizer OR @twit_er_izer", options).ResponseObject;
+            TwitterResponse<TwitterSearchResultCollection> searchResponse = TwitterSearch.Search("twitter", options);
 
-            Assert.IsNotNull(results);
-            Assert.IsNotEmpty(results);
-            Assert.That(results.Count <= 19);
+            Assert.IsNotNull(searchResponse);
+            Assert.That(searchResponse.Result == RequestResult.Success, searchResponse.ErrorMessage);
+            Assert.IsNotNull(searchResponse.ResponseObject);
+            Assert.That(searchResponse.ResponseObject.Count == 19);
+
+            var request = Twitterizer.TwitterSearch.Search("twitter");
+            Assert.IsNotNull(request);
+            Assert.That(request.Result == RequestResult.Success, request.ErrorMessage);
+            Assert.IsNotNull(request.ResponseObject);
+
         }
 
         [Test]
@@ -29,9 +36,11 @@
             SearchOptions options = new SearchOptions();
             options.GeoCode = "30.4413,-84.2809,20mi";
 
-            TwitterSearchResultCollection results = TwitterSearch.Search("tallahassee", options).ResponseObject;
+            TwitterResponse<TwitterSearchResultCollection> searchResponse = TwitterSearch.Search("", options);
 
-            Assert.IsNotNull(results);
+            Assert.IsNotNull(searchResponse);
+            Assert.That(searchResponse.Result == RequestResult.Success, searchResponse.ErrorMessage);
+            Assert.IsNotNull(searchResponse.ResponseObject);
         }
     }
 }
