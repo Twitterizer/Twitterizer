@@ -34,7 +34,7 @@ namespace Twitterizer
         /// Gets the raw json or xml response provided by Twitter.
         /// </summary>
         /// <value>The response body.</value>
-        public string Content { get; internal set; }
+        public string Content { get; set; }
 
         /// <summary>
         /// Gets or sets the error message returned by the Twitter.

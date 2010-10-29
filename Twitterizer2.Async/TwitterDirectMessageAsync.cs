@@ -14,7 +14,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Delete(OAuthTokens tokens, decimal id, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterDirectMessage>> function)
+        public static IAsyncResult Delete(OAuthTokens tokens, decimal id, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessage>> function)
         {
             Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterDirectMessage>> methodToCall = TwitterDirectMessage.Delete;
 
@@ -25,7 +25,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterDirectMessage>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -38,7 +45,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static IAsyncResult DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterDirectMessageCollection>> function)
+        public static IAsyncResult DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessageCollection>> function)
         {
             Func<OAuthTokens, DirectMessagesSentOptions, TwitterResponse<TwitterDirectMessageCollection>> methodToCall = TwitterDirectMessage.DirectMessagesSent;
 
@@ -48,7 +55,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterDirectMessageCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -63,7 +77,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>
-        public static IAsyncResult DirectMessages(OAuthTokens tokens, DirectMessagesOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterDirectMessageCollection>> function)
+        public static IAsyncResult DirectMessages(OAuthTokens tokens, DirectMessagesOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessageCollection>> function)
         {
             Func<OAuthTokens, DirectMessagesOptions, TwitterResponse<TwitterDirectMessageCollection>> methodToCall = TwitterDirectMessage.DirectMessages;
 
@@ -73,7 +87,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterDirectMessageCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -88,7 +109,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterDirectMessage>> function)
+        public static IAsyncResult Send(OAuthTokens tokens, decimal userId, string text, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessage>> function)
         {
             Func<OAuthTokens, decimal, string, OptionalProperties, TwitterResponse<TwitterDirectMessage>> methodToCall = TwitterDirectMessage.Send;
 
@@ -100,7 +121,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterDirectMessage>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -115,7 +143,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterDirectMessage>> function)
+        public static IAsyncResult Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessage>> function)
         {
             Func<OAuthTokens, string, string, OptionalProperties, TwitterResponse<TwitterDirectMessage>> methodToCall = TwitterDirectMessage.Send;
 
@@ -127,7 +155,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterDirectMessage>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }

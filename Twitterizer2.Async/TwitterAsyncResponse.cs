@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterTrendsAsync.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterAsyncResponse.cs" company="Patrick Ricky Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,32 +29,43 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The Asynchronous Twitter Trend class</summary>
+// <summary>The response wrapper class for all asynchronous methods.</summary>
 //-----------------------------------------------------------------------
-using System;
 namespace Twitterizer
 {
-    public static class TwitterTrendsAsync
-    {
-        public static IAsyncResult Current(CurrentTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
-        {
-            Func<CurrentTrendsOptions, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Current;
+    using System;
 
-            return methodToCall.BeginInvoke(
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+    public class TwitterAsyncResponse<T> : TwitterResponse<T>
+        where T : Core.ITwitterObject
+    {
+        /// <summary>
+        /// Gets or sets the exception.
+        /// </summary>
+        /// <value>The exception.</value>
+        public Exception ExceptionThrown { get; set; }
+
+        /// <summary>
+        /// Gets or sets the response object.
+        /// </summary>
+        /// <value>The response object.</value>
+        public T ResponseObject { get; internal set; }
+    }
+
+    public static class TwitterResponseAsyncConverterExtentions
+    {
+        public static TwitterAsyncResponse<T> ToAsyncResponse<T>(this TwitterResponse<T> response)
+            where T : Core.ITwitterObject
+        {
+            TwitterAsyncResponse<T> newResponse = new TwitterAsyncResponse<T>();
+            newResponse.Content = response.Content;
+            newResponse.ErrorMessage = response.ErrorMessage;
+            newResponse.RateLimiting = response.RateLimiting;
+            newResponse.RequestUrl = response.RequestUrl;
+            newResponse.ResponseCached = response.ResponseCached;
+            newResponse.ResponseObject = response.ResponseObject;
+            newResponse.Result = response.Result;
+
+            return newResponse;
         }
     }
 }

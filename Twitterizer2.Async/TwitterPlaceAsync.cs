@@ -51,7 +51,7 @@ namespace Twitterizer
             double longitude,
             TwitterPlaceLookupOptions options, 
             TimeSpan timeout,
-            Action<TwitterResponse<TwitterPlaceCollection>> function)
+            Action<TwitterAsyncResponse<TwitterPlaceCollection>> function)
         {
             Func<double, double, TwitterPlaceLookupOptions, TwitterResponse<TwitterPlaceCollection>> methodToCall = TwitterPlace.Lookup;
 
@@ -62,7 +62,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterPlaceCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }

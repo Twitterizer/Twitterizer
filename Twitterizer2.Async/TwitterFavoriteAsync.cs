@@ -47,7 +47,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Create(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterStatus>> function)
+        public static IAsyncResult Create(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
             Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterStatus>> methodToCall = TwitterFavorite.Create;
 
@@ -58,7 +58,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -72,7 +79,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Delete(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterResponse<TwitterStatus>> function)
+        public static IAsyncResult Delete(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
             Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterStatus>> methodToCall = TwitterFavorite.Delete;
 
@@ -83,7 +90,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -96,7 +110,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult List(OAuthTokens tokens, ListFavoritesOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterStatusCollection>> function)
+        public static IAsyncResult List(OAuthTokens tokens, ListFavoritesOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
             Func<OAuthTokens, ListFavoritesOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = TwitterFavorite.List;
 
@@ -106,7 +120,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterStatusCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }

@@ -47,7 +47,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Search(string query, SearchOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterSearchResultCollection>> function)
+        public static IAsyncResult Search(string query, SearchOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSearchResultCollection>> function)
         {
             Func<string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
 
@@ -57,7 +57,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterSearchResultCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }
@@ -71,7 +78,7 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Search(OAuthTokens tokens, string query, SearchOptions options, TimeSpan timeout, Action<TwitterResponse<TwitterSearchResultCollection>> function)
+        public static IAsyncResult Search(OAuthTokens tokens, string query, SearchOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSearchResultCollection>> function)
         {
             Func<OAuthTokens, string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
 
@@ -82,7 +89,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterSearchResultCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
                 },
                 null);
         }

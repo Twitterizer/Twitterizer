@@ -63,7 +63,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result));
+                    }
+                    catch (Exception ex)
+                    {
+                        function(null);
+                    }
                 },
                 null);
         }
@@ -99,7 +106,14 @@ namespace Twitterizer
                 result =>
                 {
                     result.AsyncWaitHandle.WaitOne(timeout);
-                    function(methodToCall.EndInvoke(result));
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result));
+                    }
+                    catch (Exception ex)
+                    {
+                        function(null);
+                    }
                 },
                 null);
         }
