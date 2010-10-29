@@ -360,12 +360,12 @@ namespace Twitterizer.Core
         {
             RateLimiting rateLimiting = new RateLimiting();
 
-            if (!responseHeaders.AllKeys.Contains("X-RateLimit-Limit"))
+            if (responseHeaders.AllKeys.Contains("X-RateLimit-Limit"))
             {
                 rateLimiting.Total = int.Parse(responseHeaders["X-RateLimit-Limit"], CultureInfo.InvariantCulture);
             }
 
-            if (!responseHeaders.AllKeys.Contains("X-RateLimit-Remaining"))
+            if (responseHeaders.AllKeys.Contains("X-RateLimit-Remaining"))
             {
                 rateLimiting.Remaining = int.Parse(responseHeaders["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
             }

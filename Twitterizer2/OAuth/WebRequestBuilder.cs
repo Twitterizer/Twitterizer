@@ -251,8 +251,8 @@ namespace Twitterizer
             requestParametersBuilder.Append(this.RequestUri.Query.Length == 0 ? "?" : "&");
 
 
-            Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>((Dictionary<string, string>)this.Parameters.Select(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
-                                         !SecretParameters.Contains(p.Key)));
+            Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+                                         !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Value, p => p.Key));
 
 #if SILVERLIGHT
             fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());
@@ -375,8 +375,8 @@ namespace Twitterizer
 
 
             // Generate the hash
-            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.Unicode.GetBytes(key));
-            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.Unicode.GetBytes(signatureBaseString));
+            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(key));
+            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
             return Convert.ToBase64String(signatureBytes);
         }
 
