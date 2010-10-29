@@ -168,6 +168,11 @@
     <Compile Include="Methods\List\GetListSubscriptionsCommand.cs" />
     <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />
+    <Compile Include="Methods\SavedSearches\SavedSearchesCommand.cs" />
+    <Compile Include="Methods\SavedSearches\CreateSavedSearchCommand.cs" />
+    <Compile Include="Methods\SavedSearches\DeleteSavedSearchCommand.cs" />
+    <Compile Include="Methods\SavedSearches\TwitterSavedSearch.cs" />
+    <Compile Include="Methods\SavedSearches\TwitterSavedSearchCollection.cs" />
     <Compile Include="Methods\Search\SearchOptions.cs" />
     <Compile Include="Methods\Timeline\PagedTimelineCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineOptions.cs" />
@@ -274,7 +279,6 @@
   <ItemGroup>
     <Folder Include="Methods\Block\" />
     <Folder Include="Methods\Notification\" />
-    <Folder Include="Methods\SavedSearches\" />
     <Folder Include="Methods\Spam\" />
   </ItemGroup>
   <ItemGroup>
