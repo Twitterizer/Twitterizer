@@ -252,7 +252,7 @@ namespace Twitterizer
 
 
             Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
-                                         !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Value, p => p.Key));
+                                         !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
 
 #if SILVERLIGHT
             fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());

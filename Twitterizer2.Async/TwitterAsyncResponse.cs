@@ -43,12 +43,6 @@ namespace Twitterizer
         /// </summary>
         /// <value>The exception.</value>
         public Exception ExceptionThrown { get; set; }
-
-        /// <summary>
-        /// Gets or sets the response object.
-        /// </summary>
-        /// <value>The response object.</value>
-        public T ResponseObject { get; internal set; }
     }
 
     public static class TwitterResponseAsyncConverterExtentions

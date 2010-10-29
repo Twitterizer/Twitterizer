@@ -102,12 +102,18 @@ namespace Twitterizer2.TestCases
                 new TimeSpan(0, 0, 5, 0), // async timeout
                 response => Console.WriteLine(response.ResponseObject.Status.Text));
 
+            asyncResult.AsyncWaitHandle.WaitOne();
+        }
+
+        [Test]
+        public static void AsyncTest2()
+        {
             // Second example, uses a callback method
-            IAsyncResult asyncResult2 = TwitterUserAsync.Show(null, "twitterapi", null, new TimeSpan(0, 0, 5, 0), ShowUserCompleted);
+            IAsyncResult asyncResult = TwitterUserAsync.Show(null, "twitterapi", null, new TimeSpan(0, 0, 5, 0), ShowUserCompleted);
 
             // Block the current thread until the other threads are completed
             asyncResult.AsyncWaitHandle.WaitOne();
-            asyncResult2.AsyncWaitHandle.WaitOne();
+            
         }
 
         private static void ShowUserCompleted(TwitterResponse<TwitterUser> user)

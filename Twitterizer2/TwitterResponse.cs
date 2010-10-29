@@ -16,7 +16,7 @@ namespace Twitterizer
         /// Gets or sets the object that represents the data returned by the request to Twitter.
         /// </summary>
         /// <value>The response object.</value>
-        public T ResponseObject { get; internal set; }
+        public T ResponseObject { get; set; }
 
         /// <summary>
         /// Gets or sets the result of the request.
