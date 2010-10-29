@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         public CreateFavoriteCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options) :
-            base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture.NumberFormat, "favorites/{0}/create.json", statusId), tokens, options)
+            base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture.NumberFormat, "favorites/create/{0}.json", statusId), tokens, options)
         {
             if (tokens == null)
             {

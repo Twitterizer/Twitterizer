@@ -56,7 +56,7 @@ namespace Twitterizer.Commands
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options.</param>
         public DeleteFavoriteCommand(OAuthTokens tokens, decimal statusId, OptionalProperties options)
-            : base(HTTPVerb.POST, "favorites/destroy.json", tokens, options)
+            : base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture.NumberFormat, "favorites/destroy/{0}.json", statusId), tokens, options)
         {
             if (statusId <= 0)
             {
@@ -67,22 +67,13 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("tokens");
             }
-
-            this.StatusId = statusId;
         }
-
-        /// <summary>
-        /// Gets or sets the status id.
-        /// </summary>
-        /// <value>The status id.</value>
-        public decimal StatusId { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("id", this.StatusId.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

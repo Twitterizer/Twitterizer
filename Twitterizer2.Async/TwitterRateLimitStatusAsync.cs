@@ -29,13 +29,17 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The asynchronous twitter rate limit status class.</summary>
+// <summary>The twitter rate limit status class.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
     using System;
+    using Twitterizer;
 
-    public static class TwitterRateLimitStatusAsync
+    /// <summary>
+    /// The Twitter Rate Limit Status Async class
+    /// </summary>
+    public class TwitterRateLimitStatusAsync
     {
         /// <summary>
         /// Gets the rate limiting status status for the authenticated user.
@@ -44,9 +48,7 @@ namespace Twitterizer
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
-        /// <returns>
-        /// A <see cref="TwitterRateLimitStatus"/> instance.
-        /// </returns>
+        /// <returns></returns>
         public static IAsyncResult GetStatus(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
             Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = TwitterRateLimitStatus.GetStatus;
@@ -65,6 +67,49 @@ namespace Twitterizer
                     {
                         function(new TwitterAsyncResponse<TwitterRateLimitStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Gets the rate limiting status status based on the application's IP address.
+        /// </summary>
+        /// <param name="tokens">The OAuth tokens.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param> 
+        /// <returns></returns>
+        public static IAsyncResult GetStatus(OAuthTokens tokens, TimeSpan timeout, Action<TwitterResponse<TwitterRateLimitStatus>> function)
+        {
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = TwitterRateLimitStatus.GetStatus;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                null,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Gets the rate limiting status status based on the application's IP address.
+        /// </summary>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult GetStatus(TimeSpan timeout, Action<TwitterResponse<TwitterRateLimitStatus>> function)
+        {
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = TwitterRateLimitStatus.GetStatus;
+
+            return methodToCall.BeginInvoke(
+                null,
+                null,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    function(methodToCall.EndInvoke(result));
                 },
                 null);
         }
