@@ -97,7 +97,6 @@
       <Link>SerializationHelper.cs</Link>
     </Compile>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Issue59.cs" />
     <Compile Include="NUnitSampleTests.cs" />
     <Compile Include="UserIdListTests.cs" />
     <Compile Include="Issue120.cs" />

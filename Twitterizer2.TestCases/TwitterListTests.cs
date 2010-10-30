@@ -107,5 +107,25 @@ namespace Twitterizer2.TestCases
             listResponse = TwitterList.Delete(tokens, myUser.ScreenName, listName, null);
             Assert.That(listResponse.Result == RequestResult.Success);
         }
+
+        [Test]
+        public static void CheckMembership()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<TwitterUser> secondUserResponse = TwitterUser.Show(tokens, "episod");
+            Assert.IsNotNull(secondUserResponse);
+            Assert.That(secondUserResponse.Result == RequestResult.Success);
+
+            
+            TwitterResponse<TwitterUser> membershipResponse = TwitterList.CheckMembership(
+                tokens,
+                "twitterapi",
+                "team",
+                secondUserResponse.ResponseObject.Id);
+
+            Assert.IsNotNull(membershipResponse);
+            Assert.That(membershipResponse.Result == RequestResult.Success);
+        }
     }
 }
