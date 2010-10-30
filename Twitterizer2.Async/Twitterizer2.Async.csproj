@@ -74,6 +74,7 @@
     <Compile Include="TwitterPlaceAsync.cs" />
     <Compile Include="TwitterRateLimitStatusAsync.cs" />
     <Compile Include="TwitterSearchAsync.cs" />
+    <Compile Include="TwitterSpamAsync.cs" />
     <Compile Include="TwitterStatusAsync.cs" />
     <Compile Include="TwitterTimelineAsync.cs" />
     <Compile Include="TwitterTrendsAsync.cs" />
