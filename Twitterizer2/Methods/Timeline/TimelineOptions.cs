@@ -96,6 +96,9 @@ namespace Twitterizer
         internal static void Init<T>(Core.TwitterCommand<T> command, TimelineOptions options)
             where T : Core.ITwitterObject
         {
+            if (options == null)
+                options = new TimelineOptions();
+
             if (options.Count > 0)
                 command.RequestParameters.Add("count", options.Count.ToString());
 
@@ -105,6 +108,8 @@ namespace Twitterizer
             if (options.MaxStatusId > 0)
                 command.RequestParameters.Add("max_id", options.MaxStatusId.ToString());
 
+            if (options.Page == 0)
+                options.Page = 1;
             if (options.Page > 0)
                 command.RequestParameters.Add("page", options.Page.ToString());
 

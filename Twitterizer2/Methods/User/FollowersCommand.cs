@@ -73,7 +73,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor <= 0)
+            if (this.Cursor == 0)
             {
                 this.Cursor = -1;
             }

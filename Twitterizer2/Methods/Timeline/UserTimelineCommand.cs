@@ -71,15 +71,22 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            if (this.Page == 0)
+                this.Page = 1;
+
             UserTimelineOptions options = this.OptionalProperties as UserTimelineOptions;
+            if (options == null)
+                options = new UserTimelineOptions();
+
+            options.Page = this.Page;
+
+            TimelineOptions.Init<TwitterStatusCollection>(this, options);
             
             if (options == null)
             {
                 return;
             }
-
-            TimelineOptions.Init<TwitterStatusCollection>(this, options);
-
+            
             if (options.UserId > 0)
                 this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));
 

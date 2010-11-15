@@ -14,22 +14,21 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.Mentions(tokens).ResponseObject;
-            
-            int pagenumber = 1;
-            string firstStatusText = results[0].Text;
+            TwitterResponse<TwitterStatusCollection> response = TwitterTimeline.Mentions(tokens);
 
-            while (results != null && results.Count > 0)
-            {
-                Assert.IsNotEmpty(results);
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
 
-                if (pagenumber > 1)
-                    Assert.That(results[0].Text != firstStatusText);
+            decimal firstId = response.ResponseObject[0].Id;
 
-                results = results.NextPage().ResponseObject;
-
-                pagenumber++;
-            }
+            response = response.ResponseObject.NextPage();
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+            Assert.AreNotEqual(response.ResponseObject[0].Id, firstId);
         }
 
         [Test]
@@ -39,25 +38,22 @@
         public static void UserTimeline()
         {
             OAuthTokens tokens = Configuration.GetTokens();
-            int pagenumber = 1;
 
-            TwitterResponse<TwitterStatusCollection> results = TwitterTimeline.UserTimeline(tokens,
-                                                                                            new UserTimelineOptions()
-                                                                                                {Count = 100});
+            TwitterResponse<TwitterStatusCollection> response = TwitterTimeline.UserTimeline(tokens);
 
-            string firstStatusText = results.ResponseObject[0].Text;
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
 
-            while (results.ResponseObject != null && results.ResponseObject.Count > 0 && results.RateLimiting.Remaining > 0)
-            {
-                Assert.IsNotEmpty(results.ResponseObject);
+            decimal firstId = response.ResponseObject[0].Id;
 
-                if (pagenumber > 1)
-                    Assert.That(results.ResponseObject[0].Text != firstStatusText);
-
-                results = results.ResponseObject.NextPage();
-
-                pagenumber++;
-            }
+            response = response.ResponseObject.NextPage();
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+            Assert.AreNotEqual(response.ResponseObject[0].Id, firstId);
         }
 
         [Test]
@@ -68,28 +64,21 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.FriendTimeline(tokens);
-            Assert.IsNotNull(timelineResponse);
-            Assert.That(timelineResponse.Result == RequestResult.Success);
+            TwitterResponse<TwitterStatusCollection> response = TwitterTimeline.FriendTimeline(tokens, new TimelineOptions() { Count = 2 });
 
-            int pagenumber = 1;
-            string firstStatusText = timelineResponse.ResponseObject[0].Text;
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
 
-            while (timelineResponse.ResponseObject != null && pagenumber < 3)
-            {
-                Assert.IsNotEmpty(timelineResponse.ResponseObject);
+            decimal firstId = response.ResponseObject[0].Id;
 
-                if (pagenumber > 1)
-                    Assert.That(timelineResponse.ResponseObject[0].Text != firstStatusText);
-
-                timelineResponse = timelineResponse.ResponseObject.NextPage();
-                Assert.IsNotNull(timelineResponse);
-                Assert.That(timelineResponse.Result == RequestResult.Success);
-
-                pagenumber++;
-            }
-
-            Assert.That(pagenumber > 1);
+            response = response.ResponseObject.NextPage();
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+            Assert.AreNotEqual(response.ResponseObject[0].Id, firstId);
         }
 
         [Test]
@@ -100,24 +89,21 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.HomeTimeline(tokens).ResponseObject;
+            TwitterResponse<TwitterStatusCollection> response = TwitterTimeline.HomeTimeline(tokens);
 
-            int pagenumber = 1;
-            string firstStatusText = results[0].Text;
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
 
-            while (results != null && pagenumber < 3)
-            {
-                Assert.IsNotEmpty(results);
+            decimal firstId = response.ResponseObject[0].Id;
 
-                if (pagenumber > 1)
-                    Assert.That(results[0].Text != firstStatusText);
-
-                results = results.NextPage().ResponseObject;
-
-                pagenumber++;
-            }
-
-            Assert.That(pagenumber > 1);
+            response = response.ResponseObject.NextPage();
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+            Assert.AreNotEqual(response.ResponseObject[0].Id, firstId);
         }
 
         [Test]
@@ -128,27 +114,21 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterUserCollection followers = TwitterFriendship.Followers(tokens, new FollowersOptions()
-            {
-                ScreenName = "twitterapi"
-            }).ResponseObject;
+            TwitterResponse<TwitterUserCollection> response = TwitterFriendship.Followers(tokens, new FollowersOptions() { ScreenName = "twitterapi" });
 
-            int pagenumber = 1;
-            decimal firstId = followers[0].Id;
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
 
-            while (followers != null && pagenumber < 3)
-            {
-                Assert.IsNotEmpty(followers);
+            decimal firstId = response.ResponseObject[0].Id;
 
-                if (pagenumber > 1)
-                    Assert.That(followers[0].Id != firstId);
-
-                followers = followers.NextPage().ResponseObject;
-
-                pagenumber++;
-            }
-
-            Assert.That(pagenumber > 1);
+            response = response.ResponseObject.NextPage();
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+            Assert.AreNotEqual(response.ResponseObject[0].Id, firstId);
         }
 
         [Test]

@@ -60,10 +60,14 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            if (this.Page == 0)
+                this.Page = 1;
+
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
-            
             if (options == null)
-                return;
+                options = new TimelineOptions();
+
+            options.Page = this.Page;
 
             TimelineOptions.Init<TwitterStatusCollection>(this, options);
         }
@@ -78,7 +82,7 @@ namespace Twitterizer.Commands
         {
             return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
             {
-                Page = this.Page == 0 ? 1 : this.Page
+                Page = this.Page
             };
         }
     }
