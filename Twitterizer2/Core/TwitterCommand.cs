@@ -269,6 +269,8 @@ namespace Twitterizer.Core
 
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
+                // Try to read the error message, if there is one.
+                twitterResponse.ErrorMessage = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData).ErrorMessage;
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
