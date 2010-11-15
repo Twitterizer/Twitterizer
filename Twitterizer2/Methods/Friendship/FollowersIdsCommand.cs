@@ -99,8 +99,8 @@ namespace Twitterizer.Commands
             FollowersIdsCommand command = new FollowersIdsCommand(this.Tokens,
                                                                   this.OptionalProperties as UsersIdsOptions);
 
-            if (this.OptionalProperties != null && this.OptionalProperties is GetListMembersOptions)
-                command.Cursor = ((GetListMembersOptions)this.OptionalProperties).Cursor;
+            if (this.OptionalProperties != null && this.OptionalProperties is UsersIdsOptions)
+                command.Cursor = ((UsersIdsOptions)this.OptionalProperties).Cursor;
 
             return command;
         }

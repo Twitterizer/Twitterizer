@@ -78,7 +78,7 @@ namespace Twitterizer.Commands
         {
             return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
             {
-                Page = this.Page
+                Page = this.Page == 0 ? 1 : this.Page
             };
         }
     }

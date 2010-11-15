@@ -88,7 +88,7 @@ namespace Twitterizer
             CursorPagedCommand<UserIdCollection> newCommand =
                 (CursorPagedCommand<UserIdCollection>)this.Command.Clone();
 
-            if (newCommand.Cursor == 0)
+            if (this.NextCursor == 0)
                 return null;
 
             newCommand.Cursor = this.NextCursor;

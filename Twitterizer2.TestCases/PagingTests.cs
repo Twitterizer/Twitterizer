@@ -68,19 +68,23 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterStatusCollection results = TwitterTimeline.FriendTimeline(tokens).ResponseObject;
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.FriendTimeline(tokens);
+            Assert.IsNotNull(timelineResponse);
+            Assert.That(timelineResponse.Result == RequestResult.Success);
 
             int pagenumber = 1;
-            string firstStatusText = results[0].Text;
+            string firstStatusText = timelineResponse.ResponseObject[0].Text;
 
-            while (results != null && pagenumber < 3)
+            while (timelineResponse.ResponseObject != null && pagenumber < 3)
             {
-                Assert.IsNotEmpty(results);
+                Assert.IsNotEmpty(timelineResponse.ResponseObject);
 
                 if (pagenumber > 1)
-                    Assert.That(results[0].Text != firstStatusText);
+                    Assert.That(timelineResponse.ResponseObject[0].Text != firstStatusText);
 
-                results = results.NextPage().ResponseObject;
+                timelineResponse = timelineResponse.ResponseObject.NextPage();
+                Assert.IsNotNull(timelineResponse);
+                Assert.That(timelineResponse.Result == RequestResult.Success);
 
                 pagenumber++;
             }
@@ -145,6 +149,34 @@
             }
 
             Assert.That(pagenumber > 1);
+        }
+
+        [Test]
+        [Category("Read-Only")]
+        [Category("REST")]
+        [Category("Paging")]
+        public static void FollowersIds()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<UserIdCollection> response = TwitterFriendship.FollowersIds(tokens, new UsersIdsOptions()
+            {
+                ScreenName = "twitterapi"
+            });
+
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+
+            decimal firstId = response.ResponseObject[0];
+
+            response = response.ResponseObject.NextPage();
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.That(response.ResponseObject.Count > 0);
+            Assert.AreNotEqual(response.ResponseObject[0], firstId);
         }
     }
 }
