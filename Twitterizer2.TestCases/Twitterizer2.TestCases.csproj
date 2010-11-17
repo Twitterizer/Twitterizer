@@ -135,6 +135,7 @@
     <Compile Include="TwitterUserTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UserSuggestionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
