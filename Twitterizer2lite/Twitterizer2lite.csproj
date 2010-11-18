@@ -152,6 +152,12 @@
     <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsOptions.cs">
       <Link>VerifyCredentialsOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\CreateBlockCommand.cs">
+      <Link>CreateBlockCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\TwitterBlock.cs">
+      <Link>TwitterBlock.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\DirectMessage\DeleteDirectMessageCommand.cs">
       <Link>DeleteDirectMessageCommand.cs</Link>
     </Compile>
