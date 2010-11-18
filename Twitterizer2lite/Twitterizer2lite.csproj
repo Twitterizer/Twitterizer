@@ -428,6 +428,12 @@
     <Compile Include="..\Twitterizer2\Methods\User\LookupUsersOptions.cs">
       <Link>LookupUsersOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByCommand.cs">
+      <Link>RetweetedByCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByOptions.cs">
+      <Link>RetweetedByOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\User\ShowUserCommand.cs">
       <Link>ShowUserCommand.cs</Link>
     </Compile>

@@ -45,5 +45,19 @@ namespace Twitterizer2.TestCases
             TwitterUser unfollowedUser = friendship.Delete(tokens).ResponseObject;
             Assert.IsNotNull(unfollowedUser);
         }
+
+        /// <summary>
+        /// This is a test for code submitted in the forums by reradus.
+        /// </summary>
+        [Test]
+        public static void ReradusTest()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            FollowersOptions options = new FollowersOptions();
+            //options.ScreenName = _Screenname;
+            options.UserId = 189996115;
+            var followers = TwitterFriendship.Followers(options);
+        }
     }
 }

@@ -479,5 +479,32 @@ namespace Twitterizer
             return UpdateProfileImage(tokens, image, null);
         }
         #endregion
+
+        #region Retweeted By
+        /// <summary>
+        /// Show user objects of up to 100 members who retweeted the status.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A collection of user objects.</returns>
+        public static TwitterResponse<TwitterUserCollection> RetweetedBy(OAuthTokens tokens, decimal statusId, RetweetedByOptions options)
+        {
+            Commands.RetweetedByCommand command = new Commands.RetweetedByCommand(tokens, statusId, options);
+
+            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Show user objects of up to 100 members who retweeted the status.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A collection of user objects.</returns>
+        public static TwitterResponse<TwitterUserCollection> RetweetedBy(OAuthTokens tokens, decimal statusId)
+        {
+            return RetweetedBy(tokens, statusId, null);
+        }
+        #endregion
     }
 }

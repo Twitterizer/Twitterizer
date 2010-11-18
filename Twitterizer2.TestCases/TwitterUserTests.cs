@@ -120,5 +120,18 @@ namespace Twitterizer2.TestCases
         {
             Console.WriteLine(user.ResponseObject.Status.Text);
         }
+
+        [Test]
+        public static void RetweetedBy()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            var response = TwitterUser.RetweetedBy(tokens, 5053218102972417);
+
+            Assert.IsNotNull(response);
+            Assert.That(response.Result == RequestResult.Success);
+            Assert.IsNotNull(response.ResponseObject);
+            Assert.IsNotEmpty(response.ResponseObject);
+        }
     }
 }
