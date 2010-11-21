@@ -7,7 +7,7 @@
     public class TwitterSearchTests
     {
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("Search")]
         public static void Search()
         {
@@ -29,7 +29,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("Search")]
         public static void SearchLocal()
         {

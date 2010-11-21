@@ -24,7 +24,14 @@ svn export --force . "Release\Twitterizer%twitterizerver%-source"
 REM Zip up the source code
 PUSHD "Release\Twitterizer%twitterizerver%-source"
 "%ProgramFiles%\7-Zip\7z.exe" a -r "..\Twitterizer%twitterizerver%-source.zip" *.*
-popd
+POPD
 
 REM Cleanup
 RD /S /Q "Release\Twitterizer%twitterizerver%-source"
+
+REM Prepare example application package
+IF EXIST "Release\Twitterizer%twitterizerver%-examples" RD /S /Q "Release\Twitterizer%twitterizerver%-examples"
+svn export "ExampleApplications" "Release\Twitterizer%twitterizerver%-examples"
+PUSHD "Release\Twitterizer%twitterizerver%-examples"
+"%ProgramFiles%\7-Zip\7z.exe" a -r "..\Twitterizer%twitterizerver%-examples.zip" *.*
+POPD

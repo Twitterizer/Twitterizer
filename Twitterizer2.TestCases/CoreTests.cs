@@ -12,7 +12,7 @@
     public class CoreTests
     {
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         public static void Serialization()
         {
             Assembly twitterizerAssembly = Assembly.GetAssembly(typeof(TwitterUser));
@@ -67,7 +67,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         public static void SSL()
         {
             TwitterResponse<TwitterUser> sslUser = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = true });

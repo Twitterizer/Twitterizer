@@ -9,7 +9,7 @@ namespace Twitterizer2.TestCases
     [TestFixture]
     public class TwitterUserTests
     {
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void Show()
@@ -24,7 +24,7 @@ namespace Twitterizer2.TestCases
             Assert.That(!string.IsNullOrEmpty(user.Status.Text));
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void Search()
@@ -50,7 +50,7 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(updatedUser);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void LookupUsers()
@@ -69,7 +69,7 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(result.ResponseObject);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void LookupUsersById()

@@ -12,7 +12,7 @@ namespace Twitterizer2.TestCases
     [TestFixture]
     public static class TwitterStatusTests
     {
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void Show()
@@ -25,7 +25,7 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNullOrEmpty(status.Text);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void ShowMissing()

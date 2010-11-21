@@ -8,7 +8,7 @@ namespace Twitterizer2.TestCases
     [TestFixture]
     public static class TwitterTimelineTests
     {
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void PublicTimeline()
@@ -20,7 +20,7 @@ namespace Twitterizer2.TestCases
             Assert.That(timeline.Count > 0 && timeline.Count <= 20, "Timeline should contain between 0 and 20 items.");
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void UserTimeline()
@@ -49,7 +49,7 @@ namespace Twitterizer2.TestCases
             PerformCommonTimelineTests(timelineResponse);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void FriendTimeline()
@@ -60,7 +60,18 @@ namespace Twitterizer2.TestCases
             PerformCommonTimelineTests(timelineResponse);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
+        [Category("REST")]
+        [Test]
+        public static void HomeTimeline()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.HomeTimeline(tokens);
+            PerformCommonTimelineTests(timelineResponse);
+        }
+
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void RetweetsOfMe()
@@ -71,7 +82,7 @@ namespace Twitterizer2.TestCases
             PerformCommonTimelineTests(timelineResponse);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void RetweetedByMe()
@@ -82,7 +93,7 @@ namespace Twitterizer2.TestCases
             PerformCommonTimelineTests(timelineResponse);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void RetweetedToMe()
@@ -94,7 +105,7 @@ namespace Twitterizer2.TestCases
             PerformCommonTimelineTests(timelineResponse);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void Mentions()
@@ -105,7 +116,7 @@ namespace Twitterizer2.TestCases
             PerformCommonTimelineTests(timelineResponse);
         }
 
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Test]
         public static void SinceID()

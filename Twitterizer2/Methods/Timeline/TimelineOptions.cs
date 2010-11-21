@@ -96,6 +96,8 @@ namespace Twitterizer
         internal static void Init<T>(Core.TwitterCommand<T> command, TimelineOptions options)
             where T : Core.ITwitterObject
         {
+            command.RequestParameters.Add("include_entities", "true");
+
             if (options == null)
                 options = new TimelineOptions();
 

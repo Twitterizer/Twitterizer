@@ -10,7 +10,7 @@ namespace Twitterizer2.TestCases
         private const string listName = "meetup-20100301";
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         public void GetList()
         {
@@ -20,7 +20,7 @@ namespace Twitterizer2.TestCases
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         public void GetStatuses()
         {
@@ -32,7 +32,7 @@ namespace Twitterizer2.TestCases
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         public void GetMembers()
         {
@@ -59,7 +59,7 @@ namespace Twitterizer2.TestCases
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         public static void GetSubscriptions()
         {
@@ -69,7 +69,7 @@ namespace Twitterizer2.TestCases
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         public static void GetMemberships()
         {

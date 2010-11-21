@@ -7,7 +7,7 @@
     public class PagingTests
     {
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Category("Paging")]
         public static void Mentions()
@@ -32,7 +32,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Category("Paging")]
         public static void UserTimeline()
@@ -57,7 +57,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Category("Paging")]
         public static void Friends()
@@ -82,7 +82,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Category("Paging")]
         public static void Home()
@@ -107,7 +107,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Category("Paging")]
         public static void Followers()
@@ -132,7 +132,7 @@
         }
 
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         [Category("Paging")]
         public static void FollowersIds()

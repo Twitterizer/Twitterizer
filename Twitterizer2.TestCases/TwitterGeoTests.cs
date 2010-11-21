@@ -7,7 +7,7 @@
     public class TwitterGeoTests
     {
         [Test]
-        [Category("Read-Only")]
+        [Category("ReadOnly")]
         [Category("REST")]
         public static void LookupPlaces()
         {
