@@ -230,6 +230,7 @@ namespace Twitterizer
 
             request.Method = this.Verb.ToString();
             request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            request.ContentLength = 0;
             
 #if !SILVERLIGHT
             request.ServicePoint.Expect100Continue = false;
