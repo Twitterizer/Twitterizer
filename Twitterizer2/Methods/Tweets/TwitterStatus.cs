@@ -34,9 +34,11 @@
 namespace Twitterizer
 {
     using System;
+    using System.Linq;
     using System.Diagnostics;
     using Newtonsoft.Json;
     using Twitterizer.Core;
+    using Twitterizer.Entities;
 
     /// <include file='TwitterStatus.xml' path='TwitterStatus/TwitterStatus/*'/>
     [JsonObject(MemberSerialization.OptIn)]
@@ -203,6 +205,63 @@ namespace Twitterizer
         [JsonProperty(PropertyName = "retweeted")]
         public bool Retweeted { get; set; }
         #endregion
+
+        /// <summary>
+        /// Returns the status text with HTML links to users, urls, and hashtags.
+        /// </summary>
+        /// <returns></returns>
+        public string LinkifiedText()
+        {
+            if (this.Entities == null || this.Entities.Count == 0)
+            {
+                return this.Text;
+            }
+
+            string linkedText = this.Text;
+
+            var entitiesSorted = this
+                                  .Entities
+                                  .OrderBy(e => e.StartIndex)
+                                  .Reverse();
+
+            foreach (TwitterEntity entity in entitiesSorted)
+            {
+                if (entity is TwitterHashTagEntity)
+                {
+                    TwitterHashTagEntity tagEntity = (TwitterHashTagEntity)entity;
+
+                    linkedText = string.Format(
+                        "{0}<a href=\"http://twitter.com/search?q=%23{1}\">{1}</a>{2}",
+                        linkedText.Substring(0, entity.StartIndex),
+                        tagEntity.Text,
+                        linkedText.Substring(entity.EndIndex));
+                }
+
+                if (entity is TwitterUrlEntity)
+                {
+                    TwitterUrlEntity urlEntity = (TwitterUrlEntity)entity;
+
+                    linkedText = string.Format(
+                        "{0}<a href=\"{1}\">{1}</a>{2}",
+                        linkedText.Substring(0, entity.StartIndex),
+                        urlEntity.Url,
+                        linkedText.Substring(entity.EndIndex));
+                }
+
+                if (entity is TwitterMentionEntity)
+                {
+                    TwitterMentionEntity mentionEntity = (TwitterMentionEntity)entity;
+
+                    linkedText = string.Format(
+                        "{0}<a href=\"http://twitter.com/{1}\">@{1}</a>{2}",
+                        linkedText.Substring(0, entity.StartIndex),
+                        mentionEntity.ScreenName,
+                        linkedText.Substring(entity.EndIndex));
+                }
+            }
+
+            return linkedText;
+        }
 
         /// <summary>
         /// Updates the authenticating user's status. A status update with text identical to the authenticating user's text identical to the authenticating user's current status will be ignored to prevent duplicates.

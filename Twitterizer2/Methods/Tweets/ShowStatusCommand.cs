@@ -73,6 +73,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            this.RequestParameters.Add("include_entities", "true");
         }
     }
 }

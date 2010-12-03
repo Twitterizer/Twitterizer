@@ -97,6 +97,7 @@
       <Link>SerializationHelper.cs</Link>
     </Compile>
     <Compile Include="Configuration.cs" />
+    <Compile Include="EntityTests.cs" />
     <Compile Include="NUnitSampleTests.cs" />
     <Compile Include="UserIdListTests.cs" />
     <Compile Include="Issue120.cs" />
@@ -173,10 +174,6 @@
     <ProjectReference Include="..\Twitterizer2.Async\Twitterizer2.Async.csproj">
       <Project>{566E5F16-088A-4AB5-967A-A05BA636AF75}</Project>
       <Name>Twitterizer2.Async</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Twitterizer2.Streaming\Twitterizer2.Streaming.csproj">
-      <Project>{AFDC57ED-C013-4581-9D06-54D8A42D696D}</Project>
-      <Name>Twitterizer2.Streaming</Name>
     </ProjectReference>
     <ProjectReference Include="..\Twitterizer2\Twitterizer2.csproj">
       <Project>{2FDC3492-6B9E-4771-9755-7892C9CB1E96}</Project>
