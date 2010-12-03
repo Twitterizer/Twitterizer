@@ -197,17 +197,17 @@ namespace Twitterizer
         {
             this.RateLimiting = new RateLimiting();
 
-            if (!response.Headers.AllKeys.Contains("X-RateLimit-Limit"))
+            if (response.Headers.AllKeys.Contains("X-RateLimit-Limit"))
             {
                 this.RateLimiting.Total = int.Parse(response.Headers["X-RateLimit-Limit"], CultureInfo.InvariantCulture);
             }
 
-            if (!response.Headers.AllKeys.Contains("X-RateLimit-Remaining"))
+            if (response.Headers.AllKeys.Contains("X-RateLimit-Remaining"))
             {
                 this.RateLimiting.Remaining = int.Parse(response.Headers["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
             }
 
-            if (!string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
+            if (string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
             {
                 this.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
                     .AddSeconds(double.Parse(response.Headers["X-RateLimit-Reset"], CultureInfo.InvariantCulture));
