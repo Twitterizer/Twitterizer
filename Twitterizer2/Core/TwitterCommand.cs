@@ -270,7 +270,15 @@ namespace Twitterizer.Core
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
                 // Try to read the error message, if there is one.
-                twitterResponse.ErrorMessage = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData).ErrorMessage;
+                try
+                {
+                    twitterResponse.ErrorMessage = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData).ErrorMessage;
+                }
+                catch (Exception)
+                {
+                    // Occasionally, Twitter responds with XML error data even though we asked for json.
+                    // This is that scenario. We will deal with it by doing nothing. It's up to the developer to deal with it.
+                }
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
@@ -279,8 +287,6 @@ namespace Twitterizer.Core
 
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
-
-
 
                 return twitterResponse;
             }
