@@ -81,6 +81,11 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
             }
+
+            if (options.Count > 0)
+            {
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+            }
         }
     }
 }

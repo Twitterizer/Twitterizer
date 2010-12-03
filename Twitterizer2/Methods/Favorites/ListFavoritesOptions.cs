@@ -43,6 +43,12 @@ namespace Twitterizer
     public class ListFavoritesOptions : OptionalProperties
     {
         /// <summary>
+        /// Gets or sets the number of favorites to return.
+        /// </summary>
+		  /// <value>The number of favorites to return per page.</value>
+        public int Count { get;set; }
+
+        /// <summary>
         /// Gets or sets the user name or id of the user for whom to return results for.
         /// </summary>
         /// <value>The user name or id of the user for whom to return results for.</value>
