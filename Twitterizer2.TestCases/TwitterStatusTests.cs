@@ -6,6 +6,7 @@ using Twitterizer;
 using Twitterizer.Entities;
 
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Twitterizer2.TestCases
 {
@@ -166,6 +167,24 @@ namespace Twitterizer2.TestCases
                                select g.First();
             
             
+        }
+
+        [Test]
+        public static void Conversation()
+        {
+            OAuthTokens tokens = Configuration.GetTokens();
+
+            var statusResponse = TwitterStatus.Show(7183041864671232);
+
+            List<TwitterStatus> conversation = new List<TwitterStatus>();
+            conversation.Add(statusResponse.ResponseObject);
+
+            while (statusResponse != null && statusResponse.ResponseObject.InReplyToStatusId.HasValue)
+            {
+                statusResponse = TwitterStatus.Show(statusResponse.ResponseObject.InReplyToStatusId.Value);
+
+                conversation.Insert(0, statusResponse.ResponseObject);
+            }
         }
     }
 }
