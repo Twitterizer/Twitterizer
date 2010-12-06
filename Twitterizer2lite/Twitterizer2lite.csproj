@@ -155,6 +155,12 @@
     <Compile Include="..\Twitterizer2\Methods\Block\CreateBlockCommand.cs">
       <Link>CreateBlockCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\DestroyBlockCommand.cs">
+      <Link>DestroyBlockCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\ExistsBlockCommand.cs">
+      <Link>ExistsBlockCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Block\TwitterBlock.cs">
       <Link>TwitterBlock.cs</Link>
     </Compile>
@@ -473,8 +479,6 @@
     <Compile Include="..\Twitterizer2\TwitterResponse.cs">
       <Link>TwitterResponse.cs</Link>
     </Compile>
-    <Compile Include="DestroyBlockCommand.cs" />
-    <Compile Include="ExistsBlockCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
