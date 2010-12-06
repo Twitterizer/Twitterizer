@@ -85,6 +85,9 @@ namespace Twitterizer.Commands
 
                 if (this.Page <= 1 && options.Page > 1)
                     this.Page = options.Page;
+
+                if (options.IncludeEntites)
+                    this.RequestParameters.Add("include_entities", "true");
             }
 
             this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));

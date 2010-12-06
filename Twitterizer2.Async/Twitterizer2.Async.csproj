@@ -62,6 +62,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="TwitterBlockAsync.cs" />
     <Compile Include="TwitterSavedSearchAsync.cs" />
     <Compile Include="TwitterAsyncResponse.cs" />
     <Compile Include="TwitterDirectMessageAsync.cs" />

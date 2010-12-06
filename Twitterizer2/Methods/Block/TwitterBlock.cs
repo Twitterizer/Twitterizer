@@ -93,7 +93,123 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, string screenName)
         {
-            return Create(tokens, screenName);
+            return Create(tokens, screenName, null);
+        }
+
+        /// <summary>
+        /// Unblocks the user specified as the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The unblocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Destroy(OAuthTokens tokens, decimal userId, OptionalProperties options)
+        {
+            Commands.DestroyBlockCommand command = new Commands.DestroyBlockCommand(tokens, string.Empty, userId, options);
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Unblocks the user specified as the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>
+        /// The unblocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Destroy(OAuthTokens tokens, decimal userId)
+        {
+            return Destroy(tokens, userId, null);
+        }
+
+        /// <summary>
+        /// Unblocks the user specified as the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">The user's screen name.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The unblocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Destroy(OAuthTokens tokens, string screenName, OptionalProperties options)
+        {
+            Commands.DestroyBlockCommand command = new Commands.DestroyBlockCommand(tokens, screenName, -1, options);
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Unblocks the user specifiedr.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">The user's screen name.</param>
+        /// <returns>
+        /// The unblocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Destroy(OAuthTokens tokens, string screenName)
+        {
+            return Destroy(tokens, screenName, null);
+        }
+
+        /// <summary>
+        /// Checks for a block against the the user specified as the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The blocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Exists(OAuthTokens tokens, decimal userId, OptionalProperties options)
+        {
+            Commands.ExistsBlockCommand command = new Commands.ExistsBlockCommand(tokens, string.Empty, userId, options);
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Checks for a block against the user specified as the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>
+        /// The blocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Exists(OAuthTokens tokens, decimal userId)
+        {
+            return Exists(tokens, userId, null);
+        }
+
+        /// <summary>
+        /// Checks for a block against the the user specified as the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">The user's screen name.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// The blocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Exists(OAuthTokens tokens, string screenName, OptionalProperties options)
+        {
+            Commands.ExistsBlockCommand command = new Commands.ExistsBlockCommand(tokens, screenName, -1, options);
+
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Checks for a block against the the user specifiedr.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">The user's screen name.</param>
+        /// <returns>
+        /// The blocked user in the requested format when successful.
+        /// </returns>
+        public static TwitterResponse<TwitterUser> Exists(OAuthTokens tokens, string screenName)
+        {
+            return Exists(tokens, screenName, null);
         }
     }
 }

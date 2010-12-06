@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DirectMessagesCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="DestroyBlockCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,73 +28,67 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The Direct Messages Command class.</summary>
+// <author>David Golden</author>
+// <summary>The destroy block command class.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Globalization;
-    using Twitterizer;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using Twitterizer.Core;
 
     /// <summary>
-    /// The Direct Messages Command
+    /// The destroy block command class.
     /// </summary>
-    [AuthorizedCommandAttribute]
-    internal sealed class DirectMessagesCommand : PagedCommand<TwitterDirectMessageCollection>
+    /// <remarks>http://dev.twitter.com/doc/post/blocks/destroy</remarks>
+    internal class DestroyBlockCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>
-        /// The base address to the API method.
+        /// Initializes a new instance of the <see cref="DestroyBlockCommand"/> class.
         /// </summary>
-        private const string Path = "direct_messages.json";
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DirectMessagesCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">Name of the screen.</param>
+        /// <param name="userId">The user id.</param>
         /// <param name="options">The options.</param>
-        public DirectMessagesCommand(OAuthTokens tokens, DirectMessagesOptions options)
-            : base(HTTPVerb.GET, Path, tokens, options)
+        public DestroyBlockCommand(OAuthTokens tokens, string screenName, decimal userId, OptionalProperties options)
+            : base(HTTPVerb.POST, "blocks/destroy.json", tokens, options)
         {
-            if (tokens == null)
+            if (string.IsNullOrEmpty(screenName) && userId <= 0)
             {
-                throw new ArgumentNullException("tokens");
+                throw new ArgumentException("A screen name or user id is required.");
             }
         }
-        #endregion
 
         /// <summary>
-        /// Initializes the command.
+        /// Gets or sets the name of the screen.
+        /// </summary>
+        /// <value>The name of the screen.</value>
+        public string ScreenName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user id.
+        /// </summary>
+        /// <value>The user id.</value>
+        public decimal UserId { get; set; }
+
+        /// <summary>
+        /// Inits this instance.
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
-            DirectMessagesOptions options = this.OptionalProperties as DirectMessagesOptions;
-
-            if (options != null)
+            if (!string.IsNullOrEmpty(this.ScreenName))
             {
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
-
-                if (options.IncludeEntites)
-                    this.RequestParameters.Add("include_entities", "true");
+                this.RequestParameters.Add("screen_name", this.ScreenName);
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            if (this.UserId > 0)
+            {
+                this.RequestParameters.Add("user_id", this.UserId.ToString());
+            }
+
+            this.RequestParameters.Add("include_entities", "true");
         }
     }
 }

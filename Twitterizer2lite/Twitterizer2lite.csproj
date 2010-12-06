@@ -473,6 +473,8 @@
     <Compile Include="..\Twitterizer2\TwitterResponse.cs">
       <Link>TwitterResponse.cs</Link>
     </Compile>
+    <Compile Include="DestroyBlockCommand.cs" />
+    <Compile Include="ExistsBlockCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

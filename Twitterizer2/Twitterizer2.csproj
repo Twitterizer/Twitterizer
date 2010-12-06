@@ -130,6 +130,8 @@
     <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsCommand.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsOptions.cs" />
+    <Compile Include="Methods\Block\ExistsBlockCommand.cs" />
+    <Compile Include="Methods\Block\DestroyBlockCommand.cs" />
     <Compile Include="Methods\Block\CreateBlockCommand.cs" />
     <Compile Include="Methods\Block\TwitterBlock.cs" />
     <Compile Include="Methods\DirectMessage\DeleteDirectMessageCommand.cs" />
