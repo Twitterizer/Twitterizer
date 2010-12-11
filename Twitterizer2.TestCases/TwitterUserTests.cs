@@ -36,20 +36,6 @@ namespace Twitterizer2.TestCases
             Assert.IsNotEmpty(results);
         }
 
-        [Category("Read-Write")]
-        [Category("REST")]
-        [Test]
-        [TestCase]
-        public static void UploadProfileImage()
-        {
-            OAuthTokens tokens = Configuration.GetTokens();
-
-            TwitterImage newProfileImage = TwitterImage.ReadFromDisk("Paper_Cup.jpg");
-            TwitterUser updatedUser = TwitterUser.UpdateProfileImage(tokens, newProfileImage, null).ResponseObject;
-
-            Assert.IsNotNull(updatedUser);
-        }
-
         [Category("ReadOnly")]
         [Category("REST")]
         [Test]

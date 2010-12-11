@@ -51,8 +51,8 @@ using System.Security;
 [assembly: AssemblyCopyright("2010 Patrick 'Ricky' Smith (www.ricky-dev.com)")]
 [assembly: AssemblyTrademark("")]
 
-[assembly: AssemblyVersion("2.3.1.*")]
-[assembly: AssemblyFileVersion("2.3.1.0")]
+[assembly: AssemblyVersion("2.4.0.*")]
+[assembly: AssemblyFileVersion("2.4.0.0")]
 
 #if !SILVERLIGHT
 [assembly: AllowPartiallyTrustedCallers]
