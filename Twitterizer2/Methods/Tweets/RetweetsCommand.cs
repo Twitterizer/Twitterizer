@@ -47,6 +47,12 @@ namespace Twitterizer.Commands
 #endif
     internal sealed class RetweetsCommand : TwitterCommand<TwitterStatusCollection>
     {
+        /// <summary>
+        /// Gets or sets the status id.
+        /// </summary>
+        /// <value>The status id.</value>
+        public decimal StatusId { get; set; }
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="RetweetsCommand"/> class.
@@ -70,6 +76,8 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("statusId");
             }
+
+            this.StatusId = statusId;
         }
         #endregion
 
@@ -78,7 +86,14 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            this.RequestParameters.Add("id", this.StatusId.ToString(CultureInfo.InvariantCulture));
+
             RetweetsOptions options = this.OptionalProperties as RetweetsOptions;
+
+            if (options == null)
+            {
+                return;
+            }
 
             if (options.Count > 0)
                 this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
