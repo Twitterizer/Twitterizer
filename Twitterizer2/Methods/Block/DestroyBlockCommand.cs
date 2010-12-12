@@ -59,6 +59,8 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentException("A screen name or user id is required.");
             }
+            ScreenName = this.ScreenName;
+            UserId = this.UserId;
         }
 
         /// <summary>
