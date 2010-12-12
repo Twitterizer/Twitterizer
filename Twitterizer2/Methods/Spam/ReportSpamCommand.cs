@@ -34,8 +34,10 @@
 namespace Twitterizer.Commands
 {
     using System.Globalization;
+    using Twitterizer.Core;
+    using System;
 
-    internal class ReportSpamCommand : Core.TwitterCommand<TwitterUser>
+    internal class ReportSpamCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>
         /// Gets or sets the user id.
@@ -59,13 +61,12 @@ namespace Twitterizer.Commands
         public ReportSpamCommand(OAuthTokens tokens, decimal userId, string screenName, OptionalProperties options)
             : base(HTTPVerb.POST, "report_spam.json", tokens, options)
         {
-            if (userId <= 0 ^ string.IsNullOrEmpty(screenName))
+            if (string.IsNullOrEmpty(screenName) && userId <= 0)
             {
-                throw new System.ArgumentException("Either User ID or Screen Name is required, but not both.", "userId");
+                throw new ArgumentException("A screen name or user id is required.");
             }
-
-            this.UserId = userId;
             this.ScreenName = screenName;
+            this.UserId = userId;
         }
 
         /// <summary>
@@ -73,11 +74,14 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.UserId > 0) 
-                this.RequestParameters.Add("user_id", UserId.ToString(CultureInfo.InvariantCulture));
-
-            if (!string.IsNullOrEmpty(this.ScreenName)) 
+            if (this.UserId > 0)
+            {
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (!string.IsNullOrEmpty(this.ScreenName))
+            {
                 this.RequestParameters.Add("screen_name", this.ScreenName);
+            }
         }
     }
 }

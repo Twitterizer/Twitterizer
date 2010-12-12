@@ -38,6 +38,7 @@ namespace Twitterizer.Commands
     using System.Linq;
     using System.Text;
     using Twitterizer.Core;
+    using System.Globalization;
 
     /// <summary>
     /// The destroy block command class.
@@ -59,8 +60,8 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentException("A screen name or user id is required.");
             }
-            ScreenName = this.ScreenName;
-            UserId = this.UserId;
+            this.ScreenName = screenName;
+            this.UserId = userId;
         }
 
         /// <summary>
@@ -80,14 +81,13 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (!string.IsNullOrEmpty(this.ScreenName))
-            {
-                this.RequestParameters.Add("screen_name", this.ScreenName);
-            }
-
             if (this.UserId > 0)
             {
-                this.RequestParameters.Add("user_id", this.UserId.ToString());
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (!string.IsNullOrEmpty(this.ScreenName))
+            {
+                this.RequestParameters.Add("screen_name", this.ScreenName);
             }
 
             this.RequestParameters.Add("include_entities", "true");
