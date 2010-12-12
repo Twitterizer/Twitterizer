@@ -57,7 +57,7 @@ namespace Twitterizer.Commands
         /// <param name="options">The options.</param>
         public UpdateListCommand(OAuthTokens tokens, string username, string id, UpdateListOptions options)
             : base(
-                HTTPVerb.GET, 
+                HTTPVerb.POST, 
                 string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, id), 
                 tokens, 
                 options)
