@@ -381,7 +381,7 @@ namespace Twitterizer.Core
             if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
             {
                 rateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Local);
+                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
             }
             return rateLimiting;
         }

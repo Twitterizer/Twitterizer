@@ -285,7 +285,9 @@
     <None Include="OAuth\OAuthUtility.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Core\OptionalProperties.xml" />
+    <None Include="Core\OptionalProperties.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Methods\Notification\" />

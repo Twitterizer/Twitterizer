@@ -111,6 +111,14 @@ namespace Twitterizer
         /// <value>The recipient.</value>
         [JsonProperty(PropertyName = "recipient")]
         public TwitterUser Recipient { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entities.
+        /// </summary>
+        /// <value>The entities.</value>
+        [JsonProperty(PropertyName = "entities")]
+        [JsonConverter(typeof(Entities.TwitterEntityCollection.Converter))]
+        public Entities.TwitterEntityCollection Entities { get; set; }
         #endregion
 
         /// <summary>
