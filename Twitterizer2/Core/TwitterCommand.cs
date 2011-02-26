@@ -254,6 +254,8 @@ namespace Twitterizer.Core
                         }.Contains(wex.Status))
                 {
                     twitterResponse.Result = RequestResult.ConnectionFailure;
+                    twitterResponse.ErrorMessage = wex.Message;
+                    return twitterResponse;
                 }
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.

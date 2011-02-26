@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9223c5ca-4b52-49ce-a51c-ae1252eaff5b}</ProjectGuid>
-    <SHFBSchemaVersion>1.8.0.3</SHFBSchemaVersion>
+    <SHFBSchemaVersion>1.9.0.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
@@ -98,6 +98,7 @@
     <ContentLayout Include="XML Documentation\Twitterizer2.content" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="XML Documentation\Mono.aml" />
     <None Include="XML Documentation\Examples.aml" />
     <None Include="XML Documentation\HowDoI.aml" />
     <None Include="XML Documentation\Troubleshooting.aml" />

@@ -37,7 +37,6 @@ namespace Twitterizer
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Runtime.Serialization;
     using System.Text;
     using Core;
 
@@ -207,10 +206,10 @@ namespace Twitterizer
                 this.RateLimiting.Remaining = int.Parse(response.Headers["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
             }
 
-            if (string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
+            if (!string.IsNullOrEmpty(response.Headers["X-RateLimit-Reset"]))
             {
-                this.RateLimiting.ResetDate = (new DateTime(1970, 1, 1, 0, 0, 0, 0))
-                    .AddSeconds(double.Parse(response.Headers["X-RateLimit-Reset"], CultureInfo.InvariantCulture));
+                this.RateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
+                    .AddSeconds(double.Parse(response.Headers["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
             }
         }
     }
