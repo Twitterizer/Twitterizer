@@ -2,7 +2,7 @@
 // <copyright file="TwitterStream.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
-//  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
+//  Copyright (c) 2010/2011, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without modification, are 
@@ -43,14 +43,39 @@ namespace Twitterizer.Streaming
     using Newtonsoft.Json.Linq;
 
     /// <summary>
-    /// The delegate to handle each status received.
+    /// The delegates to handle each status received.
     /// </summary>
     /// <param name="status">The status received.</param>
     public delegate void TwitterStatusReceivedHandler(TwitterStatus status);
 
     public delegate void TwitterStatusDeletedHandler(TwitterStatus status);
 
+    /// <summary>
+    /// The delegate to handle changes in the friend list
+    /// </summary>
+    /// <param name="friendList">List of user ids</param>
     public delegate void TwitterFriendsReceivedHandler(List<decimal> friendList);
+
+    public enum StopReasons
+    {
+        StoppedByRequest,
+        WebConnectionFailed,
+        Unknown
+    }
+    /// <summary>
+    /// The delegate telling that the streaming interface stopped out of any reason
+    /// </summary>
+    /// <param name="reason">The reason why the streaming stopped (if available)</param>
+    public delegate void StreamingInterfaceStopped(StopReasons reason, string description);
+
+    /// <summary>
+    /// This delegate gives the raw received status to the using app when we don't know how to handle it
+    /// So the app can maybe implement its own parser for that until we implement it here or
+    /// know at least there was something, give us the message and we can see
+    /// </summary>
+    /// <param name="message"></param>
+    public delegate void UnknownMessageTypeReceived(string message);
+
 
     /// <summary>
     /// The TwitterStream class. Provides an interface to real-time status changes.
@@ -63,12 +88,18 @@ namespace Twitterizer.Streaming
         private bool stopReceived;
 
         /// <summary>
+        /// The useragant which shall be used in connections to Twitter (a must in the specs of the API)
+        /// </summary>
+        private string userAgent { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStream"/> class.
         /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="password">The password.</param>
-        public TwitterStream(OAuthTokens tokens)
+        /// <param name="tokes">The OAuth tokens.</param>
+        /// <param name="userAgent">The useragent string which shall include the version of your client.</param>
+        public TwitterStream(OAuthTokens tokens, string UserAgent)
         {
+            userAgent = UserAgent;
             this.Tokens = tokens;
         }
 
@@ -82,6 +113,16 @@ namespace Twitterizer.Streaming
         public event TwitterStatusDeletedHandler OnStatusDeleted;
 
         public event TwitterFriendsReceivedHandler OnFriendsReceived;
+
+        /// <summary>
+        /// Events which shall give the using app the possibility to react on stream changes
+        /// </summary>
+        public event StreamingInterfaceStopped OnStreamingStopped;
+
+        /// <summary>
+        /// Event if we get an unkonwn message type
+        /// </summary>
+        public event UnknownMessageTypeReceived OnUnknownMessageTypeReceived;
 
         /// <summary>
         /// Starts the filter stream. Returns public statuses that match one or more filter predicates.
@@ -137,10 +178,11 @@ namespace Twitterizer.Streaming
         /// </summary>
         public void StartUserStream()
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("http://betastream.twitter.com/2b/user.json"), HTTPVerb.GET, this.Tokens);
-            
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens);
+
             HttpWebRequest request = builder.PrepareRequest();
             request.KeepAlive = true;
+            request.UserAgent = userAgent;
 
             request.BeginGetResponse(StreamCallback, request);
         }
@@ -156,23 +198,52 @@ namespace Twitterizer.Streaming
             using (var response = req.EndGetResponse(result))
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
-                while (!this.stopReceived && !reader.EndOfStream)
+                // taking care of lines may contain \n in text - \r is garanteed being always last line
+                string olderLines = "";
+                try
                 {
-                    string lineOfData = reader.ReadLine();
+                    while (!this.stopReceived && !reader.EndOfStream)
+                    {
+                        string lineOfData = reader.ReadLine();
+                        if (!lineOfData.EndsWith("\r"))
+                        {
+                            olderLines += lineOfData;
+                            continue;
+                        }
+                        else
+                        {
+                            lineOfData = olderLines + lineOfData;
+                            olderLines = "";
+                        }
 
-                    if (string.IsNullOrWhiteSpace(lineOfData))
-                        continue;
+                        if (string.IsNullOrWhiteSpace(lineOfData))
+                            continue;
 
-                    if (ReadStatus(lineOfData))
-                        continue;
+                        if (ReadStatus(lineOfData))
+                            continue;
 
-                    if (ReadStatusDeleted(lineOfData))
-                        continue;
+                        if (ReadStatusDeleted(lineOfData))
+                            continue;
 
-                    if (ReadFollowers(lineOfData))
-                        continue;
+                        if (ReadFollowers(lineOfData))
+                            continue;
+
+                        OnUnknownMessageTypeReceived(lineOfData);
+                    }
                 }
-
+                catch (Exception exp)
+                {
+                    // maybe also an event!!?
+                }
+                if (this.stopReceived)
+                {
+                    OnStreamingStopped(StopReasons.StoppedByRequest, "Stopped by request");
+                } 
+                else if (reader.EndOfStream)
+                {
+                    OnStreamingStopped(StopReasons.WebConnectionFailed, "Reader end of stream");
+                }
+                
                 req.Abort();
                 reader.Close();
                 response.Close();
@@ -247,7 +318,7 @@ namespace Twitterizer.Streaming
                     this.OnStatusDeleted(resultStatus);
                 }
             }
-            catch (SerializationException) 
+            catch (SerializationException)
             {
                 return false;
             }
@@ -262,8 +333,9 @@ namespace Twitterizer.Streaming
         {
             WebRequestBuilder builder = new WebRequestBuilder(new Uri(streamUri), HTTPVerb.GET, this.Tokens);
 
-            WebRequest request;
+            HttpWebRequest request;
             request = builder.PrepareRequest();
+            request.UserAgent = userAgent;
 
             request.BeginGetResponse(
                 ar =>
@@ -281,6 +353,7 @@ namespace Twitterizer.Streaming
                             if (this.stopReceived)
                             {
                                 req.Abort();
+                                OnStreamingStopped(StopReasons.StoppedByRequest, "Stop request received");
                                 return;
                             }
 
@@ -288,7 +361,7 @@ namespace Twitterizer.Streaming
                             {
                                 TwitterStatus resultObject = Twitterizer.Core.SerializationHelper<TwitterStatus>.Deserialize(
                                     Encoding.UTF8.GetBytes(reader.ReadLine()));
-                                
+
 
                                 if (resultObject != null && resultObject.Id > 0 && this.OnStatusReceived != null)
                                 {
@@ -302,8 +375,6 @@ namespace Twitterizer.Streaming
                     }
                 },
                 request);
-
-            request.Abort();
         }
 
         /// <summary>
@@ -311,6 +382,11 @@ namespace Twitterizer.Streaming
         /// </summary>
         public void EndStream()
         {
+            EndStream(StopReasons.Unknown, "General reason");
+        }
+        public void EndStream(StopReasons reason, string description)
+        {
+            OnStreamingStopped(reason, description);
             this.stopReceived = true;
         }
 
