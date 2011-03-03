@@ -106,5 +106,11 @@ namespace Twitterizer
         {
             return UpdateProfileImage(tokens, image, null);
         }
+
+        public static TwitterResponse<TwitterUser> UpdateProfile(OAuthTokens tokens, UpdateProfileOptions options)
+        {
+            Commands.UpdateProfileCommand command = new Commands.UpdateProfileCommand(tokens, options);
+            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+        }
     }
 }

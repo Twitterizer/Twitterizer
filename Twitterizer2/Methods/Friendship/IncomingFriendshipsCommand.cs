@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="IncomingFriendshipCommand.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,37 +29,41 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by options class.</summary>
+// <summary>The incoming friendship command class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+
+namespace Twitterizer.Commands
 {
-    /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
-    /// </summary>
-    public class RetweetedByOptions : OptionalProperties
+    using System.Globalization;
+    using Twitterizer.Core;
+
+    class IncomingFriendshipsCommand : TwitterCommand<TwitterCursorPagedIdCollection>
     {
         /// <summary>
-        /// Specifies the number of records to retrieve. Must be less than or equal to 100.
+        /// Initializes a new instance of the <see cref="IncomingFriendshipsCommand"/> class.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        public IncomingFriendshipsCommand(OAuthTokens tokens, IncomingFriendshipsOptions options)
+            : base(HTTPVerb.GET, "friendships/incoming.json", tokens, options)
+        {
+            this.DeserializationHandler = TwitterCursorPagedIdCollection.DeserializeWrapper;
+        }
 
         /// <summary>
-        /// Specifies the page of results to retrieve.
+        /// Inits this instance.
         /// </summary>
-        /// <value>The page.</value>
-        public int Page { get; set; }
-
-        /// <summary>
-        /// When set to true each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
-        /// </summary>
-        /// <value><c>true</c> if [trim user]; otherwise, <c>false</c>.</value>
-        public bool TrimUser { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether entities should be included in the results.
-        /// </summary>
-        /// <value><c>true</c> if entities should be included; otherwise, <c>false</c>.</value>
-        public bool IncludeEntities { get; set; }
+        public override void Init()
+        {
+            IncomingFriendshipsOptions options = this.OptionalProperties as IncomingFriendshipsOptions;
+            if (options == null || options.Cursor == 0)
+            {
+                this.RequestParameters.Add("cursor", "-1");
+            }
+            else
+            {
+                this.RequestParameters.Add("Cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
+            }
+        }
     }
 }

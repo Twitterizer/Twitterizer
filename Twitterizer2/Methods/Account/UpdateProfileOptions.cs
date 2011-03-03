@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="UpdateProfileOptions.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,37 +29,42 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by options class.</summary>
+// <summary>The update profile options class.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
+    /// Optional properties for the <see cref="Twitterizer.Commands.UpdateProfileCommand"/> class.
     /// </summary>
-    public class RetweetedByOptions : OptionalProperties
+    public class UpdateProfileOptions : OptionalProperties
     {
         /// <summary>
-        /// Specifies the number of records to retrieve. Must be less than or equal to 100.
+        /// Gets or sets the name.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
+        /// <value>The name.</value>
+        public string Name { get; set; }
 
         /// <summary>
-        /// Specifies the page of results to retrieve.
+        /// Gets or sets the URL.
         /// </summary>
-        /// <value>The page.</value>
-        public int Page { get; set; }
+        /// <value>The URL.</value>
+        public string Url { get; set; }
 
         /// <summary>
-        /// When set to true each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
+        /// Gets or sets the location.
         /// </summary>
-        /// <value><c>true</c> if [trim user]; otherwise, <c>false</c>.</value>
-        public bool TrimUser { get; set; }
+        /// <value>The location.</value>
+        public string Location { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether entities should be included in the results.
+        /// Gets or sets the description.
         /// </summary>
-        /// <value><c>true</c> if entities should be included; otherwise, <c>false</c>.</value>
-        public bool IncludeEntities { get; set; }
+        /// <value>The description.</value>
+        public string Description { get; set; }
     }
 }

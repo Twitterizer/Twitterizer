@@ -118,6 +118,7 @@
     </Compile>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
+    <Compile Include="Core\TwitterCursorPagedIdCollection.cs" />
     <Compile Include="Core\ITwitterObject.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,10 +129,14 @@
     <Compile Include="Methods\Account\TwitterAccount.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
+    <Compile Include="Methods\Account\UpdateProfileCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileOptions.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsCommand.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsOptions.cs" />
+    <Compile Include="Methods\Block\BlockingCommand.cs" />
     <Compile Include="Methods\Block\BlockingIdsCommand.cs" />
+    <Compile Include="Methods\Block\BlockingOptions.cs" />
     <Compile Include="Methods\Block\ExistsBlockCommand.cs" />
     <Compile Include="Methods\Block\DestroyBlockCommand.cs" />
     <Compile Include="Methods\Block\CreateBlockCommand.cs" />
@@ -149,7 +154,11 @@
     <Compile Include="Methods\Favorites\ListFavoritesCommand.cs" />
     <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
     <Compile Include="Methods\Favorites\TwitterFavorite.cs" />
+    <Compile Include="Methods\Friendship\OutgoingFriendshipsCommand.cs" />
+    <Compile Include="Methods\Friendship\OutgoingFriendshipsOptions.cs" />
     <Compile Include="Methods\Friendship\FriendsIdsCommand.cs" />
+    <Compile Include="Methods\Friendship\IncomingFriendshipsCommand.cs" />
+    <Compile Include="Methods\Friendship\IncomingFriendshipsOptions.cs" />
     <Compile Include="Methods\Friendship\UserIdCollection.cs" />
     <Compile Include="Methods\Friendship\FollowersIdsCommand.cs" />
     <Compile Include="Methods\Friendship\UsersIdsOptions.cs" />
@@ -177,6 +186,9 @@
     <Compile Include="Methods\List\GetListSubscriptionsCommand.cs" />
     <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />
+    <Compile Include="Methods\Notification\NotificationLeaveCommand.cs" />
+    <Compile Include="Methods\Notification\NotificationFollowCommand.cs" />
+    <Compile Include="Methods\Notification\TwitterNotification.cs" />
     <Compile Include="Methods\SavedSearches\SavedSearchesCommand.cs" />
     <Compile Include="Methods\SavedSearches\CreateSavedSearchCommand.cs" />
     <Compile Include="Methods\SavedSearches\DeleteSavedSearchCommand.cs" />
@@ -292,9 +304,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Methods\Notification\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

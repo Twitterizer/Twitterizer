@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="UpdateProfileCommand.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,37 +29,45 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by options class.</summary>
+// <summary>The update profile command class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+namespace Twitterizer.Commands
 {
+    using System;
+    using Twitterizer.Core;
+
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
+    /// The update profile command class.
     /// </summary>
-    public class RetweetedByOptions : OptionalProperties
+    sealed class UpdateProfileCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>
-        /// Specifies the number of records to retrieve. Must be less than or equal to 100.
+        /// Initializes a new instance of the <see cref="UpdateProfileCommand"/> class.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        public UpdateProfileCommand(OAuthTokens tokens, UpdateProfileOptions options)
+            : base(HTTPVerb.POST, "account/update_profile.json", tokens, options)
+        {
+        }
 
         /// <summary>
-        /// Specifies the page of results to retrieve.
+        /// Inits this instance.
         /// </summary>
-        /// <value>The page.</value>
-        public int Page { get; set; }
+        public override void Init()
+        {
+            this.RequestParameters.Add("include_entities", "true");
 
-        /// <summary>
-        /// When set to true each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
-        /// </summary>
-        /// <value><c>true</c> if [trim user]; otherwise, <c>false</c>.</value>
-        public bool TrimUser { get; set; }
+            UpdateProfileOptions options = this.OptionalProperties as UpdateProfileOptions;
+            if (options == null)
+            {
+                return;
+            }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether entities should be included in the results.
-        /// </summary>
-        /// <value><c>true</c> if entities should be included; otherwise, <c>false</c>.</value>
-        public bool IncludeEntities { get; set; }
+            this.RequestParameters.Add("name", options.Name);
+            this.RequestParameters.Add("description", options.Description);
+            this.RequestParameters.Add("location", options.Location);
+            this.RequestParameters.Add("url", options.Url);
+        }
     }
 }

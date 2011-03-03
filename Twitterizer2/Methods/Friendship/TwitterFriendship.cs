@@ -437,5 +437,50 @@ namespace Twitterizer
         }
 
         #endregion
+
+        /// <summary>
+        /// Returns a collection of IDs for every user who has a pending request to follow the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterCursorPagedIdCollection> IncomingRequests(OAuthTokens tokens, IncomingFriendshipsOptions options)
+        {
+            Commands.IncomingFriendshipsCommand command = new Commands.IncomingFriendshipsCommand(tokens, options);
+            return Core.CommandPerformer<TwitterCursorPagedIdCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns a collection of IDs for every user who has a pending request to follow the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterCursorPagedIdCollection> IncomingRequests(OAuthTokens tokens)
+        {
+            return IncomingRequests(tokens, null);
+        }
+
+        /// <summary>
+        /// Returns a collection of IDs for every protected user for whom the authenticating user has a pending follow request.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterCursorPagedIdCollection> OutgoingRequests(OAuthTokens tokens, OutgoingFriendshipsOptions options)
+        {
+            Commands.OutgoingFriendshipsCommand command = new Commands.OutgoingFriendshipsCommand(tokens, options);
+            return Core.CommandPerformer<TwitterCursorPagedIdCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns a collection of IDs for every protected user for whom the authenticating user has a pending follow request.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterCursorPagedIdCollection> OutgoingRequests(OAuthTokens tokens)
+        {
+            return OutgoingRequests(tokens, null);
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="TwitterCursorPagedIdCollection.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,37 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by options class.</summary>
+// <summary>The twitter cursor paged id collection class.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Twitterizer.Core;
+
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
+    /// Holds a collection of ID values that are broken into multiple pages.
     /// </summary>
-    public class RetweetedByOptions : OptionalProperties
+    public class TwitterCursorPagedIdCollection : Collection<decimal>, ITwitterObject
     {
         /// <summary>
-        /// Specifies the number of records to retrieve. Must be less than or equal to 100.
+        /// Annotations are additional pieces of data, supplied by Twitter clients, in a non-structured dictionary.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
+        /// <value>The annotations.</value>
+        public Dictionary<string, string> Annotations { get; set; }
 
         /// <summary>
-        /// Specifies the page of results to retrieve.
+        /// Gets or sets the next cursor.
         /// </summary>
-        /// <value>The page.</value>
-        public int Page { get; set; }
+        /// <value>The next cursor.</value>
+        public long NextCursor { get; set; }
 
         /// <summary>
-        /// When set to true each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
+        /// Gets or sets the previous cursor.
         /// </summary>
-        /// <value><c>true</c> if [trim user]; otherwise, <c>false</c>.</value>
-        public bool TrimUser { get; set; }
+        /// <value>The previous cursor.</value>
+        public long PreviousCursor { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether entities should be included in the results.
+        /// Deserializes the specified value.
         /// </summary>
-        /// <value><c>true</c> if entities should be included; otherwise, <c>false</c>.</value>
-        public bool IncludeEntities { get; set; }
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        internal static TwitterCursorPagedIdCollection DeserializeWrapper(JObject value)
+        {
+            if (value == null || value.SelectToken("users") == null)
+                return null;
+
+            TwitterCursorPagedIdCollection result = JsonConvert.DeserializeObject<TwitterCursorPagedIdCollection>(value.SelectToken("users").ToString());
+            result.NextCursor = value.SelectToken("next_cursor").Value<long>();
+            result.PreviousCursor = value.SelectToken("previous_cursor").Value<long>();
+
+            return result;
+        }
     }
 }

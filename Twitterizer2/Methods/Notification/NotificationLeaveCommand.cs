@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="NotificationLeaveCommand.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,37 +29,66 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by options class.</summary>
+// <summary>The notification leave command class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+namespace Twitterizer.Commands
 {
+    using System;
+    using System.Globalization;
+    using Twitterizer.Core;
+
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
+    /// The notification leave command class.
     /// </summary>
-    public class RetweetedByOptions : OptionalProperties
+    sealed class NotificationLeaveCommand : TwitterCommand<TwitterUser>
     {
         /// <summary>
-        /// Specifies the number of records to retrieve. Must be less than or equal to 100.
+        /// Initializes a new instance of the <see cref="NotificationFollowCommand"/> class.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="screenName">Name of the screen.</param>
+        /// <param name="options">The options.</param>
+        public NotificationLeaveCommand(OAuthTokens tokens, decimal userId, string screenName, OptionalProperties options)
+            : base(HTTPVerb.POST, "notifications/leave.json", tokens, options)
+        {
+            if (userId <= 0 && string.IsNullOrEmpty(screenName))
+            {
+                throw new ArgumentNullException("userId", "User ID or Screen name must be supplied");
+            }
+
+            this.UserId = userId;
+            this.ScreenName = screenName;
+        }
 
         /// <summary>
-        /// Specifies the page of results to retrieve.
+        /// Gets or sets the user id.
         /// </summary>
-        /// <value>The page.</value>
-        public int Page { get; set; }
+        /// <value>The user id.</value>
+        public decimal UserId { get; set; }
 
         /// <summary>
-        /// When set to true each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
+        /// Gets or sets the name of the screen.
         /// </summary>
-        /// <value><c>true</c> if [trim user]; otherwise, <c>false</c>.</value>
-        public bool TrimUser { get; set; }
+        /// <value>The name of the screen.</value>
+        public string ScreenName { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether entities should be included in the results.
+        /// Inits this instance.
         /// </summary>
-        /// <value><c>true</c> if entities should be included; otherwise, <c>false</c>.</value>
-        public bool IncludeEntities { get; set; }
+        public override void Init()
+        {
+            this.RequestParameters.Add("include_entities", "true");
+
+            if (this.UserId > 0)
+            {
+                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+            }
+
+            if (!string.IsNullOrEmpty(this.ScreenName))
+            {
+                this.RequestParameters.Add("screen_name", this.ScreenName);
+            }
+        }
     }
 }

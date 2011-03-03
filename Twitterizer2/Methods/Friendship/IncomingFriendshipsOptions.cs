@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByOptions.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="IncomingFriendshipOptions.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,37 +29,20 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by options class.</summary>
+// <summary>The optional parameters for the incoming friendship command.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer
 {
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
+    /// The optional properties for the <see cref="Twitterizer.Commands.IncomingFriendshipsCommand"/> class.
     /// </summary>
-    public class RetweetedByOptions : OptionalProperties
+    public class IncomingFriendshipsOptions : OptionalProperties
     {
         /// <summary>
-        /// Specifies the number of records to retrieve. Must be less than or equal to 100.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
-
-        /// <summary>
-        /// Specifies the page of results to retrieve.
-        /// </summary>
-        /// <value>The page.</value>
-        public int Page { get; set; }
-
-        /// <summary>
-        /// When set to true each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
-        /// </summary>
-        /// <value><c>true</c> if [trim user]; otherwise, <c>false</c>.</value>
-        public bool TrimUser { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether entities should be included in the results.
-        /// </summary>
-        /// <value><c>true</c> if entities should be included; otherwise, <c>false</c>.</value>
-        public bool IncludeEntities { get; set; }
+        /// <value>The cursor.</value>
+        public long Cursor { get; set; }
     }
 }

@@ -1,8 +1,11 @@
-﻿using System;
-using Twitterizer;
-
-namespace Twitterizer
+﻿namespace Twitterizer
 {
+    using System;
+    using Twitterizer;
+
+    /// <summary>
+    /// Provides asynchronous method wrappers for the <see cref="Twitterizer.Commands.DirectMessagesCommand"/> class.
+    /// </summary>
     public static class TwitterDirectMessageAsync
     {
         /// <summary>

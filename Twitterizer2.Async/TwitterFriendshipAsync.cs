@@ -248,5 +248,63 @@ namespace Twitterizer
                 },
                 null);
         }
+
+        /// <summary>
+        /// Returns a collection of IDs for every user who has a pending request to follow the authenticating user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult IncomingRequests(OAuthTokens tokens, IncomingFriendshipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterCursorPagedIdCollection>> function)
+        {
+            Func<OAuthTokens, IncomingFriendshipsOptions, TwitterResponse<TwitterCursorPagedIdCollection>> methodToCall = TwitterFriendship.IncomingRequests;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterCursorPagedIdCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns a collection of IDs for every protected user for whom the authenticating user has a pending follow request.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult OutgoingRequests(OAuthTokens tokens, OutgoingFriendshipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterCursorPagedIdCollection>> function)
+        {
+            Func<OAuthTokens, OutgoingFriendshipsOptions, TwitterResponse<TwitterCursorPagedIdCollection>> methodToCall = TwitterFriendship.OutgoingRequests;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterCursorPagedIdCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
     }
 }

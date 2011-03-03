@@ -65,31 +65,26 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            this.RequestParameters.Add("include_entities", "true");
+
             ListFavoritesOptions options = this.OptionalProperties as ListFavoritesOptions;
 
             if (options == null)
             {
+                this.RequestParameters.Add("page", "1");
                 return;
             }
+
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
 
             if (!string.IsNullOrEmpty(options.UserNameOrId))
             {
                 this.RequestParameters.Add("id", options.UserNameOrId);
             }
 
-            if (options.Page > 0)
-            {
-                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
-            }
-
             if (options.Count > 0)
             {
                 this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (options.IncludeEntites)
-            {
-                this.RequestParameters.Add("include_entities", "true");
             }
         }
     }
