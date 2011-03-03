@@ -44,7 +44,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    internal sealed class FriendsCommand : CursorPagedCommand<TwitterUserCollection>
+    internal sealed class FriendsCommand : TwitterCommand<TwitterUserCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendsCommand"/> class.
@@ -64,36 +64,20 @@ namespace Twitterizer.Commands
         {
             FriendsOptions options = this.OptionalProperties as FriendsOptions;
 
-            if (options != null)
+            if (options == null)
             {
-                if (options.UserId > 0)
-                    this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.CurrentCulture));
+                this.RequestParameters.Add("cursor", "-1");
 
-                if (!string.IsNullOrEmpty(options.ScreenName))
-                    this.RequestParameters.Add("screen_name", options.ScreenName);
-
-                if (options.Cursor != 0)
-                    this.Cursor = options.Cursor;
+                return;
             }
 
-            if (this.Cursor == 0)
-            {
-                this.Cursor = -1;
-            }
+            if (options.UserId > 0)
+                this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.CurrentCulture));
 
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
-        }
+            if (!string.IsNullOrEmpty(options.ScreenName))
+                this.RequestParameters.Add("screen_name", options.ScreenName);
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.TwitterCommand<TwitterUserCollection> Clone()
-        {
-            FriendsCommand newCommand = new FriendsCommand(this.Tokens, this.OptionalProperties as FriendsOptions);
-            newCommand.Cursor = this.Cursor;
-
-            return newCommand;
+            this.RequestParameters.Add("cursor", options.Cursor > 0 ? options.Cursor.ToString(CultureInfo.CurrentCulture) : "-1");
         }
     }
 }

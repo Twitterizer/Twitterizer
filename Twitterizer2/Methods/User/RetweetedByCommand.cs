@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/get/statuses/:id/retweeted_by</remarks>
     [AuthorizedCommandAttribute]
-    internal class RetweetedByCommand : PagedCommand<TwitterUserCollection>
+    internal class RetweetedByCommand : TwitterCommand<TwitterUserCollection>
     {
         public RetweetedByCommand(OAuthTokens tokens, decimal statusId, RetweetedByOptions options)
             : base(HTTPVerb.GET, string.Format("statuses/{0}/retweeted_by.json", statusId), tokens, options)
@@ -56,8 +56,6 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("statusId", "Status ID is required.");
             }
-
-            this.Page = 1;
         }
 
         /// <summary>
@@ -65,9 +63,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page == 0)
-                this.Page = 1;
-
             RetweetedByOptions options = this.OptionalProperties as RetweetedByOptions;
 
             if (options == null)
@@ -91,10 +86,10 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("trim_user", "true");
             }
 
-            if (options.Page > 1)
-                this.Page = options.Page;
-
-            this.RequestParameters.Add("page", this.Page.ToString());
+            if (options.Page > 0)
+            {
+                this.RequestParameters.Add("page", options.Page.ToString());
+            }
         }
     }
 }

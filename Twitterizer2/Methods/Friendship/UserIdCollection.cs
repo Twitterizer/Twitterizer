@@ -46,7 +46,7 @@ namespace Twitterizer
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    public class UserIdCollection : Collection<decimal>, ITwitterObject
+    public class UserIdCollection : TwitterIdCollection
     {
         /// <summary>
         /// Gets or sets the next cursor.
@@ -61,59 +61,10 @@ namespace Twitterizer
         public long PreviousCursor { get; set; }
 
         /// <summary>
-        /// Gets or sets the request parameters.
-        /// </summary>
-        /// <value>The request parameters.</value>
-        public new OAuthTokens Tokens { get; set; }
-
-        /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
         public new RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the command.
-        /// </summary>
-        /// <value>The command.</value>
-        internal Core.TwitterCommand<UserIdCollection> Command { get; set; }
-
-        /// <summary>
-        /// Gets the next page.
-        /// </summary>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        /// <value>The next page.</value>
-        public TwitterResponse<UserIdCollection> NextPage()
-        {
-            CursorPagedCommand<UserIdCollection> newCommand =
-                (CursorPagedCommand<UserIdCollection>)this.Command.Clone();
-
-            if (this.NextCursor == 0)
-                return null;
-
-            newCommand.Cursor = this.NextCursor;
-
-            return CommandPerformer<UserIdCollection>.PerformAction(newCommand);
-        }
-
-        /// <summary>
-        /// Gets the previous page.
-        /// </summary>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        /// <value>The previous page.</value>
-        public TwitterResponse<UserIdCollection> PreviousPage()
-        {
-            CursorPagedCommand<UserIdCollection> newCommand =
-                (CursorPagedCommand<UserIdCollection>)this.Command.Clone();
-
-            if (newCommand.Cursor == 0)
-                return null;
-
-            newCommand.Cursor = this.PreviousCursor;
-
-            return Core.CommandPerformer<UserIdCollection>.PerformAction(newCommand);
-        }
-              
 
         /// <summary>
         /// Deserializes the specified value.
@@ -141,11 +92,5 @@ namespace Twitterizer
 
             return result;
         }
-
-        /// <summary>
-        /// Gets or sets the annotations.
-        /// </summary>
-        /// <value>The annotations.</value>
-        public Dictionary<string, string> Annotations { get; set; }
     }
 }

@@ -14,7 +14,7 @@
         public LookupUsersOptions()
         {
             this.ScreenNames = new Collection<string>();
-            this.UserIds = new Collection<decimal>();
+            this.UserIds = new TwitterIdCollection();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// Gets or sets the user ids.
         /// </summary>
         /// <value>The user ids.</value>
-        public Collection<decimal> UserIds { get; set; }
+        public TwitterIdCollection UserIds { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [include entities].

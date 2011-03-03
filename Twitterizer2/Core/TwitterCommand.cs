@@ -341,15 +341,6 @@ namespace Twitterizer.Core
         }
 
         /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal virtual TwitterCommand<T> Clone()
-        {
-            return default(TwitterCommand<T>);
-        }
-
-        /// <summary>
         /// Sets the command URI.
         /// </summary>
         /// <param name="endPoint">The end point.</param>

@@ -43,14 +43,14 @@ namespace Twitterizer.Commands
     /// The create list command class
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class GetListSubscriptionsCommand : CursorPagedCommand<TwitterListCollection>
+    internal sealed class GetListSubscriptionsCommand : TwitterCommand<TwitterListCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListSubscriptionsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="options">The options.</param>
-        public GetListSubscriptionsCommand(OAuthTokens requestTokens, string userName, OptionalProperties options)
+        public GetListSubscriptionsCommand(OAuthTokens requestTokens, string userName, GetListSubscriptionsOptions options)
             : base(HTTPVerb.GET, string.Format("{0}/lists/subscriptions.json", userName), requestTokens, options)
         {
             if (requestTokens == null)
@@ -58,42 +58,22 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("requestTokens");
             }
 
-            this.Username = userName;
-
             this.DeserializationHandler = TwitterListCollection.Deserialize;
         }
-
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor <= 0)
+            GetListSubscriptionsOptions options = this.OptionalProperties as GetListSubscriptionsOptions;
+            if (options == null || options.Cursor <= 0)
             {
-                this.Cursor = -1;
+                this.RequestParameters.Add("cursor", "-1");
+
             }
 
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterListCollection> Clone()
-        {
-            return new GetListSubscriptionsCommand(this.Tokens, Username, this.OptionalProperties)
-            {
-                Cursor = this.Cursor
-            };
+            this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
         }
     }
 }

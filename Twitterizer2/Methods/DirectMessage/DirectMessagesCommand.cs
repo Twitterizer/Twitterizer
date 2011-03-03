@@ -43,13 +43,8 @@ namespace Twitterizer.Commands
     /// The Direct Messages Command
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class DirectMessagesCommand : PagedCommand<TwitterDirectMessageCollection>
+    internal sealed class DirectMessagesCommand : TwitterCommand<TwitterDirectMessageCollection>
     {
-        /// <summary>
-        /// The base address to the API method.
-        /// </summary>
-        private const string Path = "direct_messages.json";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectMessagesCommand"/> class.
@@ -57,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
         public DirectMessagesCommand(OAuthTokens tokens, DirectMessagesOptions options)
-            : base(HTTPVerb.GET, Path, tokens, options)
+            : base(HTTPVerb.GET, "direct_messages.json", tokens, options)
         {
             if (tokens == null)
             {
@@ -71,30 +66,28 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
             DirectMessagesOptions options = this.OptionalProperties as DirectMessagesOptions;
 
-            if (options != null)
+            if (options == null)
             {
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("page", "1");
 
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
-
-                if (options.IncludeEntites)
-                    this.RequestParameters.Add("include_entities", "true");
+                return;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            if (options.IncludeEntites)
+                this.RequestParameters.Add("include_entities", "true");
+
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

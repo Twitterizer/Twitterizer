@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetweetedByMeCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="ListMembershipsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,60 +29,20 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The retweeted by me command.</summary>
+// <summary>The list membership command class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
+namespace Twitterizer
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer.Core;
-
     /// <summary>
-    /// The Retweeted By Me Command.
+    /// The optional parameters for the <see cref="Twitterizer.Commands.ListMembershipsCommand"/> class
     /// </summary>
-    [AuthorizedCommandAttribute]
-    internal sealed class RetweetedByMeCommand : TwitterCommand<TwitterStatusCollection>
+    public class ListMembershipsOptions : OptionalProperties
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="RetweetedByMeCommand"/> class.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="options">The options.</param>
-        public RetweetedByMeCommand(OAuthTokens tokens, TimelineOptions options)
-            : base(HTTPVerb.GET, "statuses/retweeted_by_me.json", tokens, options)
-        {
-            if (tokens == null)
-            {
-                throw new ArgumentNullException("tokens");
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// Initializes the command.
-        /// </summary>
-        public override void Init()
-        {
-            TimelineOptions options = this.OptionalProperties as TimelineOptions;
-            if (options == null)
-            {
-                this.RequestParameters.Add("page", "1");
-
-                return;
-            }
-
-            if (options.SinceStatusId > 0)
-                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.MaxStatusId > 0)
-                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-            if (options.Count > 0)
-                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
-        }
+        /// <value>The cursor.</value>
+        public long Cursor { get; set; }
     }
 }

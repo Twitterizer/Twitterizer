@@ -84,7 +84,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Blocks the user specifiedr. Destroys a friendship to the blocked user if it exists.
+        /// Blocks the user specified as the authenticating user. Destroys a friendship to the blocked user if it exists.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="screenName">The user's screen name.</param>
@@ -142,7 +142,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Unblocks the user specifiedr.
+        /// Unblocks the user specified as the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="screenName">The user's screen name.</param>
@@ -171,7 +171,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Checks for a block against the user specified as the authenticating user.
+        /// Checks for a block against the the user specified as the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="userId">The user id.</param>
@@ -200,7 +200,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Checks for a block against the the user specifiedr.
+        /// Checks for a block against the the user specified as the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="screenName">The user's screen name.</param>
@@ -210,6 +210,29 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUser> Exists(OAuthTokens tokens, string screenName)
         {
             return Exists(tokens, screenName, null);
+        }
+
+        /// <summary>
+        /// Returns an collection of user ids the authenticating user is blocking.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A collection of user ids.</returns>
+        public static TwitterResponse<TwitterIdCollection> BlockingIds(OAuthTokens tokens, OptionalProperties options)
+        {
+            Commands.BlockingIdsCommand command = new Commands.BlockingIdsCommand(tokens, options);
+
+            return Core.CommandPerformer<TwitterIdCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns an collection of user ids the authenticating user is blocking.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>A collection of user ids.</returns>
+        public static TwitterResponse<TwitterIdCollection> BlockingIds(OAuthTokens tokens)
+        {
+            return BlockingIds(tokens, null);
         }
     }
 }

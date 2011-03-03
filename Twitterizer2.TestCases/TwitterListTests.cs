@@ -49,7 +49,7 @@ namespace Twitterizer2.TestCases
             // Attempt to page through the results.
             while (usersInTheList != null && usersInTheList.ResponseObject.Count > 0)
             {
-                usersInTheList = usersInTheList.ResponseObject.NextPage();
+                usersInTheList = TwitterList.GetMembers(tokens, "ghc", "ghc10-attendees", new GetListMembersOptions() { Cursor = usersInTheList.ResponseObject.NextCursor });
                 
                 if (usersInTheList != null)
                     countedMembers += usersInTheList.ResponseObject.Count;

@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The User Search Command class.
     /// </summary>
-    internal sealed class UserSearchCommand : PagedCommand<TwitterUserCollection>
+    internal sealed class UserSearchCommand : TwitterCommand<TwitterUserCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserSearchCommand"/> class.
@@ -76,34 +76,21 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
             this.RequestParameters.Add("q", this.Query);
 
             UserSearchOptions options = this.OptionalProperties as UserSearchOptions;
 
-            if (options != null)
+            if (options == null)
             {
-                if (options.NumberPerPage > 0)
-                    this.RequestParameters.Add("per_page", options.NumberPerPage.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("page", "1");
 
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
+                return;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-        }
+            if (options.NumberPerPage > 0)
+                this.RequestParameters.Add("per_page", options.NumberPerPage.ToString(CultureInfo.InvariantCulture));
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterUserCollection> Clone()
-        {
-            return new UserSearchCommand(this.Tokens, this.Query, this.OptionalProperties as UserSearchOptions);
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

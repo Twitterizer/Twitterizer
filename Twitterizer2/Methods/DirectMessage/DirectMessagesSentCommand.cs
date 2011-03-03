@@ -46,7 +46,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    internal sealed class DirectMessagesSentCommand : PagedCommand<TwitterDirectMessageCollection>
+    internal sealed class DirectMessagesSentCommand : TwitterCommand<TwitterDirectMessageCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectMessagesSentCommand"/> class.
@@ -67,41 +67,27 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
             DirectMessagesSentOptions options = this.OptionalProperties as DirectMessagesSentOptions;
 
-            if (options != null)
+            if (options == null)
             {
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
-
-                if (options.IncludeEntites)
-                    this.RequestParameters.Add("include_entities", "true");
+                this.RequestParameters.Add("page", "1");
+                return;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-        }
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterDirectMessageCollection> Clone()
-        {
-            return new DirectMessagesSentCommand(this.Tokens, this.OptionalProperties as DirectMessagesSentOptions);
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            if (options.IncludeEntites)
+                this.RequestParameters.Add("include_entities", "true");
+
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

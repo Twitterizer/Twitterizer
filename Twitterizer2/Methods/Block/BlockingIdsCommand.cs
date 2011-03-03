@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CursorPagedCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="BlockingIdsCommand.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,46 +29,33 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The interface that indicates that the command results can be paged through using cursors.</summary>
+// <summary>The blocking ids command class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+namespace Twitterizer.Commands
 {
     using System;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The CursorCursorPagedCommand class.
+    /// The blocking ids command class
     /// </summary>
-    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
-    /// <tocexclude />
-#if !SILVERLIGHT
-    [Serializable]
-#endif
-    internal abstract class CursorPagedCommand<T> : TwitterCommand<T>
-        where T : ITwitterObject
+    class BlockingIdsCommand : TwitterCommand<TwitterIdCollection>
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CursorPagedCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="BlockingIdsCommand"/> class.
         /// </summary>
-        /// <param name="method">The method.</param>
-        /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
-        protected CursorPagedCommand(HTTPVerb method, string endPoint, OAuthTokens tokens, OptionalProperties options)
-            : base(method, endPoint, tokens, options)
-        {
+        public BlockingIdsCommand(OAuthTokens tokens, OptionalProperties options)
+            : base(HTTPVerb.GET, "blocks/blocking/ids.json", tokens, options)
+        { 
         }
-        #endregion
 
         /// <summary>
-        /// Gets or sets the cursor.
+        /// Inits this instance.
         /// </summary>
-        /// <value>The cursor.</value>
-        /// <remarks>
-        /// Optional. 
-        /// Breaks the results into pages. 
-        /// A single page contains 100 users.
-        /// </remarks>
-        public long Cursor { get; set; }
+        public override void Init()
+        {
+        }
     }
 }

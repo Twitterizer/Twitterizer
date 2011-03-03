@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// The Retweets Of Me Command.
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class RetweetsOfMeCommand : PagedCommand<TwitterStatusCollection>
+    internal sealed class RetweetsOfMeCommand : TwitterCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -65,38 +65,26 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
+            this.RequestParameters.Add("include_entities", "true");
 
             RetweetsOfMeOptions options = this.OptionalProperties as RetweetsOfMeOptions;
-            if (options != null)
+
+            if (options == null)
             {
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
+                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
+                return;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-            this.RequestParameters.Add("include_entities", "true");
-        }
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            return new RetweetsOfMeCommand(this.Tokens, this.OptionalProperties as RetweetsOfMeOptions);
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

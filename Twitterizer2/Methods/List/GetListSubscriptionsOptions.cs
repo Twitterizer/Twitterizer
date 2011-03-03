@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PagedCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="GetListSubscriptionsOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,38 +29,19 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The interface that indicates that the command results can be paged through.</summary>
+// <summary>The get list subscriptions options class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Core
+namespace Twitterizer
 {
-    using System;
-
     /// <summary>
-    /// The IPagedCommand interface.
+    /// The optional parameters for the <see cref="Twitterizer.Methods.GetListSubscriptionsCommand"/> class.
     /// </summary>
-    /// <typeparam name="T">The type of BaseObject that the command returns.</typeparam>
-#if !SILVERLIGHT
-    [Serializable]
-#endif
-    internal abstract class PagedCommand<T> : TwitterCommand<T>
-        where T : ITwitterObject
+    public class GetListSubscriptionsOptions : OptionalProperties
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PagedCommand&lt;T&gt;"/> class.
+        /// Gets or sets the cursor.
         /// </summary>
-        /// <param name="httpMethod">The HTTP method.</param>
-        /// <param name="endPoint">The end point.</param>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="optionalProperties">The optional properties.</param>
-        protected PagedCommand(HTTPVerb httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
-            : base(httpMethod, endPoint, tokens, optionalProperties)
-        {
-        }
-        
-        /// <summary>
-        /// Gets or sets the page number to obtain.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int Page { get; set; }
+        /// <value>The cursor.</value>
+        public long Cursor { get; set; }
     }
 }

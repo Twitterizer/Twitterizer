@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// Returns the members of the specified list.
     /// </summary>
     [AuthorizedCommand]
-    internal class FriendsIdsCommand : CursorPagedCommand<UserIdCollection>
+    internal class FriendsIdsCommand : TwitterCommand<UserIdCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendsIdsCommand"/> class.
@@ -52,12 +52,10 @@ namespace Twitterizer.Commands
         public FriendsIdsCommand(OAuthTokens requestTokens, UsersIdsOptions options)
             : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "friends/ids.json"), requestTokens, options)
         {
-
             if (requestTokens == null)
             {
                 throw new ArgumentNullException("requestTokens");
             }
-
 
             this.DeserializationHandler = UserIdCollection.DeserializeWrapper;
         }
@@ -67,13 +65,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor <= 0)
-            {
-                this.Cursor = -1;
-            }
-
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-
             UsersIdsOptions options = this.OptionalProperties as UsersIdsOptions;
             if (options == null)
             {
@@ -85,22 +76,11 @@ namespace Twitterizer.Commands
 
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
-        }
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override Twitterizer.Core.TwitterCommand<UserIdCollection> Clone()
-        {
-            FriendsIdsCommand command = new FriendsIdsCommand(this.Tokens, this.OptionalProperties as UsersIdsOptions);
-
-            if (this.OptionalProperties != null && this.OptionalProperties is UsersIdsOptions)
-                command.Cursor = ((UsersIdsOptions)this.OptionalProperties).Cursor;
-
-            return command;
+            if (options.Cursor != 0)
+            {
+                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.InvariantCulture));
+            }
         }
     }
 }

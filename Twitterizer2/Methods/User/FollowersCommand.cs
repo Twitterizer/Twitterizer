@@ -45,7 +45,7 @@ namespace Twitterizer.Commands
     [Serializable]
 #endif
     internal sealed class FollowersCommand :
-        Core.CursorPagedCommand<TwitterUserCollection>
+        Core.TwitterCommand<TwitterUserCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FollowersCommand"/> class.
@@ -73,13 +73,6 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor == 0)
-            {
-                this.Cursor = -1;
-            }
-
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.CurrentCulture));
-
             // Handle optional parameters
             FollowersOptions options = this.OptionalProperties as FollowersOptions;
 
@@ -93,18 +86,9 @@ namespace Twitterizer.Commands
 
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
-        }
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A cloned command object.</returns>
-        internal override Twitterizer.Core.TwitterCommand<TwitterUserCollection> Clone()
-        {
-            FollowersCommand newCommand = new FollowersCommand(this.Tokens, this.OptionalProperties as FollowersOptions);
-            newCommand.Cursor = this.Cursor;
-
-            return newCommand;
+            if (options.Cursor != 0)
+                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
         }
     }
 }

@@ -58,6 +58,13 @@ namespace Twitterizer
         public decimal Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the string id.
+        /// </summary>
+        /// <value>The string id.</value>
+        [JsonProperty(PropertyName = "str_id")]
+        public string StringId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
         /// <value>The name of the user.</value>
@@ -404,12 +411,7 @@ namespace Twitterizer
         {
             Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
 
-            TwitterResponse<TwitterUserCollection> result = Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
-
-            if (result.ResponseObject != null)
-                result.ResponseObject.PagedCommand = command;
-
-            return result;
+            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>

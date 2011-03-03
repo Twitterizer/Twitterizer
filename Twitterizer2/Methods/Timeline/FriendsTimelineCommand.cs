@@ -60,30 +60,11 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page == 0)
-                this.Page = 1;
-
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
             if (options == null)
                 options = new TimelineOptions();
-
-            options.Page = this.Page;
-
+            
             TimelineOptions.Init<TwitterStatusCollection>(this, options);
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            return new FriendsTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
-            {
-                Page = this.Page
-            };
         }
     }
 }

@@ -52,5 +52,11 @@ namespace Twitterizer
         /// </summary>
         /// <value>The name of the screen.</value>
         public string ScreenName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cursor.
+        /// </summary>
+        /// <value>The cursor.</value>
+        public long Cursor { get; set; }
     }
 }

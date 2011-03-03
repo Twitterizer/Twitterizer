@@ -54,12 +54,7 @@ namespace Twitterizer
         {
             Commands.FollowersCommand command = new Commands.FollowersCommand(tokens, options);
 
-            TwitterResponse<TwitterUserCollection> result = CommandPerformer<TwitterUserCollection>.PerformAction(command);
-
-            if (result.ResponseObject != null)
-                result.ResponseObject.CursorPagedCommand = command;
-
-            return result;
+            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -102,11 +97,7 @@ namespace Twitterizer
         {
             Commands.FriendsCommand command = new Commands.FriendsCommand(tokens, options);
 
-            TwitterResponse<TwitterUserCollection> result = CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            if (result.ResponseObject != null)
-                result.ResponseObject.CursorPagedCommand = command;
-
-            return result;
+            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -404,12 +395,7 @@ namespace Twitterizer
         public static TwitterResponse<UserIdCollection> FriendsIds(OAuthTokens tokens, UsersIdsOptions options)
         {
             Commands.FriendsIdsCommand command = new Commands.FriendsIdsCommand(tokens, options);
-            TwitterResponse<UserIdCollection> result = Core.CommandPerformer<UserIdCollection>.PerformAction(command);
-
-            if (result.ResponseObject != null)
-                result.ResponseObject.Command = command;
-
-            return result;
+            return Core.CommandPerformer<UserIdCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -435,12 +421,7 @@ namespace Twitterizer
         public static TwitterResponse<UserIdCollection> FollowersIds(OAuthTokens tokens, UsersIdsOptions options)
         {
             Commands.FollowersIdsCommand command = new Commands.FollowersIdsCommand(tokens, options);
-            TwitterResponse<UserIdCollection> result = Core.CommandPerformer<UserIdCollection>.PerformAction(command);
-
-            if (result.ResponseObject != null)
-                result.ResponseObject.Command = command;
-
-            return result;
+            return Core.CommandPerformer<UserIdCollection>.PerformAction(command);
         }
 
         /// <summary>

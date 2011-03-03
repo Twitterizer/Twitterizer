@@ -71,41 +71,19 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page == 0)
-                this.Page = 1;
-
             UserTimelineOptions options = this.OptionalProperties as UserTimelineOptions;
             if (options == null)
                 options = new UserTimelineOptions();
 
-            options.Page = this.Page;
-
             TimelineOptions.Init<TwitterStatusCollection>(this, options);
-            
-            if (options == null)
-            {
-                return;
-            }
             
             if (options.UserId > 0)
                 this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));
 
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
-        }
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A cloned command object.</returns>
-        internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            return new UserTimelineCommand(
-                this.Tokens,
-                this.OptionalProperties as UserTimelineOptions)
-                {
-                    Page = this.Page
-                };
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

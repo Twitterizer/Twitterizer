@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// The Retweeted By Me Command.
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class RetweetedToMeCommand : PagedCommand<TwitterStatusCollection>
+    internal sealed class RetweetedToMeCommand : TwitterCommand<TwitterStatusCollection>
     {
         #region Constructors
         /// <summary>
@@ -65,38 +65,24 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
-            if (options != null)
+            if (options == null)
             {
+                this.RequestParameters.Add("page", "1");
 
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
+                return;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-        }
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            return new RetweetedToMeCommand(this.Tokens, this.OptionalProperties as TimelineOptions);
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+            
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

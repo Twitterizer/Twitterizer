@@ -62,9 +62,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-
-
-            Collection<decimal> userIds = new Collection<decimal>
+            TwitterIdCollection userIds = new TwitterIdCollection()
                                               {
                                                   14725805, // digitallyborn
                                                   16144513, // twit_er_izer

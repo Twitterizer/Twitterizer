@@ -408,5 +408,35 @@ namespace Twitterizer
                 },
                 null);
         }
+
+        /// <summary>
+        /// Returns an collection of user ids the authenticating user is blocking.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult BlockingIds(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterIdCollection>> function)
+        {
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterIdCollection>> methodToCall = TwitterBlock.BlockingIds;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterIdCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
     }
 }

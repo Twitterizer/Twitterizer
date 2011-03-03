@@ -47,7 +47,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    internal sealed class GetListsCommand : CursorPagedCommand<TwitterListCollection>
+    internal sealed class GetListsCommand : TwitterCommand<TwitterListCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
@@ -55,7 +55,7 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
-        public GetListsCommand(OAuthTokens requestTokens, string username, OptionalProperties options)
+        public GetListsCommand(OAuthTokens requestTokens, string username, GetListsOptions options)
             : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/lists.json", username), requestTokens, options)
         {
             if (requestTokens == null)
@@ -84,26 +84,16 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor <= 0)
+            GetListsOptions options = this.OptionalProperties as GetListsOptions;
+
+            if (options == null || options.Cursor == 0)
             {
-                this.Cursor = -1;
+                this.RequestParameters.Add("cursor", "-1");
             }
-
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterListCollection> Clone()
-        {
-            return new GetListsCommand(this.Tokens, this.Username, this.OptionalProperties)
+            else
             {
-                Cursor = this.Cursor
-            };
+                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.InvariantCulture));
+            }
         }
     }
 }

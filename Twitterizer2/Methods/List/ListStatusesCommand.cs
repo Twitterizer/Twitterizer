@@ -42,9 +42,8 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The get list statuses command class
     /// </summary>
-    internal sealed class ListStatusesCommand : PagedCommand<TwitterStatusCollection>
+    internal sealed class ListStatusesCommand : TwitterCommand<TwitterStatusCollection>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ListStatusesCommand"/> class.
         /// </summary>
@@ -64,74 +63,43 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("listIdOrSlug");
             }
-
-            this.Username = username;
-            this.ListIdOrSlug = listIdOrSlug;
         }
-        #endregion
-
-        #region API Properties
-        /// <summary>
-        /// Gets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; private set; }
-
-        /// <summary>
-        /// Gets the list id.
-        /// </summary>
-        /// <value>The list id.</value>
-        public string ListIdOrSlug { get; private set; }
-        #endregion
-
+      
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.Page <= 0)
-                this.Page = 1;
-
             ListStatusesOptions options = this.OptionalProperties as ListStatusesOptions;
 
-            if (options != null)
+            if (options == null)
             {
-                if (options.SinceId > 0)
-                {
-                    this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
-                }
+                this.RequestParameters.Add("page", "1");
 
-                if (options.MaxId > 0)
-                {
-                    this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
-                }
-
-                if (options.ItemsPerPage > 0)
-                {
-                    this.RequestParameters.Add("per_page", options.ItemsPerPage.ToString(CultureInfo.InvariantCulture));
-                }
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
-
-                if (options.IncludeEntites)
-                {
-                    this.RequestParameters.Add("include_entities", "true");
-                }
+                return;
             }
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
-        }
+            if (options.SinceId > 0)
+            {
+                this.RequestParameters.Add("since_id", options.SinceId.ToString(CultureInfo.InvariantCulture));
+            }
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            return new ListStatusesCommand(this.Tokens, this.Username, this.ListIdOrSlug, this.OptionalProperties as ListStatusesOptions);
+            if (options.MaxId > 0)
+            {
+                this.RequestParameters.Add("max_id", options.MaxId.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (options.ItemsPerPage > 0)
+            {
+                this.RequestParameters.Add("per_page", options.ItemsPerPage.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (options.IncludeEntites)
+            {
+                this.RequestParameters.Add("include_entities", "true");
+            }
+
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

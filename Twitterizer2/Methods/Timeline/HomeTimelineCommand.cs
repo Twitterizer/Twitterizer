@@ -65,28 +65,11 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Page == 0)
-                this.Page = 1;
-
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
             if (options == null)
                 options = new TimelineOptions();
 
-            options.Page = this.Page;
-
             TimelineOptions.Init<TwitterStatusCollection>(this, options);
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A cloned command object.</returns>
-        internal override Core.TwitterCommand<TwitterStatusCollection> Clone()
-        {
-            return new HomeTimelineCommand(this.Tokens, this.OptionalProperties as TimelineOptions)
-            {
-                Page = this.Page
-            };
         }
     }
 }

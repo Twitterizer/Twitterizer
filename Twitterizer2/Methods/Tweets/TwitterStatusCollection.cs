@@ -46,59 +46,9 @@ namespace Twitterizer
     public class TwitterStatusCollection : TwitterCollection<TwitterStatus>, ITwitterObject
     {
         /// <summary>
-        /// Gets or sets the command.
+        /// Gets or sets the current page number.
         /// </summary>
-        /// <value>The command.</value>
-        internal PagedCommand<TwitterStatusCollection> Command { get; set; }
-
-        /// <summary>
-        /// Gets the next page.
-        /// </summary>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public TwitterResponse<TwitterStatusCollection> NextPage()
-        {
-            if (this.Command == null || this.Command.Page < 0)
-            {
-                return null;
-            }
-
-            PagedCommand<TwitterStatusCollection> newCommand = 
-                (PagedCommand<TwitterStatusCollection>)this.Command.Clone();
-            newCommand.Page += 1;
-
-            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
-            if (result.ResponseObject != null)
-                result.ResponseObject.Command = newCommand;
-
-            return result;
-        }
-
-        /// <summary>
-        /// Gets the previous page.
-        /// </summary>
-        /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
-        public TwitterResponse<TwitterStatusCollection> PreviousPage()
-        {
-            if (this.Command == null || this.Command.Page <= 1)
-            {
-                return null;
-            }
-
-            PagedCommand<TwitterStatusCollection> newCommand = 
-                (PagedCommand<TwitterStatusCollection>)this.Command.Clone();
-            newCommand.Page -= 1;
-
-            if (newCommand.Page <= 0)
-            {
-                return null;
-            }
-
-            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(newCommand);
-            
-            if (result.ResponseObject != null)
-                result.ResponseObject.Command = newCommand;
-            
-            return result;
-        }
+        /// <value>The current page number.</value>
+        public int Page { get; set; }
     }
 }

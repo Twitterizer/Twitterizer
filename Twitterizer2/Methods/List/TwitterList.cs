@@ -194,15 +194,11 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetLists(OAuthTokens tokens, string username, OptionalProperties options)
+        public static TwitterResponse<TwitterListCollection> GetLists(OAuthTokens tokens, string username, GetListsOptions options)
         {
             Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, username, options);
-            TwitterResponse<TwitterListCollection> results = Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
 
-            if (results.ResponseObject != null)
-                results.ResponseObject.Command = command;
-
-            return results;
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -290,15 +286,10 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, string username, OptionalProperties options)
+        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, string username, ListMembershipsOptions options)
         {
             Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, username, options);
-            TwitterResponse<TwitterListCollection> result = Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
-
-           if (result.ResponseObject != null)
-                    result.ResponseObject.Command = command;
-
-            return result;
+            return Core.CommandPerformer<TwitterListCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -323,7 +314,7 @@ namespace Twitterizer
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetSubscriptions(OAuthTokens tokens, string userName, OptionalProperties options)
+        public static TwitterResponse<TwitterListCollection> GetSubscriptions(OAuthTokens tokens, string userName, GetListSubscriptionsOptions options)
         {
             Commands.GetListSubscriptionsCommand command = new Twitterizer.Commands.GetListSubscriptionsCommand(tokens, userName, options);
 
@@ -358,11 +349,7 @@ namespace Twitterizer
         {
             Commands.GetListMembersCommand command = new Twitterizer.Commands.GetListMembersCommand(tokens, username, listIdOrSlug, options);
 
-            TwitterResponse<TwitterUserCollection> result = CommandPerformer<TwitterUserCollection>.PerformAction(command);
-            if (result.ResponseObject != null)
-                result.ResponseObject.CursorPagedCommand = command;
-
-            return result;
+            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
         }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    internal abstract class PagedTimelineCommand<T> : PagedCommand<TwitterStatusCollection>
+    internal abstract class PagedTimelineCommand<T> : TwitterCommand<TwitterStatusCollection>
         where T : ITwitterObject
     {
         private NumberFormatInfo numberFormat = CultureInfo.InvariantCulture.NumberFormat;
@@ -70,30 +70,27 @@ namespace Twitterizer.Commands
             // Enable opt-in beta for entities
             this.RequestParameters.Add("include_entities", "true");
 
-            if (this.Page <= 0)
-                this.Page = 1;
-
             TimelineOptions options = this.OptionalProperties as TimelineOptions;
 
-            if (options != null)
+            if (options == null)
             {
-                if (options.SinceStatusId > 0)
-                    this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("page", "1");
 
-                if (options.MaxStatusId > 0)
-                    this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
-
-                if (options.Count > 0)
-                    this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
-
-                if (this.Page <= 1 && options.Page > 1)
-                    this.Page = options.Page;
-
-                if (options.IncludeRetweets)
-                    this.RequestParameters.Add("include_rts", "true");
+                return;
             }
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString(CultureInfo.InvariantCulture));
 
-            this.RequestParameters.Add("page", this.Page.ToString(CultureInfo.InvariantCulture));
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString(CultureInfo.InvariantCulture));
+
+            if (options.Count > 0)
+                this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
+
+            if (options.IncludeRetweets)
+                this.RequestParameters.Add("include_rts", "true");
+
+            this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }
 }

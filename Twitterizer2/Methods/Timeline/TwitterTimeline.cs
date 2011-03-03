@@ -52,14 +52,7 @@ namespace Twitterizer
         {
             Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens, options);
 
-            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-
-            if (result.ResponseObject != null)
-            {
-                result.ResponseObject.Command = command;
-            }
-
-            return result;
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
         }
 
         /// <param name="tokens">The tokens.</param>
@@ -90,11 +83,7 @@ namespace Twitterizer
         {
             Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, options);
 
-            TwitterResponse<TwitterStatusCollection> result = Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-            if (result.ResponseObject != null)
-                result.ResponseObject.Command = command;
-
-            return result;
+            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -190,12 +179,8 @@ namespace Twitterizer
         public static TwitterResponse<TwitterStatusCollection> FriendTimeline(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(tokens, options);
-            TwitterResponse<TwitterStatusCollection> result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
 
-            if (result.ResponseObject != null)
-                result.ResponseObject.Command = command;
-
-            return result;
+            return CommandPerformer<TwitterStatusCollection>.PerformAction(command);
         }
 
         /// <summary>
@@ -279,12 +264,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterStatusCollection> Mentions(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.MentionsCommand command = new Commands.MentionsCommand(tokens, options);
-            TwitterResponse<TwitterStatusCollection> results = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
-
-            if (results.ResponseObject != null)
-                results.ResponseObject.Command = command;
-
-            return results;
+            return CommandPerformer<TwitterStatusCollection>.PerformAction(command);
         }
 
         /// <summary>

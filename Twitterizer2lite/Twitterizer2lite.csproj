@@ -83,9 +83,6 @@
     <Compile Include="..\Twitterizer2\Core\ConversionUtility.cs">
       <Link>ConversionUtility.cs</Link>
     </Compile>
-    <Compile Include="..\Twitterizer2\Core\CursorPagedCommand.cs">
-      <Link>CursorPagedCommand.cs</Link>
-    </Compile>
     <Compile Include="..\Twitterizer2\Core\ICommand.cs">
       <Link>ICommand.cs</Link>
     </Compile>
@@ -97,9 +94,6 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Core\OptionalProperties.cs">
       <Link>OptionalProperties.cs</Link>
-    </Compile>
-    <Compile Include="..\Twitterizer2\Core\PagedCommand.cs">
-      <Link>PagedCommand.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Core\RateLimit.cs">
       <Link>RateLimit.cs</Link>
@@ -115,6 +109,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Core\TwitterCommand.cs">
       <Link>TwitterCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterIdCollection.cs">
+      <Link>TwitterIdCollection.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Core\TwitterImage.cs">
       <Link>TwitterImage.cs</Link>
@@ -157,6 +154,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsOptions.cs">
       <Link>VerifyCredentialsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\BlockingIdsCommand.cs">
+      <Link>BlockingIdsCommand.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Block\CreateBlockCommand.cs">
       <Link>CreateBlockCommand.cs</Link>
@@ -284,11 +284,20 @@
     <Compile Include="..\Twitterizer2\Methods\List\GetListsCommand.cs">
       <Link>GetListsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListsOptions.cs">
+      <Link>GetListsOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\GetListSubscriptionsCommand.cs">
       <Link>GetListSubscriptionsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListSubscriptionsOptions.cs">
+      <Link>GetListSubscriptionsOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\ListMembershipsCommand.cs">
       <Link>ListMembershipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\ListMembershipsOptions.cs">
+      <Link>ListMembershipsOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\ListStatusesCommand.cs">
       <Link>ListStatusesCommand.cs</Link>

@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// Returns the members of the specified list.
     /// </summary>
     [AuthorizedCommand]
-    internal class GetListMembersCommand : CursorPagedCommand<TwitterUserCollection>
+    internal class GetListMembersCommand : TwitterCommand<TwitterUserCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
@@ -69,51 +69,24 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("listIdOrSlug");
             }
 
-            this.ListIdOrSlug = listIdOrSlug;
-            this.Username = username;
-
             this.DeserializationHandler = TwitterUserCollection.DeserializeWrapper;
         }
-
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list id.
-        /// </summary>
-        /// <value>The list id.</value>
-        public string ListIdOrSlug { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor <= 0)
+            GetListMembersOptions options = this.OptionalProperties as GetListMembersOptions;
+
+            if (options == null || options.Cursor == 0)
             {
-                this.Cursor = -1;
+                this.RequestParameters.Add("cursor", "-1");
             }
-
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override TwitterCommand<TwitterUserCollection> Clone()
-        {
-            GetListMembersCommand command = new GetListMembersCommand(this.Tokens, this.Username, this.ListIdOrSlug, this.OptionalProperties as GetListMembersOptions);
-
-            if (command != null && this.OptionalProperties != null && this.OptionalProperties is GetListMembersOptions)
-                command.Cursor = ((GetListMembersOptions)this.OptionalProperties).Cursor;
-
-            return command;
+            else
+            {
+                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.InvariantCulture));
+            }
         }
     }
 }

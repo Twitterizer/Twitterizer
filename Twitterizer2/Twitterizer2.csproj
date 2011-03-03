@@ -121,6 +121,7 @@
     <Compile Include="Core\ITwitterObject.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\TwitterIdCollection.cs" />
     <Compile Include="Core\TwitterImage.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsCommand.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsOptions.cs" />
+    <Compile Include="Methods\Block\BlockingIdsCommand.cs" />
     <Compile Include="Methods\Block\ExistsBlockCommand.cs" />
     <Compile Include="Methods\Block\DestroyBlockCommand.cs" />
     <Compile Include="Methods\Block\CreateBlockCommand.cs" />
@@ -164,6 +166,9 @@
     <Compile Include="Methods\List\AddListMemberCommand.cs" />
     <Compile Include="Methods\List\CheckListMembershipCommand.cs" />
     <Compile Include="Methods\List\GetListMembersOptions.cs" />
+    <Compile Include="Methods\List\GetListsOptions.cs" />
+    <Compile Include="Methods\List\GetListSubscriptionsOptions.cs" />
+    <Compile Include="Methods\List\ListMembershipsOptions.cs" />
     <Compile Include="Methods\List\RemoveListMemberCommand.cs" />
     <Compile Include="Methods\List\CreateListCommand.cs" />
     <Compile Include="Methods\Friendship\DeleteFriendshipCommand.cs" />
@@ -233,9 +238,7 @@
     <Compile Include="Core\SerializationHelper.cs" />
     <Compile Include="Core\TwitterCollection.cs" />
     <Compile Include="Core\ConversionUtility.cs" />
-    <Compile Include="Core\CursorPagedCommand.cs" />
     <Compile Include="Core\ICommand.cs" />
-    <Compile Include="Core\PagedCommand.cs" />
     <Compile Include="Methods\User\ShowUserCommand.cs" />
     <Compile Include="Core\TwitterObject.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />

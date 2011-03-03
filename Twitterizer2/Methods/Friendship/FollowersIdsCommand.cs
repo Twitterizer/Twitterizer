@@ -43,7 +43,7 @@ namespace Twitterizer.Commands
     /// Returns the members of the specified list.
     /// </summary>
     [AuthorizedCommand]
-    internal class FollowersIdsCommand : CursorPagedCommand<UserIdCollection>
+    internal class FollowersIdsCommand : TwitterCommand<UserIdCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
@@ -68,16 +68,11 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            if (this.Cursor <= 0)
-            {
-                this.Cursor = -1;
-            }
-
-            this.RequestParameters.Add("cursor", this.Cursor.ToString(CultureInfo.InvariantCulture));
-
             UsersIdsOptions options = this.OptionalProperties as UsersIdsOptions;
+
             if (options == null)
             {
+                this.RequestParameters.Add("cursor", "-1");
                 return;
             }
 
@@ -86,26 +81,8 @@ namespace Twitterizer.Commands
 
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
-        }
 
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>
-        /// A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.
-        /// </returns>
-        internal override Twitterizer.Core.TwitterCommand<UserIdCollection> Clone()
-        {
-            FollowersIdsCommand command = new FollowersIdsCommand(this.Tokens,
-                                                                  this.OptionalProperties as UsersIdsOptions);
-
-            if (this.OptionalProperties != null && this.OptionalProperties is UsersIdsOptions)
-                command.Cursor = ((UsersIdsOptions)this.OptionalProperties).Cursor;
-
-            return command;
+            this.RequestParameters.Add("cursor", options.Cursor > 0 ? options.Cursor.ToString(CultureInfo.InvariantCulture) : "-1");
         }
     }
-
-    
-   
 }

@@ -60,59 +60,10 @@ namespace Twitterizer
         public int PreviousCursor { get; set; }
 
         /// <summary>
-        /// Gets or sets the request parameters.
-        /// </summary>
-        /// <value>The request parameters.</value>
-        public new OAuthTokens Tokens { get; set; }
-
-        /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
         public new RateLimiting RateLimiting { get; set; }
-
-        /// <summary>
-        /// Gets or sets the command.
-        /// </summary>
-        /// <value>The command.</value>
-        internal Core.TwitterCommand<TwitterListCollection> Command { get; set; }
-
-        /// <summary>
-        /// Gets the next page.
-        /// </summary>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        /// <value>The next page.</value>
-        public TwitterResponse<TwitterListCollection> NextPage()
-        {
-            CursorPagedCommand<TwitterListCollection> newCommand =
-                (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
-
-            if (newCommand.Cursor == 0)
-                return null;
-            
-            newCommand.Cursor = this.NextCursor;
-
-            return CommandPerformer<TwitterListCollection>.PerformAction(newCommand);
-        }
-
-        /// <summary>
-        /// Gets the previous page.
-        /// </summary>
-        /// <returns>A <see cref="TwitterListCollection"/> instance.</returns>
-        /// <value>The previous page.</value>
-        public TwitterResponse<TwitterListCollection> PreviousPage()
-        {
-            CursorPagedCommand<TwitterListCollection> newCommand =
-                (CursorPagedCommand<TwitterListCollection>)this.Command.Clone();
-            
-            if (newCommand.Cursor == 0)
-                return null;
-
-            newCommand.Cursor = this.PreviousCursor;
-
-            return Core.CommandPerformer<TwitterListCollection>.PerformAction(newCommand);
-        }
-
 
         /// <summary>
         /// Deserializes the specified value.

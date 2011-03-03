@@ -57,6 +57,13 @@ namespace Twitterizer
         public decimal Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the string id.
+        /// </summary>
+        /// <value>The string id.</value>
+        [JsonProperty(PropertyName = "str_id")]
+        public string StringId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this status message is truncated.
         /// </summary>
         /// <value>
