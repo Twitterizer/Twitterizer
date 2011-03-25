@@ -36,7 +36,7 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Xml.Serialization;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// The base class for object collections.
@@ -45,9 +45,15 @@ namespace Twitterizer.Core
 #if !SILVERLIGHT
     [Serializable]
 #endif
+    [DataContract]
     public abstract class TwitterCollection<T> : Collection<T>
         where T : class, ITwitterObject
     {
+        /// <summary>
+        /// Gets or sets the annotations.
+        /// </summary>
+        /// <value>The annotations.</value>
+        [DataMember]
         public System.Collections.Generic.Dictionary<string, string> Annotations { get; set; }
     }
 }

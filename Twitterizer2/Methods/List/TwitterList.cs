@@ -36,6 +36,7 @@ namespace Twitterizer
 {
     using System;
     using System.Diagnostics;
+    using System.Runtime.Serialization;
     using Newtonsoft.Json;
     using Twitterizer.Core;
 
@@ -47,6 +48,7 @@ namespace Twitterizer
 #if !SILVERLIGHT
     [Serializable]
 #endif
+    [DataContract]
     public class TwitterList : TwitterObject
     {
         #region API properties
@@ -55,6 +57,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The list id.</value>
         [JsonProperty(PropertyName = "id")]
+        [DataMember]
         public long Id { get; set; }
 
         /// <summary>
@@ -62,6 +65,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The list name.</value>
         [JsonProperty(PropertyName = "name")]
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
@@ -69,6 +73,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The full name.</value>
         [JsonProperty(PropertyName = "full_name")]
+        [DataMember]
         public string FullName { get; set; }
 
         /// <summary>
@@ -76,6 +81,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The list slug.</value>
         [JsonProperty(PropertyName = "slug")]
+        [DataMember]
         public string Slug { get; set; }
 
         /// <summary>
@@ -83,6 +89,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The description.</value>
         [JsonProperty(PropertyName = "description")]
+        [DataMember]
         public string Description { get; set; }
 
         /// <summary>
@@ -90,6 +97,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The number of subscribers.</value>
         [JsonProperty(PropertyName = "subscriber_count")]
+        [DataMember]
         public int NumberOfSubscribers { get; set; }
 
         /// <summary>
@@ -97,6 +105,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The number of members.</value>
         [JsonProperty(PropertyName = "member_count")]
+        [DataMember]
         public int NumberOfMembers { get; set; }
 
         /// <summary>
@@ -104,6 +113,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The absolute path.</value>
         [JsonProperty(PropertyName = "uri")]
+        [DataMember]
         public string AbsolutePath { get; set; }
 
         /// <summary>
@@ -111,6 +121,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The list mode.</value>
         [JsonProperty(PropertyName = "mode")]
+        [DataMember]
         public string Mode { get; set; }
 
         /// <summary>
@@ -118,6 +129,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The owning user.</value>
         [JsonProperty(PropertyName = "user")]
+        [DataMember]
         public TwitterUser User { get; set; }
         #endregion
 
@@ -126,6 +138,7 @@ namespace Twitterizer
         /// Gets a value indicating whether this instance is public.
         /// </summary>
         /// <value><c>true</c> if this instance is public; otherwise, <c>false</c>.</value>
+        [DataMember]
         public bool IsPublic
         {
             get

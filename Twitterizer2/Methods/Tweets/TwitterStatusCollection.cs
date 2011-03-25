@@ -35,6 +35,7 @@
 namespace Twitterizer
 {
     using System;
+    using System.Runtime.Serialization;
     using Twitterizer.Core;
 
     /// <summary>
@@ -43,12 +44,14 @@ namespace Twitterizer
 #if !SILVERLIGHT
     [Serializable]
 #endif
+    [DataContract]
     public class TwitterStatusCollection : TwitterCollection<TwitterStatus>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the current page number.
         /// </summary>
         /// <value>The current page number.</value>
+        [DataMember]
         public int Page { get; set; }
     }
 }

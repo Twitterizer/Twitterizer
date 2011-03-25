@@ -36,6 +36,7 @@ namespace Twitterizer
     using Twitterizer.Core;
     using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// The TwitterUserCollection class.
@@ -43,24 +44,28 @@ namespace Twitterizer
 #if !SILVERLIGHT
     [System.Serializable]
 #endif
+    [DataContract]
     public class TwitterUserCollection : TwitterCollection<TwitterUser>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the next cursor.
         /// </summary>
         /// <value>The next cursor.</value>
+        [DataMember]
         public long NextCursor { get; internal set; }
 
         /// <summary>
         /// Gets or sets the previous cursor.
         /// </summary>
         /// <value>The previous cursor.</value>
+        [DataMember]
         public long PreviousCursor { get; internal set; }
 
         /// <summary>
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
+        [DataMember]
         public new RateLimiting RateLimiting { get; internal set; }
 
         /// <summary>

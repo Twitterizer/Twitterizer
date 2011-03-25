@@ -39,6 +39,7 @@ namespace Twitterizer
     using Newtonsoft.Json;
     using Twitterizer.Core;
     using Twitterizer.Entities;
+    using System.Runtime.Serialization;
 
     /// <include file='TwitterStatus.xml' path='TwitterStatus/TwitterStatus/*'/>
     [JsonObject(MemberSerialization.OptIn)]
@@ -46,6 +47,7 @@ namespace Twitterizer
     [Serializable]
 #endif
     [DebuggerDisplay("{User.ScreenName}/{Text}")]
+    [DataContract]
     public class TwitterStatus : TwitterObject
     {
         #region Properties
@@ -53,14 +55,14 @@ namespace Twitterizer
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>
-        [JsonProperty(PropertyName = "id")]
+        [DataMember, JsonProperty(PropertyName = "id")]
         public decimal Id { get; set; }
 
         /// <summary>
         /// Gets or sets the string id.
         /// </summary>
         /// <value>The string id.</value>
-        [JsonProperty(PropertyName = "str_id")]
+        [DataMember, JsonProperty(PropertyName = "str_id")]
         public string StringId { get; set; }
 
         /// <summary>
@@ -69,13 +71,14 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this status message is truncated; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty(PropertyName = "truncated")]
+        [DataMember, JsonProperty(PropertyName = "truncated")]
         public bool? IsTruncated { get; set; }
 
         /// <summary>
         /// Gets or sets the created date.
         /// </summary>
         /// <value>The created date.</value>
+        [DataMember]
         [JsonProperty(PropertyName = "created_at")]
         [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime CreatedDate { get; set; }
@@ -84,28 +87,28 @@ namespace Twitterizer
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [JsonProperty(PropertyName = "source")]
+        [DataMember, JsonProperty(PropertyName = "source")]
         public string Source { get; set; }
 
         /// <summary>
         /// Gets or sets the screenName the status is in reply to.
         /// </summary>
         /// <value>The screenName.</value>
-        [JsonProperty(PropertyName = "in_reply_to_screen_name")]
+        [DataMember, JsonProperty(PropertyName = "in_reply_to_screen_name")]
         public string InReplyToScreenName { get; set; }
 
         /// <summary>
         /// Gets or sets the user id the status is in reply to.
         /// </summary>
         /// <value>The user id.</value>
-        [JsonProperty(PropertyName = "in_reply_to_user_id")]
+        [DataMember, JsonProperty(PropertyName = "in_reply_to_user_id")]
         public decimal? InReplyToUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status id the status is in reply to.
         /// </summary>
         /// <value>The status id.</value>
-        [JsonProperty(PropertyName = "in_reply_to_status_id")]
+        [DataMember, JsonProperty(PropertyName = "in_reply_to_status_id")]
         public decimal? InReplyToStatusId { get; set; }
 
         /// <summary>
@@ -114,49 +117,50 @@ namespace Twitterizer
         /// <value>
         /// <c>true</c> if this instance is favorited; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty(PropertyName = "favorited")]
+        [DataMember, JsonProperty(PropertyName = "favorited")]
         public bool? IsFavorited { get; set; }
 
         /// <summary>
         /// Gets or sets the text of the status.
         /// </summary>
         /// <value>The status text.</value>
-        [JsonProperty(PropertyName = "text")]
+        [DataMember, JsonProperty(PropertyName = "text")]
         public string Text { get; set; }
 
         /// <summary>
         /// Gets or sets the user.
         /// </summary>
         /// <value>The user that posted this status.</value>
-        [JsonProperty(PropertyName = "user")]
+        [DataMember, JsonProperty(PropertyName = "user")]
         public TwitterUser User { get; set; }
 
         /// <summary>
         /// Gets or sets the retweeted status.
         /// </summary>
         /// <value>The retweeted status.</value>
-        [JsonProperty(PropertyName = "retweeted_status")]
+        [DataMember, JsonProperty(PropertyName = "retweeted_status")]
         public TwitterStatus RetweetedStatus { get; set; }
 
         /// <summary>
         /// Gets or sets the place.
         /// </summary>
         /// <value>The place.</value>
-        [JsonProperty(PropertyName = "place")]
+        [DataMember, JsonProperty(PropertyName = "place")]
         public TwitterPlace Place { get; set; }
 
         /// <summary>
         /// Gets or sets the geo location data.
         /// </summary>
         /// <value>The geo location data.</value>
-        [JsonProperty(PropertyName = "geo")]
+        [DataMember, JsonProperty(PropertyName = "geo")]
         public TwitterGeo Geo { get; set; }
 
         /// <summary>
         /// Gets or sets the entities.
         /// </summary>
         /// <value>The entities.</value>
-        [JsonProperty(PropertyName  = "entities")]
+        [DataMember]
+        [JsonProperty(PropertyName = "entities")]
         [JsonConverter(typeof(Entities.TwitterEntityCollection.Converter))]
         public Entities.TwitterEntityCollection Entities { get; set; }
 
@@ -164,13 +168,14 @@ namespace Twitterizer
         /// Gets or sets the retweet count string.
         /// </summary>
         /// <value>The retweet count.</value>
-        [JsonProperty(PropertyName = "retweet_count")]
+        [DataMember, JsonProperty(PropertyName = "retweet_count")]
         public string RetweetCountString { get; set; }
 
         /// <summary>
         /// Gets the retweet count.
         /// </summary>
         /// <value>The retweet count.</value>
+        [DataMember]
         public int? RetweetCount
         {
             get
@@ -195,6 +200,7 @@ namespace Twitterizer
         /// Gets a value indicating that the number of retweets exceeds the reported value in RetweetCount. For example, "more than 100"
         /// </summary>
         /// <value>The retweet count plus indicator.</value>
+        [DataMember]
         public bool? RetweetCountPlus
         {
             get
@@ -209,7 +215,7 @@ namespace Twitterizer
         /// Gets or sets a value indicating whether this <see cref="TwitterStatus"/> is retweeted.
         /// </summary>
         /// <value><c>true</c> if retweeted; otherwise, <c>false</c>.</value>
-        [JsonProperty(PropertyName = "retweeted")]
+        [DataMember, JsonProperty(PropertyName = "retweeted")]
         public bool Retweeted { get; set; }
         #endregion
 

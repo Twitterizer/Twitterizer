@@ -44,24 +44,28 @@ namespace Twitterizer
 #if !SILVERLIGHT
     [Serializable]
 #endif
+    [DataContract]
     public class TwitterTrend : TwitterObject
     {
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name of the trend.</value>
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the address.
         /// </summary>
         /// <value>The address.</value>
+        [DataMember]
         public string Address { get; set; }
 
         /// <summary>
         /// Gets or sets the search query.
         /// </summary>
         /// <value>The search query.</value>
+        [DataMember]
         public string SearchQuery { get; set; }
 
         /// <summary>

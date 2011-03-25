@@ -110,6 +110,9 @@
     <Compile Include="..\Twitterizer2\Core\TwitterCommand.cs">
       <Link>TwitterCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterCursorPagedIdCollection.cs">
+      <Link>TwitterCursorPagedIdCollection.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Core\TwitterIdCollection.cs">
       <Link>TwitterIdCollection.cs</Link>
     </Compile>
@@ -146,8 +149,14 @@
     <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileColorsOptions.cs">
       <Link>UpdateProfileColorsOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileCommand.cs">
+      <Link>UpdateProfileCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileImageCommand.cs">
       <Link>UpdateProfileImageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileOptions.cs">
+      <Link>UpdateProfileOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsCommand.cs">
       <Link>VerifyCredentialsCommand.cs</Link>
@@ -155,8 +164,14 @@
     <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsOptions.cs">
       <Link>VerifyCredentialsOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\BlockingCommand.cs">
+      <Link>BlockingCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Block\BlockingIdsCommand.cs">
       <Link>BlockingIdsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\BlockingOptions.cs">
+      <Link>BlockingOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Block\CreateBlockCommand.cs">
       <Link>CreateBlockCommand.cs</Link>
@@ -223,6 +238,18 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Friendship\FriendsIdsCommand.cs">
       <Link>FriendsIdsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\IncomingFriendshipsCommand.cs">
+      <Link>IncomingFriendshipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\IncomingFriendshipsOptions.cs">
+      <Link>IncomingFriendshipsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\OutgoingFriendshipsCommand.cs">
+      <Link>OutgoingFriendshipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\OutgoingFriendshipsOptions.cs">
+      <Link>OutgoingFriendshipsOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Friendship\ShowFriendshipCommand.cs">
       <Link>ShowFriendshipCommand.cs</Link>

@@ -121,7 +121,7 @@ namespace Twitterizer.Commands
 
             if (options.SinceDate > new DateTime())
             {
-                this.RequestParameters.Add("since", options.SinceDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("since", options.SinceDate.ToString("{0:yyyy-MM-dd}", unitedStatesEnglishCulture));
             }
 
             if (options.SinceId > 0)
@@ -141,7 +141,7 @@ namespace Twitterizer.Commands
 
             if (options.UntilDate > new DateTime())
             {
-                this.RequestParameters.Add("until", options.UntilDate.ToString("{0:YYYY-MM-DD}", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("until", options.UntilDate.ToString("{0:yyyy-MM-dd}", unitedStatesEnglishCulture));
             }
 
             switch (options.ResultType)
