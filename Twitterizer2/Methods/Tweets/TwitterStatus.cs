@@ -192,6 +192,11 @@ namespace Twitterizer
                     return null;
                 }
 
+                if (!int.TryParse(this.RetweetCountString, out parsedResult))
+                {
+                    return null;
+                }
+
                 return parsedResult;
             }
         }
