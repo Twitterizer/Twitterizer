@@ -72,8 +72,8 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("cursor", "-1");
 
             }
-
-            this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
+            else
+                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
         }
     }
 }

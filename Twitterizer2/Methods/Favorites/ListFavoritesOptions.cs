@@ -59,5 +59,11 @@ namespace Twitterizer
         /// </summary>
         /// <value>The page number.</value>
         public int Page { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to include entities in the results.
+        /// </summary>
+        /// <value>Include entities.</value>
+        public bool IncludeEntites { get; set; }
     }
 }

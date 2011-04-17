@@ -53,7 +53,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Twitterizer2.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Twitterizer2\Twitterizer2.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -69,7 +69,6 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="TwitterBlockAsync.cs" />
-    <Compile Include="TwitterNotificationAsync.cs" />
     <Compile Include="TwitterSavedSearchAsync.cs" />
     <Compile Include="TwitterAsyncResponse.cs" />
     <Compile Include="TwitterDirectMessageAsync.cs" />
@@ -117,7 +116,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Twitterizer2.snk" />
+    <None Include="..\Twitterizer2\Twitterizer2.snk">
+      <Link>Twitterizer2.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

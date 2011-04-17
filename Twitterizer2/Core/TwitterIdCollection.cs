@@ -43,6 +43,14 @@ namespace Twitterizer
     /// </summary>
     public class TwitterIdCollection : Collection<decimal>, ITwitterObject
     {
+        public TwitterIdCollection() { }
+
+        public TwitterIdCollection(List<decimal> items)
+        {
+            items.ForEach((a) => { this.Add(a); });
+        }
+
+
         /// <summary>
         /// Annotations are additional pieces of data, supplied by Twitter clients, in a non-structured dictionary.
         /// </summary>

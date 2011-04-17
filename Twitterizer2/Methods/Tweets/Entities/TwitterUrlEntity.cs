@@ -56,5 +56,17 @@ namespace Twitterizer.Entities
         /// </summary>
         /// <value>The parsed URL.</value>
         public string Url { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Display URL parsed from the tweet text.
+        /// </summary>
+        /// <value>The parsed Display URL.</value>
+        public string DisplayUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Expanded URL parsed from the tweet text.
+        /// </summary>
+        /// <value>The parsed Expanded URL.</value>
+        public string ExpandedUrl { get; set; }
     }
 }

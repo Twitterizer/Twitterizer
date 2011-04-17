@@ -102,6 +102,16 @@ namespace Twitterizer.Entities
                                     reader.Read();
                                     ((TwitterUrlEntity)entity).Url = (string)reader.Value;
                                 }
+                                if ((string)reader.Value == "display_url")
+                                {
+                                    reader.Read();
+                                    ((TwitterUrlEntity)entity).DisplayUrl = (string)reader.Value;
+                                }
+                                if ((string)reader.Value == "expanded_url")
+                                {
+                                    reader.Read();
+                                    ((TwitterUrlEntity)entity).ExpandedUrl = (string)reader.Value;
+                                }
                             }
 
                             break;
