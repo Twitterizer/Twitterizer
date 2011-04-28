@@ -293,8 +293,16 @@ namespace Twitterizer.Core
                 return twitterResponse;
             }
 
-            twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
-
+            try
+            {
+                twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
+            }
+            catch (Newtonsoft.Json.JsonReaderException)
+            {
+                twitterResponse.ErrorMessage = "Unable to parse JSON";
+                twitterResponse.Result = RequestResult.Unknown;
+                return twitterResponse;
+            }
 
 #if !LITE && !SILVERLIGHT
             this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);

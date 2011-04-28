@@ -11,11 +11,19 @@
     <projectUrl>http://www.twitterizer.net/</projectUrl>
 	<iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
 	<tags>twitter twitterizer</tags>
+	<frameworkAssemblies>
+		<frameworkAssembly assemblyName="System" targetFramework="net35" />
+		<frameworkAssembly assemblyName="System.Web" targetFramework="net35" />
+		<frameworkAssembly assemblyName="System.Xml" targetFramework="net35" />
+		<frameworkAssembly assemblyName="System.Drawing" targetFramework="net35" />
+		<frameworkAssembly assemblyName="System.Configuration" targetFramework="net35" />
+		<frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net35" />
+	</frameworkAssemblies>
 	<dependencies>
-		<dependency id="Newtonsoft.Json" version="3.5" />
+		<dependency id="Newtonsoft.Json" />
 	</dependencies>
   </metadata> 
   <files>
-    <file src="Release\Twitterizer2\Twitterizer2.*" target="lib" />
+    <file src="Release\Twitterizer2\Twitterizer2.*" target="lib\35" />
   </files>
 </package>
