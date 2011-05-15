@@ -55,11 +55,11 @@ using Twitterizer.Core;
 
     public delegate void StatusCreatedCallback(TwitterStatus status);
 
-    public delegate void StatusDeletedCallback(TwitterStatus status);
+    public delegate void StatusDeletedCallback(TwitterStreamDeletedStatus status);
 
     public delegate void DirectMessageCreatedCallback(TwitterDirectMessage status);
 
-    public delegate void DirectMessageDeletedCallback(TwitterDirectMessage status);
+    public delegate void DirectMessageDeletedCallback(TwitterStreamDeletedDirectMessage status);
 
     public delegate void EventCallback(TwitterStreamEvent eventDetails);
 
@@ -69,6 +69,11 @@ using Twitterizer.Core;
     public class TwitterStream : IDisposable
     {
         private InitUserStreamCallback friendsCallback;
+        private StatusCreatedCallback statusCreatedCallback;
+        private StatusDeletedCallback statusDeletedCallback;
+        private DirectMessageCreatedCallback directMessageCreatedCallback;
+        private DirectMessageDeletedCallback directMessageDeletedCallback;
+        private EventCallback eventCallback;
 
         /// <summary>
         /// This value is set to true to indicate that the stream connection should be closed. 
@@ -131,6 +136,11 @@ using Twitterizer.Core;
             request.UserAgent = this.UserAgent;
 
             this.friendsCallback = friendsCallback;
+            this.statusCreatedCallback = statusCreatedCallback; 
+            this.statusDeletedCallback = statusDeletedCallback;
+            this.directMessageCreatedCallback = directMessageCreatedCallback;
+            this.directMessageDeletedCallback = directMessageDeletedCallback;
+            this.eventCallback = eventCallback;
 
             return request.BeginGetResponse(StreamCallback, request);
         }
@@ -185,7 +195,7 @@ using Twitterizer.Core;
                         if (bracketCount == 0)
                         {
                             Action<string> parseMethod = ParseMessage;
-                            parseMethod.BeginInvoke(blockBuilder.ToString(), null, null);
+                            parseMethod.BeginInvoke(blockBuilder.ToString().Trim('\n'), null, null);
                             blockBuilder.Clear();
                         }
                     }
@@ -205,11 +215,68 @@ using Twitterizer.Core;
         {
             JObject obj = (JObject)JsonConvert.DeserializeObject(p);
 
-            if (obj.SelectToken("friends", false) != null)
+            var friends = obj.SelectToken("friends", false);
+            if (friends != null)
             {
                 if (this.friendsCallback != null)
                 {
-                    this.friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(obj.First.First.ToString()));
+                    this.friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(friends.ToString()));
+                    return;
+                }
+            }
+
+            var delete = obj.SelectToken("delete", false);
+            if (delete != null)
+            {
+                var deletedstatus = delete.SelectToken("status", false);
+                if (deletedstatus != null)
+                {
+                    if (this.statusDeletedCallback != null)
+                    {
+                        this.statusDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedStatus>(deletedstatus.ToString()));
+                        return;
+                    }  
+                    return;
+                }
+
+                var deleteddirectmessage = delete.SelectToken("directmessage", false);
+                if (deleteddirectmessage != null)
+                {
+                    if (this.directMessageDeletedCallback != null)
+                    {
+                        this.directMessageDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedDirectMessage>(deleteddirectmessage.ToString()));
+                        return;
+                    }
+                    return;
+                }
+            }
+
+            var events = obj.SelectToken("target_object", false);
+            if (events != null)
+            {
+                if (this.eventCallback != null)
+                {
+                    this.eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(events.ToString()));
+                    return;
+                }
+            }
+            
+            var status = obj.SelectToken("user", false);
+            if (status != null)
+            {
+                if (this.statusCreatedCallback != null)
+                {
+                    this.statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(obj.ToString()));
+                    return;
+                }
+            }
+
+            var directmessage = obj.SelectToken("direct_message", false);
+            if (directmessage != null)
+            {
+                if (this.directMessageCreatedCallback != null)
+                {
+                    this.directMessageCreatedCallback(JsonConvert.DeserializeObject<TwitterDirectMessage>(obj.ToString()));
                     return;
                 }
             }
