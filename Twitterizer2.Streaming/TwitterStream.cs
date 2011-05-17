@@ -1,5 +1,4 @@
-﻿using Twitterizer2.Streaming;
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="TwitterStream.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
@@ -55,11 +54,11 @@ using Twitterizer.Core;
 
     public delegate void StatusCreatedCallback(TwitterStatus status);
 
-    public delegate void StatusDeletedCallback(TwitterStreamDeletedStatus status);
+    public delegate void StatusDeletedCallback(TwitterStreamDeletedEvent status);
 
     public delegate void DirectMessageCreatedCallback(TwitterDirectMessage status);
 
-    public delegate void DirectMessageDeletedCallback(TwitterStreamDeletedDirectMessage status);
+    public delegate void DirectMessageDeletedCallback(TwitterStreamDeletedEvent status);
 
     public delegate void EventCallback(TwitterStreamEvent eventDetails);
 
@@ -233,18 +232,18 @@ using Twitterizer.Core;
                 {
                     if (this.statusDeletedCallback != null)
                     {
-                        this.statusDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedStatus>(deletedstatus.ToString()));
+                        this.statusDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deletedstatus.ToString()));
                         return;
                     }  
                     return;
                 }
 
-                var deleteddirectmessage = delete.SelectToken("directmessage", false);
+                var deleteddirectmessage = delete.SelectToken("direct_message", false);
                 if (deleteddirectmessage != null)
                 {
                     if (this.directMessageDeletedCallback != null)
                     {
-                        this.directMessageDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedDirectMessage>(deleteddirectmessage.ToString()));
+                        this.directMessageDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deleteddirectmessage.ToString()));
                         return;
                     }
                     return;
@@ -276,7 +275,7 @@ using Twitterizer.Core;
             {
                 if (this.directMessageCreatedCallback != null)
                 {
-                    this.directMessageCreatedCallback(JsonConvert.DeserializeObject<TwitterDirectMessage>(obj.ToString()));
+                    this.directMessageCreatedCallback(JsonConvert.DeserializeObject<TwitterDirectMessage>(directmessage.ToString()));
                     return;
                 }
             }
