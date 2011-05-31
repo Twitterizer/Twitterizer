@@ -203,6 +203,8 @@
     <Compile Include="Methods\Tweets\Entities\TwitterUrlEntity.cs" />
     <Compile Include="Methods\Tweets\RelatedResultsCommand.cs" />
     <Compile Include="Methods\User\RetweetedByCommand.cs" />
+    <Compile Include="Methods\User\RetweetedByIdsCommand.cs" />
+    <Compile Include="Methods\User\RetweetedByIdsOptions.cs" />
     <Compile Include="Methods\User\RetweetedByOptions.cs" />
     <Compile Include="Methods\Tweets\TwitterRelatedTweets.cs" />
     <Compile Include="Methods\Tweets\RetweetsOfMeOptions.cs" />

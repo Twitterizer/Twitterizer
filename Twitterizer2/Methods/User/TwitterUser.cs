@@ -466,6 +466,31 @@ namespace Twitterizer
         {
             return RetweetedBy(tokens, statusId, null);
         }
+
+        /// <summary>
+        /// Show user ids of up to 100 members who retweeted the status.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>A collection of user ids.</returns>
+        public static TwitterResponse<UserIdCollection> RetweetedByIds(OAuthTokens tokens, decimal statusId, RetweetedByIdsOptions options)
+        {
+            Commands.RetweetedByIdsCommand command = new Commands.RetweetedByIdsCommand(tokens, statusId, options);
+
+            return Core.CommandPerformer<UserIdCollection>.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Show user ids of up to 100 members who retweeted the status.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="statusId">The status id.</param>
+        /// <returns>A collection of user ids.</returns>
+        public static TwitterResponse<UserIdCollection> RetweetedByIds(OAuthTokens tokens, decimal statusId)
+        {
+            return RetweetedByIds(tokens, statusId, null);
+        }
         #endregion
     }
 }

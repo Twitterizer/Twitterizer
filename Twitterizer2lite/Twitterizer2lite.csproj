@@ -485,6 +485,12 @@
     <Compile Include="..\Twitterizer2\Methods\User\RetweetedByCommand.cs">
       <Link>RetweetedByCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByIdsCommand.cs">
+      <Link>RetweetedByIdsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByIdsOptions.cs">
+      <Link>RetweetedByIdsOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\User\RetweetedByOptions.cs">
       <Link>RetweetedByOptions.cs</Link>
     </Compile>
