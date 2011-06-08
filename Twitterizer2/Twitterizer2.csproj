@@ -199,6 +199,7 @@
     <Compile Include="Methods\Tweets\Entities\TwitterEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterEntityCollection.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterHashTagEntity.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterMediaEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterMentionEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterUrlEntity.cs" />
     <Compile Include="Methods\Tweets\RelatedResultsCommand.cs" />
