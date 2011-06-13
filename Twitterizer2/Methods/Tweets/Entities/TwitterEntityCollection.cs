@@ -114,7 +114,7 @@ using System.Linq.Expressions;
                             break;
 
                         case "hashtags":
-                           if (reader.TokenType == JsonToken.StartObject)
+                            if (reader.TokenType == JsonToken.StartObject)
                                 entity = new TwitterHashTagEntity();
 
                             ReadFieldValue(reader, "text", entity, () => ((TwitterHashTagEntity)entity).Text);
@@ -132,8 +132,8 @@ using System.Linq.Expressions;
                             break;
                     }
 
-                    // Read the indicies (for all entities)
-                    if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "indices")
+                    // Read the indicies (for all entities except Media)
+                    if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "indices" && entity != null)
                     {
                         reader.Read();
                         reader.Read();
@@ -142,7 +142,7 @@ using System.Linq.Expressions;
                         entity.EndIndex = Convert.ToInt32((long)reader.Value);
                     }
 
-                    if (reader.TokenType == JsonToken.EndObject && entity != null)
+                    if ((reader.TokenType == JsonToken.EndObject && entity != null) || entity is TwitterMediaEntity)
                     {
                         result.Add(entity);
                         entity = null;
@@ -159,128 +159,178 @@ using System.Linq.Expressions;
 
             public TwitterMediaEntity parseMediaEntity(JsonReader reader)
             {
-                if (reader.TokenType != JsonToken.StartObject)
-                    return null;
-
-                TwitterMediaEntity entity = new TwitterMediaEntity();
-
-                int startDepth = reader.Depth;
-
-                // Start looping through all of the child nodes
-                while (reader.Read() && reader.Depth >= startDepth)
+                try
                 {
-                    // If the current node isn't a property, skip it
-                    if (reader.TokenType != JsonToken.PropertyName)
-                    {
-                        continue;
-                    }
+                    if (reader.TokenType != JsonToken.StartObject)
+                        return null;
 
-                    string fieldName = reader.Value as string;
-                    if (string.IsNullOrEmpty(fieldName))
-                    {
-                        continue;
-                    }
+                    TwitterMediaEntity entity = new TwitterMediaEntity();
 
-                    switch (fieldName)
-                    {
-                        case "type":
-                            entity.MediaType = string.IsNullOrEmpty((string)reader.Value) ?
-                                TwitterMediaEntity.MediaTypes.Unknown :
-                                TwitterMediaEntity.MediaTypes.Photo;
-                            break;
+                    int startDepth = reader.Depth;
 
-                        case "sizes":
-                            if (reader.TokenType != JsonToken.PropertyName)
-                            {
+                    // Start looping through all of the child nodes
+                    while (reader.Read() && reader.Depth >= startDepth)
+                    {
+                        // If the current node isn't a property, skip it
+                        if (reader.TokenType != JsonToken.PropertyName)
+                        {
+                            continue;
+                        }
+
+                        string fieldName = reader.Value as string;
+                        if (string.IsNullOrEmpty(fieldName))
+                        {
+                            continue;
+                        }
+
+                        switch (fieldName)
+                        {
+                            case "type":
+                                entity.MediaType = string.IsNullOrEmpty((string)reader.Value) ?
+                                    TwitterMediaEntity.MediaTypes.Unknown :
+                                    TwitterMediaEntity.MediaTypes.Photo;
                                 break;
-                            }
 
-                            TwitterMediaEntity.MediaSize newSize = new TwitterMediaEntity.MediaSize();
+                            case "sizes":
+                                entity.Sizes = new System.Collections.Generic.List<TwitterMediaEntity.MediaSize>();
+                                break;
 
-                            switch ((string)reader.Value)
-                            {
-                                case "large":
-                                    newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Large;
+                            case "large":
+                            case "medium":
+                            case "small":
+                            case "thumb":
+                                if (reader.TokenType != JsonToken.PropertyName)
+                                {
                                     break;
-                                case "medium":
-                                    newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Medium;
-                                    break;
-                                case "small":
-                                    newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Small;
-                                    break;
-                                case "thumb":
-                                    newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Thumb;
-                                    break;
-                                default:
-                                    break;
-                            }
+                                }
 
-                            int sizeDepth = reader.Depth;
+                                TwitterMediaEntity.MediaSize newSize = new TwitterMediaEntity.MediaSize();
 
-                            // Loop through all of the properties of the size and read their values
-                            while (reader.Read() && sizeDepth > reader.Depth)
-                            {
+                                switch ((string)reader.Value)
+                                {
+                                    case "large":
+                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Large;
+                                        break;
+                                    case "medium":
+                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Medium;
+                                        break;
+                                    case "small":
+                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Small;
+                                        break;
+                                    case "thumb":
+                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Thumb;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                
+                                int sizeDepth = reader.Depth;
+                                // Loop through all of the properties of the size and read their values
+                                while (reader.Read() && sizeDepth < reader.Depth)
+                                {
+                                    if (reader.TokenType != JsonToken.PropertyName)
+                                    {
+                                        continue;
+                                    }
 
-                            }
+                                    ReadFieldValue(reader, "h", newSize, () => newSize.Height);
+                                    ReadFieldValue(reader, "w", newSize, () => newSize.Width);
 
-                            break;
+                                    if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "resize")
+                                    {
+                                        reader.Read();
+                                        newSize.Resize = string.IsNullOrEmpty((string)reader.Value) ?
+                                            TwitterMediaEntity.MediaSize.MediaSizeResizes.Unknown : 
+                                            ((string)reader.Value == "fit" ? TwitterMediaEntity.MediaSize.MediaSizeResizes.Fit : TwitterMediaEntity.MediaSize.MediaSizeResizes.Crop);
+                                    }
+                                }
 
-                        default:
-                            break;
+                                entity.Sizes.Add(newSize);
+
+                                break;
+                            case "indices":
+                                reader.Read();
+                                reader.Read();
+                                entity.StartIndex = Convert.ToInt32((long)reader.Value);
+                                reader.Read();
+                                entity.EndIndex = Convert.ToInt32((long)reader.Value);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        ReadFieldValue(reader, "id", entity, () => entity.Id);
+                        ReadFieldValue(reader, "id_str", entity, () => entity.IdString);
+                        ReadFieldValue(reader, "media_url", entity, () => entity.MediaUrl);
+                        ReadFieldValue(reader, "media_url_https", entity, () => entity.MediaUrlSecure);
+                        ReadFieldValue(reader, "url", entity, () => entity.Url);
+                        ReadFieldValue(reader, "display_url", entity, () => entity.DisplayUrl);
+                        ReadFieldValue(reader, "expanded_url", entity, () => entity.ExpandedUrl);
                     }
-
-                    ReadFieldValue(reader, "id", entity, () => entity.Id);
-                    ReadFieldValue(reader, "id_str", entity, () => entity.IdString);
-                    ReadFieldValue(reader, "media_url", entity, () => entity.MediaUrl);
-                    ReadFieldValue(reader, "media_url_https", entity, () => entity.MediaUrlSecure);
-                    ReadFieldValue(reader, "url", entity, () => entity.Url);
-                    ReadFieldValue(reader, "display_url", entity, () => entity.DisplayUrl);
-                    ReadFieldValue(reader, "expanded_url", entity, () => entity.ExpandedUrl);
+                    return entity;
                 }
-
-                return entity;
+                catch
+                {
+                    return null;
+                }
             }
 
             private bool ReadFieldValue<T>(JsonReader reader, string fieldName, ref T result)
             {
-                if (reader.TokenType != JsonToken.PropertyName)
-                    return false;
-
-                if ((string)reader.Value != fieldName)
-                    return false;
-
-                reader.Read();
-
-                if (reader.ValueType == typeof(T))
+                try
                 {
-                    result = (T)reader.Value;
-                }
-                else
-                {
-                    result = (T)Convert.ChangeType(reader.Value, typeof(T));
-                }
+                    if (reader.TokenType != JsonToken.PropertyName)
+                        return false;
 
-                return true;
+                    if ((string)reader.Value != fieldName)
+                        return false;
+
+                    reader.Read();
+
+                    if (reader.ValueType == typeof(T))
+                    {
+                        result = (T)reader.Value;
+                    }
+                    else
+                    {
+
+                        result = (T)Convert.ChangeType(reader.Value, typeof(T));
+
+                    }
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
 
             private bool ReadFieldValue<TSource, TProperty>(JsonReader reader, string fieldName, TSource source, Expression<Func<TProperty>> property)
             {
-                if (reader == null || source == null)
+                try
+                {
+                    if (reader == null || source == null)
+                    {
+                        return false;
+                    }
+
+                    var expr = (MemberExpression)property.Body;
+                    var prop = (PropertyInfo)expr.Member;
+
+                    TProperty value = (TProperty)prop.GetValue(source, null);
+                    if (ReadFieldValue<TProperty>(reader, fieldName, ref value))
+                    {
+                        prop.SetValue(source, value, null);
+                        return true;
+                    }
+
+                    return false;
+                }
+                catch
                 {
                     return false;
                 }
-
-                var expr = (MemberExpression)property.Body;
-                var prop = (PropertyInfo)expr.Member;
-
-                TProperty value = (TProperty)prop.GetValue(source, null);
-                if (ReadFieldValue<TProperty>(reader, fieldName, ref value))
-                {
-                    prop.SetValue(source, value, null);
-                    return true;
-                }
-
-                return false;
             }
         }
     }

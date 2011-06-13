@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterAsyncResponse.cs" company="Patrick Ricky Smith">
+// <copyright file="AccessLevel.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,39 +28,35 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The response wrapper class for all asynchronous methods.</summary>
+// <author>David Golden</author>
+// <summary>The OAuth Token Access Level class. Provides information about the last request made.</summary>
 //-----------------------------------------------------------------------
+
 namespace Twitterizer
 {
-    using System;
-
-    public class TwitterAsyncResponse<T> : TwitterResponse<T>
-        where T : Core.ITwitterObject
+    /// <summary>
+    /// Describes the access level of the OAuth Token
+    /// </summary>
+    public enum AccessLevel
     {
         /// <summary>
-        /// Gets or sets the exception.
+        /// The request may not be authenticated or the Access Level header was missing from the response.
         /// </summary>
-        /// <value>The exception.</value>
-        public Exception ExceptionThrown { get; set; }
-    }
+        Unknown,
 
-    public static class TwitterResponseAsyncConverterExtentions
-    {
-        public static TwitterAsyncResponse<T> ToAsyncResponse<T>(this TwitterResponse<T> response)
-            where T : Core.ITwitterObject
-        {
-            TwitterAsyncResponse<T> newResponse = new TwitterAsyncResponse<T>();
-            newResponse.Content = response.Content;
-            newResponse.ErrorMessage = response.ErrorMessage;
-            newResponse.RateLimiting = response.RateLimiting;
-            newResponse.AccessLevel = response.AccessLevel;
-            newResponse.RequestUrl = response.RequestUrl;
-            newResponse.ResponseCached = response.ResponseCached;
-            newResponse.ResponseObject = response.ResponseObject;
-            newResponse.Result = response.Result;
+        /// <summary>
+        /// The OAuth token has read access levels only.
+        /// </summary>
+        Read,
 
-            return newResponse;
-        }
+        /// <summary>
+        /// The OAuth token has read write access only.
+        /// </summary>
+        ReadWrite,
+
+        /// <summary>
+        /// The OAuth token has read write and direct messages access.
+        /// </summary>
+        ReadWriteDirectMessage
     }
 }

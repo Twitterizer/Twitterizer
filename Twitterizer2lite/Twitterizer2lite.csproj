@@ -101,6 +101,9 @@
     <Compile Include="..\Twitterizer2\Core\RequestResult.cs">
       <Link>RequestResult.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Core\AccessLevel.cs">
+      <Link>AccessLevel.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Core\SerializationHelper.cs">
       <Link>SerializationHelper.cs</Link>
     </Compile>
@@ -424,6 +427,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterUrlEntity.cs">
       <Link>TwitterUrlEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterMediaEntity.cs">
+      <Link>TwitterMediaEntity.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\RelatedResultsCommand.cs">
       <Link>RelatedResultsCommand.cs</Link>

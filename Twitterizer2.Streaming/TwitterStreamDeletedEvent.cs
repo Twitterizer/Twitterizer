@@ -29,7 +29,7 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>David Golden</author>
-// <summary>The TwitterStreamDeletedDirectMessage class</summary>
+// <summary>The TwitterStreamDeletedEvent class</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer.Streaming
 {

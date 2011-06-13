@@ -47,7 +47,16 @@ using Twitterizer.Core;
     {
         StoppedByRequest,
         WebConnectionFailed,
-        Unknown
+        Unknown,
+        Unauthorised,
+        Forbidden,
+        NotFound,
+        NotAcceptable,
+        TooLong,
+        RangeUnacceptable,
+        RateLimited,
+        TwitterServerError,
+        TwitterOverloaded
     }
 
     public delegate void InitUserStreamCallback(TwitterIdCollection friendIds);
@@ -62,12 +71,15 @@ using Twitterizer.Core;
 
     public delegate void EventCallback(TwitterStreamEvent eventDetails);
 
+    public delegate void StreamStoppedCallback(StopReasons stopreason);
+
     /// <summary>
     /// The TwitterStream class. Provides an interface to real-time status changes.
     /// </summary>
     public class TwitterStream : IDisposable
     {
         private InitUserStreamCallback friendsCallback;
+        private StreamStoppedCallback streamStoppedCallback;
         private StatusCreatedCallback statusCreatedCallback;
         private StatusDeletedCallback statusDeletedCallback;
         private DirectMessageCreatedCallback directMessageCreatedCallback;
@@ -121,6 +133,7 @@ using Twitterizer.Core;
         /// </summary>
         public IAsyncResult StartUserStream(
             InitUserStreamCallback friendsCallback,
+            StreamStoppedCallback streamErrorCallback,
             StatusCreatedCallback statusCreatedCallback, 
             StatusDeletedCallback statusDeletedCallback,
             DirectMessageCreatedCallback directMessageCreatedCallback,
@@ -135,12 +148,13 @@ using Twitterizer.Core;
             request.UserAgent = this.UserAgent;
 
             this.friendsCallback = friendsCallback;
+            this.streamStoppedCallback = streamErrorCallback;
             this.statusCreatedCallback = statusCreatedCallback; 
             this.statusDeletedCallback = statusDeletedCallback;
             this.directMessageCreatedCallback = directMessageCreatedCallback;
             this.directMessageDeletedCallback = directMessageDeletedCallback;
             this.eventCallback = eventCallback;
-
+            this.stopReceived = false;
             return request.BeginGetResponse(StreamCallback, request);
         }
 
@@ -153,55 +167,142 @@ using Twitterizer.Core;
             HttpWebRequest req = (HttpWebRequest)result.AsyncState;
 
             using (var response = req.EndGetResponse(result))
-            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
-                // This will keep the count of open brackets
-                // When { is encountered, the count is incremented
-                // When } is encountered, the count is decremented
-                int bracketCount = 0;
-
-                // The blockBuilder will hold the string of the current block of json.
-                StringBuilder blockBuilder = new StringBuilder();
-
-                while (!this.stopReceived && !reader.EndOfStream)
+                try
                 {
-                    string lineOfData = reader.ReadLine();
-                    
-                    if (this.stopReceived)
+                    if ((response as HttpWebResponse).StatusCode == HttpStatusCode.OK)
                     {
-                        continue;
-                    }
-
-                    for (int index = 0; index < lineOfData.Length; index++)
-                    {
-                        blockBuilder.Append(lineOfData[index]);
-
-                        if (!new[] { '{', '}' }.Contains(lineOfData[index]))
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
-                            continue;
-                        }
+                            try
+                            {
+                                // This will keep the count of open brackets
+                                // When { is encountered, the count is incremented
+                                // When } is encountered, the count is decremented
+                                int bracketCount = 0;
 
-                        if (lineOfData[index] == '{')
-                        {
-                            bracketCount++;
-                        }
+                                // The blockBuilder will hold the string of the current block of json.
+                                StringBuilder blockBuilder = new StringBuilder();
 
-                        if (lineOfData[index] == '}')
-                        {
-                            bracketCount--;
-                        }
+                                while (!this.stopReceived && !reader.EndOfStream)
+                                {
+                                    string lineOfData = reader.ReadLine();
 
-                        if (bracketCount == 0)
-                        {
-                            Action<string> parseMethod = ParseMessage;
-                            parseMethod.BeginInvoke(blockBuilder.ToString().Trim('\n'), null, null);
-                            blockBuilder.Clear();
-                        }
+                                    if (this.stopReceived)
+                                    {
+                                        continue;
+                                    }
+
+                                    for (int index = 0; index < lineOfData.Length; index++)
+                                    {
+                                        blockBuilder.Append(lineOfData[index]);
+
+                                        if (!new[] { '{', '}' }.Contains(lineOfData[index]))
+                                        {
+                                            continue;
+                                        }
+
+                                        if (lineOfData[index] == '{')
+                                        {
+                                            bracketCount++;
+                                        }
+
+                                        if (lineOfData[index] == '}')
+                                        {
+                                            bracketCount--;
+                                        }
+
+                                        if (bracketCount == 0)
+                                        {
+                                            Action<string> parseMethod = ParseMessage;
+                                            parseMethod.BeginInvoke(blockBuilder.ToString().Trim('\n'), null, null);
+                                            blockBuilder.Clear();
+                                        }
+                                    }
+                                }
+                                reader.Close();
+                            }
+                            catch
+                            {
+                                //Stream Closed/Failed
+                                if (this.streamStoppedCallback != null)
+                                {
+                                    if (!this.stopReceived)
+                                        this.streamStoppedCallback(StopReasons.WebConnectionFailed);
+                                    else
+                                        this.streamStoppedCallback(StopReasons.StoppedByRequest);
+                                }
+                            }                            
+                        };                    
                     }
                 }
-
-                req.Abort();
-                reader.Close();
+                catch(WebException we)
+                {
+                    switch ((we.Response as HttpWebResponse).StatusCode)
+                    {
+                        case HttpStatusCode.Unauthorized:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.Unauthorised);
+                                break;
+                            }
+                        case HttpStatusCode.Forbidden:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.Forbidden);
+                                break;
+                            }
+                        case HttpStatusCode.NotFound:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.NotFound);
+                                break;
+                            }
+                        case HttpStatusCode.NotAcceptable:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.NotAcceptable);
+                                break;
+                            }
+                        case HttpStatusCode.RequestEntityTooLarge:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.TooLong);
+                                break;
+                            }
+                        case HttpStatusCode.RequestedRangeNotSatisfiable:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.RangeUnacceptable);
+                                break;
+                            }
+                        case (HttpStatusCode)420: //Rate Limited
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.RateLimited);
+                                break;
+                            }
+                        case HttpStatusCode.InternalServerError:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.TwitterServerError);
+                                break;
+                            }
+                        case HttpStatusCode.ServiceUnavailable:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.TwitterOverloaded);
+                                break;
+                            }
+                        default:
+                            {
+                                if (this.streamStoppedCallback != null)
+                                    this.streamStoppedCallback(StopReasons.Unknown);
+                                break;
+                            }
+                    }
+                }
+                req.Abort();                
                 response.Close();
             }
         }
@@ -250,12 +351,12 @@ using Twitterizer.Core;
                 }
             }
 
-            var events = obj.SelectToken("target_object", false);
+            var events = obj.SelectToken("event", false);
             if (events != null)
             {
                 if (this.eventCallback != null)
                 {
-                    this.eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(events.ToString()));
+                    this.eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(obj.ToString()));
                     return;
                 }
             }

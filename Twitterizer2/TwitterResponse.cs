@@ -59,5 +59,11 @@ namespace Twitterizer
         /// </summary>
         /// <value>The rate limiting object.</value>
         public RateLimiting RateLimiting { get; set; }
+
+        /// <summary>
+        /// Gets or sets the OAuth Token Access Level details.
+        /// </summary>
+        /// <value>The access level.</value>
+        public AccessLevel AccessLevel { get; set; }
     }
 }

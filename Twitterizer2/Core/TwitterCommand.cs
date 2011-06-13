@@ -210,7 +210,7 @@ namespace Twitterizer.Core
             twitterResponse.ResponseObject = default(T);
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
             RateLimiting rateLimiting;
-
+            AccessLevel accessLevel;
             byte[] responseData;
 
             try
@@ -237,10 +237,14 @@ namespace Twitterizer.Core
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
+                // Parse Access Level
+                accessLevel = ParseAccessLevel(response.Headers);
+
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, response.StatusCode, rateLimiting);
 
                 twitterResponse.RateLimiting = rateLimiting;
+                twitterResponse.AccessLevel = accessLevel;
             }
             catch (WebException wex)
             {
@@ -271,6 +275,9 @@ namespace Twitterizer.Core
 
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
+                // Parse Access Level
+                accessLevel = ParseAccessLevel(exceptionResponse.Headers);
+
                 // Try to read the error message, if there is one.
                 try
                 {
@@ -286,6 +293,7 @@ namespace Twitterizer.Core
                 SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
 
                 twitterResponse.RateLimiting = rateLimiting;
+                twitterResponse.AccessLevel = accessLevel;
 
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
@@ -386,6 +394,33 @@ namespace Twitterizer.Core
             }
             return rateLimiting;
         }
+
+        /// <summary>
+        /// Parses the access level headers.
+        /// </summary>
+        /// <param name="responseHeaders">The headers of the web response.</param>
+        /// <returns>An enum of the current access level of the OAuth Token being used.</returns>
+        private AccessLevel ParseAccessLevel(WebHeaderCollection responseHeaders)
+        {
+            if (responseHeaders.AllKeys.Contains("X-Access-Level"))
+            {
+                switch (responseHeaders["X-Access-Level"].ToLower())
+                {
+                    case "read":
+                        return AccessLevel.Read;
+                    case "read-write":
+                        return AccessLevel.ReadWrite;
+                    case "read-write-privatemessages":
+                        return AccessLevel.ReadWriteDirectMessage;
+                    default:
+                        break;
+                }
+                return AccessLevel.Unknown;
+            }
+            else
+                return AccessLevel.Unknown;
+        }
+
 
 #if !LITE && !SILVERLIGHT
         /// <summary>
