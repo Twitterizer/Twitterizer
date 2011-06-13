@@ -411,6 +411,7 @@ namespace Twitterizer.Core
                     case "read-write":
                         return AccessLevel.ReadWrite;
                     case "read-write-privatemessages":
+                    case "read-write-directmessages":
                         return AccessLevel.ReadWriteDirectMessage;
                     default:
                         break;
