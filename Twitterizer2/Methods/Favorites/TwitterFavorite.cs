@@ -61,7 +61,7 @@ namespace Twitterizer
         /// <returns>The favorite status when successful.</returns>
         public static TwitterResponse<TwitterStatus> Create(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
-            return CommandPerformer<TwitterStatus>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.CreateFavoriteCommand(tokens, statusId, options));
         }
 
@@ -85,7 +85,7 @@ namespace Twitterizer
         /// <returns>The un-favorited status in the requested format when successful.</returns>
         public static TwitterResponse<TwitterStatus> Delete(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
-            return CommandPerformer<TwitterStatus>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.DeleteFavoriteCommand(tokens, statusId, options));
         }
 
@@ -110,7 +110,7 @@ namespace Twitterizer
         /// <returns>The 20 most recent favorite statuses</returns>
         public static TwitterResponse<TwitterStatusCollection> List(OAuthTokens tokens, ListFavoritesOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.ListFavoritesCommand(tokens, options));
         }
 

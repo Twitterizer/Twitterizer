@@ -299,6 +299,9 @@
     <Compile Include="..\Twitterizer2\Methods\List\CreateListCommand.cs">
       <Link>CreateListCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\CreateListMembershipCommand.cs">
+      <Link>CreateListMembershipCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\DeleteListCommand.cs">
       <Link>DeleteListCommand.cs</Link>
     </Compile>

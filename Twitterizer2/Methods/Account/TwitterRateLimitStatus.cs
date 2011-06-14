@@ -81,7 +81,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterRateLimitStatus> GetStatus(OAuthTokens tokens, OptionalProperties options)
         {
             Commands.RateLimitStatusCommand command = new Twitterizer.Commands.RateLimitStatusCommand(tokens, options);
-            TwitterResponse<TwitterRateLimitStatus> result = Core.CommandPerformer<TwitterRateLimitStatus>.PerformAction(command);
+            TwitterResponse<TwitterRateLimitStatus> result = Core.CommandPerformer.PerformAction(command);
 
             return result;
         }

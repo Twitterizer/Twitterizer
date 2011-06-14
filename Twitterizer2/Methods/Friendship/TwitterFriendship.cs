@@ -54,7 +54,7 @@ namespace Twitterizer
         {
             Commands.FollowersCommand command = new Commands.FollowersCommand(tokens, options);
 
-            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -93,11 +93,12 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        [System.Obsolete("This method is deprecated as it will only return information about users who have Tweeted recently. It is not a functional way to retrieve all of a users friends. Instead of using this method use a combination of friends/ids and users/lookup.")]
         public static TwitterResponse<TwitterUserCollection> Friends(OAuthTokens tokens, FriendsOptions options)
         {
             Commands.FriendsCommand command = new Commands.FriendsCommand(tokens, options);
 
-            return CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -108,6 +109,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        [System.Obsolete("This method is deprecated as it will only return information about users who have Tweeted recently. It is not a functional way to retrieve all of a users friends. Instead of using this method use a combination of friends/ids and users/lookup.")]
         public static TwitterResponse<TwitterUserCollection> Friends(OAuthTokens tokens)
         {
             return Friends(tokens, null);
@@ -121,6 +123,7 @@ namespace Twitterizer
         /// A <see cref="TwitterUserCollection"/> instance.
         /// </returns>
         /// <remarks>Please note that the result set isn't guaranteed to be 100 every time as suspended users will be filtered out.</remarks>
+        [System.Obsolete("This method is deprecated as it will only return information about users who have Tweeted recently. It is not a functional way to retrieve all of a users friends. Instead of using this method use a combination of friends/ids and users/lookup.")]
         public static TwitterResponse<TwitterUserCollection> Friends(FriendsOptions options)
         {
             return Friends(null, options);
@@ -154,7 +157,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, decimal userId, CreateFriendshipOptions options)
         {
             Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(tokens, userId, options);
-            return CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -182,7 +185,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUser> Create(OAuthTokens tokens, string userName, CreateFriendshipOptions options)
         {
             Commands.CreateFriendshipCommand command = new Commands.CreateFriendshipCommand(tokens, userName, options);
-            return CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         #endregion
@@ -214,7 +217,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUser> Delete(OAuthTokens tokens, decimal userId, OptionalProperties options)
         {
             Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens, userId, string.Empty, options);
-            return CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -242,7 +245,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUser> Delete(OAuthTokens tokens, string userName, OptionalProperties options)
         {
             Commands.DeleteFriendshipCommand command = new Commands.DeleteFriendshipCommand(tokens, 0, userName, options);
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
         #endregion
 
@@ -301,7 +304,7 @@ namespace Twitterizer
                 string.Empty, 
                 options);
 
-            return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -351,7 +354,7 @@ namespace Twitterizer
         {
             Commands.ShowFriendshipCommand command = new Twitterizer.Commands.ShowFriendshipCommand(tokens, 0, sourceUserName, 0, targetUserName, options);
 
-            return Core.CommandPerformer<TwitterRelationship>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -395,7 +398,7 @@ namespace Twitterizer
         public static TwitterResponse<UserIdCollection> FriendsIds(OAuthTokens tokens, UsersIdsOptions options)
         {
             Commands.FriendsIdsCommand command = new Commands.FriendsIdsCommand(tokens, options);
-            return Core.CommandPerformer<UserIdCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -421,7 +424,7 @@ namespace Twitterizer
         public static TwitterResponse<UserIdCollection> FollowersIds(OAuthTokens tokens, UsersIdsOptions options)
         {
             Commands.FollowersIdsCommand command = new Commands.FollowersIdsCommand(tokens, options);
-            return Core.CommandPerformer<UserIdCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -447,7 +450,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterCursorPagedIdCollection> IncomingRequests(OAuthTokens tokens, IncomingFriendshipsOptions options)
         {
             Commands.IncomingFriendshipsCommand command = new Commands.IncomingFriendshipsCommand(tokens, options);
-            return Core.CommandPerformer<TwitterCursorPagedIdCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -469,7 +472,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterCursorPagedIdCollection> OutgoingRequests(OAuthTokens tokens, OutgoingFriendshipsOptions options)
         {
             Commands.OutgoingFriendshipsCommand command = new Commands.OutgoingFriendshipsCommand(tokens, options);
-            return Core.CommandPerformer<TwitterCursorPagedIdCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

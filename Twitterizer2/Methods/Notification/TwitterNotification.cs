@@ -33,6 +33,9 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+    /// <summary>
+    /// Provides methods to update a user's preferences on notifications. For example, whether a user will be notified on mention via SMS.
+    /// </summary>
     public static class TwitterNotification
     {
         /// <summary>
@@ -46,7 +49,7 @@ namespace Twitterizer
         {
             Commands.NotificationFollowCommand command = new Commands.NotificationFollowCommand(tokens, userId, string.Empty, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace Twitterizer
         {
             Commands.NotificationFollowCommand command = new Commands.NotificationFollowCommand(tokens, 0, screenName, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace Twitterizer
         {
             Commands.NotificationLeaveCommand command = new Commands.NotificationLeaveCommand(tokens, userId, string.Empty, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace Twitterizer
         {
             Commands.NotificationLeaveCommand command = new Commands.NotificationLeaveCommand(tokens, 0, screenName, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

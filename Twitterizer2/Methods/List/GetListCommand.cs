@@ -51,13 +51,15 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="GetListCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <param name="slug">The slug.</param>
+        /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
-        public GetListCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, OptionalProperties options)
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        public GetListCommand(OAuthTokens requestTokens, string slug, decimal listId, OptionalProperties options)
             : base(
                 HTTPVerb.GET, 
-                string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, listIdOrSlug), 
+                "lists/show.json", 
                 requestTokens, 
                 options)
         {
@@ -66,22 +68,41 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("requestTokens");
             }
 
-            if (string.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(slug) ^ listId > 0)
             {
-                throw new ArgumentNullException("username");
+                throw new ArgumentException("You must supply a list id number or slug, but not both.");
             }
 
-            if (string.IsNullOrEmpty(listIdOrSlug))
-            {
-                throw new ArgumentNullException("listIdOrSlug");
-            }
+            this.ListId = listId;
+            this.Slug = slug;
         }
+
+        /// <summary>
+        /// Gets or sets the list id.
+        /// </summary>
+        /// <value>The list id.</value>
+        public decimal ListId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the slug.
+        /// </summary>
+        /// <value>The slug.</value>
+        public string Slug { get; set; }
 
         /// <summary>
         /// Initializes the command.
         /// </summary>
         public override void Init()
         {
+            if (ListId > 0)
+            {
+                this.RequestParameters.Add("list_id", this.ListId.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (!string.IsNullOrEmpty(this.Slug))
+            {
+                this.RequestParameters.Add("slug", this.Slug);
+            }
         }
     }
 }

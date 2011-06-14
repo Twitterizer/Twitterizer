@@ -79,7 +79,7 @@ namespace Twitterizer
         {
             Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(options);
 
-            return Core.CommandPerformer<TwitterTrendCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

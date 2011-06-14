@@ -83,7 +83,7 @@ namespace Twitterizer
             Commands.SearchCommand command = new Twitterizer.Commands.SearchCommand(tokens, query, options);
 
             TwitterResponse<TwitterSearchResultCollection> results =
-                Core.CommandPerformer<TwitterSearchResultCollection>.PerformAction(command);
+                Core.CommandPerformer.PerformAction(command);
 
             return results;
         }

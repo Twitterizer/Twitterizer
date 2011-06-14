@@ -303,7 +303,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterStatus> Update(OAuthTokens tokens, string text, StatusUpdateOptions options)
         {
-            return CommandPerformer<TwitterStatus>.PerformAction(new Commands.UpdateStatusCommand(tokens, text, options));
+            return CommandPerformer.PerformAction(new Commands.UpdateStatusCommand(tokens, text, options));
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace Twitterizer
         {
             Commands.DeleteStatusCommand command = new Twitterizer.Commands.DeleteStatusCommand(tokens, id, options);
 
-            return CommandPerformer<TwitterStatus>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -342,7 +342,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
         public static TwitterResponse<TwitterStatus> Show(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
-            return CommandPerformer<TwitterStatus>.PerformAction(new Commands.ShowStatusCommand(tokens, statusId, options));
+            return CommandPerformer.PerformAction(new Commands.ShowStatusCommand(tokens, statusId, options));
         }
 
         /// <summary>
@@ -375,7 +375,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
         public static TwitterResponse<TwitterStatus> Retweet(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
-            return CommandPerformer<TwitterStatus>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RetweetCommand(tokens, statusId, options));
         }
 
@@ -401,7 +401,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterStatusCollection> Retweets(OAuthTokens tokens, decimal statusId, RetweetsOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RetweetsCommand(tokens, statusId, options));
         }
 
@@ -475,7 +475,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
         public static TwitterResponse<TwitterRelatedTweetsCollection> RelatedResultsShow(OAuthTokens tokens, decimal statusId)
         {
-            return CommandPerformer<TwitterRelatedTweetsCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RelatedResultsCommand(tokens, statusId, null));
         }
 
@@ -489,7 +489,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
         public static TwitterResponse<TwitterRelatedTweetsCollection> RelatedResultsShow(OAuthTokens tokens, decimal statusId, OptionalProperties options)
         {
-            return CommandPerformer<TwitterRelatedTweetsCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RelatedResultsCommand(tokens, statusId, options));
         }
     }

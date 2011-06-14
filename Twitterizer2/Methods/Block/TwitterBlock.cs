@@ -51,7 +51,7 @@ namespace Twitterizer
         {
             Commands.CreateBlockCommand command = new Commands.CreateBlockCommand(tokens, string.Empty, userId, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Twitterizer
         {
             Commands.CreateBlockCommand command = new Commands.CreateBlockCommand(tokens, screenName, -1, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Twitterizer
         {
             Commands.DestroyBlockCommand command = new Commands.DestroyBlockCommand(tokens, string.Empty, userId, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Twitterizer
         {
             Commands.DestroyBlockCommand command = new Commands.DestroyBlockCommand(tokens, screenName, -1, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Twitterizer
         {
             Commands.ExistsBlockCommand command = new Commands.ExistsBlockCommand(tokens, string.Empty, userId, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Twitterizer
         {
             Commands.ExistsBlockCommand command = new Commands.ExistsBlockCommand(tokens, screenName, -1, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUserCollection> Blocking(OAuthTokens tokens, BlockingOptions options)
         {
             Commands.BlockingCommand command = new Commands.BlockingCommand(tokens, options);
-            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Twitterizer
         {
             Commands.BlockingIdsCommand command = new Commands.BlockingIdsCommand(tokens, options);
 
-            return Core.CommandPerformer<TwitterIdCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

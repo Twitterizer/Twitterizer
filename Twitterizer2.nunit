@@ -1,7 +1,9 @@
 ﻿<NUnitProject>
-  <Settings activeconfig="Debug" />
+  <Settings activeconfig="Release" />
   <Config name="Debug" binpathtype="Auto">
     <assembly path="Twitterizer2.TestCases\bin\Debug\Twitterizer2.TestCases.dll" />
   </Config>
-  <Config name="Release" binpathtype="Auto" />
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="Twitterizer2.TestCases\bin\Release\Twitterizer2.TestCases.dll" />
+  </Config>
 </NUnitProject>

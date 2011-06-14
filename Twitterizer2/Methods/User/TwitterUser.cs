@@ -358,7 +358,7 @@ namespace Twitterizer
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, id, string.Empty, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
@@ -388,7 +388,7 @@ namespace Twitterizer
         {
             Commands.ShowUserCommand command = new Commands.ShowUserCommand(tokens, 0, username, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
@@ -418,7 +418,7 @@ namespace Twitterizer
         {
             Commands.UserSearchCommand command = new Commands.UserSearchCommand(tokens, query, options);
 
-            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Search[@name="Common"]/*'/>
@@ -438,7 +438,7 @@ namespace Twitterizer
         {
             Commands.LookupUsersCommand command = new Commands.LookupUsersCommand(tokens, options);
 
-            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         #region Retweeted By
@@ -453,7 +453,7 @@ namespace Twitterizer
         {
             Commands.RetweetedByCommand command = new Commands.RetweetedByCommand(tokens, statusId, options);
 
-            return Core.CommandPerformer<TwitterUserCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -478,7 +478,7 @@ namespace Twitterizer
         {
             Commands.RetweetedByIdsCommand command = new Commands.RetweetedByIdsCommand(tokens, statusId, options);
 
-            return Core.CommandPerformer<UserIdCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

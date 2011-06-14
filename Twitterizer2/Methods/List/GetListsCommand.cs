@@ -55,29 +55,16 @@ namespace Twitterizer.Commands
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
-        public GetListsCommand(OAuthTokens requestTokens, string username, GetListsOptions options)
-            : base(HTTPVerb.GET, string.Format(CultureInfo.CurrentCulture, "{0}/lists.json", username), requestTokens, options)
+        public GetListsCommand(OAuthTokens requestTokens, GetListsOptions options)
+            : base(HTTPVerb.GET, "lists.json", requestTokens, options)
         {
             if (requestTokens == null)
             {
                 throw new ArgumentNullException("requestTokens");
             }
 
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentNullException("username");
-            }
-
-            this.Username = username;
-
             this.DeserializationHandler = TwitterListCollection.Deserialize;
         }
-
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>The username.</value>
-        public string Username { get; set; }
 
         /// <summary>
         /// Initializes the command.

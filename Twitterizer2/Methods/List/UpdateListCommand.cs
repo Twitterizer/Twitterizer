@@ -55,21 +55,16 @@ namespace Twitterizer.Commands
         /// <param name="username">The username.</param>
         /// <param name="id">The list id.</param>
         /// <param name="options">The options.</param>
-        public UpdateListCommand(OAuthTokens tokens, string username, string id, UpdateListOptions options)
+        public UpdateListCommand(OAuthTokens tokens, string id, UpdateListOptions options)
             : base(
-                HTTPVerb.POST, 
-                string.Format(CultureInfo.CurrentCulture, "{0}/lists/{1}.json", username, id), 
+                HTTPVerb.POST,
+                "lists/update.json", 
                 tokens, 
                 options)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException("tokens");
-            }
-
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentNullException("username");
             }
 
             if (string.IsNullOrEmpty(id))

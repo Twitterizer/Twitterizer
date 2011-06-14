@@ -50,7 +50,7 @@ namespace Twitterizer
         {
             Commands.VerifyCredentialsCommand command = new Commands.VerifyCredentialsCommand(tokens, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Twitterizer
         {
             Commands.UpdateProfileColorsCommand command = new Twitterizer.Commands.UpdateProfileColorsCommand(tokens, options);
 
-            return CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Twitterizer
         {
             Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
 
-            return CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterUser> UpdateProfile(OAuthTokens tokens, UpdateProfileOptions options)
         {
             Commands.UpdateProfileCommand command = new Commands.UpdateProfileCommand(tokens, options);
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
     }
 }

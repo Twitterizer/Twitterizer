@@ -52,7 +52,7 @@ namespace Twitterizer
         {
             Commands.HomeTimelineCommand command = new Commands.HomeTimelineCommand(tokens, options);
 
-            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <param name="tokens">The tokens.</param>
@@ -83,7 +83,7 @@ namespace Twitterizer
         {
             Commands.UserTimelineCommand command = new Commands.UserTimelineCommand(tokens, options);
 
-            return Core.CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OAuthTokens tokens, OptionalProperties options)
         {
             Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens, options);
-            TwitterResponse<TwitterStatusCollection> result = CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            TwitterResponse<TwitterStatusCollection> result = CommandPerformer.PerformAction(command);
 
             return result;
         }
@@ -165,6 +165,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        [System.Obsolete("This method is deprecated and has been replaced by the HomeTimeline method.")]
         public static TwitterResponse<TwitterStatusCollection> FriendTimeline(OAuthTokens tokens)
         {
             return FriendTimeline(tokens, null);
@@ -176,11 +177,12 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        [System.Obsolete("This method is deprecated and has been replaced by the HomeTimeline method.")]
         public static TwitterResponse<TwitterStatusCollection> FriendTimeline(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.FriendsTimelineCommand command = new Commands.FriendsTimelineCommand(tokens, options);
 
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -191,7 +193,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterResponse<TwitterStatusCollection> RetweetsOfMe(OAuthTokens tokens, RetweetsOfMeOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RetweetsOfMeCommand(tokens, options));
         }
 
@@ -215,7 +217,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterResponse<TwitterStatusCollection> RetweetedByMe(OAuthTokens tokens, TimelineOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RetweetedByMeCommand(tokens, options));
         }
 
@@ -239,7 +241,7 @@ namespace Twitterizer
         /// <returns>A <see cref="TwitterStatusCollection"/> instance.</returns>
         public static TwitterResponse<TwitterStatusCollection> RetweetedToMe(OAuthTokens tokens, TimelineOptions options)
         {
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.RetweetedToMeCommand(tokens, options));
         }
 
@@ -264,7 +266,7 @@ namespace Twitterizer
         public static TwitterResponse<TwitterStatusCollection> Mentions(OAuthTokens tokens, TimelineOptions options)
         {
             Commands.MentionsCommand command = new Commands.MentionsCommand(tokens, options);
-            return CommandPerformer<TwitterStatusCollection>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

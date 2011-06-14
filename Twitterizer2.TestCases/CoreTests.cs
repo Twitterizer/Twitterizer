@@ -80,5 +80,18 @@
             Assert.That(timeline.RequestUrl.StartsWith("https://"));
             Assert.That(user.RequestUrl.StartsWith("https://"));
         }
+
+        [Test]
+        [Category("Distribution")]
+        public static void CheckAssemblySignature()
+        {
+Assembly asm = Assembly.GetAssembly(typeof(TwitterUser));
+if (asm != null)
+{
+    AssemblyName asmName = asm.GetName();
+    byte[] key = asmName.GetPublicKey();
+    Assert.That(key.Length > 0);
+}
+        }
     }
 }

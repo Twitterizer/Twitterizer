@@ -33,6 +33,9 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+    /// <summary>
+    /// Provides optional parameters for the <see cref="Twitterizer.TwitterList.GetMembers(Twitterizer.OAuthTokens, string, string, Twitterizer.GetListMembersOptions)"/> method.
+    /// </summary>
     public class GetListMembersOptions : OptionalProperties
     {
         /// <summary>

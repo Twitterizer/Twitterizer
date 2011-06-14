@@ -12,9 +12,9 @@ namespace Twitterizer2.TestCases
         [Test]
         [Category("ReadOnly")]
         [Category("REST")]
-        public void GetList()
+        public void Show()
         {
-            TwitterList list = TwitterList.GetList(Configuration.GetTokens(), userName, listName, null).ResponseObject;
+            TwitterList list = TwitterList.Show(Configuration.GetTokens(), listName, null).ResponseObject;
 
             Assert.IsNotNull(list);
         }
@@ -38,7 +38,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<TwitterList> list = TwitterList.GetList(tokens, "ghc", "ghc10-attendees");
+            TwitterResponse<TwitterList> list = TwitterList.Show(tokens, "ghc10-attendees");
             TwitterResponse<TwitterUserCollection> usersInTheList = TwitterList.GetMembers(tokens, "ghc", "ghc10-attendees");
 
             Assert.IsNotNull(usersInTheList);
@@ -87,7 +87,7 @@ namespace Twitterizer2.TestCases
             TwitterUser myUser = TwitterAccount.VerifyCredentials(tokens).ResponseObject;
             var userIdToAdd = TwitterUser.Show(tokens, userName).ResponseObject.Id;
 
-            var listResponse = TwitterList.GetList(tokens, myUser.ScreenName, listName);
+            var listResponse = TwitterList.Show(tokens, listName);
             if (listResponse.Result == RequestResult.FileNotFound)
             {
                 // Create the new list

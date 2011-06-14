@@ -83,7 +83,7 @@ namespace Twitterizer
         {
             Commands.SuggestedUserCategoriesCommand command = new Commands.SuggestedUserCategoriesCommand(tokens, options);
 
-            return CommandPerformer<TwitterUserCategoryCollection>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Twitterizer
         {
             Commands.SuggestedUsersCommand command = new Commands.SuggestedUsersCommand(tokens, categorySlug, options);
 
-            return CommandPerformer<TwitterUserCategory>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

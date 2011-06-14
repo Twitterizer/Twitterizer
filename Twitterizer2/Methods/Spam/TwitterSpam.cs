@@ -33,6 +33,9 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+    /// <summary>
+    /// Provides methods for reporting users and tweets as inappropriate or spam.
+    /// </summary>
     public class TwitterSpam
     {
         /// <summary>
@@ -46,7 +49,7 @@ namespace Twitterizer
         {
             Commands.ReportSpamCommand command = new Commands.ReportSpamCommand(tokens, userId, string.Empty, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace Twitterizer
         {
             Commands.ReportSpamCommand command = new Commands.ReportSpamCommand(tokens, 0, screenName, options);
 
-            return Core.CommandPerformer<TwitterUser>.PerformAction(command);
+            return Core.CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

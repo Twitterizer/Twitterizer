@@ -91,7 +91,7 @@ namespace Twitterizer
         /// <returns>The saved search when successful.</returns>
         public static TwitterResponse<TwitterSavedSearch> Create(OAuthTokens tokens, string query, OptionalProperties options)
         {
-            return CommandPerformer<TwitterSavedSearch>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.CreateSavedSearchCommand(tokens, query, options));
         }
 
@@ -115,7 +115,7 @@ namespace Twitterizer
         /// <returns>The deleted saved search in the requested format when successful.</returns>
         public static TwitterResponse<TwitterSavedSearch> Delete(OAuthTokens tokens, decimal savedsearchId, OptionalProperties options)
         {
-            return CommandPerformer<TwitterSavedSearch>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.DeleteSavedSearchCommand(tokens, savedsearchId, options));
         }
 
@@ -140,7 +140,7 @@ namespace Twitterizer
         /// <returns>The saved searches</returns>
         public static TwitterResponse<TwitterSavedSearchCollection> SavedSearches(OAuthTokens tokens, OptionalProperties options)
         {
-            return CommandPerformer<TwitterSavedSearchCollection>.PerformAction(
+            return CommandPerformer.PerformAction(
                 new Commands.SavedSearchesCommand(tokens, options));
         }
 

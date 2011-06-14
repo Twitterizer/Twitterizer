@@ -55,8 +55,8 @@ namespace Twitterizer.Commands
         /// <param name="name">The name of the list.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
-        public CreateListCommand(OAuthTokens requestTokens, string name, string username, OptionalProperties options)
-            : base(HTTPVerb.POST, string.Format(CultureInfo.CurrentCulture, "{0}/lists.json", username), requestTokens, options)
+        public CreateListCommand(OAuthTokens requestTokens, string name, OptionalProperties options)
+            : base(HTTPVerb.POST, "lists/create.json", requestTokens, options)
         {
             if (Tokens == null)
             {
@@ -66,11 +66,6 @@ namespace Twitterizer.Commands
             if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException("name");
-            }
-
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentNullException("username");
             }
 
             this.Name = name;

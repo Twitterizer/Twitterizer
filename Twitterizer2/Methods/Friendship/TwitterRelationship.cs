@@ -128,7 +128,7 @@ namespace Twitterizer
         {
             Commands.DeleteFriendshipCommand command = new Twitterizer.Commands.DeleteFriendshipCommand(tokens, this.Target.Id, string.Empty, null);
 
-            return CommandPerformer<TwitterUser>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
     }
 }

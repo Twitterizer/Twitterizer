@@ -141,7 +141,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterDirectMessageCollection> DirectMessages(OAuthTokens tokens, DirectMessagesOptions options)
         {
-            return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesCommand(tokens, options));
+            return CommandPerformer.PerformAction(new Commands.DirectMessagesCommand(tokens, options));
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Twitterizer
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, userId, options);
 
-            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer.PerformAction(command);
 
             return result;
         }
@@ -201,7 +201,7 @@ namespace Twitterizer
         {
             Commands.SendDirectMessageCommand command = new Commands.SendDirectMessageCommand(tokens, text, screenName, options);
 
-            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer.PerformAction(command);
 
             return result;
         }
@@ -228,7 +228,7 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterDirectMessageCollection> DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options)
         {
-            return CommandPerformer<TwitterDirectMessageCollection>.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
+            return CommandPerformer.PerformAction(new Commands.DirectMessagesSentCommand(tokens, options));
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Twitterizer
         {
             Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(tokens, this.Id, options);
 
-            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer.PerformAction(command);
 
             return result;
         }
@@ -261,7 +261,7 @@ namespace Twitterizer
         {
             Commands.DeleteDirectMessageCommand command = new Commands.DeleteDirectMessageCommand(tokens, id, options);
 
-            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer<TwitterDirectMessage>.PerformAction(command);
+            TwitterResponse<TwitterDirectMessage> result = Core.CommandPerformer.PerformAction(command);
 
             return result;
         }

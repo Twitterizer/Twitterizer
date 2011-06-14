@@ -122,7 +122,7 @@ namespace Twitterizer
         {
             Commands.ReverseGeocodeCommand command = new Twitterizer.Commands.ReverseGeocodeCommand(latitude, longitude, options);
 
-            return CommandPerformer<TwitterPlaceCollection>.PerformAction(command);
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
