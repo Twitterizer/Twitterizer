@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AccessLevel.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="StreamOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,44 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>David Golden</author>
-// <summary>The OAuth Token Access Level class. Provides information about the last request made.</summary>
+// <summary>The Stream Options parameters class.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer
+namespace Twitterizer.Streaming
 {
-    /// <summary>
-    /// Describes the access level of the OAuth Token
-    /// </summary>
-    public enum AccessLevel
+    using System.Collections.Generic;
+
+    public class StreamOptions
     {
-        /// <summary>
-        /// The request may not be authenticated or the Access Level header was missing from the response.
-        /// </summary>
-        Unknown,
+        public StreamOptions()
+        {
+            this.Track = new List<string>();
+            this.Locations = new List<Location>();
+            this.Follow = new List<string>();
+        }
 
         /// <summary>
-        /// The OAuth token has read access levels only.
+        /// Gets or sets the number of previous statuses to consider for delivery before transitioning to live stream delivery.
         /// </summary>
-        Read,
+        /// <value>The count.</value>
+        /// <remarks>Currently disabled by Twitter. On unfiltered streams, all considered statuses are delivered, so the number requested is the number returned. On filtered streams, the number requested is the number of statuses that are applied to the filter predicate, and not the number of statuses returned.</remarks>
+        public int Count { get; set; }
 
         /// <summary>
-        /// The OAuth token has read write access only.
+        /// Gets or sets the user IDs that is to be referenced in the stream.
         /// </summary>
-        ReadWrite,
+        /// <value>The follow.</value>
+        public List<string> Follow { get; set; }
 
         /// <summary>
-        /// The OAuth token has read write and direct messages access.
+        /// Gets or sets the keywords to track.
         /// </summary>
-        ReadWriteDirectMessage,
+        /// <value>The keywords to track.</value>
+        public List<string> Track { get; set; }
 
         /// <summary>
-        /// There was no OAuth token access level available for reading in the response headers.
+        /// Gets or sets the locations.
         /// </summary>
-        Unavailable
+        /// <value>The locations.</value>
+        public List<Location> Locations { get; set; }
     }
 }

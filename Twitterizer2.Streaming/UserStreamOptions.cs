@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AccessLevel.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="UserStreamOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,39 +29,21 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>David Golden</author>
-// <summary>The OAuth Token Access Level class. Provides information about the last request made.</summary>
+// <summary>The User Stream Options parameters class.</summary>
 //-----------------------------------------------------------------------
-
-namespace Twitterizer
+namespace Twitterizer.Streaming
 {
-    /// <summary>
-    /// Describes the access level of the OAuth Token
-    /// </summary>
-    public enum AccessLevel
+    using System.Collections.Generic;
+
+    public class UserStreamOptions : StreamOptions
     {
-        /// <summary>
-        /// The request may not be authenticated or the Access Level header was missing from the response.
-        /// </summary>
-        Unknown,
+        public UserStreamOptions() { }
 
         /// <summary>
-        /// The OAuth token has read access levels only.
+        /// Gets or sets whether to request all replies from the stream.
         /// </summary>
-        Read,
-
-        /// <summary>
-        /// The OAuth token has read write access only.
-        /// </summary>
-        ReadWrite,
-
-        /// <summary>
-        /// The OAuth token has read write and direct messages access.
-        /// </summary>
-        ReadWriteDirectMessage,
-
-        /// <summary>
-        /// There was no OAuth token access level available for reading in the response headers.
-        /// </summary>
-        Unavailable
+        /// <value>Boolean.</value>
+        /// <remarks>Will return all replies to a users stream (eg where the user doesn't follow both people replying to each other).</remarks>
+        public bool AllReplies { get; set; }
     }
 }

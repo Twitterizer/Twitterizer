@@ -419,7 +419,7 @@ namespace Twitterizer.Core
                 return AccessLevel.Unknown;
             }
             else
-                return AccessLevel.Unknown;
+                return AccessLevel.Unavailable;
         }
 
 
