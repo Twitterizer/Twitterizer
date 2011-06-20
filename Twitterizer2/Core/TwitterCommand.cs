@@ -439,8 +439,8 @@ namespace Twitterizer.Core
                     cacheKeyBuilder.ToString(),
                     resultObject,
                     null,
-                    Cache.NoAbsoluteExpiration,
-                    this.OptionalProperties.CacheTimespan,
+                    DateTime.Now.Add(this.OptionalProperties.CacheTimespan),
+                    Cache.NoSlidingExpiration,
                     CacheItemPriority.Normal,
                     null);
 
