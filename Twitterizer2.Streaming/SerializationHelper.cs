@@ -72,11 +72,19 @@ namespace Twitterizer.Core
                 // Deserialize the results.
                 if (deserializationHandler == null)
                 {
+#if !SILVERLIGHT
                     resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData));
+#else
+                    resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length));
+#endif
                 }
                 else
                 {
+#if !SILVERLIGHT
                     resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData)));
+#else
+                    resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length)));
+#endif
                 }
 
                 return resultObject;

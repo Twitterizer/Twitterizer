@@ -100,6 +100,18 @@ namespace Twitterizer
         /// <value>The tokens.</value>
         public OAuthTokens Tokens { private get; set; }
 
+        /// <summary>
+        /// Gets or sets the keep alive header on PrepareRequest.
+        /// </summary>
+        /// <value>Keep Alive.</value>
+        public Boolean KeepAlive { private get; set; }
+
+        /// <summary>
+        /// Gets or sets the UserAgent.
+        /// </summary>
+        /// <value>The User Agent.</value>
+        public String UserAgent { private get; set; }
+
 #if !SILVERLIGHT
         /// <summary>
         /// Gets or sets the proxy.
@@ -145,13 +157,15 @@ namespace Twitterizer
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent)
         {
             if (requestUri == null)
                 throw new ArgumentNullException("requestUri");
 
             this.RequestUri = requestUri;
             this.Verb = verb;
+            this.KeepAlive = KeepAlive;
+            this.UserAgent = UserAgent;
             this.UseOAuth = false;
 
             this.Parameters = new Dictionary<string, string>();
@@ -172,8 +186,8 @@ namespace Twitterizer
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
         /// <param name="tokens">The tokens.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens)
-            : this(requestUri, verb)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, Boolean KeepAlive = false, String UserAgent = "")
+            : this(requestUri, verb, KeepAlive, UserAgent)
         {
             this.Tokens = tokens;
 
@@ -226,15 +240,16 @@ namespace Twitterizer
 #if !SILVERLIGHT
             if (this.Proxy != null)
                 request.Proxy = Proxy;
+            request.KeepAlive = KeepAlive;
 #endif
 
             request.Method = this.Verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
             request.ContentLength = 0;
             
 #if !SILVERLIGHT
             request.ServicePoint.Expect100Continue = false;
-            
+          
             if (this.UseOAuth)
             {
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
@@ -376,8 +391,8 @@ namespace Twitterizer
 
 
             // Generate the hash
-            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(key));
-            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
+            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.UTF8.GetBytes(key));
+            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.UTF8.GetBytes(signatureBaseString));
             return Convert.ToBase64String(signatureBytes);
         }
 

@@ -43,14 +43,20 @@ namespace Twitterizer.Streaming
         /// Gets or sets the user id of the event. This is always the user who initiated the event.
         /// </summary>
         /// <value>The User Id.</value>
-        [DataMember, JsonProperty(PropertyName = "user_id")]
+#if !SILVERLIGHT        
+        [DataMember]
+#endif
+        [JsonProperty(PropertyName = "user_id")]
         public decimal UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the id of the event. This is the status that was affected.
         /// </summary>
         /// <value>The Direct Message or Status Id.</value>
-        [DataMember, JsonProperty(PropertyName = "id")]
+#if !SILVERLIGHT        
+        [DataMember]
+#endif
+        [JsonProperty(PropertyName = "id")]
         public decimal Id { get; set; }
     }
 }

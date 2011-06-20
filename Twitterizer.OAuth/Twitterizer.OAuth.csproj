@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Twitterizer2\Twitterizer2.snk">
-	<Link>Twitterizer2.snk</Link>
+      <Link>Twitterizer2.snk</Link>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

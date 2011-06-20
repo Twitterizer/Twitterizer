@@ -39,6 +39,7 @@ namespace Twitterizer
 
     public static class OAuthUtilityAsync
     {
+#if !SILVERLIGHT
         /// <summary>
         /// Gets a new OAuth request token from the twitter api.
         /// </summary>
@@ -117,5 +118,6 @@ namespace Twitterizer
                 },
                 null);
         }
+#endif
     }
 }

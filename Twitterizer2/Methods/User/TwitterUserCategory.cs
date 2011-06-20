@@ -40,7 +40,9 @@ namespace Twitterizer
     /// <summary>
     /// Represents a suggested user category
     /// </summary>
+#if !SILVERLIGHT 
     [Serializable]
+#endif
     public class TwitterUserCategory : Core.TwitterObject
     {
         /// <summary>
@@ -129,7 +131,9 @@ namespace Twitterizer
     /// <summary>
     /// Represents a suggested category
     /// </summary>
+#if !SILVERLIGHT 
     [Serializable]
+#endif
     public class TwitterUserCategoryCollection : Core.TwitterCollection<TwitterUserCategory>, ITwitterObject
     {
         // This intentionally left blank.

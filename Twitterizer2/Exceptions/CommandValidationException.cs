@@ -44,7 +44,9 @@ namespace Twitterizer
     /// An exception class indicating that required parameters were missing from a command.
     /// </summary>
     /// <typeparam name="T">The command type, derived from ITwitterObject.</typeparam>
+#if !SILVERLIGHT 
     [Serializable]
+#endif
     public class CommandValidationException<T> : Exception
         where T : ITwitterObject
     {

@@ -152,7 +152,7 @@ using Twitterizer.Core;
             EventCallback eventCallback
             )
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens);
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens, true, this.UserAgent);
 
             PrepareStreamOptions(builder);
 
@@ -163,9 +163,6 @@ using Twitterizer.Core;
             }
 
             HttpWebRequest request = builder.PrepareRequest();
-          
-            request.KeepAlive = true;
-            request.UserAgent = this.UserAgent;
 
             this.friendsCallback = friendsCallback;
             this.streamStoppedCallback = streamErrorCallback;
@@ -175,7 +172,11 @@ using Twitterizer.Core;
             this.directMessageDeletedCallback = directMessageDeletedCallback;
             this.eventCallback = eventCallback;
             this.stopReceived = false;
+#if !SILVERLIGHT
             return request.BeginGetResponse(StreamCallback, request);
+#else
+            return request.BeginGetRequestStream(StreamCallback, request);
+#endif            
         }
 
         /// <summary>
@@ -188,21 +189,22 @@ using Twitterizer.Core;
             EventCallback eventCallback
             )
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens);
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, true, this.UserAgent);
 
             PrepareStreamOptions(builder);
 
             HttpWebRequest request = builder.PrepareRequest();
-            
-            request.KeepAlive = true;
-            request.UserAgent = this.UserAgent;
             
             this.streamStoppedCallback = streamErrorCallback;
             this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
             this.eventCallback = eventCallback;
             this.stopReceived = false;
+#if !SILVERLIGHT
             return request.BeginGetResponse(StreamCallback, request);
+#else
+            return request.BeginGetRequestStream(StreamCallback, request);
+#endif 
         }
 
         private void PrepareStreamOptions(WebRequestBuilder builder)

@@ -39,6 +39,7 @@ namespace Twitterizer.Entities
     using Newtonsoft.Json;
 using System.Linq.Expressions;
     using System.Reflection;
+    using System.Globalization;
 
     /// <summary>
     /// Represents multiple <see cref="Twitterizer.Entities.TwitterEntity"/> objects.
@@ -293,8 +294,12 @@ using System.Linq.Expressions;
                     }
                     else
                     {
-
+#if !SILVERLIGHT
                         result = (T)Convert.ChangeType(reader.Value, typeof(T));
+#endif
+#if SILVERLIGHT
+                        result = (T)Convert.ChangeType(reader.Value, typeof(T), CultureInfo.InvariantCulture);
+#endif
 
                     }
 

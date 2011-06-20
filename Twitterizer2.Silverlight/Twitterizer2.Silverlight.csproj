@@ -40,7 +40,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Bin\Release</OutputPath>
+    <OutputPath>..\Release\Twitterizer2.Silverlight\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -50,8 +50,9 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json.Silverlight">
-      <HintPath>..\packages\Newtonsoft.Json.3.5.8\lib\SL\Newtonsoft.Json.Silverlight.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.0.2\lib\sl4\Newtonsoft.Json.Silverlight.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -60,23 +61,20 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="..\Twitterizer2\Attributes\AuthorizedCommandAttribute.cs">
       <Link>AuthorizedCommandAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Attributes\RateLimitedAttribute.cs">
       <Link>RateLimitedAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Core\AccessLevel.cs">
+      <Link>AccessLevel.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Core\CommandPerformer.cs">
       <Link>CommandPerformer.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Core\ConversionUtility.cs">
       <Link>ConversionUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\Twitterizer2\Core\CursorPagedCommand.cs">
-      <Link>CursorPagedCommand.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Core\ICommand.cs">
       <Link>ICommand.cs</Link>
@@ -89,9 +87,6 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Core\OptionalProperties.cs">
       <Link>OptionalProperties.cs</Link>
-    </Compile>
-    <Compile Include="..\Twitterizer2\Core\PagedCommand.cs">
-      <Link>PagedCommand.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Core\RateLimit.cs">
       <Link>RateLimit.cs</Link>
@@ -107,6 +102,12 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Core\TwitterCommand.cs">
       <Link>TwitterCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterCursorPagedIdCollection.cs">
+      <Link>TwitterCursorPagedIdCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Core\TwitterIdCollection.cs">
+      <Link>TwitterIdCollection.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Core\TwitterImage.cs">
       <Link>TwitterImage.cs</Link>
@@ -141,14 +142,41 @@
     <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileColorsOptions.cs">
       <Link>UpdateProfileColorsOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileCommand.cs">
+      <Link>UpdateProfileCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileImageCommand.cs">
       <Link>UpdateProfileImageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileOptions.cs">
+      <Link>UpdateProfileOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsCommand.cs">
       <Link>VerifyCredentialsCommand.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\VerifyCredentialsOptions.cs">
       <Link>VerifyCredentialsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\BlockingCommand.cs">
+      <Link>BlockingCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\BlockingIdsCommand.cs">
+      <Link>BlockingIdsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\BlockingOptions.cs">
+      <Link>BlockingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\CreateBlockCommand.cs">
+      <Link>CreateBlockCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\DestroyBlockCommand.cs">
+      <Link>DestroyBlockCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\ExistsBlockCommand.cs">
+      <Link>ExistsBlockCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Block\TwitterBlock.cs">
+      <Link>TwitterBlock.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\DirectMessage\DeleteDirectMessageCommand.cs">
       <Link>DeleteDirectMessageCommand.cs</Link>
@@ -204,6 +232,18 @@
     <Compile Include="..\Twitterizer2\Methods\Friendship\FriendsIdsCommand.cs">
       <Link>FriendsIdsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\IncomingFriendshipsCommand.cs">
+      <Link>IncomingFriendshipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\IncomingFriendshipsOptions.cs">
+      <Link>IncomingFriendshipsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\OutgoingFriendshipsCommand.cs">
+      <Link>OutgoingFriendshipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Friendship\OutgoingFriendshipsOptions.cs">
+      <Link>OutgoingFriendshipsOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Friendship\ShowFriendshipCommand.cs">
       <Link>ShowFriendshipCommand.cs</Link>
     </Compile>
@@ -249,6 +289,9 @@
     <Compile Include="..\Twitterizer2\Methods\List\CreateListCommand.cs">
       <Link>CreateListCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\CreateListMembershipCommand.cs">
+      <Link>CreateListMembershipCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\DeleteListCommand.cs">
       <Link>DeleteListCommand.cs</Link>
     </Compile>
@@ -264,11 +307,20 @@
     <Compile Include="..\Twitterizer2\Methods\List\GetListsCommand.cs">
       <Link>GetListsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListsOptions.cs">
+      <Link>GetListsOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\GetListSubscriptionsCommand.cs">
       <Link>GetListSubscriptionsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\GetListSubscriptionsOptions.cs">
+      <Link>GetListSubscriptionsOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\ListMembershipsCommand.cs">
       <Link>ListMembershipsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\ListMembershipsOptions.cs">
+      <Link>ListMembershipsOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\ListStatusesCommand.cs">
       <Link>ListStatusesCommand.cs</Link>
@@ -291,6 +343,30 @@
     <Compile Include="..\Twitterizer2\Methods\List\UpdateListOptions.cs">
       <Link>UpdateListOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Notification\NotificationFollowCommand.cs">
+      <Link>NotificationFollowCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Notification\NotificationLeaveCommand.cs">
+      <Link>NotificationLeaveCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Notification\TwitterNotification.cs">
+      <Link>TwitterNotification.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\SavedSearches\CreateSavedSearchCommand.cs">
+      <Link>CreateSavedSearchCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\SavedSearches\DeleteSavedSearchCommand.cs">
+      <Link>DeleteSavedSearchCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\SavedSearches\SavedSearchesCommand.cs">
+      <Link>SavedSearchesCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\SavedSearches\TwitterSavedSearch.cs">
+      <Link>TwitterSavedSearch.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\SavedSearches\TwitterSavedSearchCollection.cs">
+      <Link>TwitterSavedSearchCollection.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Search\SearchCommand.cs">
       <Link>SearchCommand.cs</Link>
     </Compile>
@@ -305,6 +381,12 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Search\TwitterSearchResultCollection.cs">
       <Link>TwitterSearchResultCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Spam\ReportSpamCommand.cs">
+      <Link>ReportSpamCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Spam\TwitterSpam.cs">
+      <Link>TwitterSpam.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Timeline\FriendsTimelineCommand.cs">
       <Link>FriendsTimelineCommand.cs</Link>
@@ -362,6 +444,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterHashTagEntity.cs">
       <Link>TwitterHashTagEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterMediaEntity.cs">
+      <Link>TwitterMediaEntity.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\Entities\TwitterMentionEntity.cs">
       <Link>TwitterMentionEntity.cs</Link>
@@ -429,11 +514,32 @@
     <Compile Include="..\Twitterizer2\Methods\User\LookupUsersOptions.cs">
       <Link>LookupUsersOptions.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByCommand.cs">
+      <Link>RetweetedByCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByIdsCommand.cs">
+      <Link>RetweetedByIdsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByIdsOptions.cs">
+      <Link>RetweetedByIdsOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\RetweetedByOptions.cs">
+      <Link>RetweetedByOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\User\ShowUserCommand.cs">
       <Link>ShowUserCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\SuggestedUserCategoriesCommand.cs">
+      <Link>SuggestedUserCategoriesCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\SuggestedUsersCommand.cs">
+      <Link>SuggestedUsersCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\User\TwitterUser.cs">
       <Link>TwitterUser.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\User\TwitterUserCategory.cs">
+      <Link>TwitterUserCategory.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\User\TwitterUserCollection.cs">
       <Link>TwitterUserCollection.cs</Link>
@@ -465,18 +571,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Twitterizer2\Methods\Tweets\TwitterStatus.xml">
-      <Link>TwitterStatus.xml</Link>
-    </Content>
-    <Content Include="..\Twitterizer2\Methods\User\TwitterUser.xml">
-      <Link>TwitterUser.xml</Link>
-    </Content>
-    <Content Include="..\Twitterizer2\OAuth\OAuthTokens.xml">
-      <Link>OAuthTokens.xml</Link>
-    </Content>
-    <Content Include="..\Twitterizer2\OAuth\OAuthUtility.xml">
-      <Link>OAuthUtility.xml</Link>
-    </Content>
+    <None Include="..\Twitterizer2\Twitterizer2.snk">
+      <Link>Twitterizer2.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

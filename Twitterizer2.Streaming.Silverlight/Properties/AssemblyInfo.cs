@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="SuggestedUserCategoriesCommand.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="AssemblyInfo.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,40 +28,9 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The suggested user categories command class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Commands
-{
-    using System;
-    using Twitterizer;
-    using Twitterizer.Core;
+using System.Runtime.InteropServices;
 
-    /// <summary>
-    /// The suggested users categories command
-    /// </summary>
-    /// <remarks>http://dev.twitter.com/doc/get/users/suggestions</remarks>
-#if !SILVERLIGHT 
-    [Serializable]
-#endif
-    internal class SuggestedUserCategoriesCommand : TwitterCommand<TwitterUserCategoryCollection>
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SuggestedUserCategoriesCommand"/> class.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        public SuggestedUserCategoriesCommand(OAuthTokens tokens, OptionalProperties options)
-            : base(HTTPVerb.GET, "users/suggestions.json", tokens, options)
-        {
-        }
-
-        /// <summary>
-        /// Inits this instance.
-        /// </summary>
-        public override void Init()
-        {
-        }
-    }
-}
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("ed6d2c64-644c-44d0-88a5-1a385d9115a8")]
