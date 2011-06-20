@@ -286,6 +286,13 @@ using Twitterizer.Core;
                                 }
                             }
                             reader.Close();
+                            if (this.streamStoppedCallback != null)
+                            {
+                                if (!this.stopReceived)
+                                    this.streamStoppedCallback(StopReasons.WebConnectionFailed);
+                                else
+                                    this.streamStoppedCallback(StopReasons.StoppedByRequest);
+                            }
                         }
                         catch
                         {
