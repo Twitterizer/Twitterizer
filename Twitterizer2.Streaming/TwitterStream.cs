@@ -117,11 +117,12 @@ using Twitterizer.Core;
         /// <param name="streamoptions">The stream or user stream options to intially use when starting the stream.</param>
         public TwitterStream(OAuthTokens tokens, string userAgent, StreamOptions streamoptions)
         {
+#if !SILVERLIGHT // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
             if (string.IsNullOrEmpty(userAgent))
             {
                 this.UserAgent = string.Format(
                     CultureInfo.InvariantCulture, 
-                    "Twitterizer/{0}", 
+                    "Twitterizer/{0}",
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
             }
             else
@@ -129,10 +130,10 @@ using Twitterizer.Core;
                 this.UserAgent = string.Format(
                     CultureInfo.InvariantCulture, 
                     "{0} (via Twitterizer/{1})", 
-                    userAgent, 
+                    userAgent,
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
             }
-
+#endif
             this.Tokens = tokens;
 
             if (streamoptions != null)

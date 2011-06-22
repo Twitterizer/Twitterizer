@@ -244,7 +244,9 @@ namespace Twitterizer
 #endif
 
             request.Method = this.Verb.ToString();
+#if !SILVERLIGHT // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
             request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
+#endif
             request.ContentLength = 0;
             
 #if !SILVERLIGHT
