@@ -61,7 +61,11 @@ namespace Twitterizer
         /// <summary>
         /// Reads a json array of coordinates and converts it into a collection of coordinate objects.
         /// </summary>
+#if !SILVERLIGHT         
         internal class Converter : JsonConverter
+#else
+        public class Converter : JsonConverter
+#endif
         {
             /// <summary>
             /// Determines whether this instance can convert the specified object type.
@@ -85,42 +89,49 @@ namespace Twitterizer
             /// <returns>A deserialized <see cref="System.Collections.ObjectModel.Collection{Coordinate}"/></returns>
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
-                Collection<Coordinate> result = existingValue as Collection<Coordinate>;
+                try
+                {
+                    Collection<Coordinate> result = existingValue as Collection<Coordinate>;
 
-                if (result == null)
-                    result = new Collection<Coordinate>();
+                    if (result == null)
+                        result = new Collection<Coordinate>();
 
-                int startDepth = reader.Depth;
+                    int startDepth = reader.Depth;
 
-                if (reader.TokenType != JsonToken.StartArray)
+                    if (reader.TokenType != JsonToken.StartArray)
+                    {
+                        return null;
+                    }
+
+                    int depth = reader.Depth + 1;
+                    double count = 1;
+
+                    while (reader.Read() && reader.Depth >= startDepth)
+                    {
+                        if (new[] { JsonToken.StartArray, JsonToken.EndArray }.Contains(reader.TokenType))
+                            continue;
+
+                        int itemIndex = Convert.ToInt32(Math.Ceiling(count / 2) - 1);
+
+                        if (count % 2 > 0)
+                        {
+                            result.Add(new Coordinate());
+                            result[itemIndex].Latitude = (double)reader.Value;
+                        }
+                        else
+                        {
+                            result[itemIndex].Longitude = (double)reader.Value;
+                        }
+
+                        count++;
+                    }
+
+                    return result;
+                }
+                catch
                 {
                     return null;
                 }
-
-                int depth = reader.Depth + 1;
-                double count = 1;
-
-                while (reader.Read() && reader.Depth >= startDepth)
-                {
-                    if (new[] { JsonToken.StartArray, JsonToken.EndArray }.Contains(reader.TokenType))
-                        continue;
-
-                    int itemIndex = Convert.ToInt32(Math.Ceiling(count / 2) - 1);
-
-                    if (count % 2 > 0)
-                    {
-                        result.Add(new Coordinate());
-                        result[itemIndex].Latitude = (double)reader.Value;
-                    }
-                    else
-                    {
-                        result[itemIndex].Longitude = (double)reader.Value;
-                    }
-
-                    count++;
-                }
-
-                return result;
             }
 
             /// <summary>

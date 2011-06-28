@@ -51,7 +51,11 @@ namespace Twitterizer
         /// <summary>
         /// The Json converter class for the TwitterTrendCollection object
         /// </summary>
+#if !SILVERLIGHT
         internal class Converter : JsonConverter
+#else
+        public class Converter : JsonConverter
+#endif
         {
             /// <summary>
             /// Determines whether this instance can convert the specified object type.

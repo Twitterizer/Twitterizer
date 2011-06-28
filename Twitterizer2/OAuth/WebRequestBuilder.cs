@@ -41,6 +41,9 @@ namespace Twitterizer
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
+#if SILVERLIGHT
+    using System.Net.Browser;
+#endif
 #if !SILVERLIGHT
     using System.Web;
 #endif
@@ -112,6 +115,12 @@ namespace Twitterizer
         /// <value>The User Agent.</value>
         public String UserAgent { private get; set; }
 
+        /// <summary>
+        /// Gets or sets the Basic Auth Credentials.
+        /// </summary>
+        /// <value>The Basic Auth Credentials.</value>
+        public NetworkCredential NetworkCredentials { private get; set; }
+
 #if !SILVERLIGHT
         /// <summary>
         /// Gets or sets the proxy.
@@ -157,7 +166,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials = null)
         {
             if (requestUri == null)
                 throw new ArgumentNullException("requestUri");
@@ -167,6 +176,8 @@ namespace Twitterizer
             this.KeepAlive = KeepAlive;
             this.UserAgent = UserAgent;
             this.UseOAuth = false;
+            if (NetworkCredentials != null)
+                this.NetworkCredentials = NetworkCredentials;
 
             this.Parameters = new Dictionary<string, string>();
 
@@ -218,12 +229,13 @@ namespace Twitterizer
 #if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
 #else
-            IAsyncResult asyncResult = request.BeginGetRequestStream(param => {
+            IAsyncResult asyncResult = request.BeginGetResponse(param => {
                 param.AsyncWaitHandle.WaitOne();
             }, null);
 
             return (HttpWebResponse)request.EndGetResponse(asyncResult);
 #endif
+            return null;
         }
 
         /// <summary>
@@ -234,7 +246,10 @@ namespace Twitterizer
         {
             SetupOAuth();
             AddQueryStringParametersToUri();
-
+#if SILVERLIGHT
+            WebRequest.RegisterPrefix("http://", WebRequestCreator.ClientHttp);
+            WebRequest.RegisterPrefix("https://", WebRequestCreator.ClientHttp);
+#endif
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
 
 #if !SILVERLIGHT
@@ -242,14 +257,17 @@ namespace Twitterizer
                 request.Proxy = Proxy;
             request.KeepAlive = KeepAlive;
 #endif
-
+            if (!this.UseOAuth && this.NetworkCredentials != null)
+            {
+                request.Credentials = this.NetworkCredentials;
+                request.UseDefaultCredentials = false;
+            }
             request.Method = this.Verb.ToString();
-#if !SILVERLIGHT // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
-            request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
-#endif
             request.ContentLength = 0;
+
+#if !SILVERLIGHT // No silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
+            request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
             
-#if !SILVERLIGHT
             request.ServicePoint.Expect100Continue = false;
           
             if (this.UseOAuth)
@@ -257,6 +275,7 @@ namespace Twitterizer
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
             }
 #endif
+
             return request;
         }
 
@@ -273,7 +292,8 @@ namespace Twitterizer
                                          !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
 
 #if SILVERLIGHT
-            fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());
+            if (this.UseOAuth)
+                fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());
 #endif
 
             foreach (KeyValuePair<string, string> item in fieldsToInclude)
@@ -528,7 +548,6 @@ namespace Twitterizer
             return authHeaderBuilder.ToString();
         }
         #endregion
-
-
+        
     }
 }

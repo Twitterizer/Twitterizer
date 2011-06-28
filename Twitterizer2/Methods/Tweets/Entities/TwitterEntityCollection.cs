@@ -52,7 +52,11 @@ using System.Linq.Expressions;
         /// <summary>
         /// The Json converter for <see cref="TwitterEntityCollection"/> data.
         /// </summary>
+#if !SILVERLIGHT         
         internal class Converter : JsonConverter
+#else
+        public class Converter : JsonConverter
+#endif
         {
             /// <summary>
             /// Determines whether this instance can convert the specified object type.

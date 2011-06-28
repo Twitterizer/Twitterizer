@@ -51,7 +51,11 @@ namespace Twitterizer
         /// <summary>
         /// Converts json data to a <see cref="TwitterPlaceCollection"/>.
         /// </summary>
+#if !SILVERLIGHT         
         internal class Converter : JsonConverter
+#else
+        public class Converter : JsonConverter
+#endif
         {
             /// <summary>
             /// Determines whether this instance can convert the specified object type.

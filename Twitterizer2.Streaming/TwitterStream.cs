@@ -39,10 +39,13 @@ namespace Twitterizer.Streaming
     using System.Linq;
     using System.Net;
     using System.Text;
-using Twitterizer.Core;
+    using Twitterizer.Core;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System.Net.Sockets;
+#if SILVERLIGHT
+    using System.Threading;
+#endif 
 
     public enum StopReasons
     {
@@ -110,6 +113,12 @@ using Twitterizer.Core;
         public StreamOptions StreamOptions { get; set; }
 
         /// <summary>
+        /// Gets or sets the Basic Auth Credentials.
+        /// </summary>
+        /// <value>The Basic Auth Credentials.</value>
+        public NetworkCredential NetworkCredentials { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TwitterStream"/> class.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
@@ -173,11 +182,10 @@ using Twitterizer.Core;
             this.directMessageDeletedCallback = directMessageDeletedCallback;
             this.eventCallback = eventCallback;
             this.stopReceived = false;
-#if !SILVERLIGHT
-            return request.BeginGetResponse(StreamCallback, request);
-#else
-            return request.BeginGetRequestStream(StreamCallback, request);
-#endif            
+#if SILVERLIGHT
+            request.AllowReadStreamBuffering = false;
+#endif
+            return request.BeginGetResponse(StreamCallback, request);          
         }
 
         /// <summary>
@@ -190,8 +198,7 @@ using Twitterizer.Core;
             EventCallback eventCallback
             )
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, true, this.UserAgent);
-
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("http://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, true, this.UserAgent, this.NetworkCredentials);           
             PrepareStreamOptions(builder);
 
             HttpWebRequest request = builder.PrepareRequest();
@@ -201,11 +208,10 @@ using Twitterizer.Core;
             this.statusDeletedCallback = statusDeletedCallback;
             this.eventCallback = eventCallback;
             this.stopReceived = false;
-#if !SILVERLIGHT
-            return request.BeginGetResponse(StreamCallback, request);
-#else
-            return request.BeginGetRequestStream(StreamCallback, request);
-#endif 
+#if SILVERLIGHT
+            request.AllowReadStreamBuffering = false;
+#endif
+            return request.BeginGetResponse(StreamCallback, request); 
         }
 
         private void PrepareStreamOptions(WebRequestBuilder builder)
@@ -282,8 +288,13 @@ using Twitterizer.Core;
 
                                     if (bracketCount == 0)
                                     {
+                                        var blockbuilderstring = blockBuilder.ToString();
+#if !SILVERLIGHT
                                         Action<string> parseMethod = ParseMessage;
-                                        parseMethod.BeginInvoke(blockBuilder.ToString().Trim('\n'), null, null);
+                                        parseMethod.BeginInvoke(blockbuilderstring.Trim('\n'), null, null);
+#else
+                                        ThreadPool.QueueUserWorkItem(delegate { ParseMessage(blockbuilderstring.Trim('\n')); });
+#endif
                                         blockBuilder.Clear();
                                     }
                                 }
