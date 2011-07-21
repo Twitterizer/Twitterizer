@@ -188,8 +188,9 @@ namespace Twitterizer.Streaming
             return request.BeginGetResponse(StreamCallback, request);          
         }
 
+        
         /// <summary>
-        /// Starts the user stream.
+        /// Starts the public stream.
         /// </summary>
         public IAsyncResult StartPublicStream(            
             StreamStoppedCallback streamErrorCallback,
@@ -197,12 +198,16 @@ namespace Twitterizer.Streaming
             StatusDeletedCallback statusDeletedCallback,
             EventCallback eventCallback
             )
-        {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("http://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, true, this.UserAgent, this.NetworkCredentials);           
+        {         
+            WebRequestBuilder builder;
+            if (this.Tokens != null)
+                builder = new WebRequestBuilder(new Uri("http://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, true, this.UserAgent, this.NetworkCredentials);
+            else
+                builder = new WebRequestBuilder(new Uri("http://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, true, this.UserAgent);
             PrepareStreamOptions(builder);
 
             HttpWebRequest request = builder.PrepareRequest();
-            
+
             this.streamStoppedCallback = streamErrorCallback;
             this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
@@ -211,7 +216,7 @@ namespace Twitterizer.Streaming
 #if SILVERLIGHT
             request.AllowReadStreamBuffering = false;
 #endif
-            return request.BeginGetResponse(StreamCallback, request); 
+            return request.BeginGetResponse(StreamCallback, request);
         }
 
         private void PrepareStreamOptions(WebRequestBuilder builder)
@@ -229,8 +234,10 @@ namespace Twitterizer.Streaming
 
                 if (this.StreamOptions.Track != null && this.StreamOptions.Track.Count > 0)
                     builder.Parameters.Add("track", string.Join(",", this.StreamOptions.Track.ToArray()));
-            }
+            }    
         }
+
+
 
         /// <summary>
         /// The callback handler for all streams

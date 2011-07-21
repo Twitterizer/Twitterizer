@@ -36,6 +36,9 @@ namespace Twitterizer
 {
     using System;
     using Twitterizer;
+#if SILVERLIGHT
+    using System.Threading;
+#endif
 
     public static class TwitterSearchAsync
     {
@@ -49,6 +52,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Search(string query, SearchOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSearchResultCollection>> function)
         {
+#if !SILVERLIGHT            
             Func<string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
 
             return methodToCall.BeginInvoke(
@@ -67,6 +71,13 @@ namespace Twitterizer
                     }
                 },
                 null);
+#else            
+            ThreadPool.QueueUserWorkItem((x) =>
+                {
+                    function(TwitterSearch.Search(query, options).ToAsyncResponse<TwitterSearchResultCollection>());  
+                });
+            return null;
+#endif
         }
 
         /// <summary>

@@ -43,6 +43,8 @@ namespace Twitterizer
     using System.Text.RegularExpressions;
 #if SILVERLIGHT
     using System.Net.Browser;
+    using System.Threading;
+    using System.Windows.Threading;
 #endif
 #if !SILVERLIGHT
     using System.Web;
@@ -229,13 +231,28 @@ namespace Twitterizer
 #if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
 #else
-            IAsyncResult asyncResult = request.BeginGetResponse(param => {
-                param.AsyncWaitHandle.WaitOne();
-            }, null);
-
-            return (HttpWebResponse)request.EndGetResponse(asyncResult);
+            request.AllowReadStreamBuffering = true;
+            HttpWebResponse response = null;
+            AutoResetEvent alldone = new AutoResetEvent(false);
+            IAsyncResult asyncResult = request.BeginGetResponse(new AsyncCallback((param) => 
+            {
+                HttpWebRequest req = (HttpWebRequest)param.AsyncState;
+                try
+                {
+                    response = (HttpWebResponse)req.EndGetResponse(param);
+                }
+                catch (WebException we)
+                {
+                    response = (HttpWebResponse)we.Response;
+                }
+                finally
+                {
+                    alldone.Set();
+                }
+            }), request);
+            alldone.WaitOne();
+            return response;
 #endif
-            return null;
         }
 
         /// <summary>
@@ -262,6 +279,10 @@ namespace Twitterizer
                 request.Credentials = this.NetworkCredentials;
                 request.UseDefaultCredentials = false;
             }
+            else
+            {
+                request.UseDefaultCredentials = true;
+            }
             request.Method = this.Verb.ToString();
             request.ContentLength = 0;
 
@@ -269,12 +290,16 @@ namespace Twitterizer
             request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
             
             request.ServicePoint.Expect100Continue = false;
-          
+#endif
             if (this.UseOAuth)
             {
+#if !SILVERLIGHT
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
-            }
+#else
+                request.Headers["Authorization"] = GenerateAuthorizationHeader();
 #endif
+            }
+
 
             return request;
         }
@@ -290,11 +315,6 @@ namespace Twitterizer
 
             Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
                                          !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
-
-#if SILVERLIGHT
-            if (this.UseOAuth)
-                fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());
-#endif
 
             foreach (KeyValuePair<string, string> item in fieldsToInclude)
             {
@@ -528,7 +548,7 @@ namespace Twitterizer
         public string GenerateAuthorizationHeader()
         {
             StringBuilder authHeaderBuilder = new StringBuilder();
-            authHeaderBuilder.AppendFormat("OAuth realm=\"{0}\"", Realm);
+            authHeaderBuilder.AppendFormat("OAuth realm=\"\"", Realm);
 
             var sortedParameters = from p in this.Parameters
                                    where OAuthParametersToIncludeInHeader.Contains(p.Key)
