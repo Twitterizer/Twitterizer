@@ -106,6 +106,9 @@
     <Compile Include="..\Twitterizer2.Async\TwitterUserAsync.cs">
       <Link>TwitterUserAsync.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2.Async\XAuthUtilityAsync.cs">
+      <Link>XAuthUtilityAsync.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

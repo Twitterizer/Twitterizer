@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Twitterizer;
-
-namespace Twitterizer
+﻿namespace Twitterizer
 {
+    using System;
+#if SILVERLIGHT
+    using System.Threading;
+#endif
     public static class TwitterAccountAsync
     {
         /// <summary>
@@ -52,6 +50,7 @@ namespace Twitterizer
         /// </returns>       
         public static IAsyncResult VerifyCredentials(OAuthTokens tokens, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
+#if !SILVERLIGHT
             Func<OAuthTokens, TwitterResponse<TwitterUser>> methodToCall = TwitterAccount.VerifyCredentials;
 
             return methodToCall.BeginInvoke(
@@ -69,6 +68,13 @@ namespace Twitterizer
                     }
                 },
                 null);
+#else            
+            ThreadPool.QueueUserWorkItem((x) =>
+                {
+                    function(TwitterAccount.VerifyCredentials(tokens).ToAsyncResponse<TwitterUser>());  
+                });
+            return null;
+#endif
         }
 
         /// <summary>
@@ -83,6 +89,7 @@ namespace Twitterizer
         /// </returns>       
         public static IAsyncResult VerifyCredentials(OAuthTokens tokens, VerifyCredentialsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
+#if !SILVERLIGHT
             Func<OAuthTokens, VerifyCredentialsOptions, TwitterResponse<TwitterUser>> methodToCall = TwitterAccount.VerifyCredentials;
 
             return methodToCall.BeginInvoke(
@@ -101,6 +108,13 @@ namespace Twitterizer
                     }
                 },
                 null);
+#else            
+            ThreadPool.QueueUserWorkItem((x) =>
+                {
+                    function(TwitterAccount.VerifyCredentials(tokens, options).ToAsyncResponse<TwitterUser>());  
+                });
+            return null;
+#endif
         }
 
     }
