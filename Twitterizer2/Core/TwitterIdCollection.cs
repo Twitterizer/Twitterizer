@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandPerformer.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="TwitterIdCollection.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,26 +29,32 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The command performer.</summary>
+// <summary>The twitter id collection class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer
 {
-    internal static class CommandPerformer
-    {
-        /// <summary>
-        /// Performs the action.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The parsed result of the action.</returns>
-        /// <seealso cref="Twitterizer.Core.TwitterCommand{T}"/>
-        /// <seealso cref="Twitterizer.Core.TwitterObject"/>
-        public static TwitterResponse<T> PerformAction<T>(ICommand<T> command)
-            where T : ITwitterObject
-        {
-            command.Init();
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using Twitterizer.Core;
 
-            return command.ExecuteCommand();
+    /// <summary>
+    /// Holds a collection of ID values
+    /// </summary>
+    public class TwitterIdCollection : Collection<decimal>, ITwitterObject
+    {
+        public TwitterIdCollection() { }
+
+        public TwitterIdCollection(List<decimal> items)
+        {
+            items.ForEach((a) => { this.Add(a); });
         }
+
+
+        /// <summary>
+        /// Annotations are additional pieces of data, supplied by Twitter clients, in a non-structured dictionary.
+        /// </summary>
+        /// <value>The annotations.</value>
+        public Dictionary<string, string> Annotations { get; set; }
     }
 }

@@ -106,6 +106,7 @@
     <Reference Include="System.Net">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -118,18 +119,30 @@
     </Compile>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
+    <Compile Include="Core\AccessLevel.cs" />
     <Compile Include="Core\ITwitterObject.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\TwitterCursorPagedIdCollection.cs" />
+    <Compile Include="Core\TwitterIdCollection.cs" />
     <Compile Include="Core\TwitterImage.cs" />
     <Compile Include="Core\TwitterizerDateConverter.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />
     <Compile Include="Methods\Account\TwitterAccount.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
+    <Compile Include="Methods\Account\UpdateProfileCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileOptions.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsCommand.cs" />
     <Compile Include="Methods\Account\VerifyCredentialsOptions.cs" />
+    <Compile Include="Methods\Block\BlockingCommand.cs" />
+    <Compile Include="Methods\Block\BlockingIdsCommand.cs" />
+    <Compile Include="Methods\Block\BlockingOptions.cs" />
+    <Compile Include="Methods\Block\CreateBlockCommand.cs" />
+    <Compile Include="Methods\Block\DestroyBlockCommand.cs" />
+    <Compile Include="Methods\Block\ExistsBlockCommand.cs" />
+    <Compile Include="Methods\Block\TwitterBlock.cs" />
     <Compile Include="Methods\DirectMessage\DeleteDirectMessageCommand.cs" />
     <Compile Include="Methods\DirectMessage\DirectMessagesCommand.cs" />
     <Compile Include="Methods\DirectMessage\DirectMessagesOptions.cs" />
@@ -144,6 +157,10 @@
     <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
     <Compile Include="Methods\Favorites\TwitterFavorite.cs" />
     <Compile Include="Methods\Friendship\FriendsIdsCommand.cs" />
+    <Compile Include="Methods\Friendship\IncomingFriendshipsCommand.cs" />
+    <Compile Include="Methods\Friendship\IncomingFriendshipsOptions.cs" />
+    <Compile Include="Methods\Friendship\OutgoingFriendshipsCommand.cs" />
+    <Compile Include="Methods\Friendship\OutgoingFriendshipsOptions.cs" />
     <Compile Include="Methods\Friendship\UserIdCollection.cs" />
     <Compile Include="Methods\Friendship\FollowersIdsCommand.cs" />
     <Compile Include="Methods\Friendship\UsersIdsOptions.cs" />
@@ -159,7 +176,11 @@
     <Compile Include="Methods\Geo\TwitterPlaceLookupOptions.cs" />
     <Compile Include="Methods\List\AddListMemberCommand.cs" />
     <Compile Include="Methods\List\CheckListMembershipCommand.cs" />
+    <Compile Include="Methods\List\CreateListMembershipCommand.cs" />
     <Compile Include="Methods\List\GetListMembersOptions.cs" />
+    <Compile Include="Methods\List\GetListsOptions.cs" />
+    <Compile Include="Methods\List\GetListSubscriptionsOptions.cs" />
+    <Compile Include="Methods\List\ListMembershipsOptions.cs" />
     <Compile Include="Methods\List\RemoveListMemberCommand.cs" />
     <Compile Include="Methods\List\CreateListCommand.cs" />
     <Compile Include="Methods\Friendship\DeleteFriendshipCommand.cs" />
@@ -168,6 +189,9 @@
     <Compile Include="Methods\List\GetListSubscriptionsCommand.cs" />
     <Compile Include="Methods\List\ListStatusesOptions.cs" />
     <Compile Include="Methods\List\UpdateListOptions.cs" />
+    <Compile Include="Methods\Notification\NotificationFollowCommand.cs" />
+    <Compile Include="Methods\Notification\NotificationLeaveCommand.cs" />
+    <Compile Include="Methods\Notification\TwitterNotification.cs" />
     <Compile Include="Methods\SavedSearches\SavedSearchesCommand.cs" />
     <Compile Include="Methods\SavedSearches\CreateSavedSearchCommand.cs" />
     <Compile Include="Methods\SavedSearches\DeleteSavedSearchCommand.cs" />
@@ -188,6 +212,7 @@
     <Compile Include="Methods\Tweets\Entities\TwitterEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterEntityCollection.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterHashTagEntity.cs" />
+    <Compile Include="Methods\Tweets\Entities\TwitterMediaEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterMentionEntity.cs" />
     <Compile Include="Methods\Tweets\Entities\TwitterUrlEntity.cs" />
     <Compile Include="Methods\Tweets\RelatedResultsCommand.cs" />
@@ -219,6 +244,13 @@
     <Compile Include="Methods\User\FriendsOptions.cs" />
     <Compile Include="Methods\User\LookupUsersOptions.cs" />
     <Compile Include="Methods\User\LookupUsersCommand.cs" />
+    <Compile Include="Methods\User\RetweetedByCommand.cs" />
+    <Compile Include="Methods\User\RetweetedByIdsCommand.cs" />
+    <Compile Include="Methods\User\RetweetedByIdsOptions.cs" />
+    <Compile Include="Methods\User\RetweetedByOptions.cs" />
+    <Compile Include="Methods\User\SuggestedUserCategoriesCommand.cs" />
+    <Compile Include="Methods\User\SuggestedUsersCommand.cs" />
+    <Compile Include="Methods\User\TwitterUserCategory.cs" />
     <Compile Include="Methods\User\UserSearchCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineCommand.cs" />
     <Compile Include="Core\SerializationHelper.cs" />
@@ -278,10 +310,7 @@
   <ItemGroup>
     <None Include="Core\OptionalProperties.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Methods\Block\" />
-    <Folder Include="Methods\Notification\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

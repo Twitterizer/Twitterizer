@@ -40,8 +40,13 @@ namespace Twitterizer
     /// <summary>
     /// Converts date strings returned by the Twitter API into <see cref="System.DateTime"/>
     /// </summary>
+#if !SILVERLIGHT
     internal class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
+#else
+    public class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
+#endif
     {
+        public TwitterizerDateConverter() { }
         /// <summary>
         /// The date pattern for most dates returned by the API
         /// </summary>
@@ -80,5 +85,19 @@ namespace Twitterizer
         {
             throw new NotImplementedException();
         }
+
+//#if SILVERLIGHT
+//        /// <summary>
+//        /// Determines whether this instance can convert the specified object type.
+//        /// </summary>
+//        /// <param name="objectType">Type of the object.</param>
+//        /// <returns>
+//        /// <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+//        /// </returns>
+//        public override bool CanConvert(Type objectType)
+//        {
+//            return objectType == typeof(DateTime);
+//        }
+//#endif
     }
 }

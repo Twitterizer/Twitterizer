@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterCollection.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
+// <copyright file="TwitterCursorPagedIdCollection.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,31 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The base class for object collections.</summary>
+// <summary>The twitter cursor paged id collection class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer
 {
-    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// The base class for object collections.
+    /// Holds a collection of ID values that are broken into multiple pages.
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
-#if !SILVERLIGHT
-    [Serializable]
-#endif
-    [DataContract]
-    public abstract class TwitterCollection<T> : Collection<T>
-        where T : class, ITwitterObject
+    public class TwitterCursorPagedIdCollection : Collection<decimal>, ITwitterObject
     {
         /// <summary>
-        /// Gets or sets the annotations.
+        /// Annotations are additional pieces of data, supplied by Twitter clients, in a non-structured dictionary.
         /// </summary>
         /// <value>The annotations.</value>
-        [DataMember]
-        public System.Collections.Generic.Dictionary<string, string> Annotations { get; set; }
+        public Dictionary<string, string> Annotations { get; set; }
+
+        /// <summary>
+        /// Gets or sets the next cursor.
+        /// </summary>
+        /// <value>The next cursor.</value>
+        public long NextCursor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the previous cursor.
+        /// </summary>
+        /// <value>The previous cursor.</value>
+        public long PreviousCursor { get; set; }
+
+        /// <summary>
+        /// Deserializes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        internal static TwitterCursorPagedIdCollection DeserializeWrapper(JObject value)
+        {
+            if (value == null || value.SelectToken("users") == null)
+                return null;
+
+            TwitterCursorPagedIdCollection result = JsonConvert.DeserializeObject<TwitterCursorPagedIdCollection>(value.SelectToken("users").ToString());
+            result.NextCursor = value.SelectToken("next_cursor").Value<long>();
+            result.PreviousCursor = value.SelectToken("previous_cursor").Value<long>();
+
+            return result;
+        }
     }
 }

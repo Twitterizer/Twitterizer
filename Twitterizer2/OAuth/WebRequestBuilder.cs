@@ -41,6 +41,11 @@ namespace Twitterizer
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
+#if SILVERLIGHT
+    using System.Net.Browser;
+    using System.Threading;
+    using System.Windows.Threading;
+#endif
 #if !SILVERLIGHT
     using System.Web;
 #endif
@@ -100,6 +105,24 @@ namespace Twitterizer
         /// <value>The tokens.</value>
         public OAuthTokens Tokens { private get; set; }
 
+        /// <summary>
+        /// Gets or sets the keep alive header on PrepareRequest.
+        /// </summary>
+        /// <value>Keep Alive.</value>
+        public Boolean KeepAlive { private get; set; }
+
+        /// <summary>
+        /// Gets or sets the UserAgent.
+        /// </summary>
+        /// <value>The User Agent.</value>
+        public String UserAgent { private get; set; }
+
+        /// <summary>
+        /// Gets or sets the Basic Auth Credentials.
+        /// </summary>
+        /// <value>The Basic Auth Credentials.</value>
+        public NetworkCredential NetworkCredentials { private get; set; }
+
 #if !SILVERLIGHT
         /// <summary>
         /// Gets or sets the proxy.
@@ -145,14 +168,18 @@ namespace Twitterizer
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials = null)
         {
             if (requestUri == null)
                 throw new ArgumentNullException("requestUri");
 
             this.RequestUri = requestUri;
             this.Verb = verb;
+            this.KeepAlive = KeepAlive;
+            this.UserAgent = UserAgent;
             this.UseOAuth = false;
+            if (NetworkCredentials != null)
+                this.NetworkCredentials = NetworkCredentials;
 
             this.Parameters = new Dictionary<string, string>();
 
@@ -172,8 +199,8 @@ namespace Twitterizer
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
         /// <param name="tokens">The tokens.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens)
-            : this(requestUri, verb)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, Boolean KeepAlive = false, String UserAgent = "")
+            : this(requestUri, verb, KeepAlive, UserAgent)
         {
             this.Tokens = tokens;
 
@@ -204,11 +231,27 @@ namespace Twitterizer
 #if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
 #else
-            IAsyncResult asyncResult = request.BeginGetRequestStream(param => {
-                param.AsyncWaitHandle.WaitOne();
-            }, null);
-
-            return (HttpWebResponse)request.EndGetResponse(asyncResult);
+            request.AllowReadStreamBuffering = true;
+            HttpWebResponse response = null;
+            AutoResetEvent alldone = new AutoResetEvent(false);
+            IAsyncResult asyncResult = request.BeginGetResponse(new AsyncCallback((param) => 
+            {
+                HttpWebRequest req = (HttpWebRequest)param.AsyncState;
+                try
+                {
+                    response = (HttpWebResponse)req.EndGetResponse(param);
+                }
+                catch (WebException we)
+                {
+                    response = (HttpWebResponse)we.Response;
+                }
+                finally
+                {
+                    alldone.Set();
+                }
+            }), request);
+            alldone.WaitOne();
+            return response;
 #endif
         }
 
@@ -220,25 +263,44 @@ namespace Twitterizer
         {
             SetupOAuth();
             AddQueryStringParametersToUri();
-
+#if SILVERLIGHT
+            WebRequest.RegisterPrefix("http://", WebRequestCreator.ClientHttp);
+            WebRequest.RegisterPrefix("https://", WebRequestCreator.ClientHttp);
+#endif
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
 
 #if !SILVERLIGHT
             if (this.Proxy != null)
                 request.Proxy = Proxy;
+            request.KeepAlive = KeepAlive;
 #endif
-
+            if (!this.UseOAuth && this.NetworkCredentials != null)
+            {
+                request.Credentials = this.NetworkCredentials;
+                request.UseDefaultCredentials = false;
+            }
+            else
+            {
+                request.UseDefaultCredentials = true;
+            }
             request.Method = this.Verb.ToString();
-            request.UserAgent = string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            request.ContentLength = 0;
+
+#if !SILVERLIGHT // No silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
+            request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
             
-#if !SILVERLIGHT
             request.ServicePoint.Expect100Continue = false;
-            
+#endif
             if (this.UseOAuth)
             {
+#if !SILVERLIGHT
                 request.Headers.Add("Authorization", GenerateAuthorizationHeader());
-            }
+#else
+                request.Headers["Authorization"] = GenerateAuthorizationHeader();
 #endif
+            }
+
+
             return request;
         }
 
@@ -253,10 +315,6 @@ namespace Twitterizer
 
             Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
                                          !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
-
-#if SILVERLIGHT
-            fieldsToInclude.Add("oauth_signature", GenerateAuthorizationHeader());
-#endif
 
             foreach (KeyValuePair<string, string> item in fieldsToInclude)
             {
@@ -375,8 +433,8 @@ namespace Twitterizer
 
 
             // Generate the hash
-            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(key));
-            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
+            HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.UTF8.GetBytes(key));
+            byte[] signatureBytes = hmacsha1.ComputeHash(Encoding.UTF8.GetBytes(signatureBaseString));
             return Convert.ToBase64String(signatureBytes);
         }
 
@@ -490,7 +548,7 @@ namespace Twitterizer
         public string GenerateAuthorizationHeader()
         {
             StringBuilder authHeaderBuilder = new StringBuilder();
-            authHeaderBuilder.AppendFormat("OAuth realm=\"{0}\"", Realm);
+            authHeaderBuilder.AppendFormat("OAuth realm=\"\"", Realm);
 
             var sortedParameters = from p in this.Parameters
                                    where OAuthParametersToIncludeInHeader.Contains(p.Key)
@@ -510,7 +568,6 @@ namespace Twitterizer
             return authHeaderBuilder.ToString();
         }
         #endregion
-
-
+        
     }
 }

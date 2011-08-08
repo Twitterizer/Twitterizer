@@ -95,15 +95,29 @@ namespace Twitterizer
                 throw new TwitterizerException(wex.Message, wex);
             }
 
-            Match matchedValues = Regex.Match(responseBody,
-                                              @"oauth_token=(?<token>[^&]+)|oauth_token_secret=(?<secret>[^&]+)|oauth_verifier=(?<verifier>[^&]+)");
-
             return new OAuthTokenResponse
             {
-                Token = matchedValues.Groups["token"].Value,
-                TokenSecret = matchedValues.Groups["secret"].Value,
-                VerificationString = matchedValues.Groups["verifier"].Value
+                Token = ParseQuerystringParameter("oauth_token", responseBody),
+                TokenSecret = ParseQuerystringParameter("oauth_token_secret", responseBody),
+                VerificationString = ParseQuerystringParameter("oauth_verifier", responseBody)
             };
+        }
+
+        /// <summary>
+        /// Tries to the parse querystring parameter.
+        /// </summary>
+        /// <param name="parameterName">Name of the parameter.</param>
+        /// <returns>The value of the parameter or an empty string.</returns>
+        private static string ParseQuerystringParameter(string parameterName, string text)
+        {
+            Match expressionMatch = Regex.Match(text, string.Format(@"{0}=(?<value>[^&]+)", parameterName));
+
+            if (!expressionMatch.Success)
+            {
+                return string.Empty;
+            }
+
+            return expressionMatch.Groups["value"].Value;
         }
 
 #if !SILVERLIGHT

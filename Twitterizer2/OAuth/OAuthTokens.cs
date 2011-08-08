@@ -63,5 +63,47 @@ namespace Twitterizer
         /// </summary>
         /// <value>The consumer secret.</value>
         public string ConsumerSecret { internal get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has consumer token values.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance has consumer token; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasConsumerToken
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(this.ConsumerKey) && !string.IsNullOrEmpty(this.ConsumerSecret);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has access token values.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance has access token; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasAccessToken
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(this.AccessToken) && !string.IsNullOrEmpty(this.AccessTokenSecret);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has values. This does not verify that the values are correct.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has values; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasBothTokens
+        {
+            get
+            {
+                return this.HasAccessToken && this.HasConsumerToken;
+            }
+        }
     }
 }

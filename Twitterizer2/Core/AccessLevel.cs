@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CommandPerformer.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="AccessLevel.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,27 +28,40 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The command performer.</summary>
+// <author>David Golden</author>
+// <summary>The OAuth Token Access Level class. Provides information about the last request made.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Core
+namespace Twitterizer
 {
-    internal static class CommandPerformer
+    /// <summary>
+    /// Describes the access level of the OAuth Token
+    /// </summary>
+    public enum AccessLevel
     {
         /// <summary>
-        /// Performs the action.
+        /// The request may not be authenticated or the Access Level header was missing from the response.
         /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The parsed result of the action.</returns>
-        /// <seealso cref="Twitterizer.Core.TwitterCommand{T}"/>
-        /// <seealso cref="Twitterizer.Core.TwitterObject"/>
-        public static TwitterResponse<T> PerformAction<T>(ICommand<T> command)
-            where T : ITwitterObject
-        {
-            command.Init();
+        Unknown,
 
-            return command.ExecuteCommand();
-        }
+        /// <summary>
+        /// The OAuth token has read access levels only.
+        /// </summary>
+        Read,
+
+        /// <summary>
+        /// The OAuth token has read write access only.
+        /// </summary>
+        ReadWrite,
+
+        /// <summary>
+        /// The OAuth token has read write and direct messages access.
+        /// </summary>
+        ReadWriteDirectMessage,
+
+        /// <summary>
+        /// There was no OAuth token access level available for reading in the response headers.
+        /// </summary>
+        Unavailable
     }
 }

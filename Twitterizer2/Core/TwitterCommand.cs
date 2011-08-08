@@ -210,7 +210,7 @@ namespace Twitterizer.Core
             twitterResponse.ResponseObject = default(T);
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
             RateLimiting rateLimiting;
-
+            AccessLevel accessLevel;
             byte[] responseData;
 
             try
@@ -237,10 +237,14 @@ namespace Twitterizer.Core
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
+                // Parse Access Level
+                accessLevel = ParseAccessLevel(response.Headers);
+
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, response.StatusCode, rateLimiting);
 
                 twitterResponse.RateLimiting = rateLimiting;
+                twitterResponse.AccessLevel = accessLevel;
             }
             catch (WebException wex)
             {
@@ -254,6 +258,8 @@ namespace Twitterizer.Core
                         }.Contains(wex.Status))
                 {
                     twitterResponse.Result = RequestResult.ConnectionFailure;
+                    twitterResponse.ErrorMessage = wex.Message;
+                    return twitterResponse;
                 }
 
                 // The exception response should always be an HttpWebResponse, but we check for good measure.
@@ -269,24 +275,42 @@ namespace Twitterizer.Core
 
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
+                // Parse Access Level
+                accessLevel = ParseAccessLevel(exceptionResponse.Headers);
+
                 // Try to read the error message, if there is one.
-                twitterResponse.ErrorMessage = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData).ErrorMessage;
+                try
+                {
+                    twitterResponse.ErrorMessage = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData).ErrorMessage;
+                }
+                catch (Exception)
+                {
+                    // Occasionally, Twitter responds with XML error data even though we asked for json.
+                    // This is that scenario. We will deal with it by doing nothing. It's up to the developer to deal with it.
+                }
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, exceptionResponse.StatusCode, rateLimiting);
 
                 twitterResponse.RateLimiting = rateLimiting;
+                twitterResponse.AccessLevel = accessLevel;
 
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
 
-
-
                 return twitterResponse;
             }
 
-            twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
-
+            try
+            {
+                twitterResponse.ResponseObject = SerializationHelper<T>.Deserialize(responseData, this.DeserializationHandler);
+            }
+            catch (Newtonsoft.Json.JsonReaderException)
+            {
+                twitterResponse.ErrorMessage = "Unable to parse JSON";
+                twitterResponse.Result = RequestResult.Unknown;
+                return twitterResponse;
+            }
 
 #if !LITE && !SILVERLIGHT
             this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
@@ -333,15 +357,6 @@ namespace Twitterizer.Core
         }
 
         /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A new instance of the <see cref="Twitterizer.Core.PagedCommand{T}"/> interface.</returns>
-        internal virtual TwitterCommand<T> Clone()
-        {
-            return default(TwitterCommand<T>);
-        }
-
-        /// <summary>
         /// Sets the command URI.
         /// </summary>
         /// <param name="endPoint">The end point.</param>
@@ -375,10 +390,38 @@ namespace Twitterizer.Core
             if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
             {
                 rateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Local);
+                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
             }
             return rateLimiting;
         }
+
+        /// <summary>
+        /// Parses the access level headers.
+        /// </summary>
+        /// <param name="responseHeaders">The headers of the web response.</param>
+        /// <returns>An enum of the current access level of the OAuth Token being used.</returns>
+        private AccessLevel ParseAccessLevel(WebHeaderCollection responseHeaders)
+        {
+            if (responseHeaders.AllKeys.Contains("X-Access-Level"))
+            {
+                switch (responseHeaders["X-Access-Level"].ToLower())
+                {
+                    case "read":
+                        return AccessLevel.Read;
+                    case "read-write":
+                        return AccessLevel.ReadWrite;
+                    case "read-write-privatemessages":
+                    case "read-write-directmessages":
+                        return AccessLevel.ReadWriteDirectMessage;
+                    default:
+                        break;
+                }
+                return AccessLevel.Unknown;
+            }
+            else
+                return AccessLevel.Unavailable;
+        }
+
 
 #if !LITE && !SILVERLIGHT
         /// <summary>
@@ -396,8 +439,8 @@ namespace Twitterizer.Core
                     cacheKeyBuilder.ToString(),
                     resultObject,
                     null,
-                    Cache.NoAbsoluteExpiration,
-                    this.OptionalProperties.CacheTimespan,
+                    DateTime.Now.Add(this.OptionalProperties.CacheTimespan),
+                    Cache.NoSlidingExpiration,
                     CacheItemPriority.Normal,
                     null);
 

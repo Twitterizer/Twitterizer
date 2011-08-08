@@ -94,7 +94,8 @@ namespace Twitterizer
 
                 response.Token = Regex.Match(responseBody, @"oauth_token=([^&]+)").Groups[1].Value;
                 response.TokenSecret = Regex.Match(responseBody, @"oauth_token_secret=([^&]+)").Groups[1].Value;
-                response.UserId = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value, CultureInfo.CurrentCulture);
+                if (responseBody.Contains("user_id="))
+                    response.UserId = long.Parse(Regex.Match(responseBody, @"user_id=([^&]+)").Groups[1].Value, CultureInfo.CurrentCulture);
                 response.ScreenName = Regex.Match(responseBody, @"screen_name=([^&]+)").Groups[1].Value;
             }
             catch (WebException wex)
