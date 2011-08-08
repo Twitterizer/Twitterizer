@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterAsyncResponse.cs" company="Patrick Ricky Smith">
+// <copyright file="TwitterStatus.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,39 +28,35 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The response wrapper class for all asynchronous methods.</summary>
+// <author>David Golden</author>
+// <summary>The TwitterStreamDeletedEvent class</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+namespace Twitterizer.Streaming
 {
-    using System;
+    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
 
-    public class TwitterAsyncResponse<T> : TwitterResponse<T>
-        where T : Core.ITwitterObject
+    public class TwitterStreamDeletedEvent
     {
+
         /// <summary>
-        /// Gets or sets the exception.
+        /// Gets or sets the user id of the event. This is always the user who initiated the event.
         /// </summary>
-        /// <value>The exception.</value>
-        public Exception ExceptionThrown { get; set; }
-    }
+        /// <value>The User Id.</value>
+#if !SILVERLIGHT        
+        [DataMember]
+#endif
+        [JsonProperty(PropertyName = "user_id")]
+        public decimal UserId { get; set; }
 
-    public static class TwitterResponseAsyncConverterExtentions
-    {
-        public static TwitterAsyncResponse<T> ToAsyncResponse<T>(this TwitterResponse<T> response)
-            where T : Core.ITwitterObject
-        {
-            TwitterAsyncResponse<T> newResponse = new TwitterAsyncResponse<T>();
-            newResponse.Content = response.Content;
-            newResponse.ErrorMessage = response.ErrorMessage;
-            newResponse.RateLimiting = response.RateLimiting;
-            newResponse.AccessLevel = response.AccessLevel;
-            newResponse.RequestUrl = response.RequestUrl;
-            newResponse.ResponseCached = response.ResponseCached;
-            newResponse.ResponseObject = response.ResponseObject;
-            newResponse.Result = response.Result;
-
-            return newResponse;
-        }
+        /// <summary>
+        /// Gets or sets the id of the event. This is the status that was affected.
+        /// </summary>
+        /// <value>The Direct Message or Status Id.</value>
+#if !SILVERLIGHT        
+        [DataMember]
+#endif
+        [JsonProperty(PropertyName = "id")]
+        public decimal Id { get; set; }
     }
 }

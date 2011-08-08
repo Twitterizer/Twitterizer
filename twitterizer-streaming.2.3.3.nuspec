@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata schemaVersion="2">
+    <id>twitterizer-streaming</id>
+    <version>2.3.3</version>
+    <title>Twitterizer Streaming API</title>
+    <authors>Ricky Smith,David Golden</authors>
+    <owners>Ricky Smith,David Golden</owners>
+    <licenseUrl>http://www.twitterizer.net/license/</licenseUrl>
+    <projectUrl>http://www.twitterizer.net/</projectUrl>
+    <iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A wrapper library for the Twitter Streaming API.</description>
+    <language>en-US</language>
+    <tags>twitter twitterizer streaming</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="3.5.8" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework=".NETFramework3.5" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework=".NETFramework3.5" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework3.5" />
+      <frameworkAssembly assemblyName="System.Drawing" targetFramework=".NETFramework3.5" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework3.5" />
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework=".NETFramework3.5" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="lib\35\GettingStarted.txt" target="lib\35\GettingStarted.txt" />
+    <file src="lib\35\Json.NET.license.txt" target="lib\35\Json.NET.license.txt" />
+    <file src="lib\35\Newtonsoft.Json.dll" target="lib\35\Newtonsoft.Json.dll" />
+    <file src="lib\35\Twitterizer2.Asynchronous.dll" target="lib\35\Twitterizer2.Asynchronous.dll" />
+    <file src="lib\35\Twitterizer2.dll" target="lib\35\Twitterizer2.dll" />
+    <file src="lib\35\Twitterizer2.license.txt" target="lib\35\Twitterizer2.license.txt" />
+    <file src="lib\35\Twitterizer2.Streaming.dll" target="lib\35\Twitterizer2.Streaming.dll" />
+  </files>
+</package>

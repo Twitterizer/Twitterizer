@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterAsyncResponse.cs" company="Patrick Ricky Smith">
+// <copyright file="UserStreamOptions.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,39 +28,22 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The response wrapper class for all asynchronous methods.</summary>
+// <author>David Golden</author>
+// <summary>The User Stream Options parameters class.</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer
+namespace Twitterizer.Streaming
 {
-    using System;
+    using System.Collections.Generic;
 
-    public class TwitterAsyncResponse<T> : TwitterResponse<T>
-        where T : Core.ITwitterObject
+    public class UserStreamOptions : StreamOptions
     {
+        public UserStreamOptions() { }
+
         /// <summary>
-        /// Gets or sets the exception.
+        /// Gets or sets whether to request all replies from the stream.
         /// </summary>
-        /// <value>The exception.</value>
-        public Exception ExceptionThrown { get; set; }
-    }
-
-    public static class TwitterResponseAsyncConverterExtentions
-    {
-        public static TwitterAsyncResponse<T> ToAsyncResponse<T>(this TwitterResponse<T> response)
-            where T : Core.ITwitterObject
-        {
-            TwitterAsyncResponse<T> newResponse = new TwitterAsyncResponse<T>();
-            newResponse.Content = response.Content;
-            newResponse.ErrorMessage = response.ErrorMessage;
-            newResponse.RateLimiting = response.RateLimiting;
-            newResponse.AccessLevel = response.AccessLevel;
-            newResponse.RequestUrl = response.RequestUrl;
-            newResponse.ResponseCached = response.ResponseCached;
-            newResponse.ResponseObject = response.ResponseObject;
-            newResponse.Result = response.Result;
-
-            return newResponse;
-        }
+        /// <value>Boolean.</value>
+        /// <remarks>Will return all replies to a users stream (eg where the user doesn't follow both people replying to each other).</remarks>
+        public bool AllReplies { get; set; }
     }
 }

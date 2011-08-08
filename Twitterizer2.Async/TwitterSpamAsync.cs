@@ -68,5 +68,37 @@ namespace Twitterizer
                 },
                 null);
         }
+
+                /// <summary>
+        /// Blocks the user and reports them for spam/abuse.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenName">The users screenName.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult ReportUser(OAuthTokens tokens, string screenName, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
+        {
+            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterSpam.ReportUser;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                screenName,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="OAuthUtilityAsync.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="XAuthUtilityAsync.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,95 +29,59 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>Provides simple methods to simplify OAuth interaction.</summary>
+// <summary>Provides simple methods to simplify XAuth interaction.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
     using System;
     using System.Net;
     using Twitterizer;
-
-    public static class OAuthUtilityAsync
-    {
-#if !SILVERLIGHT
-        /// <summary>
-        /// Gets a new OAuth request token from the twitter api.
-        /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="callbackAddress">Address of the callback.</param>
-        /// <param name="proxy">The proxy.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns>
-        /// A new <see cref="Twitterizer.OAuthTokenResponse"/> instance.
-        /// </returns>
-        public static IAsyncResult GetRequestToken(string consumerKey, string consumerSecret, string callbackAddress, WebProxy proxy, TimeSpan timeout, Action<OAuthTokenResponse> function)
-        {
-            Func<string, string, string, WebProxy, OAuthTokenResponse> methodToCall = OAuthUtility.GetRequestToken;
-
-            return methodToCall.BeginInvoke(
-                consumerKey,
-                consumerSecret,
-                callbackAddress,
-                proxy,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result));
-                    }
-                    catch (Exception ex)
-                    {
-                        function(null);
-                    }
-                },
-                null);
-        }
-
-        /// <summary>
-        /// Gets the access token.
-        /// </summary>
-        /// <param name="consumerKey">The consumer key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="requestToken">The request token.</param>
-        /// <param name="verifier">The verifier.</param>
-        /// <param name="proxy">The proxy.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns>An <see cref="OAuthTokenResponse"/> class containing access token information.</returns>
-        public static IAsyncResult GetAccessToken(
-            string consumerKey, 
-            string consumerSecret, 
-            string requestToken, 
-            string verifier, 
-            WebProxy proxy, 
-            TimeSpan timeout, 
-            Action<OAuthTokenResponse> function)
-        {
-            Func<string, string, string, string, WebProxy, OAuthTokenResponse> methodToCall = OAuthUtility.GetAccessToken;
-
-            return methodToCall.BeginInvoke(
-                consumerKey,
-                consumerSecret,
-                requestToken,
-                verifier,
-                proxy,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result));
-                    }
-                    catch (Exception ex)
-                    {
-                        function(null);
-                    }
-                },
-                null);
-        }
+#if SILVERLIGHT
+    using System.Threading;
 #endif
+
+    public static class XAuthUtilityAsync
+    {
+        /// <summary>
+        /// Allows OAuth applications to directly exchange Twitter usernames and passwords for OAuth access tokens and secrets.
+        /// </summary>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns>A <see cref="OAuthTokenResponse"/> instance.</returns>        
+        public static IAsyncResult GetAccessTokens(string consumerKey, string consumerSecret, string username, string password, TimeSpan timeout, Action<OAuthTokenResponse> function)
+        {
+#if !SILVERLIGHT            
+            Func<string, string, string, string, OAuthTokenResponse> methodToCall = XAuthUtility.GetAccessTokens;
+
+            return methodToCall.BeginInvoke(
+                consumerKey,
+                consumerSecret,
+                username,
+                password,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result));
+                    }
+                    catch (Exception ex)
+                    {
+                        function(null);
+                    }
+                },
+                null);
+#else
+            ThreadPool.QueueUserWorkItem((x) =>
+                {
+                    function(XAuthUtility.GetAccessTokens(consumerKey, consumerSecret, username, password));  
+                });
+            return null;
+#endif
+        }
     }
 }

@@ -124,13 +124,27 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
+        [Obsolete("TwitterListAsync.GetList() has been replaced with TwitterListAsync.Show()")]
         public static IAsyncResult GetList(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.GetList;
+            return Show(tokens, listIdOrSlug, options, timeout, function);
+        }
+
+        /// <summary>
+        /// Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Show(OAuthTokens tokens, string listIdOrSlug, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
+        {
+            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.Show;
 
             return methodToCall.BeginInvoke(
                 tokens,
-                username,
                 listIdOrSlug,
                 options,
                 result =>
@@ -157,9 +171,9 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult GetLists(OAuthTokens tokens, string username, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
+        public static IAsyncResult GetLists(OAuthTokens tokens, string username, GetListsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetLists;
+            Func<OAuthTokens, string, GetListsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetLists;
 
             return methodToCall.BeginInvoke(
                 tokens,
@@ -229,9 +243,9 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult GetMemberships(OAuthTokens tokens, string username, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
+        public static IAsyncResult GetMemberships(OAuthTokens tokens, string username, ListMembershipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetMemberships;
+            Func<OAuthTokens, string, ListMembershipsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetMemberships;
 
             return methodToCall.BeginInvoke(
                 tokens,
@@ -303,12 +317,12 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult GetSubscriptions(
             OAuthTokens tokens, 
-            string userName, 
-            OptionalProperties options, 
+            string userName,
+            GetListSubscriptionsOptions options, 
             TimeSpan timeout, 
             Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetSubscriptions;
+            Func<OAuthTokens, string, GetListSubscriptionsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetSubscriptions;
 
             return methodToCall.BeginInvoke(
                 tokens,

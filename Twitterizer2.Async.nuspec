@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>twitterizer-async</id> 
+	<title>Asynchronous Twitterizer</title>
+    <version>2.3.1</version> 
+    <authors>Ricky Smith</authors>
+    <description>Adds asynchronous method wrappers to the Twitterizer library.</description> 
+    <language>en-US</language>
+    <licenseUrl>http://www.twitterizer.net/license/</licenseUrl>
+    <projectUrl>http://www.twitterizer.net/</projectUrl>
+	<iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
+	<tags>twitter twitterizer asynchronous</tags>
+	<dependencies>
+		<dependency id="twitterizer" version="2.3.1" />
+	</dependencies>
+  </metadata> 
+  <files>
+    <file src="Release\Twitterizer2-WithAddons\Twitterizer2.Asynchronous.*" target="lib" />
+  </files>
+</package>
