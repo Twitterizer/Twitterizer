@@ -162,18 +162,12 @@ namespace Twitterizer
                                                                     "oauth_token_secret",
                                                                     "oauth_signature"
                                                                 };
-        private Uri uri;
-        private HTTPVerb hTTPVerb;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
-        /// <param name="verb">The HTTP verb.</param>
-        /// <param name="KeepAlive">Keep Alive.</param>        
-        /// <param name="UserAgent">User Agent.</param>        
-        /// <param name="NetworkCredentials">Network Credentials.</param>                
-        
+        /// <param name="verb">The verb.</param>
         public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials = null)
         {
             if (requestUri == null)
@@ -224,35 +218,6 @@ namespace Twitterizer
 
                 this.UseOAuth = true;
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
-        /// </summary>
-        /// <param name="requestUri">The request URI.</param>
-        /// <param name="verb">The HTTP verb.</param>
-        public WebRequestBuilder(Uri uri, HTTPVerb verb)
-        {
-            if (uri == null)
-                throw new ArgumentNullException("requestUri");
-
-            this.RequestUri = uri;
-            this.Verb = verb;
-            this.KeepAlive = false;
-            this.UserAgent = "";
-            this.UseOAuth = false;
-            this.NetworkCredentials = CredentialCache.DefaultCredentials as NetworkCredential;
-
-            this.Parameters = new Dictionary<string, string>();
-
-            if (string.IsNullOrEmpty(this.RequestUri.Query)) return;
-
-            foreach (Match item in Regex.Matches(this.RequestUri.Query, @"(?<key>[^&?=]+)=(?<value>[^&?=]+)"))
-            {
-                this.Parameters.Add(item.Groups["key"].Value, item.Groups["value"].Value);
-            }
-
-            this.RequestUri = new Uri(this.RequestUri.AbsoluteUri.Replace(this.RequestUri.Query, ""));
         }
 
         /// <summary>

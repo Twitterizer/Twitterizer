@@ -8,7 +8,7 @@ namespace Twitterizer.Commands
 {
     internal class CreateListMembershipCommand : TwitterCommand<TwitterList>
     {
-        private decimal listId =0;
+        private decimal listId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateListMembershipCommand"/> class.

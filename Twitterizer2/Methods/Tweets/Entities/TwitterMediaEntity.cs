@@ -55,10 +55,7 @@ namespace Twitterizer.Entities
         /// Initializes a new instance of the <see cref="TwitterMediaEntity"/> class.
         /// </summary>
         internal TwitterMediaEntity() { }
-        /// <summary>
-        /// MediaType property 
-        /// </summary>
-        /// <value>Takes a value from the MediaTypes enumeration.</value>
+
         public MediaTypes MediaType { get; set; }
         public decimal Id { get; set; }
         public string IdString { get; set; }

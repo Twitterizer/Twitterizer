@@ -63,7 +63,7 @@ namespace Twitterizer
         /// Gets or sets information about the user's rate usage.
         /// </summary>
         /// <value>The rate limiting object.</value>
-        public RateLimiting RateLimiting { get; set; }
+        public new RateLimiting RateLimiting { get; set; }
 
         /// <summary>
         /// Deserializes the specified value.
