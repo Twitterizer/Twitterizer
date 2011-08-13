@@ -167,7 +167,10 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
-        /// <param name="verb">The verb.</param>
+        /// <param name="KeepAlive">Keep Alive.</param>        
+        /// <param name="UserAgent">User Agent.</param>        
+        /// <param name="NetworkCredentials">Network Credentials.</param>                
+        
         public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials = null)
         {
             if (requestUri == null)

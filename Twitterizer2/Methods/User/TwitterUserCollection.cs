@@ -66,7 +66,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The rate limiting object.</value>
         [DataMember]
-        public new RateLimiting RateLimiting { get; internal set; }
+        public RateLimiting RateLimiting { get; internal set; }
 
         /// <summary>
         /// Deserializes the specified value.
