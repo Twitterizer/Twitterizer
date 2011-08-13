@@ -121,7 +121,7 @@ namespace Twitterizer.Commands
 
             if (options.SinceDate > new DateTime())
             {
-                this.RequestParameters.Add("since", options.SinceDate.ToString("{0:yyyy-MM-dd}", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("since", options.SinceDate.ToString("yyyy-MM-dd", unitedStatesEnglishCulture));
             }
 
             if (options.SinceId > 0)
