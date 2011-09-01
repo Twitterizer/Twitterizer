@@ -62,12 +62,12 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            this.RequestParameters.Add("cursor", "-1");
+
             FriendsOptions options = this.OptionalProperties as FriendsOptions;
 
             if (options == null)
             {
-                this.RequestParameters.Add("cursor", "-1");
-
                 return;
             }
 
@@ -77,7 +77,7 @@ namespace Twitterizer.Commands
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
 
-            this.RequestParameters.Add("cursor", options.Cursor > 0 ? options.Cursor.ToString(CultureInfo.CurrentCulture) : "-1");
+            this.RequestParameters["cursor"] = options.Cursor > 0 ? options.Cursor.ToString(CultureInfo.CurrentCulture) : "-1";
         }
     }
 }

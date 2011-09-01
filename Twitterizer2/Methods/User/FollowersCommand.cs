@@ -73,6 +73,9 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            // Default values
+            this.RequestParameters.Add("cursor", "-1");
+
             // Handle optional parameters
             FollowersOptions options = this.OptionalProperties as FollowersOptions;
 
@@ -87,8 +90,9 @@ namespace Twitterizer.Commands
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
 
+            // Override the default
             if (options.Cursor != 0)
-                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
+                this.RequestParameters["cursor"] = options.Cursor.ToString(CultureInfo.CurrentCulture);
         }
     }
 }
