@@ -15,6 +15,7 @@
     <tags>twitter twitterizer streaming</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="3.5.8" />
+      <dependency id="twitterizer" version="2.3.3" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework=".NETFramework3.5" />
@@ -29,8 +30,6 @@
     <file src="lib\35\GettingStarted.txt" target="lib\35\GettingStarted.txt" />
     <file src="lib\35\Json.NET.license.txt" target="lib\35\Json.NET.license.txt" />
     <file src="lib\35\Newtonsoft.Json.dll" target="lib\35\Newtonsoft.Json.dll" />
-    <file src="lib\35\Twitterizer2.Asynchronous.dll" target="lib\35\Twitterizer2.Asynchronous.dll" />
-    <file src="lib\35\Twitterizer2.dll" target="lib\35\Twitterizer2.dll" />
     <file src="lib\35\Twitterizer2.license.txt" target="lib\35\Twitterizer2.license.txt" />
     <file src="lib\35\Twitterizer2.Streaming.dll" target="lib\35\Twitterizer2.Streaming.dll" />
   </files>

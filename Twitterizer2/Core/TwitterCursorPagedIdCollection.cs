@@ -70,10 +70,10 @@ namespace Twitterizer
         /// <returns></returns>
         internal static TwitterCursorPagedIdCollection DeserializeWrapper(JObject value)
         {
-            if (value == null || value.SelectToken("users") == null)
+            if (value == null || value.SelectToken("ids") == null)
                 return null;
 
-            TwitterCursorPagedIdCollection result = JsonConvert.DeserializeObject<TwitterCursorPagedIdCollection>(value.SelectToken("users").ToString());
+            TwitterCursorPagedIdCollection result = JsonConvert.DeserializeObject<TwitterCursorPagedIdCollection>(value.SelectToken("ids").ToString());
             result.NextCursor = value.SelectToken("next_cursor").Value<long>();
             result.PreviousCursor = value.SelectToken("previous_cursor").Value<long>();
 

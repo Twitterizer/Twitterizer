@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>twitterizer-async</id>
+    <version>2.3.3</version>
+    <title>Asynchronous Twitterizer</title>
+    <authors>Ricky Smith,David Golden</authors>
+    <owners>Ricky Smith</owners>
+    <licenseUrl>http://www.twitterizer.net/license/</licenseUrl>
+    <projectUrl>http://www.twitterizer.net/</projectUrl>
+    <iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Adds asynchronous method wrappers to the Twitterizer library.</description>
+    <language>en-US</language>
+    <tags>twitter twitterizer asynchronous</tags>
+    <dependencies>
+      <dependency id="twitterizer" version="2.3.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="lib\Twitterizer2.Asynchronous.dll" target="lib\Twitterizer2.Asynchronous.dll" />
+    <file src="lib\Twitterizer2.Asynchronous.pdb" target="lib\Twitterizer2.Asynchronous.pdb" />
+  </files>
+</package>

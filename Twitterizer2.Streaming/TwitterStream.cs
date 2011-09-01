@@ -302,7 +302,7 @@ namespace Twitterizer.Streaming
 #else
                                         ThreadPool.QueueUserWorkItem(delegate { ParseMessage(blockbuilderstring.Trim('\n')); });
 #endif
-                                        blockBuilder.Clear();
+                                        blockBuilder = new StringBuilder();
                                     }
                                 }
                             }
@@ -494,7 +494,7 @@ namespace Twitterizer.Streaming
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("Unknown Message: {0}", new object[] { obj.ToString() });
+            System.Diagnostics.Debug.WriteLine(string.Format("Unknown Message: {0}", new object[] { obj.ToString() }));
         }
 
        
