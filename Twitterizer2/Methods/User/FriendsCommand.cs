@@ -62,6 +62,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            // Default values
             this.RequestParameters.Add("cursor", "-1");
 
             FriendsOptions options = this.OptionalProperties as FriendsOptions;
@@ -77,7 +78,9 @@ namespace Twitterizer.Commands
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
 
-            this.RequestParameters["cursor"] = options.Cursor > 0 ? options.Cursor.ToString(CultureInfo.CurrentCulture) : "-1";
+            // Override the default
+            if (options.Cursor != 0)
+                this.RequestParameters["cursor"] = options.Cursor.ToString(CultureInfo.CurrentCulture);
         }
     }
 }
