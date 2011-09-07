@@ -77,6 +77,8 @@ namespace Twitterizer.Streaming
 
     public delegate void StreamStoppedCallback(StopReasons stopreason);
 
+    public delegate void RawJsonCallback(string json);
+
     /// <summary>
     /// The TwitterStream class. Provides an interface to real-time status changes.
     /// </summary>
@@ -89,6 +91,7 @@ namespace Twitterizer.Streaming
         private DirectMessageCreatedCallback directMessageCreatedCallback;
         private DirectMessageDeletedCallback directMessageDeletedCallback;
         private EventCallback eventCallback;
+        private RawJsonCallback rawJsonCallback;
 
         /// <summary>
         /// This value is set to true to indicate that the stream connection should be closed. 
@@ -159,7 +162,8 @@ namespace Twitterizer.Streaming
             StatusDeletedCallback statusDeletedCallback,
             DirectMessageCreatedCallback directMessageCreatedCallback,
             DirectMessageDeletedCallback directMessageDeletedCallback,
-            EventCallback eventCallback
+            EventCallback eventCallback,
+            RawJsonCallback rawJsonCallback = null
             )
         {
             WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens, true, this.UserAgent);
@@ -181,6 +185,7 @@ namespace Twitterizer.Streaming
             this.directMessageCreatedCallback = directMessageCreatedCallback;
             this.directMessageDeletedCallback = directMessageDeletedCallback;
             this.eventCallback = eventCallback;
+            this.rawJsonCallback = rawJsonCallback;
             this.stopReceived = false;
 #if SILVERLIGHT
             request.AllowReadStreamBuffering = false;
@@ -196,7 +201,8 @@ namespace Twitterizer.Streaming
             StreamStoppedCallback streamErrorCallback,
             StatusCreatedCallback statusCreatedCallback,
             StatusDeletedCallback statusDeletedCallback,
-            EventCallback eventCallback
+            EventCallback eventCallback,
+            RawJsonCallback rawJsonCallback = null
             )
         {         
             WebRequestBuilder builder;
@@ -212,6 +218,7 @@ namespace Twitterizer.Streaming
             this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
             this.eventCallback = eventCallback;
+            this.rawJsonCallback = rawJsonCallback;
             this.stopReceived = false;
 #if SILVERLIGHT
             request.AllowReadStreamBuffering = false;
@@ -219,6 +226,10 @@ namespace Twitterizer.Streaming
             return request.BeginGetResponse(StreamCallback, request);
         }
 
+        /// <summary>
+        /// Prepares the stream options.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
         private void PrepareStreamOptions(WebRequestBuilder builder)
         {
             if (this.StreamOptions != null)
@@ -236,8 +247,6 @@ namespace Twitterizer.Streaming
                     builder.Parameters.Add("track", string.Join(",", this.StreamOptions.Track.ToArray()));
             }    
         }
-
-
 
         /// <summary>
         /// The callback handler for all streams
@@ -296,6 +305,11 @@ namespace Twitterizer.Streaming
                                     if (bracketCount == 0)
                                     {
                                         var blockbuilderstring = blockBuilder.ToString();
+                                        
+                                        if (rawJsonCallback != null)
+                                        {
+                                            rawJsonCallback(blockbuilderstring);
+                                        }
 #if !SILVERLIGHT
                                         Action<string> parseMethod = ParseMessage;
                                         parseMethod.BeginInvoke(blockbuilderstring.Trim('\n'), null, null);
@@ -306,7 +320,9 @@ namespace Twitterizer.Streaming
                                     }
                                 }
                             }
+
                             reader.Close();
+
                             if (this.streamStoppedCallback != null)
                             {
                                 if (!this.stopReceived)
