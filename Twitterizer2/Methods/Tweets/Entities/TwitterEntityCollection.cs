@@ -35,6 +35,7 @@
 namespace Twitterizer.Entities
 {
     using System;
+    using System.Linq;
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
 using System.Linq.Expressions;
@@ -157,11 +158,162 @@ using System.Linq.Expressions;
                 return result;
             }
 
+            /// <summary>
+            /// Writes the JSON representation of the object.
+            /// </summary>
+            /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter"/> to write to.</param>
+            /// <param name="value">The value.</param>
+            /// <param name="serializer">The calling serializer.</param>
+            /// <remarks>This is a best attempt to recreate the structure created by the Twitter API.</remarks>
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                throw new NotImplementedException();
+                TwitterEntityCollection entities = (TwitterEntityCollection)value;
+
+                writer.WriteStartObject();
+                {
+                    WriteEntity(writer, entities.OfType<TwitterHashTagEntity>().ToList(), "hashtags", (w, e) =>
+                        {
+                            w.WritePropertyName("text");
+                            w.WriteValue(e.Text);
+                        });
+
+                    WriteEntity(writer, entities.OfType<TwitterMentionEntity>().ToList(), "user_mentions", (w, e) =>
+                        {
+                            w.WritePropertyName("screen_name");
+                            w.WriteValue(e.ScreenName);
+
+                            w.WritePropertyName("name");
+                            w.WriteValue(e.Name);
+
+                            w.WritePropertyName("id");
+                            w.WriteValue(e.UserId);
+                        });
+
+                    WriteEntity(writer, entities.OfType<TwitterUrlEntity>().ToList(), "urls", (w, e) =>
+                        {
+                            w.WritePropertyName("url");
+                            w.WriteValue(e.Url);
+
+                            w.WritePropertyName("display_url");
+                            w.WriteValue(e.DisplayUrl);
+
+                            w.WritePropertyName("expanded_url");
+                            w.WriteValue(e.ExpandedUrl);
+                        });
+
+                    WriteEntity(writer, entities.OfType<TwitterMediaEntity>().ToList(), "media", WriteMediaEntity);
+
+                    writer.WriteEndObject();
+                }
             }
 
+            /// <summary>
+            /// Writes the media entity.
+            /// </summary>
+            /// <param name="w">The w.</param>
+            /// <param name="e">The e.</param>
+            private static void WriteMediaEntity(JsonWriter w, TwitterMediaEntity e)
+            {
+                w.WritePropertyName("type");
+                switch (e.MediaType)
+                {
+                    case TwitterMediaEntity.MediaTypes.Unknown:
+                        w.WriteNull();
+                        break;
+                    case TwitterMediaEntity.MediaTypes.Photo:
+                        w.WriteValue("photo");
+                        break;
+                    default:
+                        break;
+                }
+
+                w.WritePropertyName("sizes");
+                w.WriteStartObject();
+                {
+                    foreach (var item in e.Sizes)
+                    {
+                        w.WritePropertyName(item.Size.ToString().ToLower());
+                        w.WriteStartObject();
+                        {
+                            w.WritePropertyName("h");
+                            w.WriteValue(item.Height);
+                            
+                            w.WritePropertyName("w");
+                            w.WriteValue(item.Width);
+
+                            w.WritePropertyName("resize");
+                            w.WriteValue(item.Resize == TwitterMediaEntity.MediaSize.MediaSizeResizes.Fit ? "fit" : "crop");
+                            w.WriteEndObject();
+                        }
+                    }
+                  
+                    w.WriteEndObject();
+                }
+
+                w.WritePropertyName("id");
+                w.WriteValue(e.Id);
+                
+                w.WritePropertyName("id_str");
+                w.WriteValue(e.IdString);
+
+                w.WritePropertyName("media_url");
+                w.WriteValue(e.MediaUrl);
+
+                w.WritePropertyName("media_url_https");
+                w.WriteValue(e.MediaUrlSecure);
+
+                w.WritePropertyName("url");
+                w.WriteValue(e.Url);
+
+                w.WritePropertyName("display_url");
+                w.WriteValue(e.DisplayUrl);
+
+                w.WritePropertyName("expanded_url");
+                w.WriteValue(e.ExpandedUrl);
+            }
+
+            /// <summary>
+            /// Writes an entity.
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="writer">The writer.</param>
+            /// <param name="entities">The entities.</param>
+            /// <param name="entityName">Name of the entity.</param>
+            /// <param name="detailsAction">The details action.</param>
+            private static void WriteEntity<T>(JsonWriter writer, System.Collections.Generic.IList<T> entities, string entityName, Action<JsonWriter, T> detailsAction)
+                where T : TwitterEntity
+            {
+                // Note to people reading this code: Extra brackets exist to group code by json hierarchy. You're welcome.
+                writer.WritePropertyName(entityName);
+                writer.WriteStartArray();
+                {
+                    foreach (var item in entities)
+                    {
+                        writer.WriteStartObject();
+                        {
+                            writer.WritePropertyName("indices");
+                            writer.WriteStartArray();
+                            {
+                                writer.WriteValue(item.StartIndex);
+                                writer.WriteValue(item.EndIndex);
+                                writer.WriteEndArray();
+                            }
+
+                            detailsAction(writer, item);
+
+                            writer.WriteEndObject();
+                        }
+                    }
+
+                    writer.WriteEndArray();
+                }
+            }
+
+            /// <summary>
+            /// Parses the media entity.
+            /// </summary>
+            /// <param name="reader">The reader.</param>
+            /// <returns></returns>
             public TwitterMediaEntity parseMediaEntity(JsonReader reader)
             {
                 try

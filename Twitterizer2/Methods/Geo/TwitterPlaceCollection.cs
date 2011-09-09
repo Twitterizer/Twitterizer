@@ -113,7 +113,8 @@ namespace Twitterizer
             /// <param name="serializer">The calling serializer.</param>
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                throw new NotImplementedException();
+                // TODO: Implement this.
+                // throw new NotImplementedException();
             }
         }
     }

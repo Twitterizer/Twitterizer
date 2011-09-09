@@ -66,8 +66,10 @@ namespace Twitterizer.Commands
         public override void Init()
         {
             UsersIdsOptions options = this.OptionalProperties as UsersIdsOptions;
+
             if (options == null)
             {
+                this.RequestParameters.Add("cursor", "-1");
                 return;
             }
 
@@ -77,10 +79,7 @@ namespace Twitterizer.Commands
             if (!string.IsNullOrEmpty(options.ScreenName))
                 this.RequestParameters.Add("screen_name", options.ScreenName);
 
-            if (options.Cursor != 0)
-            {
-                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.InvariantCulture));
-            }
+            this.RequestParameters.Add("cursor", options.Cursor > 0 ? options.Cursor.ToString(CultureInfo.InvariantCulture) : "-1");
         }
     }
 }
