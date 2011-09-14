@@ -471,5 +471,43 @@ namespace Twitterizer
                 },
                 null);
         }
+
+        /// <summary>
+        /// Unsubscribes the authenticated user from the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public static IAsyncResult UnSubscribe(
+            OAuthTokens tokens,
+            decimal listId,
+            OptionalProperties options,
+            TimeSpan timeout,
+            Action<TwitterAsyncResponse<TwitterList>> function)
+        {
+            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.UnSubscribe;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                listId,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
     }
 }

@@ -594,9 +594,24 @@ namespace Twitterizer
         /// <param name="listId">The list id.</param>
         /// <param name="optionalProperties">The optional properties.</param>
         /// <returns></returns>
-        private static TwitterResponse<TwitterList> Subscribe(OAuthTokens tokens, decimal listId, OptionalProperties optionalProperties)
+        public static TwitterResponse<TwitterList> Subscribe(OAuthTokens tokens, decimal listId, OptionalProperties optionalProperties)
         {
             Commands.CreateListMembershipCommand command = new Commands.CreateListMembershipCommand(tokens, listId, optionalProperties);
+
+            return CommandPerformer.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Unsubscribes the authenticated user from the specified list.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="listId">The list id.</param>
+        /// <param name="optionalProperties">The optional properties.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public static TwitterResponse<TwitterList> UnSubscribe(OAuthTokens tokens, decimal listId, OptionalProperties optionalProperties = null)
+        {
+            Commands.DestroyListSubscriber command = new Commands.DestroyListSubscriber(tokens, listId, optionalProperties);
 
             return CommandPerformer.PerformAction(command);
         }

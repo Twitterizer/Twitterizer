@@ -167,6 +167,7 @@
     <Compile Include="Methods\List\AddListMemberCommand.cs" />
     <Compile Include="Methods\List\CheckListMembershipCommand.cs" />
     <Compile Include="Methods\List\CreateListMembershipCommand.cs" />
+    <Compile Include="Methods\List\DestroyListSubscriber.cs" />
     <Compile Include="Methods\List\GetListMembersOptions.cs" />
     <Compile Include="Methods\List\GetListsOptions.cs" />
     <Compile Include="Methods\List\GetListSubscriptionsOptions.cs" />
