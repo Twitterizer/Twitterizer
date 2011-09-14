@@ -265,5 +265,21 @@ namespace Twitterizer
 
             return result;
         }
+
+
+        /// <summary>
+        /// Returns a single direct message, specified by an id parameter. Like the /1/direct_messages.format request, this method will include the user objects of the sender and recipient.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="id">The id.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public static TwitterResponse<TwitterDirectMessage> Show(OAuthTokens tokens, decimal id, OptionalProperties options = null)
+        {
+            Commands.ShowDirectMessageCommand command = new Commands.ShowDirectMessageCommand(tokens, id, options);
+
+            return Core.CommandPerformer.PerformAction(command);
+        }
     }
 }

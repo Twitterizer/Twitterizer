@@ -138,6 +138,7 @@
     <Compile Include="Methods\DirectMessage\DirectMessagesSentCommand.cs" />
     <Compile Include="Methods\DirectMessage\DirectMessagesSentOptions.cs" />
     <Compile Include="Methods\DirectMessage\SendDirectMessageCommand.cs" />
+    <Compile Include="Methods\DirectMessage\ShowDirectMessageCommand.cs" />
     <Compile Include="Methods\DirectMessage\TwitterDirectMessage.cs" />
     <Compile Include="Methods\DirectMessage\TwitterDirectMessageCollection.cs" />
     <Compile Include="Methods\Favorites\CreateFavoriteCommand.cs" />
