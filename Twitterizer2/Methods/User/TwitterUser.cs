@@ -328,6 +328,13 @@ namespace Twitterizer
         public string ProfileImageLocation { get; set; }
 
         /// <summary>
+        /// Gets or sets the secure profile image location (https).
+        /// </summary>
+        /// <value>The profile image location.</value>
+        [DataMember, JsonProperty(PropertyName = "profile_image_url_https")]
+        public string ProfileImageSecureLocation { get; set; }
+
+        /// <summary>
         /// Gets or sets the color of the profile sidebar border.
         /// </summary>
         /// <value>The color of the profile sidebar border.</value>

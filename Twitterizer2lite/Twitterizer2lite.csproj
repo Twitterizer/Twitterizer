@@ -206,6 +206,9 @@
     <Compile Include="..\Twitterizer2\Methods\DirectMessage\SendDirectMessageCommand.cs">
       <Link>SendDirectMessageCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\ShowDirectMessageCommand.cs">
+      <Link>ShowDirectMessageCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\DirectMessage\TwitterDirectMessage.cs">
       <Link>TwitterDirectMessage.cs</Link>
     </Compile>
@@ -304,6 +307,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\DeleteListCommand.cs">
       <Link>DeleteListCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\DestroyListSubscriber.cs">
+      <Link>DestroyListSubscriber.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\GetListCommand.cs">
       <Link>GetListCommand.cs</Link>

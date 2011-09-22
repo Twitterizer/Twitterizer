@@ -53,6 +53,8 @@
       <HintPath>..\packages\Newtonsoft.Json.4.0.2\lib\sl4\Newtonsoft.Json.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -196,6 +198,9 @@
     <Compile Include="..\Twitterizer2\Methods\DirectMessage\SendDirectMessageCommand.cs">
       <Link>SendDirectMessageCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\DirectMessage\ShowDirectMessageCommand.cs">
+      <Link>ShowDirectMessageCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\DirectMessage\TwitterDirectMessage.cs">
       <Link>TwitterDirectMessage.cs</Link>
     </Compile>
@@ -294,6 +299,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\DeleteListCommand.cs">
       <Link>DeleteListCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\List\DestroyListSubscriber.cs">
+      <Link>DestroyListSubscriber.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\List\GetListCommand.cs">
       <Link>GetListCommand.cs</Link>
@@ -569,6 +577,7 @@
       <Link>TwitterResponse.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SynchronousWebRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Twitterizer2\Twitterizer2.snk">
