@@ -193,9 +193,10 @@ namespace Twitterizer
         /// <param name="isPublic">if set to <c>true</c> creates a public list.</param>
         /// <param name="description">The description.</param>
         /// <returns>A <see cref="TwitterList"/> instance.</returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterList> New(OAuthTokens tokens, string username, string name, bool isPublic, string description)
         {
-            return New(tokens, username, name, isPublic, description, null);
+            return New(tokens, name, isPublic, description, null);
         }
 
          /// <summary>
@@ -216,10 +217,10 @@ namespace Twitterizer
         /// Updates the specified list.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterList"/> instance.</returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterList> Update(OAuthTokens tokens, string listId, UpdateListOptions options)
         {
             Commands.UpdateListCommand command = new Twitterizer.Commands.UpdateListCommand(tokens, listId, options);
@@ -231,74 +232,15 @@ namespace Twitterizer
         /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        [Obsolete("The username parameter is no longer used.")]
-        public static TwitterResponse<TwitterListCollection> GetLists(OAuthTokens tokens, string username, GetListsOptions options)
-        {
-            return GetLists(tokens, options);
-        }
-
-        /// <summary>
-        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterListCollection"/> instance.
-        /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetLists(OAuthTokens tokens, GetListsOptions options)
+        public static TwitterResponse<TwitterListCollection> GetLists(OAuthTokens tokens, GetListsOptions options = null)
         {
             Commands.GetListsCommand command = new Twitterizer.Commands.GetListsCommand(tokens, options);
 
             return Core.CommandPerformer.PerformAction(command);
-        }
-
-        /// <summary>
-        /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <returns>
-        /// A <see cref="TwitterListCollection"/> instance.
-        /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetLists(OAuthTokens tokens, string username)
-        {
-            return GetLists(tokens, username, null);
-        }
-
-        /// <summary>
-        /// Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="listIdOrSlug">The list id or slug.</param>
-        /// <param name="options">The options.</param>
-        /// <returns>
-        /// A <see cref="TwitterListCollection"/> instance.
-        /// </returns>
-        [Obsolete("This method has been replaced by TwitterList.Show", true)]
-        public static TwitterResponse<TwitterList> GetList(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="listIdOrSlug">The list id or slug.</param>
-        /// <returns>
-        /// A <see cref="TwitterList"/> instance.
-        /// </returns>
-        [Obsolete("This method has been replaced by TwitterList.Show", true)]
-        public static TwitterResponse<TwitterList> GetList(OAuthTokens tokens, string username, string listIdOrSlug)
-        {
-            return null;
         }
 
         /// <summary>
@@ -463,10 +405,9 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="listId">The list id.</param>
-        /// <returns>
-        /// A collection of users as <see cref="TwitterUserCollection"/>.
-        /// </returns>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
+        /// <returns>A collection of users as <see cref="TwitterUserCollection"/>.</returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterUserCollection> GetMembers(OAuthTokens tokens, string username, string listIdOrSlug)
         {
             return GetMembers(tokens, username, listIdOrSlug, null);

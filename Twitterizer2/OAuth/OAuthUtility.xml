@@ -16,9 +16,10 @@
       <code lang="cs">
         string consumerKey = "XXX";
         string consumerSecret = "XXX";
+        string callbackUrl = "http://example.com/callback.aspx";
 
         // Obtain a request token
-        OAuthTokenResponse requestToken = OAuthUtility.GetRequestToken(consumerKey, consumerSecret);
+        OAuthTokenResponse requestToken = OAuthUtility.GetRequestToken(consumerKey, consumerSecret, callbackUrl);
 
         // Direct or instruct the user to the following address:
         Uri authorizationUri = OAuthUtility.BuildAuthorizationUri(requestToken.Token);
@@ -26,9 +27,10 @@
       <code lang="vb">
         Dim consumerKey As String = "XXX"
         Dim consumerSecret As String = "XXX"
+        Dim callbackUrl As String = "http://example.com/callback.aspx"
 
         '-- Obtain a request token
-        Dim requestToken As OAuthTokenResponse = OAuthUtility.GetRequestToken(consumerKey, consumerSecret)
+        Dim requestToken As OAuthTokenResponse = OAuthUtility.GetRequestToken(consumerKey, consumerSecret, callbackUrl)
 
         '-- Direct or instruct the user to the following address:
         Dim authorizationUri As Uri = OAuthUtility.BuildAuthorizationUri(requestToken.Token)
@@ -60,7 +62,7 @@
       </code>
     </example>
     <seealso cref="Twitterizer.OAuthTokenResponse" />
-    <seealso cref="Twitterizer.OAuthUtility.GetRequestToken(string,string)" />
+    <seealso cref="Twitterizer.OAuthUtility.GetRequestToken(string,string,string)" />
     <seealso cref="Twitterizer.OAuthUtility.GetAccessToken(string,string,string,string)" />
     <seealso cref="Twitterizer.OAuthUtility.BuildAuthorizationUri(string)" />
   </OAuthUtility>

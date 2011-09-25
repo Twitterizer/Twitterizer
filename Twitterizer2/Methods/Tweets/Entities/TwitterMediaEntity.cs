@@ -40,14 +40,26 @@ namespace Twitterizer.Entities
     /// <summary>
     /// Represents a pre-parsed media entity located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
     /// </summary>
+    /// <remarks></remarks>
 #if !SILVERLIGHT
     [Serializable]
 #endif
     public class TwitterMediaEntity : TwitterUrlEntity
     {
+        /// <summary>
+        /// The list of currently available and supported media types.
+        /// </summary>
+        /// <remarks></remarks>
         public enum MediaTypes
         {
+            /// <summary>
+            /// (default) Indicates the media type returned is unsupported.
+            /// </summary>
             Unknown,
+
+            /// <summary>
+            /// Indicates the media type returned is a photo.
+            /// </summary>
             Photo
         }
 
@@ -56,37 +68,128 @@ namespace Twitterizer.Entities
         /// </summary>
         internal TwitterMediaEntity() { }
 
+        /// <summary>
+        /// Gets or sets the type of the media.
+        /// </summary>
+        /// <value>The type of the media.</value>
+        /// <remarks></remarks>
         public MediaTypes MediaType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        /// <value>The id.</value>
+        /// <remarks></remarks>
         public decimal Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id string.
+        /// </summary>
+        /// <value>The id string.</value>
+        /// <remarks></remarks>
         public string IdString { get; set; }
+
+        /// <summary>
+        /// Gets or sets the media URL.
+        /// </summary>
+        /// <value>The media URL.</value>
+        /// <remarks></remarks>
         public string MediaUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the media URL secure.
+        /// </summary>
+        /// <value>The media URL secure.</value>
+        /// <remarks></remarks>
         public string MediaUrlSecure { get; set; }
-        //public string Url { get; set; }
-        //public string DisplayUrl { get; set; }
-        //public string ExpandedUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sizes.
+        /// </summary>
+        /// <value>The sizes.</value>
+        /// <remarks></remarks>
         public List<MediaSize> Sizes { get; set; }
-        
+
+        /// <summary>
+        /// Represents the display size of a media entity.
+        /// </summary>
+        /// <remarks></remarks>
         public class MediaSize
         {
+            /// <summary>
+            /// The enumerated types of reszing that could be applied to the media entity.
+            /// </summary>
+            /// <remarks></remarks>
             public enum MediaSizeResizes
             {
+                /// <summary>
+                /// Indicates that the resizing method was unrecognized.
+                /// </summary>
                 Unknown,
+                /// <summary>
+                /// Indicates that the media entity was cropped.
+                /// </summary>
                 Crop,
+                /// <summary>
+                /// Indicates that the media entity was resized to fit without cropping.
+                /// </summary>
                 Fit
             }
 
+            /// <summary>
+            /// The list of recognized media sizes.
+            /// </summary>
+            /// <remarks></remarks>
             public enum MediaSizes
             {
+                /// <summary>
+                /// (default) Indicates that the size provided by the API was unrecognized.
+                /// </summary>
                 Unknown,
+                /// <summary>
+                /// Indicates that the media entity is a thumbnail size.
+                /// </summary>
                 Thumb,
+                /// <summary>
+                /// Indicates that the media entity is a small size.
+                /// </summary>
                 Small,
+                /// <summary>
+                /// Indicates that the media entity is a medium size.
+                /// </summary>
                 Medium,
+                /// <summary>
+                /// Indicates that the media entity is a large size.
+                /// </summary>
                 Large
             }
 
+            /// <summary>
+            /// Gets or sets the size.
+            /// </summary>
+            /// <value>The size.</value>
+            /// <remarks></remarks>
             public MediaSizes Size { get; set; }
+
+            /// <summary>
+            /// Gets or sets the width.
+            /// </summary>
+            /// <value>The width.</value>
+            /// <remarks></remarks>
             public int Width { get; set; }
+
+            /// <summary>
+            /// Gets or sets the height.
+            /// </summary>
+            /// <value>The height.</value>
+            /// <remarks></remarks>
             public int Height { get; set; }
+
+            /// <summary>
+            /// Gets or sets the resize.
+            /// </summary>
+            /// <value>The resize.</value>
+            /// <remarks></remarks>
             public MediaSizeResizes Resize { get; set; }
         }
     }

@@ -122,7 +122,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the public timeline.
+        /// Returns the 20 most recent statuses, including retweets if they exist, from non-protected users. The public timeline is cached for 60 seconds.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
         /// <returns>
@@ -134,7 +134,7 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the public timeline.
+        /// Returns the 20 most recent statuses, including retweets if they exist, from non-protected users. The public timeline is cached for 60 seconds.
         /// </summary>
         /// <param name="options">The properties.</param>
         /// <returns>
@@ -146,12 +146,12 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Gets the public timeline.
+        /// Returns the 20 most recent statuses, including retweets if they exist, from non-protected users. The public timeline is cached for 60 seconds.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
-        /// <returns>
-        /// A <see cref="TwitterStatusCollection"/>.
-        /// </returns>
+        /// <param name="options">The options.</param>
+        /// <returns>A <see cref="TwitterStatusCollection"/>.</returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterStatusCollection> PublicTimeline(OAuthTokens tokens, OptionalProperties options)
         {
             Commands.PublicTimelineCommand command = new Commands.PublicTimelineCommand(tokens, options);

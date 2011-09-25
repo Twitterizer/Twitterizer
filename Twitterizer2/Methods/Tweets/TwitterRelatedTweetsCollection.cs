@@ -36,6 +36,10 @@ namespace Twitterizer
     using System;
     using Twitterizer.Core;
 #if !SILVERLIGHT
+    /// <summary>
+    /// Represents a collection of <see cref="Twitterizer.TwitterRelatedTweets"/>.
+    /// </summary>
+    /// <remarks></remarks>
     [Serializable]
 #endif
     public class TwitterRelatedTweetsCollection : TwitterCollection<TwitterRelatedTweets>, ITwitterObject

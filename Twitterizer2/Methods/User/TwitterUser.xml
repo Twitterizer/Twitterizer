@@ -18,7 +18,6 @@
     </remarks>
     <exception cref="System.ArgumentNullException">Indicates that a required argument was not supplied.</exception>
     <exception cref="System.ArgumentException">Indicates that an argument supplied was not valid.</exception>
-    <exception cref="Twitterizer.CommandValidationException{T}">Indicates that a command failed pre-execution validation.</exception>
   </Show>
   
   <Show name="ByIDWithTokensAndOptions">
@@ -232,7 +231,6 @@
     </remarks>
     <exception cref="System.ArgumentNullException">Indicates that a required argument was not supplied.</exception>
     <exception cref="System.ArgumentException">Indicates that an argument supplied was not valid.</exception>
-    <exception cref="Twitterizer.CommandValidationException{T}">Indicates that a command failed pre-execution validation.</exception>
     <returns>
       A <see cref="TwitterUserCollection"/> instance.
     </returns>

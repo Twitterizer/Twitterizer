@@ -228,8 +228,8 @@ namespace Twitterizer
         /// Returns a collection of user objects that the authenticating user is blocking.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
         /// <returns></returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterUserCollection> Blocking(OAuthTokens tokens)
         {
             return Blocking(tokens, null);

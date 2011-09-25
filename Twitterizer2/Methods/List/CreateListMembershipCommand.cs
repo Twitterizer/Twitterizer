@@ -28,6 +28,8 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("listId");
             }
+
+            this.listId = listId;
         }
 
         /// <summary>

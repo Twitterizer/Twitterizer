@@ -53,8 +53,9 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="DeleteSavedSearchCommand"/> class.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="statusId">The saved search id.</param>
+        /// <param name="savedsearchId">The savedsearch id.</param>
         /// <param name="options">The options.</param>
+        /// <remarks></remarks>
         public DeleteSavedSearchCommand(OAuthTokens tokens, decimal savedsearchId, OptionalProperties options)
             : base(HTTPVerb.POST, string.Format(CultureInfo.InvariantCulture.NumberFormat, "saved_searches/destroy/{0}.json", savedsearchId), tokens, options)
         {

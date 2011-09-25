@@ -471,8 +471,8 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
-        /// <param name="options">The options.</param>
         /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterRelatedTweetsCollection> RelatedResultsShow(OAuthTokens tokens, decimal statusId)
         {
             return CommandPerformer.PerformAction(

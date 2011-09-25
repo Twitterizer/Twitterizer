@@ -34,7 +34,7 @@
 namespace Twitterizer
 {
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.RetweetedByCommand"/> class.
+    /// The optional parameters for the <see cref="Twitterizer.Commands.RetweetedByCommand"/> class.
     /// </summary>
     public class RetweetedByOptions : OptionalProperties
     {

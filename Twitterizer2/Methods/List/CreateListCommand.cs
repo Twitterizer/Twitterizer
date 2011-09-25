@@ -52,9 +52,9 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="CreateListCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="name">The name of the list.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="name">The name.</param>
         /// <param name="options">The options.</param>
+        /// <remarks></remarks>
         public CreateListCommand(OAuthTokens requestTokens, string name, OptionalProperties options)
             : base(HTTPVerb.POST, "lists/create.json", requestTokens, options)
         {

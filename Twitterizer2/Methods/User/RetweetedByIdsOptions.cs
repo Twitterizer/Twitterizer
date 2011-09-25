@@ -28,11 +28,14 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Fabien Warniez</author>
 // <summary>The retweeted by ids options class.</summary>
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+    /// <summary>
+    /// The optional properties class for the <see cref="Twitterizer.TwitterUser.RetweetedByIds(Twitterizer.OAuthTokens, decimal, Twitterizer.RetweetedByIdsOptions)"/> method.
+    /// </summary>
+    /// <remarks></remarks>
     public class RetweetedByIdsOptions : OptionalProperties
     {
         /// <summary>

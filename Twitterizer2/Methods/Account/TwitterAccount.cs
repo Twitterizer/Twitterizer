@@ -89,9 +89,11 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
         {
-            Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
+            throw new System.NotImplementedException("File uploads are not supported in this version of Twitterizer.");
+                
+            //Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
 
-            return CommandPerformer.PerformAction(command);
+            //return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>
@@ -107,6 +109,13 @@ namespace Twitterizer
             return UpdateProfileImage(tokens, image, null);
         }
 
+        /// <summary>
+        /// Sets values that users are able to set under the "Account" tab of their settings page. Only the parameters specified will be updated.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static TwitterResponse<TwitterUser> UpdateProfile(OAuthTokens tokens, UpdateProfileOptions options)
         {
             Commands.UpdateProfileCommand command = new Commands.UpdateProfileCommand(tokens, options);

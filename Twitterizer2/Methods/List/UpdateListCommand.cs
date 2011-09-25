@@ -52,9 +52,9 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="UpdateListCommand"/> class.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="id">The list id.</param>
+        /// <param name="id">The id.</param>
         /// <param name="options">The options.</param>
+        /// <remarks></remarks>
         public UpdateListCommand(OAuthTokens tokens, string id, UpdateListOptions options)
             : base(
                 HTTPVerb.POST,

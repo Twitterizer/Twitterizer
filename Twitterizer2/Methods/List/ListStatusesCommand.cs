@@ -49,8 +49,9 @@ namespace Twitterizer.Commands
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
         /// <param name="username">The username.</param>
-        /// <param name="listId">The list id.</param>
+        /// <param name="listIdOrSlug">The list id or slug.</param>
         /// <param name="options">The options.</param>
+        /// <remarks></remarks>
         public ListStatusesCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, ListStatusesOptions options)
             : base(HTTPVerb.GET, string.Format("{0}/lists/{1}/statuses.json", username, listIdOrSlug), requestTokens, options)
         {

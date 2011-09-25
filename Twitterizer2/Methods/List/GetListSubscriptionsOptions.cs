@@ -34,7 +34,7 @@
 namespace Twitterizer
 {
     /// <summary>
-    /// The optional parameters for the <see cref="Twitterizer.Methods.GetListSubscriptionsCommand"/> class.
+    /// The optional parameters for the <see cref="Twitterizer.Commands.GetListSubscriptionsCommand"/> class.
     /// </summary>
     public class GetListSubscriptionsOptions : OptionalProperties
     {

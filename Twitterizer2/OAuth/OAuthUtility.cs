@@ -107,7 +107,9 @@ namespace Twitterizer
         /// Tries to the parse querystring parameter.
         /// </summary>
         /// <param name="parameterName">Name of the parameter.</param>
+        /// <param name="text">The text.</param>
         /// <returns>The value of the parameter or an empty string.</returns>
+        /// <remarks></remarks>
         private static string ParseQuerystringParameter(string parameterName, string text)
         {
             Match expressionMatch = Regex.Match(text, string.Format(@"{0}=(?<value>[^&]+)", parameterName));

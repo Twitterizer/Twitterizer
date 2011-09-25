@@ -53,8 +53,8 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="GetListsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
+        /// <remarks></remarks>
         public GetListsCommand(OAuthTokens requestTokens, GetListsOptions options)
             : base(HTTPVerb.GET, "lists.json", requestTokens, options)
         {

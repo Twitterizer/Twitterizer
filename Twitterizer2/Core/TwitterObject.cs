@@ -36,6 +36,12 @@ namespace Twitterizer.Core
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Represents the callback signature for asynchronous methods.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="result">The result.</param>
+    /// <remarks></remarks>
     public delegate void TwitterAsyncCallback<T>(T result)
             where T : ITwitterObject;
 

@@ -51,7 +51,7 @@ namespace Twitterizer
 #endif
 
     /// <summary>
-    /// Enumeration of the supported HTTP verbs supported by the <see cref="Twitterizer.Core.CommandPerformer{T}"/>
+    /// Enumeration of the supported HTTP verbs supported by the <see cref="Twitterizer.Core.CommandPerformer"/>
     /// </summary>
     public enum HTTPVerb
     {
@@ -167,7 +167,11 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
-        /// <param name="verb">The verb.</param>
+        /// <param name="verb">The http verb.</param>
+        /// <param name="KeepAlive">if set to <c>true</c> the <see cref="System.Net.HttpWebRequest"/> will be instructed to keep the connection alive.</param>
+        /// <param name="UserAgent">The http user agent.</param>
+        /// <param name="NetworkCredentials">The network credentials.</param>
+        /// <remarks></remarks>
         public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials = null)
         {
             if (requestUri == null)
@@ -199,6 +203,9 @@ namespace Twitterizer
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="KeepAlive">if set to <c>true</c> [keep alive].</param>
+        /// <param name="UserAgent">The user agent.</param>
+        /// <remarks></remarks>
         public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, Boolean KeepAlive = false, String UserAgent = "")
             : this(requestUri, verb, KeepAlive, UserAgent)
         {
