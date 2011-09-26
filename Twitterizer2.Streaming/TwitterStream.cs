@@ -155,7 +155,7 @@ namespace Twitterizer.Streaming
         /// <summary>
         /// Starts the user stream.
         /// </summary>
-        public IAsyncResult StartUserStream(
+        public IAsyncResult  StartUserStream(
             InitUserStreamCallback friendsCallback,
             StreamStoppedCallback streamErrorCallback,
             StatusCreatedCallback statusCreatedCallback, 
@@ -305,7 +305,7 @@ namespace Twitterizer.Streaming
                                     if (bracketCount == 0)
                                     {
                                         var blockbuilderstring = blockBuilder.ToString();
-                                        
+
                                         if (rawJsonCallback != null)
                                         {
                                             rawJsonCallback(blockbuilderstring);
@@ -323,24 +323,19 @@ namespace Twitterizer.Streaming
 
                             reader.Close();
 
-                            if (this.streamStoppedCallback != null)
-                            {
-                                if (!this.stopReceived)
-                                    this.streamStoppedCallback(StopReasons.WebConnectionFailed);
-                                else
-                                    this.streamStoppedCallback(StopReasons.StoppedByRequest);
-                            }
+                            if (!this.stopReceived)
+                                this.OnStreamStopped(StopReasons.WebConnectionFailed);
+                            else
+                                this.OnStreamStopped(StopReasons.StoppedByRequest);
+
                         }
                         catch
                         {
                             //Stream Closed/Failed
-                            if (this.streamStoppedCallback != null)
-                            {
-                                if (!this.stopReceived)
-                                    this.streamStoppedCallback(StopReasons.WebConnectionFailed);
-                                else
-                                    this.streamStoppedCallback(StopReasons.StoppedByRequest);
-                            }
+                            if (!this.stopReceived)
+                                this.OnStreamStopped(StopReasons.WebConnectionFailed);
+                            else
+                                this.OnStreamStopped(StopReasons.StoppedByRequest);
                         }
                     };
                 }
@@ -356,76 +351,64 @@ namespace Twitterizer.Streaming
                         {
                             case HttpStatusCode.Unauthorized:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.Unauthorised);
+                                    this.OnStreamStopped(StopReasons.Unauthorised);
                                     break;
                                 }
                             case HttpStatusCode.Forbidden:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.Forbidden);
+                                    this.OnStreamStopped(StopReasons.Forbidden);
                                     break;
                                 }
                             case HttpStatusCode.NotFound:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.NotFound);
+                                    this.OnStreamStopped(StopReasons.NotFound);
                                     break;
                                 }
                             case HttpStatusCode.NotAcceptable:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.NotAcceptable);
+                                    this.OnStreamStopped(StopReasons.NotAcceptable);
                                     break;
                                 }
                             case HttpStatusCode.RequestEntityTooLarge:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.TooLong);
+                                    this.OnStreamStopped(StopReasons.TooLong);
                                     break;
                                 }
                             case HttpStatusCode.RequestedRangeNotSatisfiable:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.RangeUnacceptable);
+                                    this.OnStreamStopped(StopReasons.RangeUnacceptable);
                                     break;
                                 }
                             case (HttpStatusCode)420: //Rate Limited
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.RateLimited);
+                                    this.OnStreamStopped(StopReasons.RateLimited);
                                     break;
                                 }
                             case HttpStatusCode.InternalServerError:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.TwitterServerError);
+                                    this.OnStreamStopped(StopReasons.TwitterServerError);
                                     break;
                                 }
                             case HttpStatusCode.ServiceUnavailable:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.TwitterOverloaded);
+                                    this.OnStreamStopped(StopReasons.TwitterOverloaded);
                                     break;
                                 }
                             default:
                                 {
-                                    if (this.streamStoppedCallback != null)
-                                        this.streamStoppedCallback(StopReasons.Unknown);
+                                    this.OnStreamStopped(StopReasons.Unknown);
                                     break;
                                 }
                         }
                     }
                     else
                     {
-                        if (this.streamStoppedCallback != null)
-                            this.streamStoppedCallback(StopReasons.WebConnectionFailed);
+                        this.OnStreamStopped(StopReasons.WebConnectionFailed);
                     }
                 }
                 else
                 {
-                    if (this.streamStoppedCallback != null)
-                        this.streamStoppedCallback(StopReasons.WebConnectionFailed);
+                    this.OnStreamStopped(StopReasons.WebConnectionFailed);
                 }
             }
             finally
@@ -513,6 +496,16 @@ namespace Twitterizer.Streaming
             System.Diagnostics.Debug.WriteLine("Unknown Message: {0}", new object[] { obj.ToString() });
         }
 
+        /// <summary>
+        /// Called when the stream is stopped.
+        /// </summary>
+        /// <param name="reason">The reason.</param>
+        /// <remarks></remarks>
+        private void OnStreamStopped(StopReasons reason)
+        {
+            if (this.streamStoppedCallback != null)
+                this.streamStoppedCallback(reason);
+        }
        
         /// <summary>
         /// Ends the stream.

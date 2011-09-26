@@ -30,7 +30,7 @@
                     {
                         function(methodToCall.EndInvoke(result).ToAsyncResponse());
                     }
-                    catch (Exception ex)
+                    catch (TwitterizerException ex)
                     {
                         function(new TwitterAsyncResponse<TwitterRateLimitStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }

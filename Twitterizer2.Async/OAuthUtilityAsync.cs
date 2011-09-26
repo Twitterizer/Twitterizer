@@ -68,7 +68,7 @@ namespace Twitterizer
                     {
                         function(methodToCall.EndInvoke(result));
                     }
-                    catch (Exception ex)
+                    catch (TwitterizerException)
                     {
                         function(null);
                     }
@@ -111,7 +111,7 @@ namespace Twitterizer
                     {
                         function(methodToCall.EndInvoke(result));
                     }
-                    catch (Exception ex)
+                    catch (TwitterizerException)
                     {
                         function(null);
                     }

@@ -64,5 +64,45 @@ namespace Twitterizer
         /// </summary>
         /// <value>The annotations.</value>
         public Dictionary<string, string> Annotations { get; set; }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Collections.Generic.List&lt;System.Decimal&gt;"/> to <see cref="Twitterizer.TwitterIdCollection"/>.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <returns>The result of the conversion.</returns>
+        /// <remarks></remarks>
+        public static explicit operator TwitterIdCollection (List<decimal> collection)
+        {
+            TwitterIdCollection newCollection = new TwitterIdCollection();
+            foreach (var item in collection)
+            {
+                newCollection.Add(item);
+            }
+
+            return newCollection;
+        }
+    }
+
+    /// <summary>
+    /// Holds extension methods related to the <see cref="Twitterizer.TwitterIdCollection"/> class.
+    /// </summary>
+    /// <remarks></remarks>
+    public static class TwitterIdCollectionExtensions
+    {
+        /// <summary>
+        /// Converts the collection to a <see cref="Twitterizer.TwitterIdCollection"/> class.
+        /// </summary>
+        /// <param name="old">The old.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public static TwitterIdCollection ToIdCollection(this IEnumerable<decimal> old)
+        {
+            TwitterIdCollection newCollection = new TwitterIdCollection();
+            foreach (var item in old)
+            {
+                newCollection.Add(item);
+            }
+            return newCollection;
+        }
     }
 }

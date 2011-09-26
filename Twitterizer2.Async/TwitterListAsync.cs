@@ -173,11 +173,10 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult GetLists(OAuthTokens tokens, string username, GetListsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, string, GetListsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetLists;
+            Func<OAuthTokens, GetListsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetLists;
 
             return methodToCall.BeginInvoke(
                 tokens,
-                username,
                 options,
                 result =>
                 {
@@ -365,11 +364,10 @@ namespace Twitterizer
             TimeSpan timeout,
             Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, string, bool, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.New;
+            Func<OAuthTokens, string, bool, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.New;
 
             return methodToCall.BeginInvoke(
                 tokens,
-                username,
                 name,
                 isPublic,
                 description,
@@ -444,17 +442,15 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Update(
             OAuthTokens tokens, 
-            string username, 
             string listId, 
             UpdateListOptions options, 
             TimeSpan timeout,
             Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, string, UpdateListOptions, TwitterResponse<TwitterList>> methodToCall = TwitterList.Update;
+            Func<OAuthTokens, string, UpdateListOptions, TwitterResponse<TwitterList>> methodToCall = TwitterList.Update;
 
             return methodToCall.BeginInvoke(
                 tokens,
-                username,
                 listId,
                 options,
                 result =>

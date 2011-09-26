@@ -68,35 +68,6 @@ namespace Twitterizer
                 null);
         }
 
-        /// <summary>
-        /// Obtains the authorized user's friends timeline.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="options">The options.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <param name="function">The function.</param>
-        /// <returns></returns>
-        public static IAsyncResult FriendTimeline(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
-        {
-            Func<OAuthTokens, TimelineOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = TwitterTimeline.FriendTimeline;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatusCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-        }
 
         /// <summary>
         /// Returns the 20 most recent mentions (status containing @username) for the authenticating user.
