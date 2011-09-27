@@ -87,14 +87,16 @@ namespace Twitterizer.Commands
             StatusUpdateOptions options = this.OptionalProperties as StatusUpdateOptions;
             if (options != null)
             {
+                NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
+
                 if (options.InReplyToStatusId > 0)
                     this.RequestParameters.Add("in_reply_to_status_id", options.InReplyToStatusId.ToString(CultureInfo.CurrentCulture));
 
                 if (options.Latitude != 0)
-                    this.RequestParameters.Add("lat", options.Latitude.ToString());
+                    this.RequestParameters.Add("lat", options.Latitude.ToString(nfi));
 
                 if (options.Longitude != 0)
-                    this.RequestParameters.Add("long", options.Longitude.ToString());
+                    this.RequestParameters.Add("long", options.Longitude.ToString(nfi));
 
                 if (!string.IsNullOrEmpty(options.PlaceId))
                     this.RequestParameters.Add("place_id", options.PlaceId);
