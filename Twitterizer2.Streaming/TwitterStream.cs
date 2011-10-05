@@ -493,7 +493,9 @@ namespace Twitterizer.Streaming
                 }
             }
 
+#if DEBUG
             System.Diagnostics.Debug.WriteLine("Unknown Message: {0}", new object[] { obj.ToString() });
+#endif
         }
 
         /// <summary>
