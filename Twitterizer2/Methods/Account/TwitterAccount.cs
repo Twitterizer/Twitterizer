@@ -89,11 +89,11 @@ namespace Twitterizer
         /// </returns>
         public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
         {
-            throw new System.NotImplementedException("File uploads are not supported in this version of Twitterizer.");
-                
-            //Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
+            options.APIBaseAddress = "http://upload.twitter.com/1/";
 
-            //return CommandPerformer.PerformAction(command);
+            Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
+
+            return CommandPerformer.PerformAction(command);
         }
 
         /// <summary>

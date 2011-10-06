@@ -123,6 +123,12 @@ namespace Twitterizer.Core
         public abstract void Init();
 
         /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TwitterCommand&lt;T&gt;"/> is multipart.
+        /// </summary>
+        /// <value><c>true</c> if multipart; otherwise, <c>false</c>.</value>
+        public bool Multipart { get; set; }
+
+        /// <summary>
         /// Executes the command.
         /// </summary>
         /// <returns>The results of the command.</returns>
@@ -219,7 +225,7 @@ namespace Twitterizer.Core
 
             try
             {
-				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens, false, "") { Multipart = this.OptionalProperties.Multipart };
+				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens, false, "") { Multipart = this.Multipart };
 
 #if !SILVERLIGHT
                 if (this.OptionalProperties != null)

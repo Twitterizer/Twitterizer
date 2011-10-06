@@ -72,6 +72,7 @@ namespace Twitterizer.Commands
             }
 
             this.ImageToUpload = image;
+            this.Multipart = true;
         }
 
         /// <summary>
@@ -79,6 +80,8 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            this.RequestParameters.Add("image", this.ImageToUpload);
+            this.RequestParameters.Add("include_entities", "true");
         }
     }
 }

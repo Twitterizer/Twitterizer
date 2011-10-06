@@ -318,8 +318,7 @@ namespace Twitterizer
 			StatusUpdateOptions suo = new StatusUpdateOptions();
 
 			suo.APIBaseAddress = "http://upload.twitter.com/1/";
-			suo.Multipart = true;
-
+			
 			return UpdateWithMedia(tokens, text, file, suo);
 		}
 

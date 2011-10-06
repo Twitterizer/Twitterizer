@@ -173,15 +173,6 @@ namespace Twitterizer
                                                                 };
 
         /// <summary>
-        /// Parameters that may appear in the list, but should never be included in the header.
-        /// </summary>
-		private static readonly string[] NonBaseStringInclusionParameters = new[]
-			{
-				"status",
-				"media[]"
-			};
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
@@ -377,7 +368,6 @@ namespace Twitterizer
 				}
 			}
 
-
             return request;
         }
 
@@ -449,45 +439,6 @@ namespace Twitterizer
 			return returndata;
 		}
 
-        /// <summary>
-        /// Adds the form field values to request.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        private void AddFormFieldValuesToRequest(WebRequest request)
-        {
-            throw new NotImplementedException("Multipart form data is not yet supported by the WebRequestBuilder.");
-
-/*
-            if (!(new[] { HTTPVerb.DELETE, HTTPVerb.POST }).Contains(this.Verb))
-                return;
-
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            StringBuilder requestParametersBuilder = new StringBuilder();
-
-            var fieldsToInclude = from p in this.Parameters
-                                  where !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
-                                        !SecretParameters.Contains(p.Key)
-                                  select p;
-
-            foreach (KeyValuePair<string, string> item in fieldsToInclude)
-            {
-                requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, item.Value);
-            }
-
-            if (requestParametersBuilder.Length == 0)
-                return;
-
-            requestParametersBuilder.Remove(requestParametersBuilder.Length - 1, 1);
-
-            byte[] formData = Encoding.UTF8.GetBytes(requestParametersBuilder.ToString());
-            request.ContentLength = formData.Length;
-            System.IO.Stream requestStream = request.GetRequestStream();
-            requestStream.Write(formData, 0, formData.Length);
-            requestStream.Close();
-*/
-        }
-        
         #region OAuth Helper Methods
         /// <summary>
         /// Sets up the OAuth request details.
@@ -535,7 +486,7 @@ namespace Twitterizer
 			if (Multipart)
 			{
 				nonSecretParameters = (from p in this.Parameters
-										   where (!SecretParameters.Contains(p.Key) && !NonBaseStringInclusionParameters.Contains(p.Key))
+										   where (!SecretParameters.Contains(p.Key) && p.Key.StartsWith("oauth_"))
 										   select p);
 			}
 			else

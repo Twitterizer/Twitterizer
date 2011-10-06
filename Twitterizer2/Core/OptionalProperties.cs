@@ -81,10 +81,7 @@ namespace Twitterizer
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
 		public TimeSpan CacheTimespan { get; set; }
 
-		/// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="Multipart"]/*'/>
-		public bool Multipart { get; set; }
-
-        /// <summary>
+		/// <summary>
         /// Reads the configuration settings.
         /// </summary>
         private void ReadConfigurationSettings()
