@@ -67,7 +67,7 @@ namespace Twitterizer.Core
         /// <param name="optionalProperties">The optional properties.</param>
         protected TwitterCommand(HTTPVerb method, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
         {
-            this.RequestParameters = new Dictionary<string, string>();
+			this.RequestParameters = new Dictionary<string, object>();
             this.Verb = method;
             this.Tokens = tokens;
             this.OptionalProperties = optionalProperties ?? new OptionalProperties();
@@ -97,7 +97,7 @@ namespace Twitterizer.Core
         /// Gets or sets the request parameters.
         /// </summary>
         /// <value>The request parameters.</value>
-        public Dictionary<string, string> RequestParameters { get; set; }
+        public Dictionary<string, object> RequestParameters { get; set; }
 
         /// <summary>
         /// Gets or sets the image to upload.
@@ -180,8 +180,8 @@ namespace Twitterizer.Core
 #endif
 
             // Prepare the query parameters
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, string> item in this.RequestParameters)
+			Dictionary<string, object> queryParameters = new Dictionary<string, object>();
+			foreach (KeyValuePair<string, object> item in this.RequestParameters)
             {
                 queryParameters.Add(item.Key, item.Value);
 #if !LITE && !SILVERLIGHT
@@ -219,7 +219,7 @@ namespace Twitterizer.Core
 
             try
             {
-                WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens);
+				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens, false, "") { Multipart = this.OptionalProperties.Multipart };
 
 #if !SILVERLIGHT
                 if (this.OptionalProperties != null)

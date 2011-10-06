@@ -47,7 +47,7 @@ namespace Twitterizer.Core
         /// Gets the request parameters.
         /// </summary>
         /// <value>The request parameters.</value>
-        Dictionary<string, string> RequestParameters { get; }
+        Dictionary<string, object> RequestParameters { get; }
 
         /// <summary>
         /// Initializes the command.

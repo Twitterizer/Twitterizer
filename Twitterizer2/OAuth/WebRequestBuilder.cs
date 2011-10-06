@@ -34,6 +34,7 @@
 namespace Twitterizer
 {
     using System;
+    using System.IO;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -45,9 +46,6 @@ namespace Twitterizer
     using System.Net.Browser;
     using System.Threading;
     using System.Windows.Threading;
-#endif
-#if !SILVERLIGHT
-    using System.Web;
 #endif
 
     /// <summary>
@@ -91,7 +89,7 @@ namespace Twitterizer
         /// Gets or sets the parameters.
         /// </summary>
         /// <value>The parameters.</value>
-        public Dictionary<string, string> Parameters { get; private set; }
+		public Dictionary<string, object> Parameters { get; private set; }
 
         /// <summary>
         /// Gets or sets the verb.
@@ -121,7 +119,13 @@ namespace Twitterizer
         /// Gets or sets the Basic Auth Credentials.
         /// </summary>
         /// <value>The Basic Auth Credentials.</value>
-        public NetworkCredential NetworkCredentials { private get; set; }
+		public NetworkCredential NetworkCredentials { private get; set; }
+
+		/// <summary>
+		/// Gets or sets the Multipart config
+		/// </summary>
+		/// <value>Multipart</value>
+		public bool Multipart { get; set; }
 
 #if !SILVERLIGHT
         /// <summary>
@@ -163,6 +167,12 @@ namespace Twitterizer
                                                                     "oauth_signature"
                                                                 };
 
+		private static readonly string[] NonBaseStringInclusionParameters = new[]
+			{
+				"status",
+				"media[]"
+			};
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestBuilder"/> class.
         /// </summary>
@@ -172,7 +182,7 @@ namespace Twitterizer
         /// <param name="UserAgent">The http user agent.</param>
         /// <param name="NetworkCredentials">The network credentials.</param>
         /// <remarks></remarks>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials = null)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials)
         {
             if (requestUri == null)
                 throw new ArgumentNullException("requestUri");
@@ -185,7 +195,7 @@ namespace Twitterizer
             if (NetworkCredentials != null)
                 this.NetworkCredentials = NetworkCredentials;
 
-            this.Parameters = new Dictionary<string, string>();
+			this.Parameters = new Dictionary<string, object>();
 
             if (string.IsNullOrEmpty(this.RequestUri.Query)) return;
 
@@ -203,11 +213,8 @@ namespace Twitterizer
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="KeepAlive">if set to <c>true</c> [keep alive].</param>
-        /// <param name="UserAgent">The user agent.</param>
-        /// <remarks></remarks>
         public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, Boolean KeepAlive = false, String UserAgent = "")
-            : this(requestUri, verb, KeepAlive, UserAgent)
+            : this(requestUri, verb, KeepAlive, UserAgent, null)
         {
             this.Tokens = tokens;
 
@@ -227,6 +234,8 @@ namespace Twitterizer
             }
         }
 
+		private byte[] formData = null;
+
         /// <summary>
         /// Executes the request.
         /// </summary>
@@ -234,6 +243,29 @@ namespace Twitterizer
         public HttpWebResponse ExecuteRequest()
         {
             HttpWebRequest request = PrepareRequest();
+
+			System.Diagnostics.Debug.WriteLine("\n--------------------REQUESTDUMP--------------------");
+			System.Diagnostics.Debug.WriteLine(string.Format("url: {0}", request.RequestUri));
+			System.Diagnostics.Debug.WriteLine("--------------------HEADER");
+
+			int iCount = request.Headers.Count;
+
+			for (int i = 0; i < iCount; i++)
+			{
+				System.Diagnostics.Debug.WriteLine(string.Format("{0}: {1}", request.Headers.GetKey(i), request.Headers.Get(i)));
+			}
+
+			if (null != formData)
+			{
+				System.Diagnostics.Debug.WriteLine("--------------------BODY");
+
+				string tekst = System.Text.Encoding.UTF8.GetString(formData);
+
+				System.Diagnostics.Debug.WriteLine( tekst );
+			}
+
+
+			System.Diagnostics.Debug.WriteLine("--------------------REQUESTDUMP--------------------\n");
 
 #if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
@@ -269,7 +301,23 @@ namespace Twitterizer
         public HttpWebRequest PrepareRequest()
         {
             SetupOAuth();
-            AddQueryStringParametersToUri();
+
+			formData = null;
+			string contentType = string.Empty;
+
+			if (!Multipart)
+			{	//We don't add the paramters to the query if we are multipart-ing
+				AddQueryStringParametersToUri();
+			}
+			else
+			{
+				string dataBoundary = "--------------------r4nd0m";
+				contentType = "multipart/form-data; boundary=" + dataBoundary;
+
+				formData = GetMultipartFormData(Parameters, dataBoundary);
+
+				this.Verb = HTTPVerb.POST;
+			}
 #if SILVERLIGHT
             WebRequest.RegisterPrefix("http://", WebRequestCreator.ClientHttp);
             WebRequest.RegisterPrefix("https://", WebRequestCreator.ClientHttp);
@@ -290,8 +338,11 @@ namespace Twitterizer
             {
                 request.UseDefaultCredentials = true;
             }
+
             request.Method = this.Verb.ToString();
-            request.ContentLength = 0;
+
+			request.ContentLength = Multipart ? formData.Length : 0;
+
 
 #if !SILVERLIGHT // No silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
             request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
@@ -307,6 +358,17 @@ namespace Twitterizer
 #endif
             }
 
+			if (Multipart)
+			{	//Parameters are not added to the query string, post them in the request body instead
+
+				request.ContentType = contentType;
+
+				using (Stream requestStream = request.GetRequestStream())
+				{
+					requestStream.Write(formData, 0, formData.Length);
+				}
+			}
+
 
             return request;
         }
@@ -320,12 +382,13 @@ namespace Twitterizer
             requestParametersBuilder.Append(this.RequestUri.Query.Length == 0 ? "?" : "&");
 
 
-            Dictionary<string, string> fieldsToInclude = new Dictionary<string, string>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+			Dictionary<string, object> fieldsToInclude = new Dictionary<string, object>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
                                          !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
 
-            foreach (KeyValuePair<string, string> item in fieldsToInclude)
+			foreach (KeyValuePair<string, object> item in fieldsToInclude)
             {
-                requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode(item.Value));
+				if( item.Value.GetType() == typeof(string) )
+					requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode(item.Value as string));
             }
 
             if (requestParametersBuilder.Length == 0)
@@ -335,6 +398,48 @@ namespace Twitterizer
 
             this.RequestUri = new Uri(requestParametersBuilder.ToString());
         }
+
+		private byte[] GetMultipartFormData(Dictionary<string, object> param, string boundary)
+		{
+			Stream formDataStream = new MemoryStream();
+			Encoding encoding = Encoding.UTF8;
+
+			Dictionary<string, object> fieldsToInclude = new Dictionary<string, object>(param.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+							 !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
+
+			foreach (KeyValuePair<string, object> kvp in fieldsToInclude)
+			{
+				if (kvp.Value.GetType() == typeof(byte[]))
+				{	//assume this to be a byte stream
+					byte[] data = kvp.Value as byte[];
+
+					string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\";\r\nContent-Type: application/octet-stream\r\n\r\n",
+						boundary,
+						kvp.Key,
+						kvp.Key);
+					formDataStream.Write(encoding.GetBytes(header), 0, header.Length);
+					formDataStream.Write(data, 0, data.Length);
+				}
+				else
+				{	//this is normal text data
+					string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}\r\n",
+						boundary,
+						kvp.Key,
+						kvp.Value);
+					formDataStream.Write(encoding.GetBytes(header), 0, header.Length);
+				}
+			}
+
+			string footer = string.Format("\r\n--{0}--\r\n", boundary);
+			formDataStream.Write(encoding.GetBytes(footer), 0, footer.Length);
+			formDataStream.Position = 0;
+			byte[] returndata = new byte[formDataStream.Length];
+
+			formDataStream.Read(returndata, 0, returndata.Length);
+			formDataStream.Close();
+
+			return returndata;
+		}
 
         /// <summary>
         /// Adds the form field values to request.
@@ -417,9 +522,20 @@ namespace Twitterizer
         /// <returns></returns>
         public string GenerateSignature()
         {
-            var nonSecretParameters = (from p in this.Parameters
-                                       where !SecretParameters.Contains(p.Key)
-                                       select p);
+			IEnumerable<KeyValuePair<string, object>> nonSecretParameters = null;
+
+			if (Multipart)
+			{
+				nonSecretParameters = (from p in this.Parameters
+										   where (!SecretParameters.Contains(p.Key) && !NonBaseStringInclusionParameters.Contains(p.Key))
+										   select p);
+			}
+			else
+			{
+				nonSecretParameters = (from p in this.Parameters
+										   where (!SecretParameters.Contains(p.Key))
+										   select p);
+			}
 
             Uri urlForSigning = this.RequestUri;
 
@@ -522,7 +638,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A string of all the <paramref name="parameters"/> keys and value pairs with the values encoded.</returns>
-        private static string UrlEncode(IEnumerable<KeyValuePair<string, string>> parameters)
+		private static string UrlEncode(IEnumerable<KeyValuePair<string, object>> parameters)
         {
             StringBuilder parameterString = new StringBuilder();
 
@@ -537,12 +653,13 @@ namespace Twitterizer
                     parameterString.Append("&");
                 }
 
-                parameterString.Append(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}={1}",
-                        UrlEncode(item.Key),
-                        UrlEncode(item.Value)));
+				if( item.Value.GetType() == typeof(string) )
+					parameterString.Append(
+						string.Format(
+							CultureInfo.InvariantCulture,
+							"{0}={1}",
+							UrlEncode(item.Key),
+							UrlEncode(item.Value as string)));
             }
 
             return UrlEncode(parameterString.ToString());
@@ -559,7 +676,7 @@ namespace Twitterizer
 
             var sortedParameters = from p in this.Parameters
                                    where OAuthParametersToIncludeInHeader.Contains(p.Key)
-                                   orderby p.Key, UrlEncode(p.Value)
+                                   orderby p.Key, UrlEncode( (p.Value.GetType() == typeof(string) )? p.Value as string : "")
                                    select p;
 
             foreach (var item in sortedParameters)
@@ -567,10 +684,10 @@ namespace Twitterizer
                 authHeaderBuilder.AppendFormat(
                     ",{0}=\"{1}\"",
                     UrlEncode(item.Key),
-                    UrlEncode(item.Value));
+                    UrlEncode(item.Value as string));
             }
 
-            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", UrlEncode(this.Parameters["oauth_signature"]));
+            authHeaderBuilder.AppendFormat(",oauth_signature=\"{0}\"", UrlEncode(this.Parameters["oauth_signature"] as string));
 
             return authHeaderBuilder.ToString();
         }
