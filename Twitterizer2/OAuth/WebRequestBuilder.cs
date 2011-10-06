@@ -75,6 +75,11 @@ namespace Twitterizer
     public sealed class WebRequestBuilder
     {
         /// <summary>
+        /// Holds file data form performing multipart form posts.
+        /// </summary>
+        private byte[] formData = null;
+
+        /// <summary>
         /// The HTTP Authorization realm.
         /// </summary>
         public string Realm = "Twitter API";
@@ -167,6 +172,9 @@ namespace Twitterizer
                                                                     "oauth_signature"
                                                                 };
 
+        /// <summary>
+        /// Parameters that may appear in the list, but should never be included in the header.
+        /// </summary>
 		private static readonly string[] NonBaseStringInclusionParameters = new[]
 			{
 				"status",
@@ -213,6 +221,8 @@ namespace Twitterizer
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
         /// <param name="tokens">The tokens.</param>
+        /// <param name="KeepAlive">if set to <c>true</c> the http request is instructed to keep the connection alive.</param>
+        /// <param name="UserAgent">The user agent.</param>
         public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, Boolean KeepAlive = false, String UserAgent = "")
             : this(requestUri, verb, KeepAlive, UserAgent, null)
         {
@@ -233,8 +243,6 @@ namespace Twitterizer
                 this.UseOAuth = true;
             }
         }
-
-		private byte[] formData = null;
 
         /// <summary>
         /// Executes the request.
