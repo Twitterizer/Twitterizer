@@ -550,7 +550,7 @@ namespace Twitterizer
         /// <param name="optionalProperties">The optional properties.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public static TwitterResponse<TwitterList> UnSubscribe(OAuthTokens tokens, decimal listId, OptionalProperties optionalProperties = null)
+        public static TwitterResponse<TwitterList> UnSubscribe(OAuthTokens tokens, decimal listId, OptionalProperties optionalProperties)
         {
             Commands.DestroyListSubscriber command = new Commands.DestroyListSubscriber(tokens, listId, optionalProperties);
 

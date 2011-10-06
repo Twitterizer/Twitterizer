@@ -275,7 +275,7 @@ namespace Twitterizer
         /// <param name="options">The options.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public static TwitterResponse<TwitterDirectMessage> Show(OAuthTokens tokens, decimal id, OptionalProperties options = null)
+        public static TwitterResponse<TwitterDirectMessage> Show(OAuthTokens tokens, decimal id, OptionalProperties options)
         {
             Commands.ShowDirectMessageCommand command = new Commands.ShowDirectMessageCommand(tokens, id, options);
 

@@ -501,6 +501,9 @@
     <Compile Include="..\Twitterizer2\Methods\Tweets\UpdateStatusCommand.cs">
       <Link>UpdateStatusCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Tweets\UpdateWithmediaCommand.cs">
+      <Link>UpdateWithmediaCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\TwitterResultTypeEnum.cs">
       <Link>TwitterResultTypeEnum.cs</Link>
     </Compile>

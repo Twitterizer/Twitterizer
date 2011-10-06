@@ -243,29 +243,6 @@ namespace Twitterizer
         {
             HttpWebRequest request = PrepareRequest();
 
-			System.Diagnostics.Debug.WriteLine("\n--------------------REQUESTDUMP--------------------");
-			System.Diagnostics.Debug.WriteLine(string.Format("url: {0}", request.RequestUri));
-			System.Diagnostics.Debug.WriteLine("--------------------HEADER");
-
-			int iCount = request.Headers.Count;
-
-			for (int i = 0; i < iCount; i++)
-			{
-				System.Diagnostics.Debug.WriteLine(string.Format("{0}: {1}", request.Headers.GetKey(i), request.Headers.Get(i)));
-			}
-
-			if (null != formData)
-			{
-				System.Diagnostics.Debug.WriteLine("--------------------BODY");
-
-				string tekst = System.Text.Encoding.UTF8.GetString(formData);
-
-				System.Diagnostics.Debug.WriteLine( tekst );
-			}
-
-
-			System.Diagnostics.Debug.WriteLine("--------------------REQUESTDUMP--------------------\n");
-
 #if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
 #else
@@ -362,10 +339,15 @@ namespace Twitterizer
 
 				request.ContentType = contentType;
 
-				using (Stream requestStream = request.GetRequestStream())
-				{
-					requestStream.Write(formData, 0, formData.Length);
-				}
+                request.BeginGetRequestStream((res) =>
+                    {
+                        res.AsyncWaitHandle.WaitOne();
+
+                        using (Stream requestStream = request.EndGetRequestStream(res))
+                        {
+                            requestStream.Write(formData, 0, formData.Length);
+                        }
+                    }, null);
 			}
 
             return request;
