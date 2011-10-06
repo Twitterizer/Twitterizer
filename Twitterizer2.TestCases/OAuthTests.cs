@@ -35,14 +35,15 @@ namespace Twitterizer2.TestCases
         [Test]
         public static void WebRequestBuilderParts()
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("http://example.com/endpoint"), HTTPVerb.GET)
-                                            {
-                                                Tokens = new OAuthTokens()
-                                                             {
-                                                                 ConsumerSecret = "518F1B7B4C2F855EFF3DEFDAF1311",
-                                                                 AccessTokenSecret = "A6FE4462BAA8C3ADEA7D9E3BCD5BB"
-                                                             }
-                                            };
+            WebRequestBuilder builder = new WebRequestBuilder(
+                new Uri("http://example.com/endpoint"),
+                HTTPVerb.GET,
+                new OAuthTokens()
+                                {
+                                    ConsumerSecret = "518F1B7B4C2F855EFF3DEFDAF1311",
+                                    AccessTokenSecret = "A6FE4462BAA8C3ADEA7D9E3BCD5BB"
+                                }
+            );
 
             // Manually add our values
             builder.Parameters.Add("oauth_version", "1.0");
