@@ -207,9 +207,9 @@ namespace Twitterizer.Streaming
         {         
             WebRequestBuilder builder;
             if (this.Tokens == null)
-                builder = new WebRequestBuilder(new Uri("http://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, true, this.UserAgent, this.NetworkCredentials);
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, true, this.UserAgent, this.NetworkCredentials);
             else
-                builder = new WebRequestBuilder(new Uri("http://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, true, this.UserAgent);
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, true, this.UserAgent);
             PrepareStreamOptions(builder);
 
             HttpWebRequest request = builder.PrepareRequest();
