@@ -577,7 +577,6 @@
       <Link>TwitterResponse.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SynchronousWebRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Twitterizer2\Twitterizer2.snk">
