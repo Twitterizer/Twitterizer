@@ -34,7 +34,6 @@
 
 namespace Twitterizer.Core
 {
-    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Text;

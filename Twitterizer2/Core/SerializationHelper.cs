@@ -34,7 +34,6 @@
 
 namespace Twitterizer.Core
 {
-    using System.Diagnostics;
     using System.Text;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -65,11 +64,6 @@ namespace Twitterizer.Core
         public static T Deserialize(byte[] webResponseData, DeserializationHandler deserializationHandler)
         {
             T resultObject;
-#if DEBUG && !SILVERLIGHT
-            Debug.WriteLine("----------- RESPONSE -----------");
-            Debug.WriteLine(Encoding.UTF8.GetString(webResponseData));
-            Debug.WriteLine("----------- END -----------");
-#endif
 
             // Deserialize the results.
             if (deserializationHandler == null)

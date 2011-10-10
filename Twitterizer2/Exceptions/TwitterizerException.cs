@@ -89,11 +89,6 @@ namespace Twitterizer
 
                 this.ResponseBody = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
-#if DEBUG && !SILVERLIGHT
-                System.Diagnostics.Debug.WriteLine("----------- RESPONSE -----------");
-                System.Diagnostics.Debug.Write(this.ResponseBody);
-                System.Diagnostics.Debug.WriteLine("----------- END -----------");
-#endif
                 this.ParseRateLimitHeaders(response);
 
                 if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))

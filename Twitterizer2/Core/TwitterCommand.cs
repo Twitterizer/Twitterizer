@@ -35,7 +35,6 @@ namespace Twitterizer.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Net;
     using System.Linq;
@@ -141,10 +140,6 @@ namespace Twitterizer.Core
                 this.Uri = new Uri(this.Uri.AbsoluteUri.Replace("http://", "https://"));
             }
 
-#if DEBUG
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Begin {0}", this.Uri.AbsoluteUri), "Twitterizer2");
-#endif
-
             // Loop through all of the custom attributes assigned to the command class
             foreach (Attribute attribute in this.GetType().GetCustomAttributes(false))
             {
@@ -201,12 +196,6 @@ namespace Twitterizer.Core
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
-#if DEBUG
-                    Debug.WriteLine("Found in cache", "Twitterizer2");
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "End {0}", this.Uri.AbsoluteUri),
-                                    "Twitterizer2");
-
-#endif
                     return new TwitterResponse<T>()
                                {
                                    ResponseObject = (T)cache[cacheKeyBuilder.ToString()],
@@ -328,10 +317,6 @@ namespace Twitterizer.Core
 
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             twitterResponse.Tokens = this.Tokens;
-
-#if DEBUG
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Finished {0}", this.Uri.AbsoluteUri), "Twitterizer2");
-#endif
 
             return twitterResponse;
         }
@@ -455,10 +440,6 @@ namespace Twitterizer.Core
                     Cache.NoSlidingExpiration,
                     CacheItemPriority.Normal,
                     null);
-
-#if DEBUG
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Added results to cache", this.Uri.AbsoluteUri), "Twitterizer2");
-#endif
             }
         }
 #endif
