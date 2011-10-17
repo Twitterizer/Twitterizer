@@ -146,5 +146,17 @@ namespace Twitterizer
         /// </summary>
         /// <value>The type of the result.</value>
         public SearchOptionsResultType ResultType { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to use Twitter.com user ids in the result.
+        /// </summary>
+        /// <value>The type of the result.</value>
+        public bool WithTwitterUserID { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to include some entities in the result.
+        /// </summary>
+        /// <value>The type of the result.</value>
+        public bool IncludeEntities { get; set; }
     }
 }

@@ -176,8 +176,7 @@ namespace Twitterizer.Streaming
                     builder.Parameters.Add("replies", "all");
             }
 
-            HttpWebRequest request = builder.PrepareRequest();
-
+            HttpWebRequest request = builder.PrepareRequest();            
             this.friendsCallback = friendsCallback;
             this.streamStoppedCallback = streamErrorCallback;
             this.statusCreatedCallback = statusCreatedCallback; 
@@ -189,6 +188,8 @@ namespace Twitterizer.Streaming
             this.stopReceived = false;
 #if SILVERLIGHT
             request.AllowReadStreamBuffering = false;
+#else
+            request.Timeout = 10000;
 #endif
             return request.BeginGetResponse(StreamCallback, request);          
         }

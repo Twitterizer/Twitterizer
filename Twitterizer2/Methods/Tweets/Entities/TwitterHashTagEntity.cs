@@ -47,7 +47,7 @@ namespace Twitterizer.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterHashTagEntity"/> class.
         /// </summary>
-        internal TwitterHashTagEntity()
+        public TwitterHashTagEntity()
         { 
         }
 

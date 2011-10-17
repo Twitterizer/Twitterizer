@@ -66,7 +66,9 @@ namespace Twitterizer.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterMediaEntity"/> class.
         /// </summary>
-        internal TwitterMediaEntity() { }
+        public TwitterMediaEntity()
+        {
+        }
 
         /// <summary>
         /// Gets or sets the type of the media.

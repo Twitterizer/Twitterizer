@@ -69,15 +69,30 @@ namespace Twitterizer
         public string SearchQuery { get; set; }
 
         /// <summary>
-        /// Gets the current trends.
+        /// Gets or sets the promoted content value.
         /// </summary>
+        /// <value>Promoted Content.</value>
+        [DataMember]
+        public string PromotedContent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the events.
+        /// </summary>
+        /// <value>The events.</value>
+        [DataMember]
+        public string Events { get; set; }
+
+        /// <summary>
+        /// Gets the trends with the specified WOEID.
+        /// </summary>
+        /// <param name="options">The WOEID.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A collection of <see cref="Twitterizer.TwitterTrend"/> objects.
         /// </returns>
-        public static TwitterResponse<TwitterTrendCollection> Current(CurrentTrendsOptions options)
+        public static TwitterResponse<TwitterTrendCollection> Trends(int WoeID, TrendsOptions options)
         {
-            Commands.CurrentTrendsCommand command = new Twitterizer.Commands.CurrentTrendsCommand(options);
+            Commands.TrendsCommand command = new Twitterizer.Commands.TrendsCommand(WoeID, options);
 
             return Core.CommandPerformer.PerformAction(command);
         }
@@ -85,12 +100,13 @@ namespace Twitterizer
         /// <summary>
         /// Gets the current trends.
         /// </summary>
+        /// <param name="options">The WOEID.</param>
         /// <returns>
         /// A collection of <see cref="Twitterizer.TwitterTrend"/> objects.
         /// </returns>
-        public static TwitterResponse<TwitterTrendCollection> Current()
+        public static TwitterResponse<TwitterTrendCollection> Trends(int WoeID)
         {
-            return Current(null);
+            return Trends(WoeID, null);
         }
     }
 }

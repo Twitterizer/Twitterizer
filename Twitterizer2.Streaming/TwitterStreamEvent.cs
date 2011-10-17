@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Twitterizer;
-
+﻿using Twitterizer2.Streaming;
 namespace Twitterizer.Streaming
 {
+    using System;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+#if !SILVERLIGHT
+    [System.Serializable]
+#endif
     public class TwitterStreamEvent
     {
         /// <summary>
         /// Gets or sets the type of the event.
         /// </summary>
         /// <value>The type of the event.</value>
-        public string EventType { get; set; }
+        [JsonProperty(PropertyName = "event")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TwitterSteamEvent EventType { get; set; }
 
         /// <summary>
         /// Gets or sets the source of the event. This is always the user who initiated the event.
@@ -36,6 +39,8 @@ namespace Twitterizer.Streaming
         /// Gets or sets the creation date.
         /// </summary>
         /// <value>The creation date.</value>
-        public DateTime CreationDate { get; set; }
+        [JsonProperty(PropertyName = "created_at")]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
+        public DateTime CreatedAt { get; set; }
     }
 }

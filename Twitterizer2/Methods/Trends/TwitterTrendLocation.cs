@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterUrl.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net)
+// <copyright file="TwitterTrendLocation.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -28,45 +28,37 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The twitter url entity class</summary>
+// <author>David Golden</author>
+// <summary>The Twitter Trend Location class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Entities
+namespace Twitterizer
 {
     using System;
+    using System.Runtime.Serialization;
+    using Twitterizer.Core;
 
     /// <summary>
-    /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
+    /// The TwitterTrendLocation class.
     /// </summary>
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    public class TwitterUrlEntity : TwitterEntity
+    [DataContract]
+    public class TwitterTrendLocation : TwitterObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterUrlEntity"/> class.
+        /// Gets or sets the name.
         /// </summary>
-        public TwitterUrlEntity()
-        {
-        }
+        /// <value>The name of the trend.</value>
+        [DataMember]
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the URL parsed from the tweet text.
+        /// Gets or sets the WOEID.
         /// </summary>
-        /// <value>The parsed URL.</value>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Display URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed Display URL.</value>
-        public string DisplayUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Expanded URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed Expanded URL.</value>
-        public string ExpandedUrl { get; set; }
+        /// <value>The WOEID of the trend.</value>
+        [DataMember]
+        public int WOEID { get; set; }
     }
 }

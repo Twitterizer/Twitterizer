@@ -39,12 +39,13 @@ namespace Twitterizer
 #endif
     public static class TwitterTrendsAsync
     {
-        public static IAsyncResult Current(CurrentTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
+        public static IAsyncResult Trends(int WoeID, TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
 #if !SILVERLIGHT
-            Func<CurrentTrendsOptions, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Current;
+            Func<int, TrendsOptions, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Trends;
 
             return methodToCall.BeginInvoke(
+                WoeID, 
                 options,
                 result =>
                 {
@@ -62,7 +63,7 @@ namespace Twitterizer
 #else            
             ThreadPool.QueueUserWorkItem((x) =>
                 {
-                    function(TwitterTrend.Current(options).ToAsyncResponse<TwitterTrendCollection>());  
+                    function(TwitterTrend.Trends(WoeID, options).ToAsyncResponse<TwitterTrendCollection>());  
                 });
             return null;
 #endif

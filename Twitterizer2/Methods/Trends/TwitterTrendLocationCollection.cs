@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterTrendCollection.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterTrendLocationCollection.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -28,8 +28,8 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
-// <author>Ricky Smith</author>
-// <summary>The twitter trend collection class.</summary>
+// <author>David Golden</author>
+// <summary>The twitter trend location collection class.</summary>
 //-----------------------------------------------------------------------
 
 using Twitterizer.Core;
@@ -40,26 +40,16 @@ namespace Twitterizer
     using Newtonsoft.Json;
 
     /// <summary>
-    /// The TwitterTrendCollection class. Represents multiple <see cref="Twitterizer.TwitterTrend"/> elements.
+    /// The TwitterTrendLocationCollection class. Represents multiple <see cref="Twitterizer.TwitterTrendLocation"/> elements.
     /// </summary>
-    [JsonConverter(typeof(TwitterTrendCollection.Converter))]
+    [JsonConverter(typeof(TwitterTrendLocationCollection.Converter))]
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    public class TwitterTrendCollection : Core.TwitterCollection<TwitterTrend>, ITwitterObject
-    {        
-        [JsonProperty(PropertyName = "as_of")]
-        [JsonConverter(typeof(TwitterizerDateConverter))]
-        public DateTime AsOf { get; set; }
-
-        [JsonProperty(PropertyName = "created_at")]
-        [JsonConverter(typeof(TwitterizerDateConverter))]
-        public DateTime CreatedAt { get; set; }
-        
-        public TwitterTrendLocationCollection Locations { get; set; }
-        
+    public class TwitterTrendLocationCollection : Core.TwitterCollection<TwitterTrendLocation>, ITwitterObject
+    {                
         /// <summary>
-        /// The Json converter class for the TwitterTrendCollection object
+        /// The Json converter class for the TwitterTrendLocationCollection object
         /// </summary>
 #if !SILVERLIGHT
         internal class Converter : JsonConverter
@@ -76,7 +66,7 @@ namespace Twitterizer
             /// </returns>
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof(TwitterTrendCollection);
+                return objectType == typeof(TwitterTrendLocationCollection);
             }
 
             /// <summary>
@@ -89,67 +79,30 @@ namespace Twitterizer
             /// <returns>A collection of <see cref="TwitterTrend"/> items.</returns>
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
-                TwitterTrendCollection result = existingValue as TwitterTrendCollection;
+                TwitterTrendLocationCollection result = existingValue as TwitterTrendLocationCollection;
                 
                 if (result == null)
-                    result = new TwitterTrendCollection();
+                    result = new TwitterTrendLocationCollection();
 
                 int initialDepth = reader.Depth;
 
                 while (reader.Read() && reader.Depth >= initialDepth)
                 {
-                    if (reader.TokenType == JsonToken.PropertyName && reader.Depth == 2)
-                    {
-                        switch ((string)reader.Value)
-                        {
-#if !SILVERLIGHT
-                            //TODO these two datetime converters don't seem to convert.
-                            case "as_of":
-                                reader.Read();
-                                var c = new TwitterizerDateConverter();
-                                result.AsOf = (DateTime)c.ReadJson(reader, typeof(DateTime), null, serializer);
-                                continue;
-
-                            case "created_at":
-                                reader.Read();
-                                var d = new TwitterizerDateConverter();
-                                result.CreatedAt = (DateTime)d.ReadJson(reader, typeof(DateTime), null, serializer);
-                                continue;
-#endif
-                            case "locations":
-                                reader.Read();
-                                var e = new TwitterTrendLocationCollection.Converter();
-                                result.Locations = (TwitterTrendLocationCollection)e.ReadJson(reader, typeof(TwitterTrendLocationCollection), null, serializer);
-                                continue;
-                        }
-                    }
                     if (reader.TokenType == JsonToken.StartObject && reader.Depth > 2)
-                        result.Add(new TwitterTrend());
+                        result.Add(new TwitterTrendLocation());
 
                     if (reader.TokenType == JsonToken.PropertyName)
                     {
                         switch ((string)reader.Value)
                         {
-                            case "query":
-                                reader.Read();
-                                result[result.Count - 1].SearchQuery = (string)reader.Value;
-                                continue;
                             case "name":
                                 reader.Read();
                                 result[result.Count - 1].Name = (string)reader.Value;
                                 continue;
-                            case "url":
+                            case "woeid":
                                 reader.Read();
-                                result[result.Count - 1].Address = (string)reader.Value;
-                                continue;
-                            case "promoted_content":
-                                reader.Read();
-                                result[result.Count - 1].PromotedContent = (string)reader.Value;
-                                continue;
-                            case "events":
-                                reader.Read();
-                                result[result.Count - 1].Events = (string)reader.Value;
-                                continue;
+                                result[result.Count - 1].WOEID = int.Parse(reader.Value.ToString());
+                                continue;                            
                         }
                     }
                 }

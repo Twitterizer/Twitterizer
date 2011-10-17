@@ -407,17 +407,23 @@
     <Compile Include="..\Twitterizer2\Methods\Timeline\UserTimelineOptions.cs">
       <Link>UserTimelineOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Twitterizer2\Methods\Trends\CurrentTrendsCommand.cs">
-      <Link>CurrentTrendsCommand.cs</Link>
+    <Compile Include="..\Twitterizer2\Methods\Trends\TrendsCommand.cs">
+      <Link>TrendsCommand.cs</Link>
     </Compile>
-    <Compile Include="..\Twitterizer2\Methods\Trends\CurrentTrendsOptions.cs">
-      <Link>CurrentTrendsOptions.cs</Link>
+    <Compile Include="..\Twitterizer2\Methods\Trends\TrendsOptions.cs">
+      <Link>TrendsOptions.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Trends\TwitterTrend.cs">
       <Link>TwitterTrend.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Trends\TwitterTrendCollection.cs">
       <Link>TwitterTrendCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Trends\TwitterTrendLocation.cs">
+      <Link>TwitterTrendLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Trends\TwitterTrendLocationCollection.cs">
+      <Link>TwitterTrendLocationCollection.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2\Methods\Tweets\DeleteStatusCommand.cs">
       <Link>DeleteStatusCommand.cs</Link>

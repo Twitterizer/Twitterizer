@@ -11,7 +11,7 @@
         [Test]
         public static void CurrentTrends()
         {
-            TwitterTrendCollection trends = TwitterTrend.Current().ResponseObject;
+            TwitterTrendCollection trends = TwitterTrend.Trends(1).ResponseObject;
             Assert.IsNotNull(trends);
         }
     }

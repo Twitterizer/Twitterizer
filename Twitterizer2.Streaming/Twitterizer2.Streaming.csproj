@@ -77,6 +77,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="TwitterSteamEvent.cs" />
+    <Compile Include="TwitterStreamEventConverter.cs" />
     <Compile Include="UserStreamOptions.cs" />
     <Compile Include="TwitterStreamDeletedEvent.cs" />
     <Compile Include="Location.cs" />

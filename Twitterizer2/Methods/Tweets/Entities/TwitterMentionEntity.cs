@@ -47,7 +47,7 @@ namespace Twitterizer.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="TwitterMentionEntity"/> class.
         /// </summary>
-        internal TwitterMentionEntity()
+        public TwitterMentionEntity()
         {
         }
 

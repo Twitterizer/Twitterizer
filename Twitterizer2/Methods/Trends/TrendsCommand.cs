@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterUrl.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net)
+// <copyright file="TrendsCommand.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,44 +29,55 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter url entity class</summary>
+// <summary>The trends command class</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Entities
+namespace Twitterizer.Commands
 {
     using System;
+    using Twitterizer;
+    using Twitterizer.Core;
+    using System.Globalization;
 
     /// <summary>
-    /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
+    /// The create list command class
     /// </summary>
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    public class TwitterUrlEntity : TwitterEntity
+    internal sealed class TrendsCommand : TwitterCommand<TwitterTrendCollection>
     {
+        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterUrlEntity"/> class.
+        /// Initializes a new instance of the <see cref="TrendsCommand"/> class.
         /// </summary>
-        public TwitterUrlEntity()
+        /// <param name="options">The WOEID.</param>
+        /// <param name="options">The options.</param>
+        public TrendsCommand(int WOEID, TrendsOptions options)
+            : base(
+                HTTPVerb.GET,
+                string.Format(CultureInfo.InvariantCulture, "trends/{0}.json", WOEID), 
+                null, 
+                options)
         {
         }
+        #endregion
 
         /// <summary>
-        /// Gets or sets the URL parsed from the tweet text.
+        /// Initializes the command.
         /// </summary>
-        /// <value>The parsed URL.</value>
-        public string Url { get; set; }
+        public override void Init()
+        {
+            TrendsOptions options = this.OptionalProperties as TrendsOptions;
+            if (options == null)
+            {
+                return;
+            }
 
-        /// <summary>
-        /// Gets or sets the Display URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed Display URL.</value>
-        public string DisplayUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Expanded URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed Expanded URL.</value>
-        public string ExpandedUrl { get; set; }
+            if (options.ExcludeHashTags)
+            {
+                this.RequestParameters.Add("exclude", "hashtags");
+            }
+        }
     }
 }

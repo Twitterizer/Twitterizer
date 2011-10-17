@@ -88,72 +88,75 @@ using System.Linq.Expressions;
                 int startDepth = reader.Depth;
                 string entityType = string.Empty;
                 TwitterEntity entity = null;
-
-                while (reader.Read() && reader.Depth >= startDepth)
+                try
                 {
-                    if (reader.TokenType == JsonToken.PropertyName && reader.Depth == startDepth + 1)
+                    while (reader.Read() && reader.Depth >= startDepth)
                     {
-                        entityType = (string)reader.Value;
-                        continue;
-                    }
+                        if (reader.TokenType == JsonToken.PropertyName && reader.Depth == startDepth + 1)
+                        {
+                            entityType = (string)reader.Value;
+                            continue;
+                        }
 
-                    switch (entityType)
-                    {
-                        case "urls":
-                            if (reader.TokenType == JsonToken.StartObject)
-                                entity = new TwitterUrlEntity();
+                        switch (entityType)
+                        {
+                            case "urls":
+                                if (reader.TokenType == JsonToken.StartObject)
+                                    entity = new TwitterUrlEntity();
 
-                            ReadFieldValue(reader, "url", entity, () => ((TwitterUrlEntity)entity).Url);
-                            ReadFieldValue(reader, "display_url", entity, () => ((TwitterUrlEntity)entity).DisplayUrl);
-                            ReadFieldValue(reader, "expanded_url", entity, () => ((TwitterUrlEntity)entity).ExpandedUrl);
+                                ReadFieldValue(reader, "url", entity, () => ((TwitterUrlEntity)entity).Url);
+                                ReadFieldValue(reader, "display_url", entity, () => ((TwitterUrlEntity)entity).DisplayUrl);
+                                ReadFieldValue(reader, "expanded_url", entity, () => ((TwitterUrlEntity)entity).ExpandedUrl);
 
-                            break;
+                                break;
 
-                        case "user_mentions":
-                            if (reader.TokenType == JsonToken.StartObject)
-                                entity = new TwitterMentionEntity();
+                            case "user_mentions":
+                                if (reader.TokenType == JsonToken.StartObject)
+                                    entity = new TwitterMentionEntity();
 
-                            ReadFieldValue(reader, "screen_name", entity, () => ((TwitterMentionEntity)entity).ScreenName);
-                            ReadFieldValue(reader, "name", entity, () => ((TwitterMentionEntity)entity).Name);
-                            ReadFieldValue(reader, "id", entity, () => ((TwitterMentionEntity)entity).UserId);
+                                ReadFieldValue(reader, "screen_name", entity, () => ((TwitterMentionEntity)entity).ScreenName);
+                                ReadFieldValue(reader, "name", entity, () => ((TwitterMentionEntity)entity).Name);
+                                ReadFieldValue(reader, "id", entity, () => ((TwitterMentionEntity)entity).UserId);
 
-                            break;
+                                break;
 
-                        case "hashtags":
-                            if (reader.TokenType == JsonToken.StartObject)
-                                entity = new TwitterHashTagEntity();
+                            case "hashtags":
+                                if (reader.TokenType == JsonToken.StartObject)
+                                    entity = new TwitterHashTagEntity();
 
-                            ReadFieldValue(reader, "text", entity, () => ((TwitterHashTagEntity)entity).Text);
+                                ReadFieldValue(reader, "text", entity, () => ((TwitterHashTagEntity)entity).Text);
 
-                            break;
+                                break;
 
-                        case "media":
-                            // Move to object start and parse the entity
+                            case "media":
+                                // Move to object start and parse the entity
+                                reader.Read();
+                                entity = parseMediaEntity(reader);
+
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                        // Read the indicies (for all entities except Media)
+                        if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "indices" && entity != null)
+                        {
                             reader.Read();
-                            entity = parseMediaEntity(reader);
+                            reader.Read();
+                            entity.StartIndex = Convert.ToInt32((long)reader.Value);
+                            reader.Read();
+                            entity.EndIndex = Convert.ToInt32((long)reader.Value);
+                        }
 
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                    // Read the indicies (for all entities except Media)
-                    if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "indices" && entity != null)
-                    {
-                        reader.Read();
-                        reader.Read();
-                        entity.StartIndex = Convert.ToInt32((long)reader.Value);
-                        reader.Read();
-                        entity.EndIndex = Convert.ToInt32((long)reader.Value);
-                    }
-
-                    if ((reader.TokenType == JsonToken.EndObject && entity != null) || entity is TwitterMediaEntity)
-                    {
-                        result.Add(entity);
-                        entity = null;
+                        if ((reader.TokenType == JsonToken.EndObject && entity != null) || entity is TwitterMediaEntity)
+                        {
+                            result.Add(entity);
+                            entity = null;
+                        }
                     }
                 }
+                catch { }
 
                 return result;
             }

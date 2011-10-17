@@ -193,8 +193,10 @@
     <Compile Include="Methods\Spam\TwitterSpam.cs" />
     <Compile Include="Methods\Timeline\PagedTimelineCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineOptions.cs" />
-    <Compile Include="Methods\Trends\CurrentTrendsCommand.cs" />
-    <Compile Include="Methods\Trends\CurrentTrendsOptions.cs" />
+    <Compile Include="Methods\Trends\TwitterTrendLocation.cs" />
+    <Compile Include="Methods\Trends\TwitterTrendLocationCollection.cs" />
+    <Compile Include="Methods\Trends\TrendsCommand.cs" />
+    <Compile Include="Methods\Trends\TrendsOptions.cs" />
     <Compile Include="Methods\Search\SearchCommand.cs" />
     <Compile Include="Methods\Timeline\TimelineOptions.cs" />
     <Compile Include="Methods\Timeline\TwitterTimeline.cs" />

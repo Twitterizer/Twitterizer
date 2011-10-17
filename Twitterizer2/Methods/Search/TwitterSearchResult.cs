@@ -130,5 +130,14 @@ namespace Twitterizer
         /// <value>The location.</value>
         [JsonProperty(PropertyName = "location")]
         public string Location { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entities.
+        /// </summary>
+        /// <value>The entities.</value>
+        [DataMember]
+        [JsonProperty(PropertyName = "entities")]
+        [JsonConverter(typeof(Entities.TwitterEntityCollection.Converter))]
+        public Entities.TwitterEntityCollection Entities { get; set; }
     }
 }

@@ -156,6 +156,12 @@ namespace Twitterizer.Commands
                     this.RequestParameters.Add("result_type", "popular");
                     break;
             }
+
+            if (options.WithTwitterUserID)
+                this.RequestParameters.Add("with_twitter_user_id", "true");
+
+            if (options.IncludeEntities)
+                this.RequestParameters.Add("include_entities", "true");
         }
     }
 }

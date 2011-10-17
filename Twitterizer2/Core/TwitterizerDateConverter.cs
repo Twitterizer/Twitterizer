@@ -40,11 +40,7 @@ namespace Twitterizer
     /// <summary>
     /// Converts date strings returned by the Twitter API into <see cref="System.DateTime"/>
     /// </summary>
-#if !SILVERLIGHT
-    internal class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
-#else
     public class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
-#endif
     {
         public TwitterizerDateConverter() { }
         /// <summary>

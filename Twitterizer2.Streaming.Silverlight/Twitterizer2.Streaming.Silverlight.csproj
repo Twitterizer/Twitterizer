@@ -48,6 +48,7 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json.Silverlight, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -67,6 +68,9 @@
     </Compile>
     <Compile Include="..\Twitterizer2.Streaming\StreamOptions.cs">
       <Link>StreamOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2.Streaming\TwitterSteamEvent.cs">
+      <Link>TwitterSteamEvent.cs</Link>
     </Compile>
     <Compile Include="..\Twitterizer2.Streaming\TwitterStream.cs">
       <Link>TwitterStream.cs</Link>

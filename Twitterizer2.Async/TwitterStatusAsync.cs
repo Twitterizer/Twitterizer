@@ -35,6 +35,9 @@ namespace Twitterizer
 {
     using System;
     using Twitterizer;
+#if SILVERLIGHT
+    using System.Threading;
+#endif
 
     public static class TwitterStatusAsync
     {
@@ -145,6 +148,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Show(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
+#if !SILVERLIGHT 
             Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.Show;
 
             return methodToCall.BeginInvoke(
@@ -164,6 +168,13 @@ namespace Twitterizer
                     }
                 },
                 null);
+#else
+            ThreadPool.QueueUserWorkItem((x) =>
+                {
+                    function(TwitterStatus.Show(tokens, statusId, options).ToAsyncResponse<TwitterStatus>());  
+                });
+            return null;
+#endif
         }
 
         /// <summary>

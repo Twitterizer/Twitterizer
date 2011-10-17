@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterUrl.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net)
+// <copyright file="TrendsOptions.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,44 +29,23 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter url entity class</summary>
+// <summary>The trends options class.</summary>
 //-----------------------------------------------------------------------
 
-namespace Twitterizer.Entities
+namespace Twitterizer
 {
-    using System;
-
     /// <summary>
-    /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
+    /// The current trends options class. Provides a payload for optional parameters for the CurrentTrendsCommand class.
     /// </summary>
 #if !SILVERLIGHT
-    [Serializable]
+    [System.Serializable]
 #endif
-    public class TwitterUrlEntity : TwitterEntity
+    public class TrendsOptions : OptionalProperties
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterUrlEntity"/> class.
+        /// Gets or sets a value indicating whether [exclude hash tags].
         /// </summary>
-        public TwitterUrlEntity()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets the URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed URL.</value>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Display URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed Display URL.</value>
-        public string DisplayUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Expanded URL parsed from the tweet text.
-        /// </summary>
-        /// <value>The parsed Expanded URL.</value>
-        public string ExpandedUrl { get; set; }
+        /// <value><c>true</c> if [exclude hash tags]; otherwise, <c>false</c>.</value>
+        public bool ExcludeHashTags { get; set; } 
     }
 }
