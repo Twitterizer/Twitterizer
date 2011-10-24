@@ -57,7 +57,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the file location.
         /// </summary>
         /// <value>The file location.</value>
-        public string File { get; set; }
+        public byte[] File { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UpdateStatusCommand"/> class.
@@ -66,7 +66,7 @@ namespace Twitterizer.Commands
 		/// <param name="text">The status text.</param>
 		/// <param name="file">The file to upload.</param>
 		/// <param name="optionalProperties">The optional properties.</param>
-		public UpdateWithMediaCommand(OAuthTokens tokens, string text, string file, StatusUpdateOptions optionalProperties)
+		public UpdateWithMediaCommand(OAuthTokens tokens, string text, byte[] fileData, StatusUpdateOptions optionalProperties)
 			: base(HTTPVerb.POST, "Set below", tokens, optionalProperties)
 		{
 			if (tokens == null)
@@ -79,7 +79,7 @@ namespace Twitterizer.Commands
 				throw new ArgumentNullException("text");
 			}
 
-			if (string.IsNullOrEmpty(file) || !System.IO.File.Exists(file))
+            if (fileData == null || fileData.Length == 0)
 			{
 				throw new ArgumentException("file");
 			}
@@ -88,7 +88,7 @@ namespace Twitterizer.Commands
             this.SetCommandUri("statuses/update_with_media.json");
 
 			this.Text = text;
-			this.File = file;
+            this.File = fileData;
             this.Multipart = true;
 		}
 
@@ -97,10 +97,8 @@ namespace Twitterizer.Commands
 		/// </summary>
 		public override void Init()
 		{
-			byte[] data = System.IO.File.ReadAllBytes(File);
-
 			this.RequestParameters.Add("status", this.Text);
-			this.RequestParameters.Add("media[]", data);
+			this.RequestParameters.Add("media[]", this.File);
 
 			StatusUpdateOptions options = this.OptionalProperties as StatusUpdateOptions;
 			if (options != null)

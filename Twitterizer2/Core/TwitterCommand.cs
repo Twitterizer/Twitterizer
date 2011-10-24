@@ -99,12 +99,6 @@ namespace Twitterizer.Core
         public Dictionary<string, object> RequestParameters { get; set; }
 
         /// <summary>
-        /// Gets or sets the image to upload.
-        /// </summary>
-        /// <value>The image to upload.</value>
-        public TwitterImage ImageToUpload { get; set; }
-
-        /// <summary>
         /// Gets or sets the serialization delegate.
         /// </summary>
         /// <value>The serialization delegate.</value>

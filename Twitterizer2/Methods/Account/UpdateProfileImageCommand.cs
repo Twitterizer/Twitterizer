@@ -42,13 +42,15 @@ namespace Twitterizer.Commands
 #endif
     internal class UpdateProfileImageCommand : TwitterCommand<TwitterUser>
     {
+        private byte[] imageData;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateProfileImageCommand"/> class.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="image">The image.</param>
         /// <param name="options">The options.</param>
-        public UpdateProfileImageCommand(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
+        public UpdateProfileImageCommand(OAuthTokens tokens, byte[] image, OptionalProperties options)
             : base(HTTPVerb.POST, "account/update_profile_image.json", tokens, options)
         {
             if (tokens == null)
@@ -56,22 +58,17 @@ namespace Twitterizer.Commands
                 throw new ArgumentNullException("tokens");
             }
 
-            if (image == null)
-            {
-                throw new ArgumentNullException("image");
-            }
-
-            if (image.Data == null || image.Data.Length == 0)
+            if (image == null || image.Length == 0)
             {
                 throw new ArithmeticException("Image data cannot be null or zero length.");
             }
 
-            if (image.Data.Length > 89600)
+            if (image.Length > 89600)
             {
                 throw new ArithmeticException("Image cannot exceed 700Kb in size.");
             }
 
-            this.ImageToUpload = image;
+            this.imageData = image;
             this.Multipart = true;
         }
 
@@ -80,7 +77,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("image", this.ImageToUpload);
+            this.RequestParameters.Add("image", this.imageData);
             this.RequestParameters.Add("include_entities", "true");
         }
     }

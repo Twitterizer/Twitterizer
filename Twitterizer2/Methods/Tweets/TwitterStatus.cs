@@ -316,10 +316,25 @@ namespace Twitterizer
 		/// <returns>
 		/// A <see cref="TwitterStatus"/> object of the newly created status.
 		/// </returns>
-		public static TwitterResponse<TwitterStatus> UpdateWithMedia(OAuthTokens tokens, string text, string file, StatusUpdateOptions options = null)
+		public static TwitterResponse<TwitterStatus> UpdateWithMedia(OAuthTokens tokens, string text, byte[] fileData, StatusUpdateOptions options = null)
 		{
-			return CommandPerformer.PerformAction(new Commands.UpdateWithMediaCommand(tokens, text, file, options));
+            return CommandPerformer.PerformAction(new Commands.UpdateWithMediaCommand(tokens, text, fileData, options));
 		}
+
+        /// <summary>
+        /// Updates the authenticating user's status. A status update with text identical to the authenticating user's text identical to the authenticating user's current status will be ignored to prevent duplicates.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="text">The status text.</param>
+        /// <param name="fileLocation">The file location.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterStatus"/> object of the newly created status.
+        /// </returns>
+        public static TwitterResponse<TwitterStatus> UpdateWithMedia(OAuthTokens tokens, string text, string fileLocation, StatusUpdateOptions options = null)
+        {
+            return UpdateWithMedia(tokens, text, System.IO.File.ReadAllBytes(fileLocation), options);
+        }
 
         /// <summary>
         /// Deletes the specified status.

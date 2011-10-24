@@ -79,19 +79,17 @@ namespace Twitterizer
         }
 
         /// <summary>
-        /// Updates the authenticating user's profile image. 
+        /// Updates the authenticating user's profile image.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="image">The avatar image for the profile. Must be a valid GIF, JPG, or PNG image of less than 700 kilobytes in size. Images with width larger than 500 pixels will be scaled down.</param>
+        /// <param name="imageData">The image data.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// The user, with updated data, as a <see cref="TwitterUser"/>
         /// </returns>
-        public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, TwitterImage image, OptionalProperties options)
+        public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, byte[] imageData, OptionalProperties options = null)
         {
-            options.APIBaseAddress = "http://upload.twitter.com/1/";
-
-            Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, image, options);
+            Commands.UpdateProfileImageCommand command = new Twitterizer.Commands.UpdateProfileImageCommand(tokens, imageData, options);
 
             return CommandPerformer.PerformAction(command);
         }
@@ -100,13 +98,14 @@ namespace Twitterizer
         /// Updates the authenticating user's profile image.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="image">The avatar image for the profile. Must be a valid GIF, JPG, or PNG image of less than 700 kilobytes in size. Images with width larger than 500 pixels will be scaled down.</param>
+        /// <param name="imageLocation">The image location.</param>
+        /// <param name="options">The options.</param>
         /// <returns>
         /// The user, with updated data, as a <see cref="TwitterUser"/>
         /// </returns>
-        public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, TwitterImage image)
+        public static TwitterResponse<TwitterUser> UpdateProfileImage(OAuthTokens tokens, string imageLocation, OptionalProperties options = null)
         {
-            return UpdateProfileImage(tokens, image, null);
+            return UpdateProfileImage(tokens, System.IO.File.ReadAllBytes(imageLocation), options);
         }
 
         /// <summary>
