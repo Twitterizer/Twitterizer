@@ -312,27 +312,11 @@ namespace Twitterizer
 		/// <param name="tokens">The tokens.</param>
 		/// <param name="text">The status text.</param>
 		/// <param name="file">The file to upload.</param>
-		/// <returns>A <see cref="TwitterStatus"/> object of the newly created status.</returns>
-		public static TwitterResponse<TwitterStatus> UpdateWithMedia(OAuthTokens tokens, string text, string file)
-		{
-			StatusUpdateOptions suo = new StatusUpdateOptions();
-
-			suo.APIBaseAddress = "http://upload.twitter.com/1/";
-			
-			return UpdateWithMedia(tokens, text, file, suo);
-		}
-
-		/// <summary>
-		/// Updates the authenticating user's status. A status update with text identical to the authenticating user's text identical to the authenticating user's current status will be ignored to prevent duplicates.
-		/// </summary>
-		/// <param name="tokens">The tokens.</param>
-		/// <param name="text">The status text.</param>
-		/// <param name="file">The file to upload.</param>
 		/// <param name="options">The options.</param>
 		/// <returns>
 		/// A <see cref="TwitterStatus"/> object of the newly created status.
 		/// </returns>
-		public static TwitterResponse<TwitterStatus> UpdateWithMedia(OAuthTokens tokens, string text, string file, StatusUpdateOptions options)
+		public static TwitterResponse<TwitterStatus> UpdateWithMedia(OAuthTokens tokens, string text, string file, StatusUpdateOptions options = null)
 		{
 			return CommandPerformer.PerformAction(new Commands.UpdateWithMediaCommand(tokens, text, file, options));
 		}

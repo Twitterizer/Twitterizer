@@ -339,15 +339,10 @@ namespace Twitterizer
 
 				request.ContentType = contentType;
 
-                request.BeginGetRequestStream((res) =>
-                    {
-                        res.AsyncWaitHandle.WaitOne();
-
-                        using (Stream requestStream = request.EndGetRequestStream(res))
-                        {
-                            requestStream.Write(formData, 0, formData.Length);
-                        }
-                    }, null);
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(formData, 0, formData.Length);
+                }
 			}
 
             return request;

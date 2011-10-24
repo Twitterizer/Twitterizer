@@ -67,7 +67,7 @@ namespace Twitterizer.Commands
 		/// <param name="file">The file to upload.</param>
 		/// <param name="optionalProperties">The optional properties.</param>
 		public UpdateWithMediaCommand(OAuthTokens tokens, string text, string file, StatusUpdateOptions optionalProperties)
-			: base(HTTPVerb.POST, "statuses/update_with_media.json", tokens, optionalProperties)
+			: base(HTTPVerb.POST, "Set below", tokens, optionalProperties)
 		{
 			if (tokens == null)
 			{
@@ -83,6 +83,9 @@ namespace Twitterizer.Commands
 			{
 				throw new ArgumentException("file");
 			}
+
+            this.OptionalProperties.APIBaseAddress = "https://upload.twitter.com/1/";
+            this.SetCommandUri("statuses/update_with_media.json");
 
 			this.Text = text;
 			this.File = file;
