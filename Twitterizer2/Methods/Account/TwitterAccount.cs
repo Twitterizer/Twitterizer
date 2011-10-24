@@ -109,6 +109,37 @@ namespace Twitterizer
         }
 
         /// <summary>
+        /// Updates the authenticating user's profile background image. This method can also be used to enable or disable the profile background image.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="imageData">The image data.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterUser> UpdateProfileBackgroundImage(OAuthTokens tokens, byte[] imageData = null, UpdateProfileBackgroundImageOptions options = null)
+        {
+            if (imageData == null && options == null)
+            {
+                throw new System.ArgumentNullException("imageData", "You must provide image data or indicate you wish to not use any image in the options argument.");
+            }
+
+            Commands.UpdateProfileBackgroundImageCommand command = new Twitterizer.Commands.UpdateProfileBackgroundImageCommand(tokens, imageData, options);
+
+            return CommandPerformer.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Updates the authenticating user's profile background image. This method can also be used to enable or disable the profile background image.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="imageLocation">The image location.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterUser> UpdateProfileBackgroundImage(OAuthTokens tokens, string imageLocation, UpdateProfileBackgroundImageOptions options = null)
+        {
+            return UpdateProfileBackgroundImage(tokens, System.IO.File.ReadAllBytes(imageLocation), options);
+        }
+
+        /// <summary>
         /// Sets values that users are able to set under the "Account" tab of their settings page. Only the parameters specified will be updated.
         /// </summary>
         /// <param name="tokens">The tokens.</param>

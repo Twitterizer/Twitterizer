@@ -339,7 +339,18 @@ namespace Twitterizer
 
 				request.ContentType = contentType;
 
+
+#if !SILVERLIGHT
                 using (Stream requestStream = request.GetRequestStream())
+#else
+                IAsyncResult getRequestStreamResult = request.BeginGetRequestStream(
+                    (res) =>
+                    {
+
+                    }, null);
+
+                using (Stream requestStream = request.EndGetRequestStream(getRequestStreamResult))
+#endif
                 {
                     requestStream.Write(formData, 0, formData.Length);
                 }

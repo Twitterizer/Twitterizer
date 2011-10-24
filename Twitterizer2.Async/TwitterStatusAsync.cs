@@ -208,5 +208,53 @@ namespace Twitterizer
                 },
                 null);
         }
+
+        public static IAsyncResult UpdateWithMedia(OAuthTokens tokens, string text, byte[] fileData, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function, StatusUpdateOptions options = null)
+        {
+            Func<OAuthTokens, string, byte[], StatusUpdateOptions, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.UpdateWithMedia;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                text,
+                fileData,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+        public static IAsyncResult UpdateWithMedia(OAuthTokens tokens, string text, string fileLocation, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function, StatusUpdateOptions options = null)
+        {
+            Func<OAuthTokens, string, string, StatusUpdateOptions, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.UpdateWithMedia;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                text,
+                fileLocation,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
     }
 }

@@ -119,6 +119,8 @@
     <Compile Include="Core\TwitterizerDateConverter.cs" />
     <Compile Include="Exceptions\TwitterErrorDetails.cs" />
     <Compile Include="Methods\Account\TwitterAccount.cs" />
+    <Compile Include="Methods\Account\UpdateProfileBackgroundImageCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileBackgroundImageOptions.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
     <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
     <Compile Include="Methods\Account\UpdateProfileCommand.cs" />
