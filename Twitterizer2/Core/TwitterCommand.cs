@@ -208,7 +208,7 @@ namespace Twitterizer.Core
 
             try
             {
-				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens, false, "") { Multipart = this.Multipart };
+				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens, "") { Multipart = this.Multipart };
 
 #if !SILVERLIGHT
                 if (this.OptionalProperties != null)
@@ -339,6 +339,10 @@ namespace Twitterizer.Core
 
                 case HttpStatusCode.NotFound:
                     twitterResponse.Result = RequestResult.FileNotFound;
+                    break;
+
+                case HttpStatusCode.ProxyAuthenticationRequired:
+                    twitterResponse.Result = RequestResult.ProxyAuthenticationRequired;
                     break;
 
                 default:

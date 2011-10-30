@@ -109,12 +109,6 @@ namespace Twitterizer
         public OAuthTokens Tokens { private get; set; }
 
         /// <summary>
-        /// Gets or sets the keep alive header on PrepareRequest.
-        /// </summary>
-        /// <value>Keep Alive.</value>
-        public Boolean KeepAlive { private get; set; }
-
-        /// <summary>
         /// Gets or sets the UserAgent.
         /// </summary>
         /// <value>The User Agent.</value>
@@ -181,14 +175,13 @@ namespace Twitterizer
         /// <param name="UserAgent">The http user agent.</param>
         /// <param name="NetworkCredentials">The network credentials.</param>
         /// <remarks></remarks>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, Boolean KeepAlive, String UserAgent, NetworkCredential NetworkCredentials)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, String UserAgent, NetworkCredential NetworkCredentials)
         {
             if (requestUri == null)
                 throw new ArgumentNullException("requestUri");
 
             this.RequestUri = requestUri;
             this.Verb = verb;
-            this.KeepAlive = KeepAlive;
             this.UserAgent = UserAgent;
             this.UseOAuth = false;
             if (NetworkCredentials != null)
@@ -214,8 +207,8 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="KeepAlive">if set to <c>true</c> the http request is instructed to keep the connection alive.</param>
         /// <param name="UserAgent">The user agent.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, Boolean KeepAlive = false, String UserAgent = "")
-            : this(requestUri, verb, KeepAlive, UserAgent, null)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, String UserAgent = "")
+            : this(requestUri, verb, UserAgent, null)
         {
             this.Tokens = tokens;
 
@@ -303,7 +296,6 @@ namespace Twitterizer
 #if !SILVERLIGHT
             if (this.Proxy != null)
                 request.Proxy = Proxy;
-            request.KeepAlive = KeepAlive;
 #endif
             if (!this.UseOAuth && this.NetworkCredentials != null)
             {

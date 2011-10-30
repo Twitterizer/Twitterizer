@@ -87,6 +87,11 @@ namespace Twitterizer
         /// <summary>
         /// Something unexpected happened. See the error message for additional information.
         /// </summary>
-        Unknown
+        Unknown,
+
+        /// <summary>
+        /// Failed to authenticate with the proxy.
+        /// </summary>
+        ProxyAuthenticationRequired
     }
 }

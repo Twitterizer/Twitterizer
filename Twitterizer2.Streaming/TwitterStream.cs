@@ -166,7 +166,7 @@ namespace Twitterizer.Streaming
             RawJsonCallback rawJsonCallback = null
             )
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens, true, this.UserAgent);
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens, this.UserAgent);
 
             PrepareStreamOptions(builder);
 
@@ -208,9 +208,9 @@ namespace Twitterizer.Streaming
         {         
             WebRequestBuilder builder;
             if (this.Tokens == null)
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, true, this.UserAgent, this.NetworkCredentials);
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.UserAgent, this.NetworkCredentials);
             else
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, true, this.UserAgent);
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, this.UserAgent);
             PrepareStreamOptions(builder);
 
             HttpWebRequest request = builder.PrepareRequest();

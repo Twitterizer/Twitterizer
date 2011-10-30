@@ -76,7 +76,6 @@ namespace Twitterizer
                 new Uri("https://api.twitter.com/oauth/request_token"),
                 HTTPVerb.POST,
                 new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				false,
 				"");
 
             if (!string.IsNullOrEmpty(callbackAddress))
@@ -156,7 +155,6 @@ namespace Twitterizer
                 new Uri("https://api.twitter.com/oauth/request_token"),
                 HTTPVerb.POST,
                 new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				false,
 				"") { Proxy = proxy };
 
             if (!string.IsNullOrEmpty(callbackAddress))
@@ -220,7 +218,6 @@ namespace Twitterizer
                 new Uri("https://api.twitter.com/oauth/access_token"),
                 HTTPVerb.GET,
 				new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				false,
 				"");
 
             if (!string.IsNullOrEmpty(verifier))
@@ -284,7 +281,6 @@ namespace Twitterizer
                 new Uri("https://api.twitter.com/oauth/access_token"),
                 HTTPVerb.GET,
 				new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				false,
 				"");
 
             builder.Proxy = proxy;
@@ -397,7 +393,6 @@ namespace Twitterizer
                 new Uri("https://api.twitter.com/1/account/verify_credentials.json"), 
                 HTTPVerb.POST,
 				tokens,
-				false,
 				"");
 
             builder.PrepareRequest();

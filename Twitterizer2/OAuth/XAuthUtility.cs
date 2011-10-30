@@ -85,7 +85,6 @@ namespace Twitterizer
                     new Uri("https://api.twitter.com/oauth/access_token"),
                     HTTPVerb.POST,
                     new OAuthTokens() { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-					false,
 					"");
 
                 builder.Parameters.Add("x_auth_username", username);

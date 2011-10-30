@@ -138,6 +138,12 @@
     <Compile Include="..\Twitterizer2\Methods\Account\TwitterRateLimitStatus.cs">
       <Link>TwitterRateLimitStatus.cs</Link>
     </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileBackgroundImageCommand.cs">
+      <Link>UpdateProfileBackgroundImageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileBackgroundImageOptions.cs">
+      <Link>UpdateProfileBackgroundImageOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2\Methods\Account\UpdateProfileColorsCommand.cs">
       <Link>UpdateProfileColorsCommand.cs</Link>
     </Compile>
