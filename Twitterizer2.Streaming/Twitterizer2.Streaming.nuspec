@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>twitterizer-streaming</id> 
+	<title>Twitterizer Steaming API</title>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://www.twitterizer.net/license/</licenseUrl>
+    <projectUrl>http://www.twitterizer.net/</projectUrl>
+	<iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Full user streaming support.</releaseNotes>
+    <copyright>Copyright 2011 Patrick "Ricky" Smith</copyright>
+    <tags>twitter twitterizer streaming</tags>
+  </metadata>
+</package>
