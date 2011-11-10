@@ -79,21 +79,10 @@ namespace Twitterizer
         /// <param name="serializer">The serializer.</param>
         public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
-            throw new NotImplementedException();
-        }
+            if (value.GetType() != typeof(DateTime))
+                throw new ArgumentOutOfRangeException("value", "The value provided was not the expected data type.");
 
-//#if SILVERLIGHT
-//        /// <summary>
-//        /// Determines whether this instance can convert the specified object type.
-//        /// </summary>
-//        /// <param name="objectType">Type of the object.</param>
-//        /// <returns>
-//        /// <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
-//        /// </returns>
-//        public override bool CanConvert(Type objectType)
-//        {
-//            return objectType == typeof(DateTime);
-//        }
-//#endif
+            writer.WriteValue(((DateTime)value).ToString(DateFormat, CultureInfo.InvariantCulture));
+        }
     }
 }
