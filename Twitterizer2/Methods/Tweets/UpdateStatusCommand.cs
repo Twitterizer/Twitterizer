@@ -103,6 +103,9 @@ namespace Twitterizer.Commands
 
                 if (options.PlacePin)
                     this.RequestParameters.Add("display_coordinates", "true");
+
+                if (options.WrapLinks)
+                    this.RequestParameters.Add("wrap_links", "true");
             }
         }
     }

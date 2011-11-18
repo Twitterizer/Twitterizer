@@ -81,5 +81,12 @@ namespace Twitterizer
         /// </summary>
         /// <value>The place id.</value>
         public string PlaceId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether links should be wrapped with Twitter's t.co link wrapper.
+        /// </summary>
+        /// <value><c>true</c> if [wrap links]; otherwise, <c>false</c>.</value>
+        /// <remarks>More information is available here: https://dev.twitter.com/docs/tco-link-wrapper/faq</remarks>
+        public bool WrapLinks { get; set; }
     }
 }
