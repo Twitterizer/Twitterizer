@@ -306,5 +306,188 @@ namespace Twitterizer
                 },
                 null);
         }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is does not want to see retweets from.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult NoRetweetIDs(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<UserIdCollection>> function)
+        {
+            Func<OAuthTokens, OptionalProperties, TwitterResponse<UserIdCollection>> methodToCall = TwitterFriendship.NoRetweetIDs;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<UserIdCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is does not want to see retweets from.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>       
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult NoRetweetIDs(OAuthTokens tokens, TimeSpan timeout, Action<TwitterAsyncResponse<UserIdCollection>> function)
+        {
+            Func<OAuthTokens, TwitterResponse<UserIdCollection>> methodToCall = TwitterFriendship.NoRetweetIDs;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<UserIdCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+
+        /// <summary>
+        /// Updates the friendship.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userid">The userid.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Update(OAuthTokens tokens, decimal userid, UpdateFriendshipOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRelationship>> function)
+        {
+            Func<OAuthTokens, decimal, UpdateFriendshipOptions, TwitterResponse<TwitterRelationship>> methodToCall = TwitterFriendship.Update;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                userid,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterRelationship>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is does not want to see retweets from.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userid">The userid.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Update(OAuthTokens tokens, decimal userid, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRelationship>> function)
+        {
+            Func<OAuthTokens, decimal, TwitterResponse<TwitterRelationship>> methodToCall = TwitterFriendship.Update;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                userid,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterRelationship>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Updates the friendship.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenname">The screenname.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Update(OAuthTokens tokens, string screenname, UpdateFriendshipOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRelationship>> function)
+        {
+            Func<OAuthTokens, string, UpdateFriendshipOptions, TwitterResponse<TwitterRelationship>> methodToCall = TwitterFriendship.Update;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                screenname,
+                options,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterRelationship>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
+
+        /// <summary>
+        /// Returns the numeric IDs for every user the specified user is does not want to see retweets from.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenname">The screenname.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult Update(OAuthTokens tokens, string screenname, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRelationship>> function)
+        {
+            Func<OAuthTokens, string, TwitterResponse<TwitterRelationship>> methodToCall = TwitterFriendship.Update;
+
+            return methodToCall.BeginInvoke(
+                tokens,
+                screenname,
+                result =>
+                {
+                    result.AsyncWaitHandle.WaitOne(timeout);
+                    try
+                    {
+                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
+                    }
+                    catch (Exception ex)
+                    {
+                        function(new TwitterAsyncResponse<TwitterRelationship>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                    }
+                },
+                null);
+        }
     }
 }

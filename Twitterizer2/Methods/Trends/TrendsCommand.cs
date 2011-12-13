@@ -51,13 +51,14 @@ namespace Twitterizer.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="TrendsCommand"/> class.
         /// </summary>
-        /// <param name="options">The WOEID.</param>
+        /// <param name="tokens">The request tokens.</param>
+        /// <param name="WOEID">The WOEID.</param>
         /// <param name="options">The options.</param>
-        public TrendsCommand(int WOEID, TrendsOptions options)
+        public TrendsCommand(OAuthTokens tokens, int WOEID, LocalTrendsOptions options)
             : base(
                 HTTPVerb.GET,
-                string.Format(CultureInfo.InvariantCulture, "trends/{0}.json", WOEID), 
-                null, 
+                string.Format(CultureInfo.InvariantCulture, "trends/{0}.json", WOEID),
+                tokens,
                 options)
         {
         }
@@ -68,7 +69,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            TrendsOptions options = this.OptionalProperties as TrendsOptions;
+            LocalTrendsOptions options = this.OptionalProperties as LocalTrendsOptions;
             if (options == null)
             {
                 return;

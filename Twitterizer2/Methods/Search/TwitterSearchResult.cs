@@ -132,6 +132,13 @@ namespace Twitterizer
         public string Location { get; set; }
 
         /// <summary>
+        /// Gets or sets the status id the status is in reply to.
+        /// </summary>
+        /// <value>The status id.</value>
+        [DataMember, JsonProperty(PropertyName = "in_reply_to_status_id")]
+        public decimal? InReplyToStatusId { get; set; }
+
+        /// <summary>
         /// Gets or sets the entities.
         /// </summary>
         /// <value>The entities.</value>

@@ -52,19 +52,19 @@ namespace Twitterizer
         /// <summary>
         /// The relationship source
         /// </summary>
-        private TwitterUser source;
+        private TwitterRelationshipUser source;
 
         /// <summary>
         /// The relationship target
         /// </summary>
-        private TwitterUser target;
+        private TwitterRelationshipUser target;
 
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
         [JsonProperty(PropertyName = "source")]
-        public TwitterUser Source
+        public TwitterRelationshipUser Source
         {
             get
             {
@@ -82,7 +82,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The target.</value>
         [JsonProperty(PropertyName = "target")]
-        public TwitterUser Target
+        public TwitterRelationshipUser Target
         {
             get
             {

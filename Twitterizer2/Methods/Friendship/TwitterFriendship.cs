@@ -485,5 +485,75 @@ namespace Twitterizer
             return OutgoingRequests(tokens, null);
         }
 
+        /// <summary>
+        /// Returns a collection of IDs that the user does not want to see retweets from.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<UserIdCollection> NoRetweetIDs(OAuthTokens tokens, OptionalProperties options)
+        {
+            Commands.NoRetweetIDsCommand command = new Commands.NoRetweetIDsCommand(tokens, options);
+            return Core.CommandPerformer.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Returns a collection of IDs that the user does not want to see retweets from.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>        
+        /// <returns></returns>
+        public static TwitterResponse<UserIdCollection> NoRetweetIDs(OAuthTokens tokens)
+        {
+            return NoRetweetIDs(tokens, null);
+        }
+
+        /// <summary>
+        /// Updates a friendship for a user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userid">The userid.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterRelationship> Update(OAuthTokens tokens, decimal userid, UpdateFriendshipOptions options)
+        {
+            Commands.UpdateFriendshipCommand command = new Commands.UpdateFriendshipCommand(tokens, userid, options);
+            return Core.CommandPerformer.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Updates a friendship for a user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userid">The userid.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterRelationship> Update(OAuthTokens tokens, decimal userid)
+        {
+            return Update(tokens, userid, null);
+        }
+
+        /// <summary>
+        /// Updates a friendship for a user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenname">The screenname.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterRelationship> Update(OAuthTokens tokens, string screenname, UpdateFriendshipOptions options)
+        {
+            Commands.UpdateFriendshipCommand command = new Commands.UpdateFriendshipCommand(tokens, screenname, options);
+            return Core.CommandPerformer.PerformAction(command);
+        }
+
+        /// <summary>
+        /// Updates a friendship for a user.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="screenname">The screenname.</param>
+        /// <returns></returns>
+        public static TwitterResponse<TwitterRelationship> Update(OAuthTokens tokens, string screenname)
+        {
+            return Update(tokens, screenname, null);
+        }
+
     }
 }

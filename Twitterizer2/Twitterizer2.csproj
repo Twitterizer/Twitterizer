@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Attributes\RateLimitedAttribute.cs" />
     <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
+    <Compile Include="Core\TwitterDictionary.cs" />
     <Compile Include="Core\RequestResult.cs" />
     <Compile Include="Core\TwitterCursorPagedIdCollection.cs" />
     <Compile Include="Core\ITwitterObject.cs">
@@ -148,6 +149,10 @@
     <Compile Include="Methods\Favorites\ListFavoritesCommand.cs" />
     <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
     <Compile Include="Methods\Favorites\TwitterFavorite.cs" />
+    <Compile Include="Methods\Friendship\UpdateFriendshipOptions.cs" />
+    <Compile Include="Methods\Friendship\UpdateFriendshipCommand.cs" />
+    <Compile Include="Methods\Friendship\NoRetweetIDsCommand.cs" />
+    <Compile Include="Methods\Friendship\TwitterRelationship.cs" />
     <Compile Include="Methods\Friendship\OutgoingFriendshipsCommand.cs" />
     <Compile Include="Methods\Friendship\OutgoingFriendshipsOptions.cs" />
     <Compile Include="Methods\Friendship\FriendsIdsCommand.cs" />
@@ -195,10 +200,17 @@
     <Compile Include="Methods\Spam\TwitterSpam.cs" />
     <Compile Include="Methods\Timeline\PagedTimelineCommand.cs" />
     <Compile Include="Methods\Timeline\UserTimelineOptions.cs" />
+    <Compile Include="Methods\Trends\AvailableTrendsCommand.cs" />
+    <Compile Include="Methods\Trends\AvailableTrendsOptions.cs" />
+    <Compile Include="Methods\Trends\WeeklyTrendsCommand.cs" />
+    <Compile Include="Methods\Trends\DailyTrendsCommand.cs" />
+    <Compile Include="Methods\Trends\TrendsOptions.cs" />
+    <Compile Include="Methods\Trends\TwitterTrendDictionary.cs" />
+    <Compile Include="Methods\Trends\TwitterTrendLocationPlaceType.cs" />
     <Compile Include="Methods\Trends\TwitterTrendLocation.cs" />
     <Compile Include="Methods\Trends\TwitterTrendLocationCollection.cs" />
     <Compile Include="Methods\Trends\TrendsCommand.cs" />
-    <Compile Include="Methods\Trends\TrendsOptions.cs" />
+    <Compile Include="Methods\Trends\LocalTrendsOptions.cs" />
     <Compile Include="Methods\Search\SearchCommand.cs" />
     <Compile Include="Methods\Timeline\TimelineOptions.cs" />
     <Compile Include="Methods\Timeline\TwitterTimeline.cs" />
@@ -273,7 +285,7 @@
     <Compile Include="Methods\List\TwitterList.cs" />
     <Compile Include="Methods\List\TwitterListCollection.cs" />
     <Compile Include="Methods\Account\TwitterRateLimitStatus.cs" />
-    <Compile Include="Methods\Friendship\TwitterRelationship.cs" />
+    <Compile Include="Methods\Friendship\TwitterRelationshipUser.cs" />
     <Compile Include="Methods\TwitterResultTypeEnum.cs" />
     <Compile Include="Methods\Search\TwitterSearch.cs" />
     <Compile Include="Methods\Search\TwitterSearchResult.cs" />
@@ -327,10 +339,6 @@
   <ItemGroup>
     <Content Include="..\GettingStarted.txt">
       <Link>GettingStarted.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Json.NET.license.txt">
-      <Link>Json.NET.license.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Twitterizer2.license.txt">

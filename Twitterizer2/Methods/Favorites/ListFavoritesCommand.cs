@@ -74,7 +74,7 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("page", "1");
                 return;
             }
-
+            
             this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
 
             if (!string.IsNullOrEmpty(options.UserNameOrId))
@@ -86,6 +86,9 @@ namespace Twitterizer.Commands
             {
                 this.RequestParameters.Add("count", options.Count.ToString(CultureInfo.InvariantCulture));
             }
+
+            if (options.SinceStatusId > 0)
+                this.RequestParameters.Add("since_id", options.SinceStatusId.ToString());
         }
     }
 }

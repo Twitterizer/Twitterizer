@@ -96,9 +96,9 @@ namespace Twitterizer
 
                 int initialDepth = reader.Depth;
 
-                while (reader.Read() && reader.Depth >= initialDepth)
+                while (reader.Read() && reader.Depth > initialDepth)
                 {
-                    if (reader.TokenType == JsonToken.PropertyName && reader.Depth == 2)
+                    if (reader.TokenType == JsonToken.PropertyName && reader.Depth == initialDepth + 2)
                     {
                         switch ((string)reader.Value)
                         {
@@ -123,7 +123,7 @@ namespace Twitterizer
                                 continue;
                         }
                     }
-                    if (reader.TokenType == JsonToken.StartObject && reader.Depth > 2)
+                    if (reader.TokenType == JsonToken.StartObject && reader.Depth > initialDepth + 1)
                         result.Add(new TwitterTrend());
 
                     if (reader.TokenType == JsonToken.PropertyName)

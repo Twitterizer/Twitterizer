@@ -50,15 +50,43 @@ namespace Twitterizer
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        /// <value>The name of the trend.</value>
+        /// <value>The name of the location.</value>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the place type.
+        /// </summary>
+        /// <value>The Place Type of the location.</value>
+        [DataMember]
+        public TwitterTrendLocationPlaceType PlaceType { get; set; }
+
+        /// <summary>
         /// Gets or sets the WOEID.
         /// </summary>
-        /// <value>The WOEID of the trend.</value>
+        /// <value>The WOEID of the location.</value>
         [DataMember]
         public int WOEID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Country.
+        /// </summary>
+        /// <value>The Country of the location.</value>
+        [DataMember]
+        public string Country { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL.
+        /// </summary>
+        /// <value>The URL of the location.</value>
+        [DataMember]
+        public string URL { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Country Code.
+        /// </summary>
+        /// <value>The Country Code of the location.</value>
+        [DataMember]
+        public string CountryCode { get; set; }
     }
 }

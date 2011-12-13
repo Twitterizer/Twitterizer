@@ -22,7 +22,7 @@ namespace Twitterizer2.TestCases
             TwitterRelationship friendship = TwitterFriendship.Show(tokens, "rickydev").ResponseObject;
 
             // If it exists, delete it.
-            if (friendship.Target.IsFollowing != null && friendship.Target.IsFollowing.Value)
+            if (friendship.Target.Following != null && friendship.Target.Following)
             {
                 DeleteFriendship(tokens, friendship);
             }

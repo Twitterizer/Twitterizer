@@ -88,7 +88,7 @@ namespace Twitterizer
 
                 while (reader.Read() && reader.Depth >= initialDepth)
                 {
-                    if (reader.TokenType == JsonToken.StartObject && reader.Depth > 2)
+                    if (reader.TokenType == JsonToken.StartObject && reader.Depth >= 1)
                         result.Add(new TwitterTrendLocation());
 
                     if (reader.TokenType == JsonToken.PropertyName)
@@ -102,7 +102,45 @@ namespace Twitterizer
                             case "woeid":
                                 reader.Read();
                                 result[result.Count - 1].WOEID = int.Parse(reader.Value.ToString());
-                                continue;                            
+                                continue;
+
+                            case "placeType":
+                                int placetypeDepth = reader.Depth;
+                                while (reader.Read() && reader.Depth > placetypeDepth)
+                                {
+                                    if (reader.TokenType == JsonToken.StartObject && reader.Depth >= 2)
+                                        result[result.Count - 1].PlaceType = new TwitterTrendLocationPlaceType();
+
+                                    if (reader.TokenType == JsonToken.PropertyName)
+                                    {
+                                        switch ((string)reader.Value)
+                                        {
+                                            case "name":
+                                                reader.Read();
+                                                result[result.Count - 1].PlaceType.Name = (string)reader.Value;
+                                                continue;
+
+                                            case "code":
+                                                reader.Read();
+                                                result[result.Count - 1].PlaceType.Code = int.Parse(reader.Value.ToString());
+                                                continue;
+                                        }
+                                    }
+                                }
+                                continue;
+
+                            case "country":
+                                reader.Read();
+                                result[result.Count - 1].Country = (string)reader.Value;
+                                continue;
+                            case "url":
+                                reader.Read();
+                                result[result.Count - 1].URL = (string)reader.Value;
+                                continue;
+                            case "countryCode":
+                                reader.Read();
+                                result[result.Count - 1].CountryCode = (string)reader.Value;
+                                continue;  
                         }
                     }
                 }

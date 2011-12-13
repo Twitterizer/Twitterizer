@@ -29,23 +29,22 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The trends options class.</summary>
+// <summary>The daily trends options class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer
 {
     /// <summary>
-    /// The current trends options class. Provides a payload for optional parameters for the CurrentTrendsCommand class.
+    /// The trends options class. Provides a payload for optional parameters for the TrendsCommand class.
     /// </summary>
 #if !SILVERLIGHT
     [System.Serializable]
 #endif
-    public class TrendsOptions : OptionalProperties
+    public class TrendsOptions : LocalTrendsOptions
     {
         /// <summary>
-        /// Gets or sets a value indicating whether [exclude hash tags].
+        /// Gets or sets a value indicating whether to set the start date of the returned trends (Format "yyyy-MM-dd")
         /// </summary>
-        /// <value><c>true</c> if [exclude hash tags]; otherwise, <c>false</c>.</value>
-        public bool ExcludeHashTags { get; set; } 
+        public string Date { get; set; } 
     }
 }
