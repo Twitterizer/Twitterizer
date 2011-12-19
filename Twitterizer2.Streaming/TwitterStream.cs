@@ -256,12 +256,12 @@ namespace Twitterizer.Streaming
         private void StreamCallback(IAsyncResult result)
         {
             HttpWebRequest req = (HttpWebRequest)result.AsyncState;
-            WebResponse response = null;
+            HttpWebResponse response = null;
             try
             {
-                response = req.EndGetResponse(result);
+                response = req.EndGetResponse(result) as HttpWebResponse;
 
-                if ((response as HttpWebResponse).StatusCode == HttpStatusCode.OK)
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
@@ -284,7 +284,7 @@ namespace Twitterizer.Streaming
                                     continue;
                                 }
 
-                                for (int index = 0; index < lineOfData.Length; index++)
+                                for (int index = 0; lineOfData != null && index < lineOfData.Length; index++)
                                 {
                                     blockBuilder.Append(lineOfData[index]);
 
@@ -345,10 +345,10 @@ namespace Twitterizer.Streaming
             {
                 if (e is WebException)
                 {
-                    var we = e as WebException;
-                    if (we.Response != null)
+                    HttpWebResponse httpResponse = ((WebException)e).Response as HttpWebResponse;
+                    if (httpResponse != null)
                     {
-                        switch ((we.Response as HttpWebResponse).StatusCode)
+                        switch (httpResponse.StatusCode)
                         {
                             case HttpStatusCode.Unauthorized:
                                 {
@@ -433,7 +433,10 @@ namespace Twitterizer.Streaming
             {
                 if (this.friendsCallback != null)
                 {
-                    this.friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(friends.ToString()));
+                    if (friends.HasValues)
+                        this.friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(friends.ToString()));
+                    else
+                        this.friendsCallback(new TwitterIdCollection());
                     return;
                 }
             }
