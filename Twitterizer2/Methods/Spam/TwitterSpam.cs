@@ -85,7 +85,7 @@ namespace Twitterizer
         /// <returns>The user details.</returns>
         public static TwitterResponse<TwitterUser> ReportUser(OAuthTokens tokens, string screenName)
         {
-            return ReportUser(tokens, screenName);
+            return ReportUser(tokens, screenName, null);
         }
     }
 }
