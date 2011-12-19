@@ -311,7 +311,7 @@ namespace Twitterizer
 		/// </summary>
 		/// <param name="tokens">The tokens.</param>
 		/// <param name="text">The status text.</param>
-		/// <param name="file">The file to upload.</param>
+		/// <param name="fileData">The file to upload, as a byte array.</param>
 		/// <param name="options">The options.</param>
 		/// <returns>
 		/// A <see cref="TwitterStatus"/> object of the newly created status.

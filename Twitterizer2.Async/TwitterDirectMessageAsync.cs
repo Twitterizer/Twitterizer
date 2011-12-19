@@ -45,6 +45,8 @@
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
+        /// <param name="timeout">The time period to wait for a response.</param>
+        /// <param name="function">The method to call when the response arrives.</param>
         /// <returns>
         /// A <see cref="TwitterDirectMessageCollection"/> instance.
         /// </returns>

@@ -74,7 +74,7 @@ namespace Twitterizer
         /// Deletes the saved search specified in the ID parameter as the authenticating user.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="statusId">The saved search id.</param>
+        /// <param name="savedsearchId">The saved search id.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>

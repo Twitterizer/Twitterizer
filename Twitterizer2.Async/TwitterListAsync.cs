@@ -434,7 +434,6 @@ namespace Twitterizer
         /// Updates the specified list.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="listId">The list id.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>

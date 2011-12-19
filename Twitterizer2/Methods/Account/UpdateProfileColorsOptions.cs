@@ -39,7 +39,7 @@ namespace Twitterizer
 #endif
 
     /// <summary>
-    /// Optional properties for the <see cref="Twitterizer.TwitterUser.UpdateProfileColors"/> method.
+    /// Optional properties for the <see cref="Twitterizer.TwitterUser"/>.Profile*Colors methods.
     /// </summary>
     public class UpdateProfileColorsOptions : OptionalProperties
     {

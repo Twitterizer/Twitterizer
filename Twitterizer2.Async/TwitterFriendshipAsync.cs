@@ -254,6 +254,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="timeout">The timeout.</param>
+        /// <param name="options">The options.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
         public static IAsyncResult IncomingRequests(OAuthTokens tokens, IncomingFriendshipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterCursorPagedIdCollection>> function)
@@ -283,6 +284,7 @@ namespace Twitterizer
         /// </summary>
         /// <param name="tokens">The tokens.</param>
         /// <param name="timeout">The timeout.</param>
+        /// <param name="options">The options.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
         public static IAsyncResult OutgoingRequests(OAuthTokens tokens, OutgoingFriendshipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterCursorPagedIdCollection>> function)

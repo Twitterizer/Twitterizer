@@ -97,9 +97,9 @@ namespace Twitterizer
                 {
                     if (reader.TokenType == JsonToken.PropertyName && reader.Depth == 1)
                     {
+#if !SILVERLIGHT
                         switch ((string)reader.Value)
                         {
-#if !SILVERLIGHT
                             //TODO these two datetime converters don't seem to convert.
                             case "as_of":
                                 reader.Read();
@@ -129,8 +129,8 @@ namespace Twitterizer
                                     }
                                 }
                                 continue;
-#endif
                         }
+#endif
                     }                    
                 }
                 return result;

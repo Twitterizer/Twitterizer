@@ -171,21 +171,20 @@ namespace Twitterizer
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The http verb.</param>
-        /// <param name="KeepAlive">if set to <c>true</c> the <see cref="System.Net.HttpWebRequest"/> will be instructed to keep the connection alive.</param>
-        /// <param name="UserAgent">The http user agent.</param>
-        /// <param name="NetworkCredentials">The network credentials.</param>
+        /// <param name="userAgent">The http user agent.</param>
+        /// <param name="networkCredentials">The network credentials.</param>
         /// <remarks></remarks>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, String UserAgent, NetworkCredential NetworkCredentials)
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, String userAgent, NetworkCredential networkCredentials)
         {
             if (requestUri == null)
                 throw new ArgumentNullException("requestUri");
 
             this.RequestUri = requestUri;
             this.Verb = verb;
-            this.UserAgent = UserAgent;
+            this.UserAgent = userAgent;
             this.UseOAuth = false;
-            if (NetworkCredentials != null)
-                this.NetworkCredentials = NetworkCredentials;
+            if (networkCredentials != null)
+                this.NetworkCredentials = networkCredentials;
 
 			this.Parameters = new Dictionary<string, object>();
 
@@ -205,10 +204,9 @@ namespace Twitterizer
         /// <param name="requestUri">The request URI.</param>
         /// <param name="verb">The verb.</param>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="KeepAlive">if set to <c>true</c> the http request is instructed to keep the connection alive.</param>
-        /// <param name="UserAgent">The user agent.</param>
-        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, String UserAgent = "")
-            : this(requestUri, verb, UserAgent, null)
+        /// <param name="userAgent">The user agent.</param>
+        public WebRequestBuilder(Uri requestUri, HTTPVerb verb, OAuthTokens tokens, string userAgent = "")
+            : this(requestUri, verb, userAgent, null)
         {
             this.Tokens = tokens;
 

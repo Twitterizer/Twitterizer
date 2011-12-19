@@ -64,7 +64,7 @@ namespace Twitterizer.Commands
 		/// </summary>
 		/// <param name="tokens">The request tokens.</param>
 		/// <param name="text">The status text.</param>
-		/// <param name="file">The file to upload.</param>
+		/// <param name="fileData">The file to upload, as a byte array.</param>
 		/// <param name="optionalProperties">The optional properties.</param>
 		public UpdateWithMediaCommand(OAuthTokens tokens, string text, byte[] fileData, StatusUpdateOptions optionalProperties)
 			: base(HTTPVerb.POST, "Set below", tokens, optionalProperties)

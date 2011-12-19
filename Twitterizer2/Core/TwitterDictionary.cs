@@ -42,7 +42,8 @@ namespace Twitterizer.Core
     /// <summary>
     /// The base class for object dictionaries.
     /// </summary>
-    /// <typeparam name="T">The type of object stored in the collection.</typeparam>
+    /// <typeparam name="T">The type of key object stored in the collection.</typeparam>
+    /// <typeparam name="T2">The type of value object stored in the collection.</typeparam>
 #if !SILVERLIGHT
     [Serializable]
 #endif
@@ -56,6 +57,6 @@ namespace Twitterizer.Core
         /// </summary>
         /// <value>The annotations.</value>
         [DataMember]
-        public System.Collections.Generic.Dictionary<string, string> Annotations { get; set; }
+        public Dictionary<string, string> Annotations { get; set; }
     }
 }
