@@ -97,6 +97,16 @@ namespace Twitterizer
         public string Text { get; set; }
 
         /// <summary>
+        /// Returns the status text with HTML links to users, urls, and hashtags.
+        /// </summary>
+        /// <remarks>This will only work if you specify <see cref="SearchOptions.IncludeEntities"/> = <c>true</c> when executing the search.</remarks>
+        /// <returns></returns>
+        public string LinkifiedText()
+        {
+            return TwitterStatus.LinkifiedText(Entities, Text);
+        }
+
+        /// <summary>
         /// Gets or sets the status id.
         /// </summary>
         /// <value>The status id.</value>

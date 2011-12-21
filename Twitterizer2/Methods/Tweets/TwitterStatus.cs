@@ -230,17 +230,19 @@ namespace Twitterizer
         /// <returns></returns>
         public string LinkifiedText()
         {
-            if (this.Entities == null || this.Entities.Count == 0)
+            return LinkifiedText(Entities, Text);
+        }
+
+        internal static string LinkifiedText(TwitterEntityCollection entities, string text)
+        {
+            if (entities == null || entities.Count == 0)
             {
-                return this.Text;
+                return text;
             }
 
-            string linkedText = this.Text;
+            string linkedText = text;
 
-            var entitiesSorted = this
-                                  .Entities
-                                  .OrderBy(e => e.StartIndex)
-                                  .Reverse();
+            var entitiesSorted = entities.OrderBy(e => e.StartIndex).Reverse();
 
             foreach (TwitterEntity entity in entitiesSorted)
             {
