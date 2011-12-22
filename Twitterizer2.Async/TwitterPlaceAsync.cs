@@ -35,6 +35,9 @@ namespace Twitterizer
 {
     using System;
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterPlace"/> class.
+    /// </summary>
     public static class TwitterPlaceAsync
     {
         /// <summary>
@@ -68,7 +71,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterPlaceCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterPlaceCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

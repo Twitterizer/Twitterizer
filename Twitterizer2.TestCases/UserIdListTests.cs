@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Twitterizer;
 
 namespace Twitterizer2.TestCases
 {
     [TestFixture]
-    public static class UserIdListTests
+    public class UserIdListTests
     {
         [Test]
         public static void GetFriendIds()

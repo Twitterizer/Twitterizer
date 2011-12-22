@@ -46,7 +46,6 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="TimelineOptions"/> class.
         /// </summary>
         public TimelineOptions()
-            : base()
         {
             this.Page = 1;
         }

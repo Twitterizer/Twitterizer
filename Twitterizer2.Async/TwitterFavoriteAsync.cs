@@ -34,8 +34,10 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer;
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterFavorite"/> class.
+    /// </summary>
     public static class TwitterFavoriteAsync
     {
         /// <summary>
@@ -64,7 +66,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -96,7 +98,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -112,24 +114,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult List(OAuthTokens tokens, ListFavoritesOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            Func<OAuthTokens, ListFavoritesOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = TwitterFavorite.List;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatusCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterFavorite.List, function);
         }
     }
 }

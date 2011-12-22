@@ -1,10 +1,9 @@
 ﻿namespace Twitterizer
 {
     using System;
-    using Twitterizer;
 
     /// <summary>
-    /// Provides asynchronous method wrappers for the <see cref="Twitterizer.Commands.DirectMessagesCommand"/> class.
+    /// An asynchronous wrapper around the <see cref="TwitterDirectMessage"/> class.
     /// </summary>
     public static class TwitterDirectMessageAsync
     {
@@ -34,7 +33,7 @@
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterDirectMessage>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterDirectMessage> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -52,24 +51,7 @@
         /// </returns>
         public static IAsyncResult DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessageCollection>> function)
         {
-            Func<OAuthTokens, DirectMessagesSentOptions, TwitterResponse<TwitterDirectMessageCollection>> methodToCall = TwitterDirectMessage.DirectMessagesSent;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterDirectMessageCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterDirectMessage.DirectMessagesSent, function);
         }
 
         /// <summary>
@@ -84,24 +66,7 @@
         /// </returns>
         public static IAsyncResult DirectMessages(OAuthTokens tokens, DirectMessagesOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessageCollection>> function)
         {
-            Func<OAuthTokens, DirectMessagesOptions, TwitterResponse<TwitterDirectMessageCollection>> methodToCall = TwitterDirectMessage.DirectMessages;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterDirectMessageCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterDirectMessage.DirectMessages, function);
         }
 
         /// <summary>
@@ -132,7 +97,7 @@
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterDirectMessage>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterDirectMessage> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -166,7 +131,7 @@
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterDirectMessage>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterDirectMessage> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

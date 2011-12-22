@@ -38,14 +38,8 @@ namespace Twitterizer
     /// <summary>
     /// Identifies command classes that must enforce rate limiting. This will cause rate status to be queried before each command call.
     /// </summary>
-    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     internal sealed class RateLimitedAttribute : Attribute
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RateLimitedAttribute"/> class.
-        /// </summary>
-        public RateLimitedAttribute()
-        {
-        }
     }
 }

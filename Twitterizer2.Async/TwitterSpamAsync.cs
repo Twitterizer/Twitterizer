@@ -35,6 +35,9 @@
 using System;
 namespace Twitterizer
 {
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterSpam"/> class.
+    /// </summary>
     public static class TwitterSpamAsync
     {
         /// <summary>
@@ -63,7 +66,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -95,7 +98,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

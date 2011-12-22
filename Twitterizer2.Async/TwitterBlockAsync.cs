@@ -35,6 +35,9 @@
 using System;
 namespace Twitterizer
 {
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterBlock"/> class.
+    /// </summary>
     public static class TwitterBlockAsync
     {
         /// <summary>
@@ -63,7 +66,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -93,7 +96,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -125,7 +128,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -155,7 +158,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -187,7 +190,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -217,7 +220,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -249,7 +252,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -279,7 +282,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -311,7 +314,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -341,7 +344,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -373,7 +376,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -403,7 +406,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -433,7 +436,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterIdCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterIdCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

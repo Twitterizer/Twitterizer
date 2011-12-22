@@ -48,7 +48,6 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="DirectMessagesOptions"/> class.
         /// </summary>
         public DirectMessagesOptions()
-            : base()
         {
             this.Page = 1;
         }

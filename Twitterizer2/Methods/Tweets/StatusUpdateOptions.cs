@@ -34,24 +34,14 @@
 
 namespace Twitterizer
 {
-    using System;
-
     /// <summary>
     /// The Status Update Options class
     /// </summary>
 #if !SILVERLIGHT
-    [Serializable]
+    [System.Serializable]
 #endif
     public sealed class StatusUpdateOptions : OptionalProperties
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusUpdateOptions"/> class.
-        /// </summary>
-        public StatusUpdateOptions()
-            : base()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the in reply to status id.
         /// </summary>

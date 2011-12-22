@@ -37,11 +37,8 @@ namespace Twitterizer.Commands
     using System;
     using System.Globalization;
     using Twitterizer;
-    using Twitterizer.Core;
+    using Core;
 
-    /// <summary>
-    /// The create list command class
-    /// </summary>
 #if !SILVERLIGHT
     [Serializable]
 #endif
@@ -57,7 +54,7 @@ namespace Twitterizer.Commands
         public SearchCommand(OAuthTokens requestTokens, string query, SearchOptions options)
             : base(HTTPVerb.GET, "search.json", requestTokens, options)
         {
-            if (string.IsNullOrEmpty(query) && options == null && string.IsNullOrEmpty(options.Locale))
+            if (string.IsNullOrEmpty(query))
             {
                 throw new ArgumentNullException("query");
             }

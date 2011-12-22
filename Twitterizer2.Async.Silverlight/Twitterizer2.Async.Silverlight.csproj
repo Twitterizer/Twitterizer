@@ -66,6 +66,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Twitterizer2.Async\AsyncHelper.cs">
+      <Link>AsyncHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Twitterizer2.Async\OAuthUtilityAsync.cs">
       <Link>OAuthUtilityAsync.cs</Link>
     </Compile>

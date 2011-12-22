@@ -13,7 +13,7 @@ using System.IO;
         /// <returns></returns>
         public static OAuthTokens GetTokens()
         {
-            ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap()
+            ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap
             {
                 ExeConfigFilename = Path.Combine(Environment.CurrentDirectory, "TestSettings.config")
             };

@@ -51,7 +51,7 @@ namespace Twitterizer.Core
         /// The JavascriptConversionDelegate. The delegate is invokes when using the JavaScriptSerializer to manually construct a result object.
         /// </summary>
         /// <param name="value">Contains nested dictionary objects containing deserialized values for manual parsing.</param>
-        /// <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T"/></returns>
+        /// <returns>A strongly typed object representing the deserialized data of type T</returns>
         public delegate T DeserializationHandler(JObject value);
 
         /// <summary>
@@ -64,34 +64,27 @@ namespace Twitterizer.Core
         /// </returns>
         public static T Deserialize(byte[] webResponseData, DeserializationHandler deserializationHandler)
         {
-            try
-            {
-                T resultObject = default(T);
+            T resultObject;
 
-                // Deserialize the results.
-                if (deserializationHandler == null)
-                {
-#if !SILVERLIGHT
-                    resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData));
-#else
-                    resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length));
-#endif
-                }
-                else
-                {
-#if !SILVERLIGHT
-                    resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData)));
-#else
-                    resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length)));
-#endif
-                }
-
-                return resultObject;
-            }
-            catch (System.Exception)
+            // Deserialize the results.
+            if (deserializationHandler == null)
             {
-                throw;
+#if !SILVERLIGHT
+                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData));
+#else
+                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length));
+#endif
             }
+            else
+            {
+#if !SILVERLIGHT
+                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData)));
+#else
+                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length)));
+#endif
+            }
+
+            return resultObject;
         }
 
         /// <summary>

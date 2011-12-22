@@ -35,7 +35,7 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer.Core;
+    using Core;
 
     /// <summary>
     /// The TwitterFavorite class. Provides static methods for manipulating favorite tweets.
@@ -45,13 +45,6 @@ namespace Twitterizer
 #endif
     public sealed class TwitterFavorite : TwitterObject
     {
-        /// <summary>
-        /// Prevents a default instance of the TwitterFavorite class from being created.
-        /// </summary>
-        private TwitterFavorite()
-        { 
-        }
-
         /// <summary>
         /// Favorites the status specified in the ID parameter as the authenticating user.
         /// </summary>

@@ -34,12 +34,13 @@
 namespace Twitterizer
 {
     using System;
-    using System.Net;
-    using Twitterizer;
 #if SILVERLIGHT
     using System.Threading;
 #endif
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="XAuthUtility"/> class.
+    /// </summary>
     public static class XAuthUtilityAsync
     {
         /// <summary>
@@ -76,10 +77,7 @@ namespace Twitterizer
                 },
                 null);
 #else
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(XAuthUtility.GetAccessTokens(consumerKey, consumerSecret, username, password));  
-                });
+            ThreadPool.QueueUserWorkItem(x => function(XAuthUtility.GetAccessTokens(consumerKey, consumerSecret, username, password)));
             return null;
 #endif
         }

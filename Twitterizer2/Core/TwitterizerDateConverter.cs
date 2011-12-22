@@ -42,7 +42,6 @@ namespace Twitterizer
     /// </summary>
     public class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
     {
-        public TwitterizerDateConverter() { }
         /// <summary>
         /// The date pattern for most dates returned by the API
         /// </summary>

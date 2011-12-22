@@ -3,7 +3,7 @@
     using Twitterizer;
     using NUnit.Framework;
     
-    [TestFixture()]
+    [TestFixture]
     public class PagingTests
     {
         [Test]
@@ -23,7 +23,7 @@
 
             decimal firstId = response.ResponseObject[0].Id;
 
-            response = TwitterTimeline.Mentions(tokens, new TimelineOptions() { Page = ++response.ResponseObject.Page });
+            response = TwitterTimeline.Mentions(tokens, new TimelineOptions { Page = ++response.ResponseObject.Page });
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotNull(response.ResponseObject);
@@ -48,7 +48,7 @@
 
             decimal firstId = response.ResponseObject[0].Id;
 
-            response = TwitterTimeline.UserTimeline(tokens, new UserTimelineOptions() { Page = ++response.ResponseObject.Page });
+            response = TwitterTimeline.UserTimeline(tokens, new UserTimelineOptions { Page = ++response.ResponseObject.Page });
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotNull(response.ResponseObject);
@@ -64,7 +64,9 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<TwitterStatusCollection> response = TwitterTimeline.FriendTimeline(tokens, new TimelineOptions() { Count = 2 });
+#pragma warning disable 618
+            TwitterResponse<TwitterStatusCollection> response = TwitterTimeline.FriendTimeline(tokens, new TimelineOptions { Count = 2 });
+#pragma warning restore 618
 
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
@@ -73,7 +75,9 @@
 
             decimal firstId = response.ResponseObject[0].Id;
 
-            response = TwitterTimeline.FriendTimeline(tokens, new TimelineOptions() { Page = ++response.ResponseObject.Page });
+#pragma warning disable 618
+            response = TwitterTimeline.FriendTimeline(tokens, new TimelineOptions { Page = ++response.ResponseObject.Page });
+#pragma warning restore 618
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotNull(response.ResponseObject);
@@ -98,7 +102,7 @@
 
             decimal firstId = response.ResponseObject[0].Id;
 
-            response = TwitterTimeline.HomeTimeline(tokens, new TimelineOptions() { Page = ++response.ResponseObject.Page });
+            response = TwitterTimeline.HomeTimeline(tokens, new TimelineOptions { Page = ++response.ResponseObject.Page });
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotNull(response.ResponseObject);
@@ -114,7 +118,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<TwitterUserCollection> response = TwitterFriendship.Followers(tokens, new FollowersOptions() { ScreenName = "twitterapi" });
+            TwitterResponse<TwitterUserCollection> response = TwitterFriendship.Followers(tokens, new FollowersOptions { ScreenName = "twitterapi" });
 
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
@@ -123,7 +127,7 @@
 
             decimal firstId = response.ResponseObject[0].Id;
 
-            response = TwitterFriendship.Followers(tokens, new FollowersOptions() { ScreenName = "twitterapi", Cursor = response.ResponseObject.NextCursor });
+            response = TwitterFriendship.Followers(tokens, new FollowersOptions { ScreenName = "twitterapi", Cursor = response.ResponseObject.NextCursor });
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotNull(response.ResponseObject);
@@ -139,7 +143,7 @@
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterResponse<UserIdCollection> response = TwitterFriendship.FollowersIds(tokens, new UsersIdsOptions()
+            TwitterResponse<UserIdCollection> response = TwitterFriendship.FollowersIds(tokens, new UsersIdsOptions
             {
                 ScreenName = "twitterapi"
             });
@@ -151,7 +155,7 @@
 
             decimal firstId = response.ResponseObject[0];
 
-            response = TwitterFriendship.FollowersIds(tokens, new UsersIdsOptions() { ScreenName = "twitterapi", Cursor = response.ResponseObject.NextCursor });
+            response = TwitterFriendship.FollowersIds(tokens, new UsersIdsOptions { ScreenName = "twitterapi", Cursor = response.ResponseObject.NextCursor });
             Assert.IsNotNull(response);
             Assert.That(response.Result == RequestResult.Success);
             Assert.IsNotNull(response.ResponseObject);

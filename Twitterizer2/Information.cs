@@ -48,7 +48,7 @@ namespace Twitterizer
 #if !SILVERLIGHT
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 #else
-            return System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1].ToString();
+            return System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
 #endif
         }
     }

@@ -34,14 +34,10 @@
 
 namespace Twitterizer.Commands
 {
-    using System;
-    using System.Globalization;
-    using Twitterizer.Core;
-
     /// <summary>
     /// The Friends Timeline Command class
     /// </summary>
-    internal sealed class FriendsTimelineCommand : PagedTimelineCommand<TwitterStatusCollection>
+    internal sealed class FriendsTimelineCommand : PagedTimelineCommand
     {
         #region Constructors
         /// <summary>
@@ -64,7 +60,7 @@ namespace Twitterizer.Commands
             if (options == null)
                 options = new TimelineOptions();
             
-            TimelineOptions.Init<TwitterStatusCollection>(this, options);
+            TimelineOptions.Init(this, options);
         }
     }
 }

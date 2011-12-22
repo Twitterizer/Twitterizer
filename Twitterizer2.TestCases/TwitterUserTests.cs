@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Twitterizer2.TestCases
+﻿namespace Twitterizer2.TestCases
 {
     using NUnit.Framework;
     using Twitterizer;
@@ -62,7 +60,7 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            TwitterIdCollection userIds = new TwitterIdCollection()
+            TwitterIdCollection userIds = new TwitterIdCollection
                                               {
                                                   14725805, // digitallyborn
                                                   16144513, // twit_er_izer

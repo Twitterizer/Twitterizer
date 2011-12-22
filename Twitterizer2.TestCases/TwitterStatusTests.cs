@@ -1,17 +1,14 @@
 ﻿using System;
-using NUnit.Framework;
-
+using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using Twitterizer;
 using Twitterizer.Entities;
-
-using System.Diagnostics;
-using System.Collections.Generic;
 
 namespace Twitterizer2.TestCases
 {
     [TestFixture]
-    public static class TwitterStatusTests
+    public class TwitterStatusTests
     {
         [Category("ReadOnly")]
         [Category("REST")]
@@ -67,7 +64,7 @@ namespace Twitterizer2.TestCases
         [ExpectedException(ExpectedException = typeof(ArgumentException))]
         public static void TestTokenValidation2()
         {
-            OAuthTokens fakeTokens = new OAuthTokens()
+            OAuthTokens fakeTokens = new OAuthTokens
                 {
                     ConsumerKey = "fake",
                     ConsumerSecret = "fake"
@@ -121,16 +118,16 @@ namespace Twitterizer2.TestCases
             Assert.IsNotNull(tweet);
 
             // Get the hashtags
-            var hashTags = from entities in tweet.Entities.OfType<TwitterHashTagEntity>()
-                            select entities;
+            //var hashTags = from entities in tweet.Entities.OfType<TwitterHashTagEntity>()
+            //                select entities;
 
             // Get the mentions (@screenname within the text)
             var mentions = from entities in tweet.Entities.OfType<TwitterMentionEntity>()
                             select entities;
 
             // Get urls
-            var urls = from entities in tweet.Entities.OfType<TwitterUrlEntity>()
-                        select entities;
+            //var urls = from entities in tweet.Entities.OfType<TwitterUrlEntity>()
+            //            select entities;
 
             // Get the tweet text to be modified
             string modifiedTweetText = tweet.Text;
@@ -162,24 +159,22 @@ namespace Twitterizer2.TestCases
                 UserNameOrId = "mschilling"
             });
 
-            var combinedList = from t in request1.ResponseObject.Union(request2.ResponseObject)
-                               group t by t.Id into g
-                               select g.First();
-            
-            
+            //var combinedList = from t in request1.ResponseObject.Union(request2.ResponseObject)
+            //                   group t by t.Id into g
+            //                   select g.First();
         }
 
         [Test]
         public static void Conversation()
         {
-            OAuthTokens tokens = Configuration.GetTokens();
+            //OAuthTokens tokens = Configuration.GetTokens();
 
             var statusResponse = TwitterStatus.Show(7183041864671232);
 
             List<TwitterStatus> conversation = new List<TwitterStatus>();
             conversation.Add(statusResponse.ResponseObject);
 
-            while (statusResponse != null && statusResponse.ResponseObject.InReplyToStatusId.HasValue)
+            while (statusResponse.ResponseObject.InReplyToStatusId.HasValue)
             {
                 statusResponse = TwitterStatus.Show(statusResponse.ResponseObject.InReplyToStatusId.Value);
 

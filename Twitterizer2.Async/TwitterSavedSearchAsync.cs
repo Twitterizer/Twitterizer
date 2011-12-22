@@ -34,8 +34,10 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer;
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterSavedSearch"/> class.
+    /// </summary>
     public static class TwitterSavedSearchAsync
     {
         /// <summary>
@@ -64,7 +66,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterSavedSearch>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterSavedSearch> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -96,7 +98,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterSavedSearch>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterSavedSearch> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -112,24 +114,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult SavedSearches(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSavedSearchCollection>> function)
         {
-            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterSavedSearchCollection>> methodToCall = TwitterSavedSearch.SavedSearches;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterSavedSearchCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterSavedSearch.SavedSearches, function);
         }
     }
 }

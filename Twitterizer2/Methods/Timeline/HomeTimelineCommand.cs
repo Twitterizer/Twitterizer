@@ -44,7 +44,7 @@ namespace Twitterizer.Commands
     [Serializable]
 #endif
     [AuthorizedCommandAttribute]
-    internal sealed class HomeTimelineCommand : PagedTimelineCommand<TwitterStatusCollection>
+    internal sealed class HomeTimelineCommand : PagedTimelineCommand
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeTimelineCommand"/> class.
@@ -69,7 +69,7 @@ namespace Twitterizer.Commands
             if (options == null)
                 options = new TimelineOptions();
 
-            TimelineOptions.Init<TwitterStatusCollection>(this, options);
+            TimelineOptions.Init(this, options);
         }
     }
 }

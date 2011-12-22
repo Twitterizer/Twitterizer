@@ -34,23 +34,14 @@
 
 namespace Twitterizer.Entities
 {
-    using System;
-
     /// <summary>
     /// Represents mention of a user within a <see cref="TwitterStatus.Text"/> value.
     /// </summary>
 #if !SILVERLIGHT
-    [Serializable]
+    [System.Serializable]
 #endif
     public class TwitterMentionEntity : TwitterEntity
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterMentionEntity"/> class.
-        /// </summary>
-        public TwitterMentionEntity()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the user's screen name.
         /// </summary>

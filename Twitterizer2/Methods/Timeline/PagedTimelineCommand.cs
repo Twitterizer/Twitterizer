@@ -34,30 +34,25 @@
 
 namespace Twitterizer.Commands
 {
-    using System;
     using System.Globalization;
-    using Twitterizer.Core;
+    using Core;
 
     /// <summary>
     /// The Paged Timeline Command class. Provides common functionality for all of the paged timeline command classes.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
 #if !SILVERLIGHT
-    [Serializable]
+    [System.Serializable]
 #endif
-    internal abstract class PagedTimelineCommand<T> : TwitterCommand<TwitterStatusCollection>
-        where T : ITwitterObject
+    internal abstract class PagedTimelineCommand : TwitterCommand<TwitterStatusCollection>
     {
-        private NumberFormatInfo numberFormat = CultureInfo.InvariantCulture.NumberFormat;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="PagedTimelineCommand&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="PagedTimelineCommand"/> class.
         /// </summary>
         /// <param name="httpMethod">The HTTP method.</param>
         /// <param name="endPoint">The end point.</param>
         /// <param name="tokens">The tokens.</param>
         /// <param name="optionalProperties">The optional properties.</param>
-        public PagedTimelineCommand(HTTPVerb httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
+        protected PagedTimelineCommand(HTTPVerb httpMethod, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
             : base(httpMethod, endPoint, tokens, optionalProperties)
         {
         }

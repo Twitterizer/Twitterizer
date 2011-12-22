@@ -34,23 +34,14 @@
 
 namespace Twitterizer.Entities
 {
-    using System;
-
     /// <summary>
     /// Represents a pre-parsed hash tag in a <see cref="Twitterizer.TwitterStatus.Text"/> value.
     /// </summary>
 #if !SILVERLIGHT
-    [Serializable]
+    [System.Serializable]
 #endif
     public class TwitterHashTagEntity : TwitterEntity
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterHashTagEntity"/> class.
-        /// </summary>
-        public TwitterHashTagEntity()
-        { 
-        }
-
         /// <summary>
         /// Gets or sets the hash tag text.
         /// </summary>

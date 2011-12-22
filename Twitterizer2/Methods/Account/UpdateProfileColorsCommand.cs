@@ -75,50 +75,65 @@ namespace Twitterizer.Commands
         {
             UpdateProfileColorsOptions options = (UpdateProfileColorsOptions)this.OptionalProperties;
 
+#if !SILVERLIGHT
+            if (options.BackgroundColor != Color.Empty)
+            {
+                this.RequestParameters.Add("profile_background_color", ColorTranslator.ToHtml(options.BackgroundColor));
+            }
+#else
             if (options.BackgroundColor != null)
             {
-#if !SILVERLIGHT
-                this.RequestParameters.Add("profile_background_color", ColorTranslator.ToHtml(options.BackgroundColor));
-#else
                 this.RequestParameters.Add("profile_background_color", options.BackgroundColor);
-#endif
             }
+#endif
 
+#if !SILVERLIGHT
+            if (options.TextColor != Color.Empty)
+            {
+                this.RequestParameters.Add("profile_text_color", ColorTranslator.ToHtml(options.TextColor));
+            }
+#else
             if (options.TextColor != null)
             {
-#if !SILVERLIGHT
-                this.RequestParameters.Add("profile_text_color", ColorTranslator.ToHtml(options.TextColor));
-#else
                 this.RequestParameters.Add("profile_text_color", options.TextColor);
-#endif
             }
+#endif
 
+#if !SILVERLIGHT
+            if (options.LinkColor != Color.Empty)
+            {
+                this.RequestParameters.Add("profile_link_color", ColorTranslator.ToHtml(options.LinkColor));
+            }
+#else
             if (options.LinkColor != null)
             {
-#if !SILVERLIGHT
-                this.RequestParameters.Add("profile_link_color", ColorTranslator.ToHtml(options.LinkColor));
-#else
                 this.RequestParameters.Add("profile_link_color", options.LinkColor);
-#endif
             }
+#endif
 
+#if !SILVERLIGHT
+            if (options.SidebarFillColor != Color.Empty)
+            {
+                this.RequestParameters.Add("profile_sidebar_fill_color", ColorTranslator.ToHtml(options.SidebarFillColor));
+            }
+#else
             if (options.SidebarFillColor != null)
             {
-#if !SILVERLIGHT
-                this.RequestParameters.Add("profile_sidebar_fill_color", ColorTranslator.ToHtml(options.SidebarFillColor));
-#else
                 this.RequestParameters.Add("profile_sidebar_fill_color", options.SidebarFillColor);
-#endif
             }
+#endif
 
+#if !SILVERLIGHT
+            if (options.SidebarBorderColor != Color.Empty)
+            {
+                this.RequestParameters.Add("profile_sidebar_border_color", ColorTranslator.ToHtml(options.SidebarBorderColor));
+            }
+#else
             if (options.SidebarBorderColor != null)
             {
-#if !SILVERLIGHT
-                this.RequestParameters.Add("profile_sidebar_border_color", ColorTranslator.ToHtml(options.SidebarBorderColor));
-#else
                 this.RequestParameters.Add("profile_sidebar_border_color", options.SidebarBorderColor);
-#endif
             }
+#endif
         }
     }
 }

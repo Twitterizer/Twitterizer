@@ -32,17 +32,15 @@
 // <summary>Test class for entities.</summary>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Twitterizer;
 using Twitterizer.Entities;
 
 namespace Twitterizer2.TestCases
 {
-    public static class EntityTests
+    [TestFixture]
+    public class EntityTests
     {
         [Test]
         public static void LinkifyText()
@@ -108,7 +106,7 @@ namespace Twitterizer2.TestCases
             Assert.That(StatusResult.Result == RequestResult.Success);
             Assert.IsNotNull(StatusResult.ResponseObject);
 
-            string linkifiedText = StatusResult.ResponseObject.LinkifiedText();
+            /*string linkifiedText =*/ StatusResult.ResponseObject.LinkifiedText();
         }
     }
 }

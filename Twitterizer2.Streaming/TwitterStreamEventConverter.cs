@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Twitterizer2.Streaming
+﻿namespace Twitterizer2.Streaming
 {
         using System;
         using System.Globalization;
@@ -13,7 +8,6 @@ namespace Twitterizer2.Streaming
         /// </summary>
         public class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
         {
-            public TwitterizerDateConverter() { }
             /// <summary>
             /// The date pattern for most dates returned by the API
             /// </summary>

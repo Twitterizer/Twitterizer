@@ -35,6 +35,10 @@ namespace Twitterizer
 {
     using System;
 
+    /// <summary>
+    /// A subclass to the <see cref="TwitterResponse{T}"/> class, for use with the asynchronous api.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class TwitterAsyncResponse<T> : TwitterResponse<T>
         where T : Core.ITwitterObject
     {
@@ -45,8 +49,17 @@ namespace Twitterizer
         public Exception ExceptionThrown { get; set; }
     }
 
-    public static class TwitterResponseAsyncConverterExtentions
+    /// <summary>
+    /// An extension class for converting asynchronous <see cref="TwitterResponse{T}"/> objects.
+    /// </summary>
+    public static class TwitterResponseAsyncConverterExtensions
     {
+        /// <summary>
+        /// Converts a <see cref="TwitterResponse{T}"/> to an async response.
+        /// </summary>
+        /// <typeparam name="T">The datatype contained in the response.</typeparam>
+        /// <param name="response">The response.</param>
+        /// <returns></returns>
         public static TwitterAsyncResponse<T> ToAsyncResponse<T>(this TwitterResponse<T> response)
             where T : Core.ITwitterObject
         {

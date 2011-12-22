@@ -1,4 +1,6 @@
-﻿namespace Twitterizer2.TestCases
+﻿using System.Collections.Generic;
+
+namespace Twitterizer2.TestCases
 {
     using System;
     using System.IO;
@@ -25,20 +27,24 @@
                                )
                                select t;
 
+            var interfacesToImplement = new List<Type>();
+            interfacesToImplement.Add(twitterizerAssembly.GetType("Twitterizer.Core.ICommand`1"));
+            interfacesToImplement.Add(twitterizerAssembly.GetType("Twitterizer.Core.ITwitterCommand`1"));
+
+            var baseClassesToInherit = new List<Type>();
+            baseClassesToInherit.Add(twitterizerAssembly.GetType("Twitterizer.Commands.PagedTimelineCommand`1"));
+
             var commandTypesToCheck = from t in twitterizerAssembly.GetTypes()
                                       where
-                                     //!t.IsAbstract &&
-                                     //!t.IsInterface &&
                                      (
-                                      t.GetInterfaces().Contains(twitterizerAssembly.GetType("Twitterizer.Core.ICommand`1")) ||
-                                      t.GetInterfaces().Contains(twitterizerAssembly.GetType("Twitterizer.Core.TwitterCommand`1")) ||
-                                      t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Commands.PagedTimelineCommand`1")) ||
-                                      t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Core.PagedCommand`1")) ||
-                                      t.IsSubclassOf(twitterizerAssembly.GetType("Twitterizer.Core.CursorPagedCommand`1"))
+                                      interfacesToImplement.Intersect(t.GetInterfaces()).Count() > 0 ||
+                                      baseClassesToInherit.Any(t.IsSubclassOf)
                                      )
                                      select t;
 
-            foreach (Type type in objectTypesToCheck.Union(commandTypesToCheck))
+            var objects = objectTypesToCheck.Union(commandTypesToCheck).ToList();
+
+            foreach (Type type in objects)
             {
                 Console.WriteLine(string.Format("Inspecting: {0}", type.FullName));
 
@@ -47,6 +53,9 @@
 
                 // Get the parameter-less constructor, if there is one
                 ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+
+                if (constructor == null)
+                    Assert.Fail(string.Format("{0} does not have a public ctor", type.FullName));
 
                 // Instantiate the type by invoking the constructor
                 object objectToSerialize = constructor.Invoke(null);
@@ -70,13 +79,13 @@
         [Category("ReadOnly")]
         public static void SSL()
         {
-            TwitterResponse<TwitterUser> sslUser = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = true });
+            TwitterResponse<TwitterUser> sslUser = TwitterUser.Show("twitterapi", new OptionalProperties { UseSSL = true });
             Assert.That(sslUser.RequestUrl.StartsWith("https://"));
             
-            TwitterResponse<TwitterUser> user = TwitterUser.Show("twitterapi", new OptionalProperties() { UseSSL = false });
+            TwitterResponse<TwitterUser> user = TwitterUser.Show("twitterapi", new OptionalProperties { UseSSL = false });
             Assert.That(user.RequestUrl.StartsWith("http://"));
 
-            TwitterResponse<TwitterStatusCollection> timeline = TwitterTimeline.HomeTimeline(Configuration.GetTokens(), new TimelineOptions() { UseSSL = true });
+            TwitterResponse<TwitterStatusCollection> timeline = TwitterTimeline.HomeTimeline(Configuration.GetTokens(), new TimelineOptions { UseSSL = true });
             Assert.That(timeline.RequestUrl.StartsWith("https://"));
             Assert.That(user.RequestUrl.StartsWith("https://"));
         }

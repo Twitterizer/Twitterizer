@@ -36,6 +36,9 @@ namespace Twitterizer
 {
     using System;
 
+    /// <summary>
+    /// An options class for updating the user's profile background image.
+    /// </summary>
 #if !SILVERLIGHT
     [Serializable]
 #endif

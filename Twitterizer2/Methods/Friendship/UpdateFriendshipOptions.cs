@@ -47,7 +47,6 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="UpdateFriendshipOptions"/> class.
         /// </summary>
         public UpdateFriendshipOptions()
-            : base()
         {
             DeviceNotifications = null;
             ShowRetweets = null;

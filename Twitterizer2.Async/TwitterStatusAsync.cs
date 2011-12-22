@@ -39,6 +39,9 @@ namespace Twitterizer
     using System.Threading;
 #endif
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterStatus"/> class.
+    /// </summary>
     public static class TwitterStatusAsync
     {
         /// <summary>
@@ -67,7 +70,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -99,7 +102,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -131,7 +134,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatusCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatusCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -164,15 +167,12 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
 #else
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterStatus.Show(tokens, statusId, options).ToAsyncResponse<TwitterStatus>());  
-                });
+            ThreadPool.QueueUserWorkItem(x => function(TwitterStatus.Show(tokens, statusId, options).ToAsyncResponse()));
             return null;
 #endif
         }
@@ -203,12 +203,22 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
         }
 
+        /// <summary>
+        /// Updates the twitter status, and includes media (typically an image) in that update.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="fileData">The file data.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
         public static IAsyncResult UpdateWithMedia(OAuthTokens tokens, string text, byte[] fileData, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function, StatusUpdateOptions options = null)
         {
             Func<OAuthTokens, string, byte[], StatusUpdateOptions, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.UpdateWithMedia;
@@ -227,12 +237,22 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
         }
 
+        /// <summary>
+        /// Updates the twitter status, and includes media (typically an image) in that update.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="fileLocation">The file location.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
         public static IAsyncResult UpdateWithMedia(OAuthTokens tokens, string text, string fileLocation, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function, StatusUpdateOptions options = null)
         {
             Func<OAuthTokens, string, string, StatusUpdateOptions, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.UpdateWithMedia;
@@ -251,7 +271,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

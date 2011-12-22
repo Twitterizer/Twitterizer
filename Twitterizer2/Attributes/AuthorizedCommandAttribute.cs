@@ -34,17 +34,13 @@
 
 namespace Twitterizer.Core
 {
+    using System;
+
     /// <summary>
     /// Indicates that a command class requires authorization tokens.
     /// </summary>
-    [global::System.AttributeUsage(System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     internal sealed class AuthorizedCommandAttribute : System.Attribute
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthorizedCommandAttribute"/> class.
-        /// </summary>
-        public AuthorizedCommandAttribute()
-        {
-        }
     }
 }

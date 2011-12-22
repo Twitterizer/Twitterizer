@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
 #endif
     internal class UpdateProfileImageCommand : TwitterCommand<TwitterUser>
     {
-        private byte[] imageData;
+        private readonly byte[] imageData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateProfileImageCommand"/> class.

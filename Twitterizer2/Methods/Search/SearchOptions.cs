@@ -73,7 +73,6 @@ namespace Twitterizer
         /// Initializes a new instance of the <see cref="SearchOptions"/> class.
         /// </summary>
         public SearchOptions()
-            : base()
         {
             this.APIBaseAddress = "http://search.twitter.com/";
         }

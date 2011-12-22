@@ -103,7 +103,7 @@ namespace Twitterizer
                         return null;
                     }
 
-                    int depth = reader.Depth + 1;
+                    //int depth = reader.Depth + 1;
                     double count = 1;
 
                     while (reader.Read() && reader.Depth >= startDepth)

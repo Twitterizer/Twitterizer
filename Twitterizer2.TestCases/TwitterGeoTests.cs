@@ -11,7 +11,7 @@
         [Category("REST")]
         public static void LookupPlaces()
         {
-            TwitterPlaceLookupOptions options = new TwitterPlaceLookupOptions()
+            TwitterPlaceLookupOptions options = new TwitterPlaceLookupOptions
             {
                 Granularity = "city",
                 MaxResults = 2

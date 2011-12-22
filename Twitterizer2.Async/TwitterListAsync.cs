@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Twitterizer;
-
-namespace Twitterizer
+﻿namespace Twitterizer
 {
+    using System;
+
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterList"/> class.
+    /// </summary>
     public static class TwitterListAsync
     {
         /// <summary>
@@ -38,7 +37,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -74,7 +73,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -108,7 +107,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -118,14 +117,13 @@ namespace Twitterizer
         /// Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="listIdOrSlug">The list id or slug.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
         [Obsolete("TwitterListAsync.GetList() has been replaced with TwitterListAsync.Show()")]
-        public static IAsyncResult GetList(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
+        public static IAsyncResult GetList(OAuthTokens tokens, string listIdOrSlug, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
         {
             return Show(tokens, listIdOrSlug, options, timeout, function);
         }
@@ -156,7 +154,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -166,31 +164,13 @@ namespace Twitterizer
         /// List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who's lists are being returned.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult GetLists(OAuthTokens tokens, string username, GetListsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
+        public static IAsyncResult GetLists(OAuthTokens tokens, GetListsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, GetListsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetLists;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterListCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterList.GetLists, function);
         }
 
         /// <summary>
@@ -227,7 +207,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUserCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUserCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -259,7 +239,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterListCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterListCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -299,7 +279,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterStatusCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterStatusCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -336,7 +316,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterListCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterListCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -346,7 +326,6 @@ namespace Twitterizer
         /// Creates a new list for the authenticated user. Accounts are limited to 20 lists.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
         /// <param name="name">The name.</param>
         /// <param name="isPublic">if set to <c>true</c> [is public].</param>
         /// <param name="description">The description.</param>
@@ -356,7 +335,6 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult New(
             OAuthTokens tokens, 
-            string username, 
             string name, 
             bool isPublic, 
             string description, 
@@ -381,7 +359,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -424,7 +402,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -461,7 +439,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -499,7 +477,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterList>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

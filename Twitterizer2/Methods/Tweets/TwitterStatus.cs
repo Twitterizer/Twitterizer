@@ -182,7 +182,7 @@ namespace Twitterizer
             {
                 if (string.IsNullOrEmpty(this.RetweetCountString)) return null;
 
-                int parsedResult = 0;
+                int parsedResult;
 
                 if (
                     this.RetweetCountString.EndsWith("+") &&

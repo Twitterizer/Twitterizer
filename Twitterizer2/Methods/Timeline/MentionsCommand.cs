@@ -35,8 +35,7 @@
 namespace Twitterizer.Commands
 {
     using System;
-    using System.Globalization;
-    using Twitterizer.Core;
+    using Core;
 
     /// <summary>
     /// The Mentions Command class
@@ -45,7 +44,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    internal sealed class MentionsCommand : PagedTimelineCommand<TwitterStatusCollection>
+    internal sealed class MentionsCommand : PagedTimelineCommand
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MentionsCommand"/> class.
@@ -70,7 +69,7 @@ namespace Twitterizer.Commands
             if (options == null)
                 options = new TimelineOptions();
 
-            TimelineOptions.Init<TwitterStatusCollection>(this, options);
+            TimelineOptions.Init(this, options);
         }
     }
 }

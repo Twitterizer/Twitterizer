@@ -45,6 +45,18 @@ namespace Twitterizer
     {
 #if !SILVERLIGHT
         /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateProfileColorsOptions"/> class.
+        /// </summary>
+        public UpdateProfileColorsOptions()
+        {
+            BackgroundColor = Color.Empty;
+            TextColor = Color.Empty;
+            LinkColor = Color.Empty;
+            SidebarFillColor = Color.Empty;
+            SidebarBorderColor = Color.Empty;
+        }
+
+        /// <summary>
         /// Gets or sets the color of the background.
         /// </summary>
         /// <value>The color of the background.</value>
@@ -74,7 +86,7 @@ namespace Twitterizer
         /// <value>The color of the sidebar border.</value>
         public Color SidebarBorderColor { get; set; }
 #else
-                /// <summary>
+        /// <summary>
         /// Gets or sets the color of the background.
         /// </summary>
         /// <value>The color of the background.</value>

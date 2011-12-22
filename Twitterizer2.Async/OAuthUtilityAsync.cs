@@ -33,10 +33,15 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer
 {
+#if !SILVERLIGHT
     using System;
     using System.Net;
     using Twitterizer;
+#endif
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="OAuthUtility"/> class.
+    /// </summary>
     public static class OAuthUtilityAsync
     {
 #if !SILVERLIGHT

@@ -34,23 +34,14 @@
 
 namespace Twitterizer.Entities
 {
-    using System;
-
     /// <summary>
     /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
     /// </summary>
 #if !SILVERLIGHT
-    [Serializable]
+    [System.Serializable]
 #endif
     public class TwitterUrlEntity : TwitterEntity
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterUrlEntity"/> class.
-        /// </summary>
-        public TwitterUrlEntity()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the URL parsed from the tweet text.
         /// </summary>

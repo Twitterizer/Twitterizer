@@ -32,10 +32,12 @@
 // <summary>The TwitterUserAsync class</summary>
 //-----------------------------------------------------------------------
 using System;
-using Twitterizer;
 
 namespace Twitterizer
 {
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterUser"/> class.
+    /// </summary>
     public static class TwitterUserAsync
     {
         /// <summary>
@@ -48,24 +50,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Lookup(OAuthTokens tokens, LookupUsersOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUserCollection>> function)
         {
-            Func<OAuthTokens, LookupUsersOptions, TwitterResponse<TwitterUserCollection>> methodToCall = TwitterUser.Lookup;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUserCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterUser.Lookup, function);
         }
 
         /// <summary>
@@ -94,7 +79,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUserCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUserCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -126,7 +111,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
@@ -156,7 +141,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterUser>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

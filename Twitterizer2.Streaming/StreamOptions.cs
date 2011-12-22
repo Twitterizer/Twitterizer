@@ -37,7 +37,7 @@ namespace Twitterizer.Streaming
 
     public class StreamOptions
     {
-        public StreamOptions()
+        protected StreamOptions()
         {
             this.Track = new List<string>();
             this.Locations = new List<Location>();

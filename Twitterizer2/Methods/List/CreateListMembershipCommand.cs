@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Twitterizer.Core;
 
 namespace Twitterizer.Commands
 {
     internal class CreateListMembershipCommand : TwitterCommand<TwitterList>
     {
-        private decimal listId;
+        private readonly decimal listId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateListMembershipCommand"/> class.

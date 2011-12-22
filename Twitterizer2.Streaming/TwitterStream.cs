@@ -157,7 +157,7 @@ namespace Twitterizer.Streaming
         /// </summary>
         public IAsyncResult  StartUserStream(
             InitUserStreamCallback friendsCallback,
-            StreamStoppedCallback streamErrorCallback,
+            StreamStoppedCallback streamStoppedCallback,
             StatusCreatedCallback statusCreatedCallback, 
             StatusDeletedCallback statusDeletedCallback,
             DirectMessageCreatedCallback directMessageCreatedCallback,
@@ -178,7 +178,7 @@ namespace Twitterizer.Streaming
 
             HttpWebRequest request = builder.PrepareRequest();            
             this.friendsCallback = friendsCallback;
-            this.streamStoppedCallback = streamErrorCallback;
+            this.streamStoppedCallback = streamStoppedCallback;
             this.statusCreatedCallback = statusCreatedCallback; 
             this.statusDeletedCallback = statusDeletedCallback;
             this.directMessageCreatedCallback = directMessageCreatedCallback;
@@ -198,8 +198,8 @@ namespace Twitterizer.Streaming
         /// <summary>
         /// Starts the public stream.
         /// </summary>
-        public IAsyncResult StartPublicStream(            
-            StreamStoppedCallback streamErrorCallback,
+        public IAsyncResult StartPublicStream(
+            StreamStoppedCallback streamStoppedCallback,
             StatusCreatedCallback statusCreatedCallback,
             StatusDeletedCallback statusDeletedCallback,
             EventCallback eventCallback,
@@ -215,7 +215,7 @@ namespace Twitterizer.Streaming
 
             HttpWebRequest request = builder.PrepareRequest();
 
-            this.streamStoppedCallback = streamErrorCallback;
+            this.streamStoppedCallback = streamStoppedCallback;
             this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
             this.eventCallback = eventCallback;
@@ -338,7 +338,7 @@ namespace Twitterizer.Streaming
                             else
                                 this.OnStreamStopped(StopReasons.StoppedByRequest);
                         }
-                    };
+                    }
                 }
             }
             catch (Exception e)

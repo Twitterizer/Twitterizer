@@ -4,7 +4,7 @@
     using NUnit.Framework;
     
     [TestFixture]
-    public static class TwitterTrendTests
+    public class TwitterTrendTests
     {
         [Category("ReadOnly")]
         [Category("Search")]

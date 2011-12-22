@@ -49,7 +49,7 @@ namespace Twitterizer.Core
         /// The JavascriptConversionDelegate. The delegate is invokes when using the JavaScriptSerializer to manually construct a result object.
         /// </summary>
         /// <param name="value">Contains nested dictionary objects containing deserialized values for manual parsing.</param>
-        /// <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T" />
+        /// <returns>A strongly typed object representing the deserialized data of type T.
         /// </returns>
         public delegate T DeserializationHandler(JObject value);
 

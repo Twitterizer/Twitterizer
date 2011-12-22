@@ -40,6 +40,9 @@ namespace Twitterizer
     using System.Threading;
 #endif
 
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterSearch"/> class.
+    /// </summary>
     public static class TwitterSearchAsync
     {
         /// <summary>
@@ -67,15 +70,12 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterSearchResultCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterSearchResultCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);
 #else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterSearch.Search(query, options).ToAsyncResponse<TwitterSearchResultCollection>());  
-                });
+            ThreadPool.QueueUserWorkItem(x => function(TwitterSearch.Search(query, options).ToAsyncResponse()));
             return null;
 #endif
         }
@@ -106,7 +106,7 @@ namespace Twitterizer
                     }
                     catch (Exception ex)
                     {
-                        function(new TwitterAsyncResponse<TwitterSearchResultCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
+                        function(new TwitterAsyncResponse<TwitterSearchResultCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
                     }
                 },
                 null);

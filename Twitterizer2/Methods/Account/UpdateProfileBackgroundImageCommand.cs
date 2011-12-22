@@ -45,7 +45,7 @@ namespace Twitterizer.Commands
 #endif
     internal sealed class UpdateProfileBackgroundImageCommand : TwitterCommand<TwitterUser>
     {
-        private byte[] imageData;
+        private readonly byte[] imageData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateProfileBackgroundImageCommand"/> class.

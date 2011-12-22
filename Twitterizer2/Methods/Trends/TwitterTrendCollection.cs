@@ -47,15 +47,24 @@ namespace Twitterizer
     [Serializable]
 #endif
     public class TwitterTrendCollection : Core.TwitterCollection<TwitterTrend>, ITwitterObject
-    {        
+    {
+        /// <summary>
+        /// Gets or sets the as of date.
+        /// </summary>
         [JsonProperty(PropertyName = "as_of")]
         [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime AsOf { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created at date.
+        /// </summary>
         [JsonProperty(PropertyName = "created_at")]
         [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime CreatedAt { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the location.
+        /// </summary>
         public TwitterTrendLocationCollection Locations { get; set; }
         
         /// <summary>

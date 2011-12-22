@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Twitterizer;
-using System.Net;
 
 namespace Twitterizer2.TestCases
 {
@@ -14,7 +10,7 @@ namespace Twitterizer2.TestCases
         [Test]
         public static void RequestToken()
         {
-            OAuthTokens tokens = Configuration.GetTokens();
+            //OAuthTokens tokens = Configuration.GetTokens();
 
             //OAuthTokenResponse response = OAuthUtility.GetRequestToken(tokens.ConsumerKey, tokens.ConsumerSecret, "oob");
 
@@ -38,9 +34,11 @@ namespace Twitterizer2.TestCases
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("http://example.com/endpoint"),
                 HTTPVerb.GET,
-                new OAuthTokens()
+                new OAuthTokens
                                 {
+                                    ConsumerKey =  "key",
                                     ConsumerSecret = "518F1B7B4C2F855EFF3DEFDAF1311",
+                                    AccessToken = "token",
                                     AccessTokenSecret = "A6FE4462BAA8C3ADEA7D9E3BCD5BB"
                                 }
             );

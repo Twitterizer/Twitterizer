@@ -34,15 +34,19 @@
 
 namespace Twitterizer
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Twitterizer.Core;
+    using Core;
 
     /// <summary>
     /// Holds a collection of ID values that are broken into multiple pages.
     /// </summary>
+#if !SILVERLIGHT
+    [Serializable]
+#endif
     public class TwitterCursorPagedIdCollection : Collection<decimal>, ITwitterObject
     {
         /// <summary>

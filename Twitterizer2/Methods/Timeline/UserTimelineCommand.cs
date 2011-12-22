@@ -36,7 +36,6 @@ namespace Twitterizer.Commands
 {
     using System;
     using System.Globalization;
-    using Twitterizer.Core;
 
     /// <summary>
     /// The user timeline command.
@@ -44,8 +43,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    internal sealed class UserTimelineCommand :
-        PagedTimelineCommand<TwitterStatusCollection>
+    internal sealed class UserTimelineCommand : PagedTimelineCommand
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserTimelineCommand"/> class.
@@ -75,7 +73,7 @@ namespace Twitterizer.Commands
             if (options == null)
                 options = new UserTimelineOptions();
 
-            TimelineOptions.Init<TwitterStatusCollection>(this, options);
+            TimelineOptions.Init(this, options);
             
             if (options.UserId > 0)
                 this.RequestParameters.Add("user_id", options.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));

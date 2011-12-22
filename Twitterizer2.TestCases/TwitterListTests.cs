@@ -49,7 +49,7 @@ namespace Twitterizer2.TestCases
             // Attempt to page through the results.
             while (usersInTheList != null && usersInTheList.ResponseObject.Count > 0)
             {
-                usersInTheList = TwitterList.GetMembers(tokens, "ghc", "ghc10-attendees", new GetListMembersOptions() { Cursor = usersInTheList.ResponseObject.NextCursor });
+                usersInTheList = TwitterList.GetMembers(tokens, "ghc", "ghc10-attendees", new GetListMembersOptions { Cursor = usersInTheList.ResponseObject.NextCursor });
                 
                 if (usersInTheList != null)
                     countedMembers += usersInTheList.ResponseObject.Count;
@@ -83,28 +83,28 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
-            string listName = "test-list-ignore";
+            string testListIgnore = "test-list-ignore";
             TwitterUser myUser = TwitterAccount.VerifyCredentials(tokens).ResponseObject;
             var userIdToAdd = TwitterUser.Show(tokens, userName).ResponseObject.Id;
 
-            var listResponse = TwitterList.Show(tokens, listName);
+            var listResponse = TwitterList.Show(tokens, testListIgnore);
             if (listResponse.Result == RequestResult.FileNotFound)
             {
                 // Create the new list
-                listResponse = TwitterList.New(tokens, myUser.ScreenName, listName, false, "Testing Twitterizer");
+                listResponse = TwitterList.New(tokens, myUser.ScreenName, testListIgnore, false, "Testing Twitterizer");
                 Assert.That(listResponse.Result == RequestResult.Success);
             }
 
             // Add a user
-            var addMemberResponse = TwitterList.AddMember(tokens, myUser.ScreenName, listName, userIdToAdd);
+            var addMemberResponse = TwitterList.AddMember(tokens, myUser.ScreenName, testListIgnore, userIdToAdd);
             Assert.That(addMemberResponse.Result == RequestResult.Success);
 
             // Remove the user
-            var removeMemberResponse = TwitterList.RemoveMember(tokens, myUser.ScreenName, listName, userIdToAdd);
+            var removeMemberResponse = TwitterList.RemoveMember(tokens, myUser.ScreenName, testListIgnore, userIdToAdd);
             Assert.That(removeMemberResponse.Result == RequestResult.Success);
 
             // Delete the list
-            listResponse = TwitterList.Delete(tokens, myUser.ScreenName, listName, null);
+            listResponse = TwitterList.Delete(tokens, myUser.ScreenName, testListIgnore, null);
             Assert.That(listResponse.Result == RequestResult.Success);
         }
 

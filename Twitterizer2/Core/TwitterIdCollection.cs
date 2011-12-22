@@ -32,8 +32,10 @@
 // <summary>The twitter id collection class.</summary>
 //-----------------------------------------------------------------------
 
+
 namespace Twitterizer
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Core;
@@ -41,6 +43,9 @@ namespace Twitterizer
     /// <summary>
     /// Holds a collection of ID values
     /// </summary>
+#if !SILVERLIGHT
+    [Serializable]
+#endif
     public class TwitterIdCollection : Collection<decimal>, ITwitterObject
     {
         /// <summary>

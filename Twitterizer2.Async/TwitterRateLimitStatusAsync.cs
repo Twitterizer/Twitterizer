@@ -34,10 +34,9 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer;
 
     /// <summary>
-    /// The Twitter Rate Limit Status Async class
+    /// An asynchronous wrapper around the <see cref="TwitterRateLimitStatus"/> class.
     /// </summary>
     public class TwitterRateLimitStatusAsync
     {
@@ -51,24 +50,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult GetStatus(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
-            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = TwitterRateLimitStatus.GetStatus;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterRateLimitStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterRateLimitStatus.GetStatus, function);
         }
 
         /// <summary>
@@ -78,26 +60,9 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param> 
         /// <returns></returns>
-        public static IAsyncResult GetStatus(OAuthTokens tokens, TimeSpan timeout, Action<TwitterResponse<TwitterRateLimitStatus>> function)
+        public static IAsyncResult GetStatus(OAuthTokens tokens, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
-            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = TwitterRateLimitStatus.GetStatus;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                null,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterRateLimitStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(tokens, timeout, TwitterRateLimitStatus.GetStatus, function);
         }
 
         /// <summary>
@@ -106,26 +71,9 @@ namespace Twitterizer
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult GetStatus(TimeSpan timeout, Action<TwitterResponse<TwitterRateLimitStatus>> function)
+        public static IAsyncResult GetStatus(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
-            Func<OAuthTokens, OptionalProperties, TwitterResponse<TwitterRateLimitStatus>> methodToCall = TwitterRateLimitStatus.GetStatus;
-
-            return methodToCall.BeginInvoke(
-                null,
-                null,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterRateLimitStatus>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncHelper.ExecuteAsyncMethod(null, timeout, TwitterRateLimitStatus.GetStatus, function);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Twitterizer2.TestCases
     using NUnit.Framework;
 
     [TestFixture]
-    public static class TwitterTimelineTests
+    public class TwitterTimelineTests
     {
         [Category("ReadOnly")]
         [Category("REST")]
@@ -29,12 +29,7 @@ namespace Twitterizer2.TestCases
                 Configuration.GetTokens(),
                 new UserTimelineOptions(),
                 new TimeSpan(0, 2, 0),
-                result =>
-                {
-                    TwitterStatusCollection timeline = result.ResponseObject;
-
-                    PerformCommonTimelineTests(result);
-                });
+                PerformCommonTimelineTests);
 
             asyncResult.AsyncWaitHandle.WaitOne();
 
@@ -56,7 +51,9 @@ namespace Twitterizer2.TestCases
         {
             OAuthTokens tokens = Configuration.GetTokens();
 
+#pragma warning disable 618
             TwitterResponse<TwitterStatusCollection> timelineResponse = TwitterTimeline.FriendTimeline(tokens);
+#pragma warning restore 618
             PerformCommonTimelineTests(timelineResponse);
         }
 
@@ -129,7 +126,7 @@ namespace Twitterizer2.TestCases
 
             decimal mostRecentId = timelineResponse.ResponseObject[0].Id;
 
-            TwitterResponse<TwitterStatusCollection> timeline2 = TwitterTimeline.Mentions(tokens, new TimelineOptions()
+            TwitterResponse<TwitterStatusCollection> timeline2 = TwitterTimeline.Mentions(tokens, new TimelineOptions
             {
                 SinceStatusId = mostRecentId
             });

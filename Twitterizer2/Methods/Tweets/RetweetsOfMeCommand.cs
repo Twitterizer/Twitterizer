@@ -71,7 +71,6 @@ namespace Twitterizer.Commands
 
             if (options == null)
             {
-                this.RequestParameters.Add("page", options.Page.ToString(CultureInfo.InvariantCulture));
                 return;
             }
 

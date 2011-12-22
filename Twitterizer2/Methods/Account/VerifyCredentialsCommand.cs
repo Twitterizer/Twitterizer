@@ -64,7 +64,7 @@ namespace Twitterizer.Commands
 
             if (options == null) return;
 
-            if (options.IncludeEntities == true)
+            if (options.IncludeEntities)
             {
                 this.RequestParameters.Add("include_entities", "true");
             }

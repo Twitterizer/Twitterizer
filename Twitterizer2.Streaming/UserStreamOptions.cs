@@ -33,12 +33,8 @@
 //-----------------------------------------------------------------------
 namespace Twitterizer.Streaming
 {
-    using System.Collections.Generic;
-
     public class UserStreamOptions : StreamOptions
     {
-        public UserStreamOptions() { }
-
         /// <summary>
         /// Gets or sets whether to request all replies from the stream.
         /// </summary>

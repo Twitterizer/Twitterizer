@@ -78,19 +78,19 @@ namespace Twitterizer.Core
         /// Gets or sets the optional properties.
         /// </summary>
         /// <value>The optional properties.</value>
-        public OptionalProperties OptionalProperties { get; set; }
+        protected OptionalProperties OptionalProperties { get; set; }
 
         /// <summary>
         /// Gets or sets the API method URI.
         /// </summary>
         /// <value>The URI for the API method.</value>
-        public Uri Uri { get; set; }
+        private Uri Uri { get; set; }
 
         /// <summary>
         /// Gets or sets the method.
         /// </summary>
         /// <value>The method.</value>
-        public HTTPVerb Verb { get; set; }
+        private HTTPVerb Verb { get; set; }
 
         /// <summary>
         /// Gets or sets the request parameters.
@@ -102,7 +102,7 @@ namespace Twitterizer.Core
         /// Gets or sets the serialization delegate.
         /// </summary>
         /// <value>The serialization delegate.</value>
-        public SerializationHelper<T>.DeserializationHandler DeserializationHandler { get; set; }
+        protected SerializationHelper<T>.DeserializationHandler DeserializationHandler { get; set; }
 
         /// <summary>
         /// Gets the request tokens.
@@ -119,7 +119,7 @@ namespace Twitterizer.Core
         /// Gets or sets a value indicating whether this <see cref="TwitterCommand&lt;T&gt;"/> is multipart.
         /// </summary>
         /// <value><c>true</c> if multipart; otherwise, <c>false</c>.</value>
-        public bool Multipart { get; set; }
+        protected bool Multipart { get; set; }
 
         /// <summary>
         /// Executes the command.
@@ -137,7 +137,7 @@ namespace Twitterizer.Core
             // Loop through all of the custom attributes assigned to the command class
             foreach (Attribute attribute in this.GetType().GetCustomAttributes(false))
             {
-                if (attribute.GetType() == typeof(AuthorizedCommandAttribute))
+                if (attribute is AuthorizedCommandAttribute)
                 {
                     if (this.Tokens == null)
                     {
@@ -152,7 +152,7 @@ namespace Twitterizer.Core
                         throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Token values cannot be null when executing the \"{0}\" command.", this.GetType()));
                     }
                 }
-                else if (attribute.GetType() == typeof(RateLimitedAttribute))
+                else if (attribute is RateLimitedAttribute)
                 {
                     // Get the rate limiting status
                     if (TwitterRateLimitStatus.GetStatus(this.Tokens).ResponseObject.RemainingHits == 0)
@@ -190,7 +190,7 @@ namespace Twitterizer.Core
             {
                 if (cache[cacheKeyBuilder.ToString()] is T)
                 {
-                    return new TwitterResponse<T>()
+                    return new TwitterResponse<T>
                                {
                                    ResponseObject = (T)cache[cacheKeyBuilder.ToString()],
                                    ResponseCached = true
@@ -208,7 +208,7 @@ namespace Twitterizer.Core
 
             try
             {
-				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens, "") { Multipart = this.Multipart };
+				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens) { Multipart = this.Multipart };
 
 #if !SILVERLIGHT
                 if (this.OptionalProperties != null)
@@ -413,8 +413,7 @@ namespace Twitterizer.Core
                 }
                 return AccessLevel.Unknown;
             }
-            else
-                return AccessLevel.Unavailable;
+            return AccessLevel.Unavailable;
         }
 
 

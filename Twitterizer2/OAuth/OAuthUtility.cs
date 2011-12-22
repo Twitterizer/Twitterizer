@@ -75,8 +75,7 @@ namespace Twitterizer
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/oauth/request_token"),
                 HTTPVerb.POST,
-                new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				"");
+                new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
 
             if (!string.IsNullOrEmpty(callbackAddress))
             {
@@ -154,8 +153,7 @@ namespace Twitterizer
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/oauth/request_token"),
                 HTTPVerb.POST,
-                new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				"") { Proxy = proxy };
+                new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret }) { Proxy = proxy };
 
             if (!string.IsNullOrEmpty(callbackAddress))
             {
@@ -217,8 +215,7 @@ namespace Twitterizer
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/oauth/access_token"),
                 HTTPVerb.GET,
-				new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				"");
+				new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
 
             if (!string.IsNullOrEmpty(verifier))
             {
@@ -280,8 +277,7 @@ namespace Twitterizer
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/oauth/access_token"),
                 HTTPVerb.GET,
-				new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-				"");
+				new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
 
             builder.Proxy = proxy;
 
@@ -392,8 +388,7 @@ namespace Twitterizer
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/1/account/verify_credentials.json"), 
                 HTTPVerb.POST,
-				tokens,
-				"");
+				tokens);
 
             builder.PrepareRequest();
 

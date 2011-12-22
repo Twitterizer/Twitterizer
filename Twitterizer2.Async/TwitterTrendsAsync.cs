@@ -37,159 +37,62 @@ namespace Twitterizer
 #if SILVERLIGHT
     using System.Threading;
 #endif
+    /// <summary>
+    /// An asynchronous wrapper around the <see cref="TwitterTrend"/> class.
+    /// </summary>
     public static class TwitterTrendsAsync
     {
 
         /// <summary>
         /// Gets the trends with the specified WOEID.
         /// </summary>
-        /// <param name="WoeID">The WOEID.</param>
+        /// <param name="woeId">The WOEID.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Trends(int WoeID, LocalTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
+        public static IAsyncResult Trends(int woeId, LocalTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<int, LocalTrendsOptions, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Trends;
-
-            return methodToCall.BeginInvoke(
-                WoeID, 
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Trends(WoeID, options).ToAsyncResponse<TwitterTrendCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, woeId, options, timeout, TwitterTrend.Trends, function);
         }
 
         /// <summary>
         /// Gets the trends with the specified WOEID.
         /// </summary>
-        /// <param name="WoeID">The WOEID.</param>
+        /// <param name="woeId">The WOEID.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Trends(int WoeID, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
+        public static IAsyncResult Trends(int woeId, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<int, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Trends;
-
-            return methodToCall.BeginInvoke(
-                WoeID,                
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Trends(WoeID).ToAsyncResponse<TwitterTrendCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, woeId, timeout, TwitterTrend.Trends, function);
         }
 
         /// <summary>
         /// Gets the trends with the specified WOEID.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        /// <param name="WoeID">The WOEID.</param>
+        /// <param name="woeId">The WOEID.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Trends(OAuthTokens tokens, int WoeID, LocalTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
+        public static IAsyncResult Trends(OAuthTokens tokens, int woeId, LocalTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<OAuthTokens, int, LocalTrendsOptions, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Trends;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                WoeID,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Trends(tokens, WoeID, options).ToAsyncResponse<TwitterTrendCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(tokens, woeId, options, timeout, TwitterTrend.Trends, function);
         }
 
         /// <summary>
         /// Gets the trends with the specified WOEID.
         /// </summary>
         /// <param name="tokens">The request tokens.</param>
-        /// <param name="WoeID">The WOEID.</param>
+        /// <param name="woeId">The WOEID.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult Trends(OAuthTokens tokens, int WoeID, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
+        public static IAsyncResult Trends(OAuthTokens tokens, int woeId, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<OAuthTokens, int, TwitterResponse<TwitterTrendCollection>> methodToCall = TwitterTrend.Trends;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                WoeID,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Trends(tokens, WoeID).ToAsyncResponse<TwitterTrendCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(tokens, woeId, timeout, TwitterTrend.Trends, function);
         }
 
 
@@ -204,32 +107,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Available(OAuthTokens tokens, AvailableTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendLocationCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<OAuthTokens, AvailableTrendsOptions, TwitterResponse<TwitterTrendLocationCollection>> methodToCall = TwitterTrend.Available;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendLocationCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Available(tokens, options).ToAsyncResponse<TwitterTrendLocationCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Available, function);
         }
 
         /// <summary>
@@ -241,31 +119,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Available(AvailableTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendLocationCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<AvailableTrendsOptions, TwitterResponse<TwitterTrendLocationCollection>> methodToCall = TwitterTrend.Available;
-
-            return methodToCall.BeginInvoke(
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendLocationCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Available(options).ToAsyncResponse<TwitterTrendLocationCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Available, function);
         }
 
         /// <summary>
@@ -276,32 +130,8 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Available(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendLocationCollection>> function)
         {
-#if !SILVERLIGHT
-            Func<TwitterResponse<TwitterTrendLocationCollection>> methodToCall = TwitterTrend.Available;
-
-            return methodToCall.BeginInvoke(
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendLocationCollection>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Available().ToAsyncResponse<TwitterTrendLocationCollection>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, (AvailableTrendsOptions)null, timeout, TwitterTrend.Available, function);
         }
-
 
         /// <summary>
         /// Gets the daily global trends
@@ -313,32 +143,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Daily(OAuthTokens tokens, TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-#if !SILVERLIGHT
-            Func<OAuthTokens, TrendsOptions, TwitterResponse<TwitterTrendDictionary>> methodToCall = TwitterTrend.Daily;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendDictionary>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Daily(tokens, options).ToAsyncResponse<TwitterTrendDictionary>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Daily, function);
         }
 
         /// <summary>
@@ -350,31 +155,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Daily(TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-#if !SILVERLIGHT
-            Func<TrendsOptions, TwitterResponse<TwitterTrendDictionary>> methodToCall = TwitterTrend.Daily;
-
-            return methodToCall.BeginInvoke(
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendDictionary>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Daily(options).ToAsyncResponse<TwitterTrendDictionary>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Daily, function);
         }
 
         /// <summary>
@@ -385,30 +166,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Daily(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-#if !SILVERLIGHT
-            Func<TwitterResponse<TwitterTrendDictionary>> methodToCall = TwitterTrend.Daily;
-
-            return methodToCall.BeginInvoke(
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendDictionary>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Daily().ToAsyncResponse<TwitterTrendDictionary>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, (TrendsOptions)null, timeout, TwitterTrend.Daily, function);
         }
 
 
@@ -422,32 +180,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Weekly(OAuthTokens tokens, TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-#if !SILVERLIGHT
-            Func<OAuthTokens, TrendsOptions, TwitterResponse<TwitterTrendDictionary>> methodToCall = TwitterTrend.Weekly;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendDictionary>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Weekly(tokens, options).ToAsyncResponse<TwitterTrendDictionary>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Weekly, function);
         }
 
         /// <summary>
@@ -459,31 +192,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Weekly(TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-#if !SILVERLIGHT
-            Func<TrendsOptions, TwitterResponse<TwitterTrendDictionary>> methodToCall = TwitterTrend.Weekly;
-
-            return methodToCall.BeginInvoke(
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendDictionary>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Weekly(options).ToAsyncResponse<TwitterTrendDictionary>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Weekly, function);
         }
 
         /// <summary>
@@ -494,30 +203,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Weekly(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-#if !SILVERLIGHT
-            Func<TwitterResponse<TwitterTrendDictionary>> methodToCall = TwitterTrend.Weekly;
-
-            return methodToCall.BeginInvoke(
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterTrendDictionary>() { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    function(TwitterTrend.Weekly().ToAsyncResponse<TwitterTrendDictionary>());  
-                });
-            return null;
-#endif
+            return AsyncHelper.ExecuteAsyncMethod(null, (TrendsOptions)null, timeout, TwitterTrend.Weekly, function);
         }
     }
 }

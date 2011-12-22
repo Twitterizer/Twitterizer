@@ -84,8 +84,7 @@ namespace Twitterizer
                 WebRequestBuilder builder = new WebRequestBuilder(
                     new Uri("https://api.twitter.com/oauth/access_token"),
                     HTTPVerb.POST,
-                    new OAuthTokens() { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret },
-					"");
+                    new OAuthTokens { ConsumerKey = consumerKey, ConsumerSecret = consumerSecret });
 
                 builder.Parameters.Add("x_auth_username", username);
                 builder.Parameters.Add("x_auth_password", password);

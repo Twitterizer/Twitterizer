@@ -49,6 +49,9 @@ namespace Twitterizer
 #endif
     public class TwitterTrendDictionary : Core.TwitterDictionary<DateTime, TwitterTrendCollection>, ITwitterObject
     {
+        /// <summary>
+        /// Gets or sets as of date.
+        /// </summary>
         [JsonProperty(PropertyName = "as_of")]
         [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime AsOf { get; set; }
@@ -74,7 +77,9 @@ namespace Twitterizer
                 return objectType == typeof(TwitterTrendDictionary);
             }
 
-            static string[] dateformats = { "yyyy-MM-dd HH:mm", "yyyy-MM-dd" };
+#if !SILVERLIGHT
+            static readonly string[] dateformats = { "yyyy-MM-dd HH:mm", "yyyy-MM-dd" };
+#endif
 
             /// <summary>
             /// Reads the json.

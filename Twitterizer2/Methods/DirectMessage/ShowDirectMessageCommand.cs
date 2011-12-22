@@ -53,12 +53,12 @@ namespace Twitterizer.Commands
         {
             if (tokens == null)
             {
-                throw new ArgumentNullException("The tokens parameter is required.");
+                throw new ArgumentNullException("tokens", "The tokens parameter is required.");
             }
 
             if (id <= 0)
             {
-                throw new ArgumentOutOfRangeException("The id parameter must be greater than zero.");
+                throw new ArgumentOutOfRangeException("id", "The id parameter must be greater than zero.");
             }
         }
 

@@ -77,7 +77,7 @@ namespace Twitterizer
         /// <summary>
         /// Holds file data form performing multipart form posts.
         /// </summary>
-        private byte[] formData = null;
+        private byte[] formData;
 
         /// <summary>
         /// The HTTP Authorization realm.
@@ -240,7 +240,7 @@ namespace Twitterizer
             request.AllowReadStreamBuffering = true;
             HttpWebResponse response = null;
             AutoResetEvent alldone = new AutoResetEvent(false);
-            IAsyncResult asyncResult = request.BeginGetResponse(new AsyncCallback((param) => 
+            request.BeginGetResponse(param =>
             {
                 HttpWebRequest req = (HttpWebRequest)param.AsyncState;
                 try
@@ -255,7 +255,7 @@ namespace Twitterizer
                 {
                     alldone.Set();
                 }
-            }), request);
+            }, request);
             alldone.WaitOne();
             return response;
 #endif
@@ -273,7 +273,7 @@ namespace Twitterizer
 			string contentType = string.Empty;
 
 			if (!Multipart)
-			{	//We don't add the paramters to the query if we are multipart-ing
+			{	//We don't add the parameters to the query if we are multipart-ing
 				AddQueryStringParametersToUri();
 			}
 			else
@@ -307,8 +307,7 @@ namespace Twitterizer
 
             request.Method = this.Verb.ToString();
 
-			request.ContentLength = Multipart ? formData.Length : 0;
-
+			request.ContentLength = Multipart ? ((formData != null) ? formData.Length: 0) : 0;
 
 #if !SILVERLIGHT // No silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
             request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
@@ -334,7 +333,7 @@ namespace Twitterizer
                 using (Stream requestStream = request.GetRequestStream())
 #else
                 IAsyncResult getRequestStreamResult = request.BeginGetRequestStream(
-                    (res) =>
+                    res =>
                     {
 
                     }, null);
@@ -342,7 +341,10 @@ namespace Twitterizer
                 using (Stream requestStream = request.EndGetRequestStream(getRequestStreamResult))
 #endif
                 {
-                    requestStream.Write(formData, 0, formData.Length);
+                    if (formData != null)
+                    {
+                        requestStream.Write(formData, 0, formData.Length);
+                    }
                 }
 			}
 
@@ -363,8 +365,8 @@ namespace Twitterizer
 
 			foreach (KeyValuePair<string, object> item in fieldsToInclude)
             {
-				if( item.Value.GetType() == typeof(string) )
-					requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode(item.Value as string));
+                if (item.Value is string)
+					requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode((string)item.Value));
             }
 
             if (requestParametersBuilder.Length == 0)
@@ -387,7 +389,7 @@ namespace Twitterizer
 			{
 				if (kvp.Value.GetType() == typeof(byte[]))
 				{	//assume this to be a byte stream
-					byte[] data = kvp.Value as byte[];
+                    byte[] data = (byte[])kvp.Value;
 
 					string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\";\r\nContent-Type: application/octet-stream\r\n\r\n",
 						boundary,
@@ -459,7 +461,7 @@ namespace Twitterizer
         /// <returns></returns>
         public string GenerateSignature()
         {
-			IEnumerable<KeyValuePair<string, object>> nonSecretParameters = null;
+			IEnumerable<KeyValuePair<string, object>> nonSecretParameters;
 
 			if (Multipart)
 			{
@@ -590,13 +592,13 @@ namespace Twitterizer
                     parameterString.Append("&");
                 }
 
-				if( item.Value.GetType() == typeof(string) )
+				if( item.Value is string)
 					parameterString.Append(
 						string.Format(
 							CultureInfo.InvariantCulture,
 							"{0}={1}",
 							UrlEncode(item.Key),
-							UrlEncode(item.Value as string)));
+							UrlEncode((string)item.Value)));
             }
 
             return UrlEncode(parameterString.ToString());
@@ -609,11 +611,11 @@ namespace Twitterizer
         public string GenerateAuthorizationHeader()
         {
             StringBuilder authHeaderBuilder = new StringBuilder();
-            authHeaderBuilder.AppendFormat("OAuth realm=\"\"", Realm);
+            authHeaderBuilder.AppendFormat("OAuth realm=\"{0}\"", Realm);
 
             var sortedParameters = from p in this.Parameters
                                    where OAuthParametersToIncludeInHeader.Contains(p.Key)
-                                   orderby p.Key, UrlEncode( (p.Value.GetType() == typeof(string) )? p.Value as string : "")
+                                   orderby p.Key, UrlEncode( (p.Value is string) ? (string)p.Value : string.Empty)
                                    select p;
 
             foreach (var item in sortedParameters)
