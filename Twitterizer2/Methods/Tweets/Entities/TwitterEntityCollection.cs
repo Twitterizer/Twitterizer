@@ -106,28 +106,37 @@ using System.Linq.Expressions;
                                 if (reader.TokenType == JsonToken.StartObject)
                                     entity = new TwitterUrlEntity();
 
-                                ReadFieldValue(reader, "url", entity, () => ((TwitterUrlEntity)entity).Url);
-                                ReadFieldValue(reader, "display_url", entity, () => ((TwitterUrlEntity)entity).DisplayUrl);
-                                ReadFieldValue(reader, "expanded_url", entity, () => ((TwitterUrlEntity)entity).ExpandedUrl);
-
+                                TwitterUrlEntity tue = entity as TwitterUrlEntity;
+                                if (tue != null)
+                                {
+                                    ReadFieldValue(reader, "url", entity, () => tue.Url);
+                                    ReadFieldValue(reader, "display_url", entity, () => tue.DisplayUrl);
+                                    ReadFieldValue(reader, "expanded_url", entity, () => tue.ExpandedUrl);
+                                }
                                 break;
 
                             case "user_mentions":
                                 if (reader.TokenType == JsonToken.StartObject)
                                     entity = new TwitterMentionEntity();
 
-                                ReadFieldValue(reader, "screen_name", entity, () => ((TwitterMentionEntity)entity).ScreenName);
-                                ReadFieldValue(reader, "name", entity, () => ((TwitterMentionEntity)entity).Name);
-                                ReadFieldValue(reader, "id", entity, () => ((TwitterMentionEntity)entity).UserId);
-
+                                TwitterMentionEntity tme = entity as TwitterMentionEntity;
+                                if (tme != null)
+                                {
+                                    ReadFieldValue(reader, "screen_name", entity, () => tme.ScreenName);
+                                    ReadFieldValue(reader, "name", entity, () => tme.Name);
+                                    ReadFieldValue(reader, "id", entity, () => tme.UserId);
+                                }
                                 break;
 
                             case "hashtags":
                                 if (reader.TokenType == JsonToken.StartObject)
                                     entity = new TwitterHashTagEntity();
 
-                                ReadFieldValue(reader, "text", entity, () => ((TwitterHashTagEntity)entity).Text);
-
+                                TwitterHashTagEntity the = entity as TwitterHashTagEntity;
+                                if (the != null)
+                                {
+                                    ReadFieldValue(reader, "text", entity, () => the.Text);
+                                }
                                 break;
 
                             case "media":
@@ -135,9 +144,6 @@ using System.Linq.Expressions;
                                 reader.Read();
                                 entity = parseMediaEntity(reader);
 
-                                break;
-
-                            default:
                                 break;
                         }
 
