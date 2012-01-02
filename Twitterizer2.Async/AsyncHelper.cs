@@ -26,7 +26,7 @@ namespace Twitterizer
                 },
                 null);
 #else
-            System.Threading.ThreadPool.QueueUserWorkItem(x => methodToCall(tokens, woeId).ToAsyncResponse<TResponse>());
+            System.Threading.ThreadPool.QueueUserWorkItem(x => function(methodToCall(tokens, woeId).ToAsyncResponse<TResponse>()));
             return null;
 #endif
         }
@@ -54,7 +54,7 @@ namespace Twitterizer
                 },
                 null);
 #else
-            System.Threading.ThreadPool.QueueUserWorkItem(x => methodToCall(tokens, woeId, properties).ToAsyncResponse<TResponse>());
+            System.Threading.ThreadPool.QueueUserWorkItem(x => function(methodToCall(tokens, woeId, properties).ToAsyncResponse<TResponse>()));
             return null;
 #endif
         }
@@ -79,7 +79,7 @@ namespace Twitterizer
                 },
                 null);
 #else
-            System.Threading.ThreadPool.QueueUserWorkItem(x => methodToCall(tokens).ToAsyncResponse<TResponse>());
+            System.Threading.ThreadPool.QueueUserWorkItem(x => function(methodToCall(tokens).ToAsyncResponse<TResponse>()));
             return null;
 #endif
         }
@@ -106,7 +106,7 @@ namespace Twitterizer
                 },
                 null);
 #else
-            System.Threading.ThreadPool.QueueUserWorkItem(x => methodToCall(tokens, properties).ToAsyncResponse<TResponse>());
+            System.Threading.ThreadPool.QueueUserWorkItem(x => function(methodToCall(tokens, properties).ToAsyncResponse<TResponse>()));
             return null;
 #endif
         }
