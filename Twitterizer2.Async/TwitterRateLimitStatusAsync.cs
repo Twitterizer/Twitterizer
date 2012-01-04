@@ -50,7 +50,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult GetStatus(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterRateLimitStatus.GetStatus, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterRateLimitStatus.GetStatus, function);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult GetStatus(OAuthTokens tokens, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, timeout, TwitterRateLimitStatus.GetStatus, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, timeout, TwitterRateLimitStatus.GetStatus, function);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult GetStatus(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterRateLimitStatus>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, timeout, TwitterRateLimitStatus.GetStatus, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, timeout, TwitterRateLimitStatus.GetStatus, function);
         }
     }
 }

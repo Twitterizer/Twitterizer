@@ -34,10 +34,6 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer;
-#if SILVERLIGHT
-    using System.Threading;
-#endif
 
     /// <summary>
     /// An asynchronous wrapper around the <see cref="TwitterStatus"/> class.
@@ -55,25 +51,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Delete(OAuthTokens tokens, decimal id, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.Delete;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                id,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, id, options, timeout, TwitterStatus.Delete, function);
         }
 
         /// <summary>
@@ -87,25 +65,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Retweet(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.Retweet;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                statusId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, statusId, options, timeout, TwitterStatus.Retweet, function);
         }
 
         /// <summary>
@@ -119,25 +79,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Retweets(OAuthTokens tokens, decimal statusId, RetweetsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            Func<OAuthTokens, decimal, RetweetsOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = TwitterStatus.Retweets;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                statusId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatusCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, statusId, options, timeout, TwitterStatus.Retweets, function);
         }
 
         /// <summary>
@@ -151,30 +93,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Show(OAuthTokens tokens, decimal statusId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
-#if !SILVERLIGHT 
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.Show;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                statusId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else
-            ThreadPool.QueueUserWorkItem(x => function(TwitterStatus.Show(tokens, statusId, options).ToAsyncResponse()));
-            return null;
-#endif
+            return AsyncUtility.ExecuteAsyncMethod(tokens, statusId, options, timeout, TwitterStatus.Show, function);
         }
 
         /// <summary>
@@ -188,25 +107,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Update(OAuthTokens tokens, string text, StatusUpdateOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatus>> function)
         {
-            Func<OAuthTokens, string, StatusUpdateOptions, TwitterResponse<TwitterStatus>> methodToCall = TwitterStatus.Update;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                text,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, text, options, timeout, TwitterStatus.Update, function);
         }
 
         /// <summary>
@@ -228,18 +129,7 @@ namespace Twitterizer
                 text,
                 fileData,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.ThreeParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
 
@@ -262,18 +152,7 @@ namespace Twitterizer
                 text,
                 fileLocation,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatus> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.ThreeParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
     }

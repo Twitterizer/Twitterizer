@@ -32,9 +32,10 @@
 // <summary>The TwitterSpamAsync class.</summary>
 //-----------------------------------------------------------------------
 
-using System;
 namespace Twitterizer
 {
+    using System;
+
     /// <summary>
     /// An asynchronous wrapper around the <see cref="TwitterSpam"/> class.
     /// </summary>
@@ -51,25 +52,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult ReportUser(OAuthTokens tokens, decimal userId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterSpam.ReportUser;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                userId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, userId, options, timeout, TwitterSpam.ReportUser, function);
         }
 
                 /// <summary>
@@ -83,25 +66,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult ReportUser(OAuthTokens tokens, string screenName, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterSpam.ReportUser;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                screenName,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, screenName, options, timeout, TwitterSpam.ReportUser, function);
         }
     }
 }

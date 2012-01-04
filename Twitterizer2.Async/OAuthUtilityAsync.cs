@@ -36,7 +36,6 @@ namespace Twitterizer
 #if !SILVERLIGHT
     using System;
     using System.Net;
-    using Twitterizer;
 #endif
 
     /// <summary>

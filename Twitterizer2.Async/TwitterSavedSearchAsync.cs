@@ -51,25 +51,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Create(OAuthTokens tokens, string query, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSavedSearch>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterSavedSearch>> methodToCall = TwitterSavedSearch.Create;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                query,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterSavedSearch> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, query, options, timeout, TwitterSavedSearch.Create, function);
         }
 
         /// <summary>
@@ -83,25 +65,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Delete(OAuthTokens tokens, decimal savedsearchId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSavedSearch>> function)
         {
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterSavedSearch>> methodToCall = TwitterSavedSearch.Delete;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                savedsearchId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterSavedSearch> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, savedsearchId, options, timeout, TwitterSavedSearch.Delete, function);
         }
 
         /// <summary>
@@ -114,7 +78,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult SavedSearches(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSavedSearchCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterSavedSearch.SavedSearches, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterSavedSearch.SavedSearches, function);
         }
     }
 }

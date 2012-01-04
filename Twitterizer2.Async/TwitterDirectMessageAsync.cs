@@ -18,25 +18,7 @@
         /// <returns></returns>
         public static IAsyncResult Delete(OAuthTokens tokens, decimal id, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessage>> function)
         {
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterDirectMessage>> methodToCall = TwitterDirectMessage.Delete;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                id,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterDirectMessage> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, id, options, timeout, TwitterDirectMessage.Delete, function);
         }
 
         /// <summary>
@@ -51,7 +33,7 @@
         /// </returns>
         public static IAsyncResult DirectMessagesSent(OAuthTokens tokens, DirectMessagesSentOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessageCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterDirectMessage.DirectMessagesSent, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterDirectMessage.DirectMessagesSent, function);
         }
 
         /// <summary>
@@ -66,7 +48,7 @@
         /// </returns>
         public static IAsyncResult DirectMessages(OAuthTokens tokens, DirectMessagesOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessageCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterDirectMessage.DirectMessages, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterDirectMessage.DirectMessages, function);
         }
 
         /// <summary>
@@ -88,18 +70,7 @@
                 userId,
                 text,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterDirectMessage> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.ThreeParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
 
@@ -115,26 +86,7 @@
         /// <returns></returns>
         public static IAsyncResult Send(OAuthTokens tokens, string screenName, string text, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterDirectMessage>> function)
         {
-            Func<OAuthTokens, string, string, OptionalProperties, TwitterResponse<TwitterDirectMessage>> methodToCall = TwitterDirectMessage.Send;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                screenName,
-                text,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterDirectMessage> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, screenName, text, options, timeout, TwitterDirectMessage.Send, function);
         }
     }
 }

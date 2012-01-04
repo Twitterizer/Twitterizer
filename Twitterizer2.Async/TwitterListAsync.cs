@@ -28,18 +28,7 @@
                 listId,
                 userIdToAdd,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
 
@@ -64,18 +53,7 @@
                 listId,
                 userId,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
 
@@ -91,26 +69,7 @@
         /// <returns></returns>
         public static IAsyncResult Delete(OAuthTokens tokens, string username, string listIdOrSlug, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.Delete;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                username,
-                listIdOrSlug,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, username, listIdOrSlug, options, timeout, TwitterList.Delete, function);
         }
 
         /// <summary>
@@ -139,25 +98,7 @@
         /// <returns></returns>
         public static IAsyncResult Show(OAuthTokens tokens, string listIdOrSlug, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.Show;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                listIdOrSlug,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, listIdOrSlug, options, timeout, TwitterList.Show, function);
         }
 
         /// <summary>
@@ -170,7 +111,7 @@
         /// <returns></returns>
         public static IAsyncResult GetLists(OAuthTokens tokens, GetListsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterList.GetLists, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterList.GetLists, function);
         }
 
         /// <summary>
@@ -191,26 +132,7 @@
             TimeSpan timeout, 
             Action<TwitterAsyncResponse<TwitterUserCollection>> function)
         {
-            Func<OAuthTokens, string, string, GetListMembersOptions, TwitterResponse<TwitterUserCollection>> methodToCall = TwitterList.GetMembers;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                ownerUsername,
-                listId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUserCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, ownerUsername, listId, options, timeout, TwitterList.GetMembers, function);
         }
 
         /// <summary>
@@ -224,25 +146,7 @@
         /// <returns></returns>
         public static IAsyncResult GetMemberships(OAuthTokens tokens, string username, ListMembershipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, string, ListMembershipsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetMemberships;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                username,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterListCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, username, options, timeout, TwitterList.GetMemberships, function);
         }
 
         /// <summary>
@@ -263,26 +167,7 @@
             TimeSpan timeout, 
             Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            Func<OAuthTokens, string, string, ListStatusesOptions, TwitterResponse<TwitterStatusCollection>> methodToCall = TwitterList.GetStatuses;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                username,
-                listIdOrSlug,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterStatusCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, username, listIdOrSlug, options, timeout, TwitterList.GetStatuses, function);
         }
 
         /// <summary>
@@ -301,25 +186,7 @@
             TimeSpan timeout, 
             Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            Func<OAuthTokens, string, GetListSubscriptionsOptions, TwitterResponse<TwitterListCollection>> methodToCall = TwitterList.GetSubscriptions;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                userName,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterListCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, userName, options, timeout, TwitterList.GetSubscriptions, function);
         }
 
         /// <summary>
@@ -350,18 +217,7 @@
                 isPublic,
                 description,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
 
@@ -393,18 +249,7 @@
                 listId,
                 userIdToAdd,
                 options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
+                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
                 null);
         }
 
@@ -424,25 +269,7 @@
             TimeSpan timeout,
             Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, UpdateListOptions, TwitterResponse<TwitterList>> methodToCall = TwitterList.Update;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                listId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, listId, options, timeout, TwitterList.Update, function);
         }
 
         /// <summary>
@@ -462,25 +289,7 @@
             TimeSpan timeout,
             Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, decimal, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.UnSubscribe;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                listId,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterList> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, listId, options, timeout, TwitterList.UnSubscribe, function);
         }
     }
 }

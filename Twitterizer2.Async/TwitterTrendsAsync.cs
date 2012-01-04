@@ -53,7 +53,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Trends(int woeId, LocalTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, woeId, options, timeout, TwitterTrend.Trends, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, woeId, options, timeout, TwitterTrend.Trends, function);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Trends(int woeId, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, woeId, timeout, TwitterTrend.Trends, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, woeId, timeout, TwitterTrend.Trends, function);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Trends(OAuthTokens tokens, int woeId, LocalTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, woeId, options, timeout, TwitterTrend.Trends, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, woeId, options, timeout, TwitterTrend.Trends, function);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Trends(OAuthTokens tokens, int woeId, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, woeId, timeout, TwitterTrend.Trends, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, woeId, timeout, TwitterTrend.Trends, function);
         }
 
 
@@ -107,7 +107,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Available(OAuthTokens tokens, AvailableTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendLocationCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Available, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Available, function);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Available(AvailableTrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendLocationCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Available, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Available, function);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Available(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendLocationCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, (AvailableTrendsOptions)null, timeout, TwitterTrend.Available, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, (AvailableTrendsOptions)null, timeout, TwitterTrend.Available, function);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Daily(OAuthTokens tokens, TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Daily, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Daily, function);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Daily(TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Daily, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Daily, function);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Daily(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, (TrendsOptions)null, timeout, TwitterTrend.Daily, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, (TrendsOptions)null, timeout, TwitterTrend.Daily, function);
         }
 
 
@@ -180,7 +180,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Weekly(OAuthTokens tokens, TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Weekly, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTrend.Weekly, function);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Weekly(TrendsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Weekly, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, options, timeout, TwitterTrend.Weekly, function);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Weekly(TimeSpan timeout, Action<TwitterAsyncResponse<TwitterTrendDictionary>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, (TrendsOptions)null, timeout, TwitterTrend.Weekly, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, (TrendsOptions)null, timeout, TwitterTrend.Weekly, function);
         }
     }
 }

@@ -31,10 +31,11 @@
 // <author>Ricky Smith</author>
 // <summary>The TwitterUserAsync class</summary>
 //-----------------------------------------------------------------------
-using System;
 
 namespace Twitterizer
 {
+    using System;
+
     /// <summary>
     /// An asynchronous wrapper around the <see cref="TwitterUser"/> class.
     /// </summary>
@@ -50,7 +51,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Lookup(OAuthTokens tokens, LookupUsersOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUserCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterUser.Lookup, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterUser.Lookup, function);
         }
 
         /// <summary>
@@ -64,25 +65,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Search(OAuthTokens tokens, string query, UserSearchOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUserCollection>> function)
         {
-            Func<OAuthTokens, string, UserSearchOptions, TwitterResponse<TwitterUserCollection>> methodToCall = TwitterUser.Search;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                query,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUserCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, query, options, timeout, TwitterUser.Search, function);
         }
 
         /// <summary>
@@ -96,25 +79,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Show(OAuthTokens tokens, string username, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
-            Func<OAuthTokens, string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterUser.Show;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                username,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, username, options, timeout, TwitterUser.Show, function);
         }
 
         /// <summary>
@@ -127,24 +92,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Show(string username, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
-            Func<string, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterUser.Show;
-
-            return methodToCall.BeginInvoke(                
-                username,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterUser> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(null, username, options, timeout, TwitterUser.Show, function);
         }
     }
 }

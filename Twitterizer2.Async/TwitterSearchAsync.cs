@@ -35,10 +35,6 @@
 namespace Twitterizer
 {
     using System;
-    using Twitterizer;
-#if SILVERLIGHT
-    using System.Threading;
-#endif
 
     /// <summary>
     /// An asynchronous wrapper around the <see cref="TwitterSearch"/> class.
@@ -55,29 +51,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Search(string query, SearchOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSearchResultCollection>> function)
         {
-#if !SILVERLIGHT            
-            Func<string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
-
-            return methodToCall.BeginInvoke(
-                query,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterSearchResultCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
-#else            
-            ThreadPool.QueueUserWorkItem(x => function(TwitterSearch.Search(query, options).ToAsyncResponse()));
-            return null;
-#endif
+            return AsyncUtility.ExecuteAsyncMethod(null, query, options, timeout, TwitterSearch.Search, function);
         }
 
         /// <summary>
@@ -91,25 +65,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Search(OAuthTokens tokens, string query, SearchOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterSearchResultCollection>> function)
         {
-            Func<OAuthTokens, string, SearchOptions, TwitterResponse<TwitterSearchResultCollection>> methodToCall = TwitterSearch.Search;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                query,
-                options,
-                result =>
-                {
-                    result.AsyncWaitHandle.WaitOne(timeout);
-                    try
-                    {
-                        function(methodToCall.EndInvoke(result).ToAsyncResponse());
-                    }
-                    catch (Exception ex)
-                    {
-                        function(new TwitterAsyncResponse<TwitterSearchResultCollection> { Result = RequestResult.Unknown, ExceptionThrown = ex });
-                    }
-                },
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, query, options, timeout, TwitterSearch.Search, function);
         }
     }
 }

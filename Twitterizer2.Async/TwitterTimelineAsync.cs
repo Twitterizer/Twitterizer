@@ -50,7 +50,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult HomeTimeline(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.HomeTimeline, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.HomeTimeline, function);
         }
 
 
@@ -64,7 +64,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult Mentions(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.Mentions, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.Mentions, function);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult PublicTimeline(OAuthTokens tokens, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.PublicTimeline, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.PublicTimeline, function);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult PublicTimeline(OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(null, options, timeout, TwitterTimeline.PublicTimeline, function);
+            return AsyncUtility.ExecuteAsyncMethod(null, options, timeout, TwitterTimeline.PublicTimeline, function);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult RetweetedByMe(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.RetweetedByMe, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.RetweetedByMe, function);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult RetweetedToMe(OAuthTokens tokens, TimelineOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.RetweetedToMe, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.RetweetedToMe, function);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult RetweetsOfMe(OAuthTokens tokens, RetweetsOfMeOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.RetweetsOfMe, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.RetweetsOfMe, function);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Twitterizer
         /// <returns></returns>
         public static IAsyncResult UserTimeline(OAuthTokens tokens, UserTimelineOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterStatusCollection>> function)
         {
-            return AsyncHelper.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.UserTimeline, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, options, timeout, TwitterTimeline.UserTimeline, function);
         }
     }
 }
