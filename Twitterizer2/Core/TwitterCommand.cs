@@ -66,7 +66,7 @@ namespace Twitterizer.Core
         /// <param name="optionalProperties">The optional properties.</param>
         protected TwitterCommand(HTTPVerb method, string endPoint, OAuthTokens tokens, OptionalProperties optionalProperties)
         {
-			this.RequestParameters = new Dictionary<string, object>();
+            this.RequestParameters = new Dictionary<string, object>();
             this.Verb = method;
             this.Tokens = tokens;
             this.OptionalProperties = optionalProperties ?? new OptionalProperties();
@@ -175,8 +175,8 @@ namespace Twitterizer.Core
 #endif
 
             // Prepare the query parameters
-			Dictionary<string, object> queryParameters = new Dictionary<string, object>();
-			foreach (KeyValuePair<string, object> item in this.RequestParameters)
+            Dictionary<string, object> queryParameters = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, object> item in this.RequestParameters)
             {
                 queryParameters.Add(item.Key, item.Value);
 #if !LITE && !SILVERLIGHT
@@ -197,7 +197,7 @@ namespace Twitterizer.Core
                                };
                 }
             }
-            
+
 #endif
             // Declare the variable to be returned
             twitterResponse.ResponseObject = default(T);
@@ -250,7 +250,7 @@ namespace Twitterizer.Core
                             WebExceptionStatus.ConnectFailure
                         }.Contains(wex.Status))
                 {
-                    twitterResponse.Result = RequestResult.ConnectionFailure;
+                    twitterResponse.Result = ConvertWebExceptionStatusToRequestResult(wex.Status);
                     twitterResponse.ErrorMessage = wex.Message;
                     return twitterResponse;
                 }
@@ -274,7 +274,9 @@ namespace Twitterizer.Core
                 // Try to read the error message, if there is one.
                 try
                 {
-                    twitterResponse.ErrorMessage = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData).ErrorMessage;
+                    TwitterErrorDetails errorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
+                    twitterResponse.Result = ConvertWebExceptionStatusToRequestResult(wex.Status);
+                    twitterResponse.ErrorMessage = errorDetails.ErrorMessage;
                 }
                 catch (Exception)
                 {
@@ -313,6 +315,31 @@ namespace Twitterizer.Core
             twitterResponse.Tokens = this.Tokens;
 
             return twitterResponse;
+        }
+
+        private static RequestResult ConvertWebExceptionStatusToRequestResult(WebExceptionStatus status)
+        {
+            switch (status)
+            {
+                case WebExceptionStatus.Success:
+                    return RequestResult.Success;
+
+                case WebExceptionStatus.ProtocolError:
+                    return RequestResult.Unauthorized;
+
+#if !SILVERLIGHT
+                case WebExceptionStatus.Timeout:
+                case WebExceptionStatus.ConnectionClosed:
+#endif
+                case WebExceptionStatus.ConnectFailure:
+                    return RequestResult.ConnectionFailure;
+
+                case WebExceptionStatus.RequestProhibitedByProxy:
+                    return RequestResult.ProxyAuthenticationRequired;
+
+                default:
+                    return RequestResult.Unknown;
+            }
         }
 
         /// <summary>
@@ -408,8 +435,6 @@ namespace Twitterizer.Core
                     case "read-write-privatemessages":
                     case "read-write-directmessages":
                         return AccessLevel.ReadWriteDirectMessage;
-                    default:
-                        break;
                 }
                 return AccessLevel.Unknown;
             }
@@ -440,5 +465,5 @@ namespace Twitterizer.Core
             }
         }
 #endif
-        }
+    }
 }
