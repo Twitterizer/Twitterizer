@@ -281,5 +281,14 @@ namespace Twitterizer
 
             return Core.CommandPerformer.PerformAction(command);
         }
+
+        /// <summary>
+        /// Returns the status text with HTML links to users, urls, and hashtags.
+        /// </summary>
+        /// <returns></returns>
+        public string LinkifiedText()
+        {
+            return TwitterStatus.LinkifiedText(Entities, Text);
+        }
     }
 }
