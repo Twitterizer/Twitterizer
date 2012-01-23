@@ -250,7 +250,7 @@ namespace Twitterizer.Core
                             WebExceptionStatus.ConnectFailure
                         }.Contains(wex.Status))
                 {
-                    twitterResponse.Result = ConvertWebExceptionStatusToRequestResult(wex.Status);
+                    twitterResponse.Result = RequestResult.ConnectionFailure;
                     twitterResponse.ErrorMessage = wex.Message;
                     return twitterResponse;
                 }
@@ -275,7 +275,6 @@ namespace Twitterizer.Core
                 try
                 {
                     TwitterErrorDetails errorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
-                    twitterResponse.Result = ConvertWebExceptionStatusToRequestResult(wex.Status);
                     twitterResponse.ErrorMessage = errorDetails.ErrorMessage;
                 }
                 catch (Exception)
@@ -317,31 +316,6 @@ namespace Twitterizer.Core
             return twitterResponse;
         }
 
-        private static RequestResult ConvertWebExceptionStatusToRequestResult(WebExceptionStatus status)
-        {
-            switch (status)
-            {
-                case WebExceptionStatus.Success:
-                    return RequestResult.Success;
-
-                case WebExceptionStatus.ProtocolError:
-                    return RequestResult.Unauthorized;
-
-#if !SILVERLIGHT
-                case WebExceptionStatus.Timeout:
-                case WebExceptionStatus.ConnectionClosed:
-#endif
-                case WebExceptionStatus.ConnectFailure:
-                    return RequestResult.ConnectionFailure;
-
-                case WebExceptionStatus.RequestProhibitedByProxy:
-                    return RequestResult.ProxyAuthenticationRequired;
-
-                default:
-                    return RequestResult.Unknown;
-            }
-        }
-
         /// <summary>
         /// Sets the status code.
         /// </summary>
@@ -370,6 +344,14 @@ namespace Twitterizer.Core
 
                 case HttpStatusCode.ProxyAuthenticationRequired:
                     twitterResponse.Result = RequestResult.ProxyAuthenticationRequired;
+                    break;
+
+                case HttpStatusCode.RequestTimeout:
+                    twitterResponse.Result = RequestResult.TwitterIsOverloaded;
+                    break;
+
+                case HttpStatusCode.Forbidden:
+                    twitterResponse.Result = RequestResult.Unauthorized;
                     break;
 
                 default:
