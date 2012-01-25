@@ -39,10 +39,8 @@ namespace Twitterizer.Streaming
     using System.Linq;
     using System.Net;
     using System.Text;
-    using Twitterizer.Core;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using System.Net.Sockets;
 #if SILVERLIGHT
     using System.Threading;
 #endif 
@@ -311,11 +309,13 @@ namespace Twitterizer.Streaming
                                         {
                                             rawJsonCallback(blockbuilderstring);
                                         }
+
+                                        string strToParse = blockbuilderstring.Replace(Environment.NewLine, string.Empty);
 #if !SILVERLIGHT
                                         Action<string> parseMethod = ParseMessage;
-                                        parseMethod.BeginInvoke(blockbuilderstring.Trim('\n'), null, null);
+                                        parseMethod.BeginInvoke(strToParse.Trim('\n'), null, null);
 #else
-                                        ThreadPool.QueueUserWorkItem(delegate { ParseMessage(blockbuilderstring.Trim('\n')); });
+                                        ThreadPool.QueueUserWorkItem(delegate { ParseMessage(strToParse.Trim('\n')); });
 #endif
                                         blockBuilder.Clear();
                                     }
