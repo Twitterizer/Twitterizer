@@ -31,20 +31,26 @@
 // <author>Ricky Smith</author>
 // <summary>The Twitter Stream class</summary>
 //-----------------------------------------------------------------------
+
+using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace Twitterizer.Streaming
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Text;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 #if SILVERLIGHT
     using System.Threading;
-#endif 
+#endif
 
+    /// <summary>
+    /// The different stop reasons for stopping a stream.
+    /// </summary>
     public enum StopReasons
     {
         StoppedByRequest,
@@ -78,85 +84,107 @@ namespace Twitterizer.Streaming
     public delegate void RawJsonCallback(string json);
 
     /// <summary>
-    /// The TwitterStream class. Provides an interface to real-time status changes.
+    ///   The TwitterStream class. Provides an interface to real-time status changes.
     /// </summary>
     public class TwitterStream : IDisposable
     {
-        private InitUserStreamCallback friendsCallback;
-        private StreamStoppedCallback streamStoppedCallback;
-        private StatusCreatedCallback statusCreatedCallback;
-        private StatusDeletedCallback statusDeletedCallback;
         private DirectMessageCreatedCallback directMessageCreatedCallback;
         private DirectMessageDeletedCallback directMessageDeletedCallback;
         private EventCallback eventCallback;
+        private InitUserStreamCallback friendsCallback;
         private RawJsonCallback rawJsonCallback;
+        private StatusCreatedCallback statusCreatedCallback;
+        private StatusDeletedCallback statusDeletedCallback;
 
         /// <summary>
-        /// This value is set to true to indicate that the stream connection should be closed. 
+        ///   This value is set to true to indicate that the stream connection should be closed.
         /// </summary>
         private bool stopReceived;
 
+        private StreamStoppedCallback streamStoppedCallback;
+
         /// <summary>
-        /// The useragant which shall be used in connections to Twitter (a must in the specs of the API)
+        ///   Initializes a new instance of the <see cref = "TwitterStream" /> class.
+        /// </summary>
+        /// <param name = "tokens">The tokens.</param>
+        /// <param name = "userAgent">The useragent string which shall include the version of your client.</param>
+        /// <param name = "streamoptions">The stream or user stream options to intially use when starting the stream.</param>
+        public TwitterStream(OAuthTokens tokens, string userAgent, StreamOptions streamoptions)
+        {
+#if !SILVERLIGHT
+            // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
+            if (string.IsNullOrEmpty(userAgent))
+            {
+                UserAgent = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Twitterizer/{0}",
+                    Assembly.GetExecutingAssembly().GetName().Version);
+            }
+            else
+            {
+                UserAgent = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0} (via Twitterizer/{1})",
+                    userAgent,
+                    Assembly.GetExecutingAssembly().GetName().Version);
+            }
+#endif
+            Tokens = tokens;
+
+            if (streamoptions != null)
+                StreamOptions = streamoptions;
+        }
+
+        /// <summary>
+        ///   The useragant which shall be used in connections to Twitter (a must in the specs of the API)
         /// </summary>
         private string UserAgent { get; set; }
 
         /// <summary>
-        /// Gets or sets the tokens.
+        ///   Gets or sets the tokens.
         /// </summary>
         /// <value>The tokens.</value>
         public OAuthTokens Tokens { get; set; }
 
         /// <summary>
-        /// Gets or sets the stream options.
+        ///   Gets or sets the stream options.
         /// </summary>
         /// <value>The stream options.</value>
         public StreamOptions StreamOptions { get; set; }
 
         /// <summary>
-        /// Gets or sets the Basic Auth Credentials.
+        ///   Gets or sets the Basic Auth Credentials.
         /// </summary>
         /// <value>The Basic Auth Credentials.</value>
         public NetworkCredential NetworkCredentials { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterStream"/> class.
-        /// </summary>
-        /// <param name="tokens">The tokens.</param>
-        /// <param name="userAgent">The useragent string which shall include the version of your client.</param>
-        /// <param name="streamoptions">The stream or user stream options to intially use when starting the stream.</param>
-        public TwitterStream(OAuthTokens tokens, string userAgent, StreamOptions streamoptions)
-        {
-#if !SILVERLIGHT // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
-            if (string.IsNullOrEmpty(userAgent))
-            {
-                this.UserAgent = string.Format(
-                    CultureInfo.InvariantCulture, 
-                    "Twitterizer/{0}",
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
-            }
-            else
-            {
-                this.UserAgent = string.Format(
-                    CultureInfo.InvariantCulture, 
-                    "{0} (via Twitterizer/{1})", 
-                    userAgent,
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
-            }
-#endif
-            this.Tokens = tokens;
+        #region IDisposable Members
 
-            if (streamoptions != null)
-                this.StreamOptions = streamoptions;
+        /// <summary>
+        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            friendsCallback = null;
+            streamStoppedCallback = null;
+            statusCreatedCallback = null;
+            statusDeletedCallback = null;
+            directMessageCreatedCallback = null;
+            directMessageDeletedCallback = null;
+            eventCallback = null;
+            rawJsonCallback = null;
+            stopReceived = true;
         }
 
+        #endregion
+
         /// <summary>
-        /// Starts the user stream.
+        ///   Starts the user stream.
         /// </summary>
-        public IAsyncResult  StartUserStream(
+        public IAsyncResult StartUserStream(
             InitUserStreamCallback friendsCallback,
             StreamStoppedCallback streamStoppedCallback,
-            StatusCreatedCallback statusCreatedCallback, 
+            StatusCreatedCallback statusCreatedCallback,
             StatusDeletedCallback statusDeletedCallback,
             DirectMessageCreatedCallback directMessageCreatedCallback,
             DirectMessageDeletedCallback directMessageDeletedCallback,
@@ -164,61 +192,64 @@ namespace Twitterizer.Streaming
             RawJsonCallback rawJsonCallback = null
             )
         {
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"), HTTPVerb.GET, this.Tokens, this.UserAgent);
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"),
+                                                              HTTPVerb.GET, Tokens, UserAgent);
 
             PrepareStreamOptions(builder);
 
-            if (this.StreamOptions != null && this.StreamOptions is UserStreamOptions)
+            if (StreamOptions != null && StreamOptions is UserStreamOptions)
             {
-                if ((this.StreamOptions as UserStreamOptions).AllReplies)
+                if ((StreamOptions as UserStreamOptions).AllReplies)
                     builder.Parameters.Add("replies", "all");
             }
 
-            HttpWebRequest request = builder.PrepareRequest();            
+            HttpWebRequest request = builder.PrepareRequest();
             this.friendsCallback = friendsCallback;
             this.streamStoppedCallback = streamStoppedCallback;
-            this.statusCreatedCallback = statusCreatedCallback; 
+            this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
             this.directMessageCreatedCallback = directMessageCreatedCallback;
             this.directMessageDeletedCallback = directMessageDeletedCallback;
             this.eventCallback = eventCallback;
             this.rawJsonCallback = rawJsonCallback;
-            this.stopReceived = false;
+            stopReceived = false;
 #if SILVERLIGHT
             request.AllowReadStreamBuffering = false;
 #else
             request.Timeout = 10000;
 #endif
-            return request.BeginGetResponse(StreamCallback, request);          
+            return request.BeginGetResponse(StreamCallback, request);
         }
 
-        
+
         /// <summary>
-        /// Starts the public stream.
+        ///   Starts the public stream.
         /// </summary>
         public IAsyncResult StartPublicStream(
-            StreamStoppedCallback streamStoppedCallback,
+            StreamStoppedCallback streamErrorCallback,
             StatusCreatedCallback statusCreatedCallback,
             StatusDeletedCallback statusDeletedCallback,
             EventCallback eventCallback,
             RawJsonCallback rawJsonCallback = null
             )
-        {         
+        {
             WebRequestBuilder builder;
-            if (this.Tokens == null)
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.UserAgent, this.NetworkCredentials);
+            if (Tokens == null)
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"),
+                                                HTTPVerb.POST, UserAgent, NetworkCredentials);
             else
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"), HTTPVerb.POST, this.Tokens, this.UserAgent);
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"),
+                                                HTTPVerb.POST, Tokens, UserAgent);
             PrepareStreamOptions(builder);
 
             HttpWebRequest request = builder.PrepareRequest();
 
-            this.streamStoppedCallback = streamStoppedCallback;
+            streamStoppedCallback = streamErrorCallback;
             this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
             this.eventCallback = eventCallback;
             this.rawJsonCallback = rawJsonCallback;
-            this.stopReceived = false;
+            stopReceived = false;
 #if SILVERLIGHT
             request.AllowReadStreamBuffering = false;
 #endif
@@ -226,40 +257,42 @@ namespace Twitterizer.Streaming
         }
 
         /// <summary>
-        /// Prepares the stream options.
+        ///   Prepares the stream options.
         /// </summary>
-        /// <param name="builder">The builder.</param>
+        /// <param name = "builder">The builder.</param>
         private void PrepareStreamOptions(WebRequestBuilder builder)
         {
-            if (this.StreamOptions != null)
+            if (StreamOptions != null)
             {
-                if (this.StreamOptions.Count > 0)
-                    builder.Parameters.Add("count", this.StreamOptions.Count.ToString());
+                if (StreamOptions.Count > 0)
+                    builder.Parameters.Add("count", StreamOptions.Count.ToString());
 
-                if (this.StreamOptions.Follow != null && this.StreamOptions.Follow.Count > 0)
-                    builder.Parameters.Add("follow", string.Join(",", this.StreamOptions.Follow.ToArray()));
+                if (StreamOptions.Follow != null && StreamOptions.Follow.Count > 0)
+                    builder.Parameters.Add("follow", string.Join(",", StreamOptions.Follow.ToArray()));
 
-                if (this.StreamOptions.Locations != null && this.StreamOptions.Locations.Count > 0)
-                    builder.Parameters.Add("locations", string.Join(",", this.StreamOptions.Locations.Select((x, r) => x.ToString()).ToArray()));
+                if (StreamOptions.Locations != null && StreamOptions.Locations.Count > 0)
+                    builder.Parameters.Add("locations",
+                                           string.Join(",",
+                                                       StreamOptions.Locations.Select((x, r) => x.ToString()).ToArray()));
 
-                if (this.StreamOptions.Track != null && this.StreamOptions.Track.Count > 0)
-                    builder.Parameters.Add("track", string.Join(",", this.StreamOptions.Track.ToArray()));
-            }    
+                if (StreamOptions.Track != null && StreamOptions.Track.Count > 0)
+                    builder.Parameters.Add("track", string.Join(",", StreamOptions.Track.ToArray()));
+            }
         }
 
         /// <summary>
-        /// The callback handler for all streams
+        ///   The callback handler for all streams
         /// </summary>
-        /// <param name="result">The result.</param>
+        /// <param name = "result">The result.</param>
         private void StreamCallback(IAsyncResult result)
         {
             HttpWebRequest req = (HttpWebRequest)result.AsyncState;
             HttpWebResponse response = null;
             try
             {
-                response = req.EndGetResponse(result) as HttpWebResponse;
+                response = (HttpWebResponse)req.EndGetResponse(result);
 
-                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
@@ -273,16 +306,16 @@ namespace Twitterizer.Streaming
                             // The blockBuilder will hold the string of the current block of json.
                             StringBuilder blockBuilder = new StringBuilder();
 
-                            while (!this.stopReceived && !reader.EndOfStream)
+                            while (!stopReceived && !reader.EndOfStream)
                             {
                                 string lineOfData = reader.ReadLine();
 
-                                if (this.stopReceived)
+                                if (stopReceived || lineOfData == null)
                                 {
-                                    continue;
+                                    break;
                                 }
 
-                                for (int index = 0; lineOfData != null && index < lineOfData.Length; index++)
+                                for (int index = 0; index < lineOfData.Length; index++)
                                 {
                                     blockBuilder.Append(lineOfData[index]);
 
@@ -309,7 +342,6 @@ namespace Twitterizer.Streaming
                                         {
                                             rawJsonCallback(blockbuilderstring);
                                         }
-
                                         string strToParse = blockbuilderstring.Replace(Environment.NewLine, string.Empty);
 #if !SILVERLIGHT
                                         Action<string> parseMethod = ParseMessage;
@@ -324,93 +356,82 @@ namespace Twitterizer.Streaming
 
                             reader.Close();
 
-                            if (!this.stopReceived)
-                                this.OnStreamStopped(StopReasons.WebConnectionFailed);
-                            else
-                                this.OnStreamStopped(StopReasons.StoppedByRequest);
-
+                            OnStreamStopped(stopReceived ? StopReasons.StoppedByRequest : StopReasons.WebConnectionFailed);
                         }
                         catch
                         {
-                            //Stream Closed/Failed
-                            if (!this.stopReceived)
-                                this.OnStreamStopped(StopReasons.WebConnectionFailed);
-                            else
-                                this.OnStreamStopped(StopReasons.StoppedByRequest);
+                            OnStreamStopped(stopReceived ? StopReasons.StoppedByRequest : StopReasons.WebConnectionFailed);
                         }
                     }
                 }
             }
-            catch (Exception e)
+            catch (WebException we)
             {
-                if (e is WebException)
+                HttpWebResponse httpResponse = we.Response as HttpWebResponse;
+                if (httpResponse != null)
                 {
-                    HttpWebResponse httpResponse = ((WebException)e).Response as HttpWebResponse;
-                    if (httpResponse != null)
+                    switch ((httpResponse).StatusCode)
                     {
-                        switch (httpResponse.StatusCode)
-                        {
-                            case HttpStatusCode.Unauthorized:
-                                {
-                                    this.OnStreamStopped(StopReasons.Unauthorised);
-                                    break;
-                                }
-                            case HttpStatusCode.Forbidden:
-                                {
-                                    this.OnStreamStopped(StopReasons.Forbidden);
-                                    break;
-                                }
-                            case HttpStatusCode.NotFound:
-                                {
-                                    this.OnStreamStopped(StopReasons.NotFound);
-                                    break;
-                                }
-                            case HttpStatusCode.NotAcceptable:
-                                {
-                                    this.OnStreamStopped(StopReasons.NotAcceptable);
-                                    break;
-                                }
-                            case HttpStatusCode.RequestEntityTooLarge:
-                                {
-                                    this.OnStreamStopped(StopReasons.TooLong);
-                                    break;
-                                }
-                            case HttpStatusCode.RequestedRangeNotSatisfiable:
-                                {
-                                    this.OnStreamStopped(StopReasons.RangeUnacceptable);
-                                    break;
-                                }
-                            case (HttpStatusCode)420: //Rate Limited
-                                {
-                                    this.OnStreamStopped(StopReasons.RateLimited);
-                                    break;
-                                }
-                            case HttpStatusCode.InternalServerError:
-                                {
-                                    this.OnStreamStopped(StopReasons.TwitterServerError);
-                                    break;
-                                }
-                            case HttpStatusCode.ServiceUnavailable:
-                                {
-                                    this.OnStreamStopped(StopReasons.TwitterOverloaded);
-                                    break;
-                                }
-                            default:
-                                {
-                                    this.OnStreamStopped(StopReasons.Unknown);
-                                    break;
-                                }
-                        }
-                    }
-                    else
-                    {
-                        this.OnStreamStopped(StopReasons.WebConnectionFailed);
+                        case HttpStatusCode.Unauthorized:
+                            {
+                                OnStreamStopped(StopReasons.Unauthorised);
+                                break;
+                            }
+                        case HttpStatusCode.Forbidden:
+                            {
+                                OnStreamStopped(StopReasons.Forbidden);
+                                break;
+                            }
+                        case HttpStatusCode.NotFound:
+                            {
+                                OnStreamStopped(StopReasons.NotFound);
+                                break;
+                            }
+                        case HttpStatusCode.NotAcceptable:
+                            {
+                                OnStreamStopped(StopReasons.NotAcceptable);
+                                break;
+                            }
+                        case HttpStatusCode.RequestEntityTooLarge:
+                            {
+                                OnStreamStopped(StopReasons.TooLong);
+                                break;
+                            }
+                        case HttpStatusCode.RequestedRangeNotSatisfiable:
+                            {
+                                OnStreamStopped(StopReasons.RangeUnacceptable);
+                                break;
+                            }
+                        case (HttpStatusCode)420: //Rate Limited
+                            {
+                                OnStreamStopped(StopReasons.RateLimited);
+                                break;
+                            }
+                        case HttpStatusCode.InternalServerError:
+                            {
+                                OnStreamStopped(StopReasons.TwitterServerError);
+                                break;
+                            }
+                        case HttpStatusCode.ServiceUnavailable:
+                            {
+                                OnStreamStopped(StopReasons.TwitterOverloaded);
+                                break;
+                            }
+                        default:
+                            {
+                                OnStreamStopped(StopReasons.Unknown);
+                                break;
+                            }
                     }
                 }
                 else
                 {
-                    this.OnStreamStopped(StopReasons.WebConnectionFailed);
+                    OnStreamStopped(StopReasons.Unknown);
                 }
+            }
+            catch (Exception)
+            {
+                OnStreamStopped(StopReasons.WebConnectionFailed);
             }
             finally
             {
@@ -421,9 +442,9 @@ namespace Twitterizer.Streaming
         }
 
         /// <summary>
-        /// Parses the message.
+        ///   Parses the message.
         /// </summary>
-        /// <param name="p">The p.</param>
+        /// <param name = "p">The p.</param>
         private void ParseMessage(string p)
         {
             JObject obj = (JObject)JsonConvert.DeserializeObject(p);
@@ -431,12 +452,12 @@ namespace Twitterizer.Streaming
             var friends = obj.SelectToken("friends", false);
             if (friends != null)
             {
-                if (this.friendsCallback != null)
+                if (friendsCallback != null)
                 {
                     if (friends.HasValues)
-                        this.friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(friends.ToString()));
+                        friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(friends.ToString()));
                     else
-                        this.friendsCallback(new TwitterIdCollection());
+                        friendsCallback(new TwitterIdCollection());
                     return;
                 }
             }
@@ -447,20 +468,22 @@ namespace Twitterizer.Streaming
                 var deletedstatus = delete.SelectToken("status", false);
                 if (deletedstatus != null)
                 {
-                    if (this.statusDeletedCallback != null)
+                    if (statusDeletedCallback != null)
                     {
-                        this.statusDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deletedstatus.ToString()));
+                        statusDeletedCallback(
+                            JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deletedstatus.ToString()));
                         return;
-                    }  
+                    }
                     return;
                 }
 
                 var deleteddirectmessage = delete.SelectToken("direct_message", false);
                 if (deleteddirectmessage != null)
                 {
-                    if (this.directMessageDeletedCallback != null)
+                    if (directMessageDeletedCallback != null)
                     {
-                        this.directMessageDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deleteddirectmessage.ToString()));
+                        directMessageDeletedCallback(
+                            JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deleteddirectmessage.ToString()));
                         return;
                     }
                     return;
@@ -470,19 +493,19 @@ namespace Twitterizer.Streaming
             var events = obj.SelectToken("event", false);
             if (events != null)
             {
-                if (this.eventCallback != null)
+                if (eventCallback != null)
                 {
-                    this.eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(obj.ToString()));
+                    eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(obj.ToString()));
                     return;
                 }
             }
-            
+
             var status = obj.SelectToken("user", false);
             if (status != null)
             {
-                if (this.statusCreatedCallback != null)
+                if (statusCreatedCallback != null)
                 {
-                    this.statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(obj.ToString()));
+                    statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(obj.ToString()));
                     return;
                 }
             }
@@ -490,44 +513,42 @@ namespace Twitterizer.Streaming
             var directmessage = obj.SelectToken("direct_message", false);
             if (directmessage != null)
             {
-                if (this.directMessageCreatedCallback != null)
+                if (directMessageCreatedCallback != null)
                 {
-                    this.directMessageCreatedCallback(JsonConvert.DeserializeObject<TwitterDirectMessage>(directmessage.ToString()));
-                    return;
+                    directMessageCreatedCallback(
+                        JsonConvert.DeserializeObject<TwitterDirectMessage>(directmessage.ToString()));
                 }
             }
         }
 
         /// <summary>
-        /// Called when the stream is stopped.
+        ///   Called when the stream is stopped.
         /// </summary>
-        /// <param name="reason">The reason.</param>
-        /// <remarks></remarks>
+        /// <param name = "reason">The reason.</param>
+        /// <remarks>
+        /// </remarks>
         private void OnStreamStopped(StopReasons reason)
         {
-            if (this.streamStoppedCallback != null)
-                this.streamStoppedCallback(reason);
+            if (streamStoppedCallback != null)
+                streamStoppedCallback(reason);
         }
-       
+
         /// <summary>
-        /// Ends the stream.
+        ///   Ends the stream.
         /// </summary>
         public void EndStream()
         {
             EndStream(StopReasons.Unknown, "General reason");
         }
 
+        /// <summary>
+        /// Ends the stream.
+        /// </summary>
+        /// <param name="reason">The reason.</param>
+        /// <param name="description">The description.</param>
         public void EndStream(StopReasons reason, string description)
         {
-            this.stopReceived = true;
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.stopReceived = true;
+            stopReceived = true;
         }
     }
 }
