@@ -39,15 +39,12 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Twitterizer.Streaming
 {
-#if SILVERLIGHT
-    using System.Threading;
-#endif
-
     /// <summary>
     /// The different stop reasons for stopping a stream.
     /// </summary>
@@ -342,13 +339,7 @@ namespace Twitterizer.Streaming
                                         {
                                             rawJsonCallback(blockbuilderstring);
                                         }
-                                        string strToParse = blockbuilderstring.Replace(Environment.NewLine, string.Empty);
-#if !SILVERLIGHT
-                                        Action<string> parseMethod = ParseMessage;
-                                        parseMethod.BeginInvoke(strToParse.Trim('\n'), null, null);
-#else
-                                        ThreadPool.QueueUserWorkItem(delegate { ParseMessage(strToParse.Trim('\n')); });
-#endif
+                                        ThreadPool.QueueUserWorkItem(delegate { ParseMessage(blockbuilderstring.Trim()); });
                                         blockBuilder.Clear();
                                     }
                                 }
@@ -441,6 +432,13 @@ namespace Twitterizer.Streaming
             }
         }
 
+        private static string ConvertJTokenToString(JToken token)
+        {
+            if (token != null)
+                return token.ToString().Trim();
+            return null;
+        }
+
         /// <summary>
         ///   Parses the message.
         /// </summary>
@@ -452,39 +450,32 @@ namespace Twitterizer.Streaming
             var friends = obj.SelectToken("friends", false);
             if (friends != null)
             {
-                if (friendsCallback != null)
+                if (friendsCallback != null && friends.HasValues)
                 {
-                    if (friends.HasValues)
-                        friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(friends.ToString()));
-                    else
-                        friendsCallback(new TwitterIdCollection());
-                    return;
+                    friendsCallback(JsonConvert.DeserializeObject<TwitterIdCollection>(ConvertJTokenToString(friends)));
                 }
+                return;
             }
 
             var delete = obj.SelectToken("delete", false);
             if (delete != null)
             {
-                var deletedstatus = delete.SelectToken("status", false);
-                if (deletedstatus != null)
+                var deletedStatus = delete.SelectToken("status", false);
+                if (deletedStatus != null)
                 {
-                    if (statusDeletedCallback != null)
+                    if (statusDeletedCallback != null && deletedStatus.HasValues)
                     {
-                        statusDeletedCallback(
-                            JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deletedstatus.ToString()));
-                        return;
+                        statusDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(ConvertJTokenToString(deletedStatus)));
                     }
                     return;
                 }
 
-                var deleteddirectmessage = delete.SelectToken("direct_message", false);
-                if (deleteddirectmessage != null)
+                var deletedDirectMessage = delete.SelectToken("direct_message", false);
+                if (deletedDirectMessage != null)
                 {
-                    if (directMessageDeletedCallback != null)
+                    if (directMessageDeletedCallback != null && deletedDirectMessage.HasValues)
                     {
-                        directMessageDeletedCallback(
-                            JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(deleteddirectmessage.ToString()));
-                        return;
+                        directMessageDeletedCallback(JsonConvert.DeserializeObject<TwitterStreamDeletedEvent>(ConvertJTokenToString(deletedDirectMessage)));
                     }
                     return;
                 }
@@ -493,30 +484,29 @@ namespace Twitterizer.Streaming
             var events = obj.SelectToken("event", false);
             if (events != null)
             {
-                if (eventCallback != null)
+                if (eventCallback != null && events.HasValues)
                 {
-                    eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(obj.ToString()));
-                    return;
+                    eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(ConvertJTokenToString(events)));
                 }
+                return;
             }
 
-            var status = obj.SelectToken("user", false);
-            if (status != null)
+            var user = obj.SelectToken("user", false);
+            if (user != null)
             {
-                if (statusCreatedCallback != null)
+                if (statusCreatedCallback != null && user.HasValues)
                 {
-                    statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(obj.ToString()));
-                    return;
+                    statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(ConvertJTokenToString(user)));
                 }
+                return;
             }
 
-            var directmessage = obj.SelectToken("direct_message", false);
-            if (directmessage != null)
+            var directMessage = obj.SelectToken("direct_message", false);
+            if (directMessage != null)
             {
-                if (directMessageCreatedCallback != null)
+                if (directMessageCreatedCallback != null && directMessage.HasValues)
                 {
-                    directMessageCreatedCallback(
-                        JsonConvert.DeserializeObject<TwitterDirectMessage>(directmessage.ToString()));
+                    directMessageCreatedCallback(JsonConvert.DeserializeObject<TwitterDirectMessage>(ConvertJTokenToString(directMessage)));
                 }
             }
         }
