@@ -94,9 +94,16 @@ namespace Twitterizer.Streaming
         private StatusDeletedCallback statusDeletedCallback;
 
         /// <summary>
+        ///   The userAgent which shall be used in connections to Twitter (a must in the specs of the API)
+        /// </summary>
+        private string userAgent = null;
+
+        /// <summary>
         ///   This value is set to true to indicate that the stream connection should be closed.
         /// </summary>
         private bool stopReceived;
+
+        private HttpWebRequest request;
 
         private StreamStoppedCallback streamStoppedCallback;
 
@@ -104,7 +111,7 @@ namespace Twitterizer.Streaming
         ///   Initializes a new instance of the <see cref = "TwitterStream" /> class.
         /// </summary>
         /// <param name = "tokens">The tokens.</param>
-        /// <param name = "userAgent">The useragent string which shall include the version of your client.</param>
+        /// <param name = "userAgent">The user agent string which shall include the version of your client.</param>
         /// <param name = "streamoptions">The stream or user stream options to intially use when starting the stream.</param>
         public TwitterStream(OAuthTokens tokens, string userAgent, StreamOptions streamoptions)
         {
@@ -112,14 +119,14 @@ namespace Twitterizer.Streaming
             // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
             if (string.IsNullOrEmpty(userAgent))
             {
-                UserAgent = string.Format(
+                this.userAgent = string.Format(
                     CultureInfo.InvariantCulture,
                     "Twitterizer/{0}",
                     Assembly.GetExecutingAssembly().GetName().Version);
             }
             else
             {
-                UserAgent = string.Format(
+                this.userAgent = string.Format(
                     CultureInfo.InvariantCulture,
                     "{0} (via Twitterizer/{1})",
                     userAgent,
@@ -131,11 +138,6 @@ namespace Twitterizer.Streaming
             if (streamoptions != null)
                 StreamOptions = streamoptions;
         }
-
-        /// <summary>
-        ///   The useragant which shall be used in connections to Twitter (a must in the specs of the API)
-        /// </summary>
-        private string UserAgent { get; set; }
 
         /// <summary>
         ///   Gets or sets the tokens.
@@ -162,6 +164,7 @@ namespace Twitterizer.Streaming
         /// </summary>
         public void Dispose()
         {
+            EndStream();
             friendsCallback = null;
             streamStoppedCallback = null;
             statusCreatedCallback = null;
@@ -170,7 +173,6 @@ namespace Twitterizer.Streaming
             directMessageDeletedCallback = null;
             eventCallback = null;
             rawJsonCallback = null;
-            stopReceived = true;
         }
 
         #endregion
@@ -189,8 +191,13 @@ namespace Twitterizer.Streaming
             RawJsonCallback rawJsonCallback = null
             )
         {
+            if (request != null)
+            {
+                throw new InvalidOperationException("Stream is already open");
+            }
+
             WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"),
-                                                              HTTPVerb.GET, Tokens, UserAgent);
+                                                              HTTPVerb.GET, Tokens, userAgent);
 
             PrepareStreamOptions(builder);
 
@@ -200,7 +207,7 @@ namespace Twitterizer.Streaming
                     builder.Parameters.Add("replies", "all");
             }
 
-            HttpWebRequest request = builder.PrepareRequest();
+            request = builder.PrepareRequest();
             this.friendsCallback = friendsCallback;
             this.streamStoppedCallback = streamStoppedCallback;
             this.statusCreatedCallback = statusCreatedCallback;
@@ -223,25 +230,30 @@ namespace Twitterizer.Streaming
         ///   Starts the public stream.
         /// </summary>
         public IAsyncResult StartPublicStream(
-            StreamStoppedCallback streamErrorCallback,
+            StreamStoppedCallback streamStoppedCallback,
             StatusCreatedCallback statusCreatedCallback,
             StatusDeletedCallback statusDeletedCallback,
             EventCallback eventCallback,
             RawJsonCallback rawJsonCallback = null
             )
         {
+            if (request != null)
+            {
+                throw new InvalidOperationException("Stream is already open");
+            }
+
             WebRequestBuilder builder;
             if (Tokens == null)
                 builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"),
-                                                HTTPVerb.POST, UserAgent, NetworkCredentials);
+                                                HTTPVerb.POST, userAgent, NetworkCredentials);
             else
                 builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"),
-                                                HTTPVerb.POST, Tokens, UserAgent);
+                                                HTTPVerb.POST, Tokens, userAgent);
             PrepareStreamOptions(builder);
 
-            HttpWebRequest request = builder.PrepareRequest();
+            request = builder.PrepareRequest();
 
-            streamStoppedCallback = streamErrorCallback;
+            this.streamStoppedCallback = streamStoppedCallback;
             this.statusCreatedCallback = statusCreatedCallback;
             this.statusDeletedCallback = statusDeletedCallback;
             this.eventCallback = eventCallback;
@@ -346,11 +358,11 @@ namespace Twitterizer.Streaming
                             }
 
                             reader.Close();
-
                             OnStreamStopped(stopReceived ? StopReasons.StoppedByRequest : StopReasons.WebConnectionFailed);
                         }
                         catch
                         {
+                            reader.Close();
                             OnStreamStopped(stopReceived ? StopReasons.StoppedByRequest : StopReasons.WebConnectionFailed);
                         }
                     }
@@ -524,21 +536,16 @@ namespace Twitterizer.Streaming
         }
 
         /// <summary>
-        ///   Ends the stream.
+        /// Ends the stream.
         /// </summary>
         public void EndStream()
         {
-            EndStream(StopReasons.Unknown, "General reason");
-        }
-
-        /// <summary>
-        /// Ends the stream.
-        /// </summary>
-        /// <param name="reason">The reason.</param>
-        /// <param name="description">The description.</param>
-        public void EndStream(StopReasons reason, string description)
-        {
             stopReceived = true;
+            if (request != null)
+            {
+                request.Abort();
+                request = null;
+            }
         }
     }
 }

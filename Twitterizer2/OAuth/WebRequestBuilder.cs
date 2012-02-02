@@ -82,7 +82,7 @@ namespace Twitterizer
         /// <summary>
         /// The HTTP Authorization realm.
         /// </summary>
-        public string Realm = "Twitter API";
+        public const string Realm = "Twitter API";
 
         /// <summary>
         /// Gets or sets the request URI.
@@ -112,19 +112,19 @@ namespace Twitterizer
         /// Gets or sets the UserAgent.
         /// </summary>
         /// <value>The User Agent.</value>
-        public String UserAgent { private get; set; }
+        private string userAgent;
 
         /// <summary>
         /// Gets or sets the Basic Auth Credentials.
         /// </summary>
         /// <value>The Basic Auth Credentials.</value>
-		public NetworkCredential NetworkCredentials { private get; set; }
+        private NetworkCredential networkCredentials;
 
-		/// <summary>
-		/// Gets or sets the Multipart config
-		/// </summary>
-		/// <value>Multipart</value>
-		public bool Multipart { get; set; }
+        /// <summary>
+        /// Gets or sets the Multipart config
+        /// </summary>
+        /// <value>Multipart</value>
+        public bool Multipart { get; set; }
 
 #if !SILVERLIGHT
         /// <summary>
@@ -181,10 +181,10 @@ namespace Twitterizer
 
             this.RequestUri = requestUri;
             this.Verb = verb;
-            this.UserAgent = userAgent;
+            this.userAgent = userAgent;
             this.UseOAuth = false;
             if (networkCredentials != null)
-                this.NetworkCredentials = networkCredentials;
+                this.networkCredentials = networkCredentials;
 
 			this.Parameters = new Dictionary<string, object>();
 
@@ -295,9 +295,9 @@ namespace Twitterizer
             if (this.Proxy != null)
                 request.Proxy = Proxy;
 #endif
-            if (!this.UseOAuth && this.NetworkCredentials != null)
+            if (!this.UseOAuth && this.networkCredentials != null)
             {
-                request.Credentials = this.NetworkCredentials;
+                request.Credentials = this.networkCredentials;
                 request.UseDefaultCredentials = false;
             }
             else
@@ -310,7 +310,7 @@ namespace Twitterizer
 			request.ContentLength = Multipart ? ((formData != null) ? formData.Length: 0) : 0;
 
 #if !SILVERLIGHT // No silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
-            request.UserAgent = (String.IsNullOrEmpty(UserAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : UserAgent;
+            request.UserAgent = (string.IsNullOrEmpty(userAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) : userAgent;
             
             request.ServicePoint.Expect100Continue = false;
 #endif
@@ -423,7 +423,7 @@ namespace Twitterizer
         /// <summary>
         /// Sets up the OAuth request details.
         /// </summary>
-        public void SetupOAuth()
+        private void SetupOAuth()
         {
             // We only sign oauth requests
             if (!this.UseOAuth)
