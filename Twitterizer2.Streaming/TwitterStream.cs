@@ -498,7 +498,7 @@ namespace Twitterizer.Streaming
             {
                 if (eventCallback != null && events.HasValues)
                 {
-                    eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(ConvertJTokenToString(events)));
+                    eventCallback(JsonConvert.DeserializeObject<TwitterStreamEvent>(ConvertJTokenToString(obj)));
                 }
                 return;
             }
@@ -508,7 +508,7 @@ namespace Twitterizer.Streaming
             {
                 if (statusCreatedCallback != null && user.HasValues)
                 {
-                    statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(ConvertJTokenToString(user)));
+                    statusCreatedCallback(JsonConvert.DeserializeObject<TwitterStatus>(ConvertJTokenToString(obj)));
                 }
                 return;
             }
