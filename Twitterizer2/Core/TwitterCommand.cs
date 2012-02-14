@@ -305,6 +305,12 @@ namespace Twitterizer.Core
                 twitterResponse.Result = RequestResult.Unknown;
                 return twitterResponse;
             }
+            catch (Newtonsoft.Json.JsonSerializationException)
+            {
+                twitterResponse.ErrorMessage = "Unable to parse JSON";
+                twitterResponse.Result = RequestResult.Unknown;
+                return twitterResponse;
+            }
 
 #if !LITE && !SILVERLIGHT
             this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
