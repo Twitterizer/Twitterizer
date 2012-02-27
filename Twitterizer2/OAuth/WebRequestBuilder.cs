@@ -285,11 +285,31 @@ namespace Twitterizer
 
 				this.Verb = HTTPVerb.POST;
 			}
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
+            //Deal with the special case where we need to add the compression header if the UseCompression key is in the parameters dictionary.
+            object UseCompressionObj;
+            if (Parameters.TryGetValue("UseCompression", out UseCompressionObj)) 
+            {
+                //now try and convert to a boolean.
+                bool UseCompression = false;
+                try
+                {
+                    UseCompression = Convert.ToBoolean(UseCompressionObj);
+                }
+                catch (Exception e)
+                {
+                    throw; //properly rethrow the exception preserving stack trace.
+                }
+                if (UseCompression ==true)
+                    request.AutomaticDecompression =DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                else
+                    request.AutomaticDecompression =DecompressionMethods.None;
+            }
 #if SILVERLIGHT
             WebRequest.RegisterPrefix("http://", WebRequestCreator.ClientHttp);
             WebRequest.RegisterPrefix("https://", WebRequestCreator.ClientHttp);
+
 #endif
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
 
 #if !SILVERLIGHT
             if (this.Proxy != null)
@@ -363,11 +383,11 @@ namespace Twitterizer
 			Dictionary<string, object> fieldsToInclude = new Dictionary<string, object>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
                                          !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
 
-			foreach (KeyValuePair<string, object> item in fieldsToInclude)
+            foreach (KeyValuePair<string, object> item in fieldsToInclude)
             {
                 if (item.Value is string)
-					requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode((string)item.Value));
-            }
+                    requestParametersBuilder.AppendFormat("{0}={1}&", item.Key, UrlEncode((string)item.Value));
+            }        
 
             if (requestParametersBuilder.Length == 0)
                 return;
