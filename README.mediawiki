@@ -1,0 +1,13 @@
+For most applications, Twitterizer2 is the project that will create the assembly you want.
+
+== Build From Source ==
+Requirements:
+* Visual Studio 2010 / Mono
+* [[http://www.nuget.org/ NuGet]]
+
+Depending on your target application, you may want (or need) to remove the silverlight projects from the solution.
+
+== Build for .NET 3.5 ==
+Twitterizer (as of this writing) is built for .NET 4.0 primarily. It is possible to build the library for .NET 3.5 by selecting it as the target framework in Visual Studio. VS2010 should build this will few changes needed. VS2008 may require more changes.
+
+I understand that this might put you in a bad spot, but I have a hard time keeping up with code changes and bug fixes just keeping the library working at all. I really don't have the time to make sure that the code I'm writing is backward compatible.

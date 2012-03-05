@@ -52,12 +52,6 @@ namespace Twitterizer
             // Set the default values for the properties
             this.UseSSL = false;
             this.APIBaseAddress = "http://api.twitter.com/1/";
-
-#if !LITE && !SILVERLIGHT
-            this.CacheOutput = false;
-            this.CacheTimespan = new TimeSpan(0, 5, 0);
-            this.ReadConfigurationSettings();
-#endif
         }
 
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="UseSSL"]/*'/>
@@ -73,46 +67,5 @@ namespace Twitterizer
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
         public WebProxy Proxy { get; set; }
 #endif
-
-#if !LITE && !SILVERLIGHT
-        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheOutput"]/*'/>
-        public bool CacheOutput { get; set; }
-
-        /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="CacheTimespan"]/*'/>
-		public TimeSpan CacheTimespan { get; set; }
-
-		/// <summary>
-        /// Reads the configuration settings.
-        /// </summary>
-        private void ReadConfigurationSettings()
-        {
-
-            System.Collections.Specialized.NameValueCollection appSettings = ConfigurationManager.AppSettings;
-
-            // Get the enable caching configuration setting
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnableCaching"]) &&
-                appSettings["Twitterizer2.EnableCaching"].ToLower().Trim() == "true")
-            {
-                this.CacheOutput = true;
-            }
-
-            // Get the cache timeout setting
-            string cacheTimeoutSetting = appSettings["Twitterizer2.CacheTimeout"];
-            long cacheTimeoutSeconds;
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.CacheTimeout"]) &&
-                long.TryParse(cacheTimeoutSetting, out cacheTimeoutSeconds))
-            {
-                // Convert the seconds value to ticks and instantiate a new timespan
-                this.CacheTimespan = new TimeSpan(cacheTimeoutSeconds * 10000000);
-            }
-
-            // Get the SSL setting
-            if (!string.IsNullOrEmpty(appSettings["Twitterizer2.EnableSSL"]) &&
-                appSettings["Twitterizer2.EnableSSL"].ToLower().Trim() == "true")
-            {
-                this.UseSSL = true;
-            }
-        }
-#endif
-        }
+    }
 }

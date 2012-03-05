@@ -69,7 +69,6 @@ namespace Twitterizer
             newResponse.RateLimiting = response.RateLimiting;
             newResponse.AccessLevel = response.AccessLevel;
             newResponse.RequestUrl = response.RequestUrl;
-            newResponse.ResponseCached = response.ResponseCached;
             newResponse.ResponseObject = response.ResponseObject;
             newResponse.Result = response.Result;
 

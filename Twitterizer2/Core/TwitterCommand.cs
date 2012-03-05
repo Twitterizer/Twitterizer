@@ -42,9 +42,6 @@ namespace Twitterizer.Core
 #if !SILVERLIGHT
     using System.Web;
 #endif
-#if !LITE && !SILVERLIGHT
-    using System.Web.Caching;
-#endif
     using Twitterizer;
 
     /// <summary>
@@ -163,42 +160,13 @@ namespace Twitterizer.Core
 
             }
 
-#if !LITE && !SILVERLIGHT
-            // Variables and objects needed for caching
-            StringBuilder cacheKeyBuilder = new StringBuilder(this.Uri.AbsoluteUri);
-            if (this.Tokens != null)
-            {
-                cacheKeyBuilder.AppendFormat("|{0}|{1}", this.Tokens.ConsumerKey, this.Tokens.ConsumerKey);
-            }
-
-            Cache cache = HttpRuntime.Cache;
-#endif
-
             // Prepare the query parameters
             Dictionary<string, object> queryParameters = new Dictionary<string, object>();
             foreach (KeyValuePair<string, object> item in this.RequestParameters)
             {
                 queryParameters.Add(item.Key, item.Value);
-#if !LITE && !SILVERLIGHT
-                cacheKeyBuilder.AppendFormat("|{0}={1}", item.Key, item.Value);
-#endif
             }
 
-#if !LITE && !SILVERLIGHT
-            // Lookup the cached item and return it
-            if (this.Verb == HTTPVerb.GET && this.OptionalProperties.CacheOutput && cache[cacheKeyBuilder.ToString()] != null)
-            {
-                if (cache[cacheKeyBuilder.ToString()] is T)
-                {
-                    return new TwitterResponse<T>
-                               {
-                                   ResponseObject = (T)cache[cacheKeyBuilder.ToString()],
-                                   ResponseCached = true
-                               };
-                }
-            }
-
-#endif
             // Declare the variable to be returned
             twitterResponse.ResponseObject = default(T);
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
@@ -312,10 +280,6 @@ namespace Twitterizer.Core
                 return twitterResponse;
             }
 
-#if !LITE && !SILVERLIGHT
-            this.AddResultToCache(cacheKeyBuilder, cache, twitterResponse.ResponseObject);
-#endif
-
             // Pass the current oauth tokens into the new object, so method calls from there will keep the authentication.
             twitterResponse.Tokens = this.Tokens;
 
@@ -428,30 +392,5 @@ namespace Twitterizer.Core
             }
             return AccessLevel.Unavailable;
         }
-
-
-#if !LITE && !SILVERLIGHT
-        /// <summary>
-        /// Adds the result to cache.
-        /// </summary>
-        /// <param name="cacheKeyBuilder">The cache key builder.</param>
-        /// <param name="cache">The cache.</param>
-        /// <param name="resultObject">The result object.</param>
-        private void AddResultToCache(StringBuilder cacheKeyBuilder, Cache cache, T resultObject)
-        {
-            // If caching is enabled, add the result to the cache.
-            if (this.Verb == HTTPVerb.GET && this.OptionalProperties.CacheOutput)
-            {
-                cache.Add(
-                    cacheKeyBuilder.ToString(),
-                    resultObject,
-                    null,
-                    DateTime.Now.Add(this.OptionalProperties.CacheTimespan),
-                    Cache.NoSlidingExpiration,
-                    CacheItemPriority.Normal,
-                    null);
-            }
-        }
-#endif
     }
 }

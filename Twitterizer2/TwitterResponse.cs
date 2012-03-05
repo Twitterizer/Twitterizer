@@ -49,12 +49,6 @@ namespace Twitterizer
         internal OAuthTokens Tokens { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the response was retrieved from a cache.
-        /// </summary>
-        /// <value><c>true</c> if [response cached]; otherwise, <c>false</c>.</value>
-        public Boolean ResponseCached { get; set; }
-
-        /// <summary>
         /// Gets or sets the rate limiting details.
         /// </summary>
         /// <value>The rate limiting object.</value>
