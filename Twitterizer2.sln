@@ -30,13 +30,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Async", "Twitt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Addon Assemblies", "Addon Assemblies", "{5AE22138-EA40-48EF-AC38-6370D7F1F9E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2lite", "Twitterizer2lite\Twitterizer2lite.csproj", "{C188B5C8-E361-4869-9800-CE23133F3B2C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Silverlight", "Twitterizer2.Silverlight\Twitterizer2.Silverlight.csproj", "{73DA9258-F437-4948-A15E-F775B72A4923}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Streaming.Silverlight", "Twitterizer2.Streaming.Silverlight\Twitterizer2.Streaming.Silverlight.csproj", "{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Async.Silverlight", "Twitterizer2.Async.Silverlight\Twitterizer2.Async.Silverlight.csproj", "{764B161E-BC98-4C48-A2D7-89AF92D467B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7CD7E564-2FF7-4C7A-BC49-BB06A59BD771}"
+	ProjectSection(SolutionItems) = preProject
+		README.mediawiki = README.mediawiki
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,20 +128,6 @@ Global
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.Release|x86-Only.ActiveCfg = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.CCNET|Any CPU.Build.0 = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C188B5C8-E361-4869-9800-CE23133F3B2C}.Release|x86-Only.ActiveCfg = Release|Any CPU
 		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
 		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|Any CPU.Build.0 = Release|Any CPU
 		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
@@ -189,8 +178,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AFDC57ED-C013-4581-9D06-54D8A42D696D} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
 		{566E5F16-088A-4AB5-967A-A05BA636AF75} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
+		{AFDC57ED-C013-4581-9D06-54D8A42D696D} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
 		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
 		{764B161E-BC98-4C48-A2D7-89AF92D467B9} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
 	EndGlobalSection

@@ -286,29 +286,30 @@ namespace Twitterizer
 				this.Verb = HTTPVerb.POST;
 			}
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
+#if !SILVERLIGHT
             //Deal with the special case where we need to add the compression header if the UseCompression key is in the parameters dictionary.
             object UseCompressionObj;
-            if (Parameters.TryGetValue("UseCompression", out UseCompressionObj)) 
+            if (Parameters.TryGetValue("UseCompression", out UseCompressionObj))
             {
                 //now try and convert to a boolean.
                 bool UseCompression = false;
+
                 try
                 {
                     UseCompression = Convert.ToBoolean(UseCompressionObj);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw; //properly rethrow the exception preserving stack trace.
                 }
-                if (UseCompression ==true)
-                    request.AutomaticDecompression =DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                if (UseCompression == true)
+                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
                 else
-                    request.AutomaticDecompression =DecompressionMethods.None;
+                    request.AutomaticDecompression = DecompressionMethods.None;
             }
-#if SILVERLIGHT
+#else
             WebRequest.RegisterPrefix("http://", WebRequestCreator.ClientHttp);
             WebRequest.RegisterPrefix("https://", WebRequestCreator.ClientHttp);
-
 #endif
 
 #if !SILVERLIGHT
@@ -415,7 +416,10 @@ namespace Twitterizer
 						boundary,
 						kvp.Key,
 						kvp.Key);
-					formDataStream.Write(encoding.GetBytes(header), 0, header.Length);
+
+                    byte[] headerBytes = encoding.GetBytes(header);
+
+                    formDataStream.Write(headerBytes, 0, headerBytes.Length);
 					formDataStream.Write(data, 0, data.Length);
 				}
 				else
@@ -424,7 +428,10 @@ namespace Twitterizer
 						boundary,
 						kvp.Key,
 						kvp.Value);
-					formDataStream.Write(encoding.GetBytes(header), 0, header.Length);
+
+                    byte[] headerBytes = encoding.GetBytes(header);
+
+                    formDataStream.Write(headerBytes, 0, headerBytes.Length);
 				}
 			}
 
