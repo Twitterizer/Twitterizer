@@ -3,7 +3,7 @@ For most applications, Twitterizer2 is the project that will create the assembly
 == Build From Source ==
 Requirements:
 * Visual Studio 2010 / Mono
-* [[http://www.nuget.org/ NuGet]]
+* [http://www.nuget.org/ NuGet]
 
 Depending on your target application, you may want (or need) to remove the silverlight projects from the solution.
 
