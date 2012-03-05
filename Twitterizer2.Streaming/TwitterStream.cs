@@ -286,7 +286,10 @@ namespace Twitterizer.Streaming
 
                 if (StreamOptions.Track != null && StreamOptions.Track.Count > 0)
                     builder.Parameters.Add("track", string.Join(",", StreamOptions.Track.ToArray()));
-            }
+
+                if (StreamOptions.UseCompression != null)
+                    builder.Parameters.Add("UseCompression", StreamOptions.UseCompression);
+                    }
         }
 
         /// <summary>

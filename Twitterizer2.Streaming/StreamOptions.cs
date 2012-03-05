@@ -68,5 +68,12 @@ namespace Twitterizer.Streaming
         /// </summary>
         /// <value>The locations.</value>
         public List<Location> Locations { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to request the use of GZip compression on the stream.
+        /// </summary>
+        /// <value>Boolean.</value>
+        /// <remarks>Will use the recently introduced GZip compression to decrease bandwitdth.</remarks>
+        public bool UseCompression { get; set; }
     }
 }
