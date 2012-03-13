@@ -126,6 +126,12 @@ namespace Twitterizer
         /// <value>Multipart</value>
         public bool Multipart { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether to use accept compression on this request
+        /// </summary>
+        /// <value>UseCompression</value>
+        public bool UseCompression { get; set; }
+
 #if !SILVERLIGHT
         /// <summary>
         /// Gets or sets the proxy.
@@ -285,34 +291,24 @@ namespace Twitterizer
 
 				this.Verb = HTTPVerb.POST;
 			}
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
-#if !SILVERLIGHT
-            //Deal with the special case where we need to add the compression header if the UseCompression key is in the parameters dictionary.
-            object UseCompressionObj;
-            if (Parameters.TryGetValue("UseCompression", out UseCompressionObj))
-            {
-                //now try and convert to a boolean.
-                bool UseCompression = false;
 
-                try
-                {
-                    UseCompression = Convert.ToBoolean(UseCompressionObj);
-                }
-                catch (Exception)
-                {
-                    throw; //properly rethrow the exception preserving stack trace.
-                }
-                if (UseCompression == true)
-                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-                else
-                    request.AutomaticDecompression = DecompressionMethods.None;
+            HttpWebRequest request;
+#if SILVERLIGHT
+            request = (HttpWebRequest)WebRequestCreator.ClientHttp.Create(this.RequestUri);
+            
+            if (this.RequestUri.Host.Contains("search.twitter.com") || this.RequestUri.Host.Contains("api.twitter.com")) //-- DG HACK FOR TWITTER QUERIES TO FIX BAD COOKIE DOMAIN= DATA BEING RETURNED FROM TWITTER.
+            {
+                request.CookieContainer = new CookieContainer();
+                request.CookieContainer.Add(this.RequestUri, new Cookie("k", "Twitterizer hack for bad twitter cookie"));
             }
 #else
-            WebRequest.RegisterPrefix("http://", WebRequestCreator.ClientHttp);
-            WebRequest.RegisterPrefix("https://", WebRequestCreator.ClientHttp);
-#endif
+            request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
+            
+            if (this.UseCompression == true)
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            else
+                request.AutomaticDecompression = DecompressionMethods.None;
 
-#if !SILVERLIGHT
             if (this.Proxy != null)
                 request.Proxy = Proxy;
 #endif
@@ -614,18 +610,20 @@ namespace Twitterizer
 
             foreach (var item in paramsSorted)
             {
-                if (parameterString.Length > 0)
+                if (item.Value is string)
                 {
-                    parameterString.Append("&");
-                }
+                    if (parameterString.Length > 0)
+                    {
+                        parameterString.Append("&");
+                    }
 
-				if( item.Value is string)
-					parameterString.Append(
-						string.Format(
-							CultureInfo.InvariantCulture,
-							"{0}={1}",
-							UrlEncode(item.Key),
-							UrlEncode((string)item.Value)));
+                    parameterString.Append(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "{0}={1}",
+                            UrlEncode(item.Key),
+                            UrlEncode((string)item.Value)));
+                }
             }
 
             return UrlEncode(parameterString.ToString());

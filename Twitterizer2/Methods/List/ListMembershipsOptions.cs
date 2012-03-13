@@ -44,5 +44,11 @@ namespace Twitterizer
         /// </summary>
         /// <value>The cursor.</value>
         public long Cursor { get; set; }
+
+        /// <summary>
+        /// Gets or sets filtered to owned lists.
+        /// </summary>
+        /// <value>Whether to filter to owned lists.</value>
+        public bool FilterToOwnedLists { get; set; }
     }
 }

@@ -190,16 +190,28 @@ namespace Twitterizer.Core
 
                 HttpWebResponse response = requestBuilder.ExecuteRequest();
 
+                if (response == null)
+                {
+                    twitterResponse.Result = RequestResult.Unknown;
+                    return twitterResponse;
+                }
+
                 responseData = ConversionUtility.ReadStream(response.GetResponseStream());
                 twitterResponse.Content = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
                 twitterResponse.RequestUrl = requestBuilder.RequestUri.AbsoluteUri;
 
+#if !SILVERLIGHT
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
                 // Parse Access Level
                 accessLevel = ParseAccessLevel(response.Headers);
+#else
+                rateLimiting = null;
+                accessLevel = AccessLevel.Unknown;
+
+#endif
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, response.StatusCode, rateLimiting);
@@ -234,10 +246,15 @@ namespace Twitterizer.Core
                 responseData = ConversionUtility.ReadStream(exceptionResponse.GetResponseStream());
                 twitterResponse.Content = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
+#if !SILVERLIGHT
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
                 // Parse Access Level
                 accessLevel = ParseAccessLevel(exceptionResponse.Headers);
+#else
+                rateLimiting = null;
+                accessLevel = AccessLevel.Unknown;
+#endif
 
                 // Try to read the error message, if there is one.
                 try
@@ -301,7 +318,7 @@ namespace Twitterizer.Core
                     break;
 
                 case HttpStatusCode.BadRequest:
-                    twitterResponse.Result = rateLimiting.Remaining == 0 ? RequestResult.RateLimited : RequestResult.BadRequest;
+                    twitterResponse.Result = (rateLimiting != null && rateLimiting.Remaining == 0) ? RequestResult.RateLimited : RequestResult.BadRequest;
                     break;
 
                 case HttpStatusCode.Unauthorized:

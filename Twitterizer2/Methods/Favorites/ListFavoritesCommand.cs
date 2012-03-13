@@ -89,6 +89,9 @@ namespace Twitterizer.Commands
 
             if (options.SinceStatusId > 0)
                 this.RequestParameters.Add("since_id", options.SinceStatusId.ToString());
+
+            if (options.MaxStatusId > 0)
+                this.RequestParameters.Add("max_id", options.MaxStatusId.ToString());
         }
     }
 }

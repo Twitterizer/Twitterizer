@@ -1,5 +1,4 @@
-﻿using Twitterizer2.Streaming;
-namespace Twitterizer.Streaming
+﻿namespace Twitterizer.Streaming
 {
     using System;
     using Newtonsoft.Json;

@@ -65,5 +65,11 @@ namespace Twitterizer
         /// </summary>
         /// <value>The since id.</value>
         public decimal SinceStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max (latest) status id to request.
+        /// </summary>
+        /// <value>The max id.</value>
+        public decimal MaxStatusId { get; set; }
     }
 }

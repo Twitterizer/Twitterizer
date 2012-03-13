@@ -111,7 +111,6 @@ namespace Twitterizer
                     {
                         switch ((string)reader.Value)
                         {
-#if !SILVERLIGHT
                             //TODO these two datetime converters don't seem to convert.
                             case "as_of":
                                 reader.Read();
@@ -124,7 +123,6 @@ namespace Twitterizer
                                 var d = new TwitterizerDateConverter();
                                 result.CreatedAt = (DateTime)d.ReadJson(reader, typeof(DateTime), null, serializer);
                                 continue;
-#endif
                             case "locations":
                                 reader.Read();
                                 var e = new TwitterTrendLocationCollection.Converter();
@@ -132,7 +130,7 @@ namespace Twitterizer
                                 continue;
                         }
                     }
-                    if (reader.TokenType == JsonToken.StartObject && reader.Depth > initialDepth + 1)
+                    if (reader.TokenType == JsonToken.StartObject && reader.Depth > initialDepth + 2)
                         result.Add(new TwitterTrend());
 
                     if (reader.TokenType == JsonToken.PropertyName)

@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
-namespace Twitterizer2.Streaming
+namespace Twitterizer.Streaming
 {
     /// <summary>
     /// Describes the type of event that has occured on twitter
@@ -96,7 +96,7 @@ namespace Twitterizer2.Streaming
         /// <summary>
         /// The source users profile was updated.
         /// </summary>
-        [EnumMemberAttribute(Value = "user_updated")]
+        [EnumMemberAttribute(Value = "user_update")]
         UserUpdated
     }
 }

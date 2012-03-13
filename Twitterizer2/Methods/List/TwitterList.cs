@@ -329,14 +329,14 @@ namespace Twitterizer
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="username">The screenname.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, string username, ListMembershipsOptions options)
+        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, string screenname, ListMembershipsOptions options)
         {
-            Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, username, options);
+            Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, screenname, options);
             return Core.CommandPerformer.PerformAction(command);
         }
 
@@ -344,13 +344,41 @@ namespace Twitterizer
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="username">The screenname.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
-        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, string username)
+        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, string screenname)
         {
-            return GetMemberships(tokens, username, null);
+            return GetMemberships(tokens, screenname, null);
+        }
+
+        /// <summary>
+        /// List the lists the specified user has been added to.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The userid.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, decimal userid, ListMembershipsOptions options)
+        {
+            Commands.ListMembershipsCommand command = new Twitterizer.Commands.ListMembershipsCommand(tokens, userid, options);
+            return Core.CommandPerformer.PerformAction(command);
+        }
+
+        /// <summary>
+        /// List the lists the specified user has been added to.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="username">The userid.</param>
+        /// <returns>
+        /// A <see cref="TwitterListCollection"/> instance.
+        /// </returns>
+        public static TwitterResponse<TwitterListCollection> GetMemberships(OAuthTokens tokens, decimal userid)
+        {
+            return GetMemberships(tokens, userid, null);
         }
 
         /// <summary>

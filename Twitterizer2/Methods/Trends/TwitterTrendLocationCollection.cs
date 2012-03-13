@@ -86,7 +86,7 @@ namespace Twitterizer
 
                 int initialDepth = reader.Depth;
 
-                while (reader.Read() && reader.Depth >= initialDepth)
+                while (reader.Read() && reader.Depth > initialDepth)
                 {
                     if (reader.TokenType == JsonToken.StartObject && reader.Depth >= 1)
                         result.Add(new TwitterTrendLocation());

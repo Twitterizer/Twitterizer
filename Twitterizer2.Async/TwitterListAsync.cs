@@ -20,16 +20,7 @@
         /// <returns></returns>
         public static IAsyncResult AddMember(OAuthTokens tokens, string ownerUsername, string listId, decimal userIdToAdd, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, string, decimal, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.AddMember;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                ownerUsername,
-                listId,
-                userIdToAdd,
-                options,
-                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, ownerUsername, listId, userIdToAdd, options, timeout, TwitterList.AddMember, function);
         }
 
         /// <summary>
@@ -45,16 +36,7 @@
         /// <returns></returns>
         public static IAsyncResult CheckMembership(OAuthTokens tokens, string ownerUsername, string listId, decimal userId, OptionalProperties options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterUser>> function)
         {
-            Func<OAuthTokens, string, string, decimal, OptionalProperties, TwitterResponse<TwitterUser>> methodToCall = TwitterList.CheckMembership;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                ownerUsername,
-                listId,
-                userId,
-                options,
-                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, ownerUsername, listId, userId, options, timeout, TwitterList.CheckMembership, function);
         }
 
         /// <summary>
@@ -139,14 +121,28 @@
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="screenname">The screenname.</param>
         /// <param name="options">The options.</param>
         /// <param name="timeout">The timeout.</param>
         /// <param name="function">The function.</param>
         /// <returns></returns>
-        public static IAsyncResult GetMemberships(OAuthTokens tokens, string username, ListMembershipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
+        public static IAsyncResult GetMemberships(OAuthTokens tokens, string screenname, ListMembershipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
         {
-            return AsyncUtility.ExecuteAsyncMethod(tokens, username, options, timeout, TwitterList.GetMemberships, function);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, screenname, options, timeout, TwitterList.GetMemberships, function);
+        }
+
+        /// <summary>
+        /// List the lists the specified user has been added to.
+        /// </summary>
+        /// <param name="tokens">The tokens.</param>
+        /// <param name="userid">The userid.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="function">The function.</param>
+        /// <returns></returns>
+        public static IAsyncResult GetMemberships(OAuthTokens tokens, decimal userid, ListMembershipsOptions options, TimeSpan timeout, Action<TwitterAsyncResponse<TwitterListCollection>> function)
+        {
+            return AsyncUtility.ExecuteAsyncMethod(tokens, userid, options, timeout, TwitterList.GetMemberships, function);
         }
 
         /// <summary>
@@ -209,16 +205,7 @@
             TimeSpan timeout,
             Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, bool, string, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.New;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                name,
-                isPublic,
-                description,
-                options,
-                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, name, isPublic, description, options, timeout, TwitterList.New, function); 
         }
 
         /// <summary>
@@ -241,16 +228,7 @@
             TimeSpan timeout,
             Action<TwitterAsyncResponse<TwitterList>> function)
         {
-            Func<OAuthTokens, string, string, decimal, OptionalProperties, TwitterResponse<TwitterList>> methodToCall = TwitterList.RemoveMember;
-
-            return methodToCall.BeginInvoke(
-                tokens,
-                ownerUsername,
-                listId,
-                userIdToAdd,
-                options,
-                result => AsyncUtility.FourParamsCallback(result, timeout, methodToCall, function),
-                null);
+            return AsyncUtility.ExecuteAsyncMethod(tokens, ownerUsername, listId, userIdToAdd, options, timeout, TwitterList.AddMember, function);
         }
 
         /// <summary>

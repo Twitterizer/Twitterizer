@@ -45,22 +45,25 @@ namespace Twitterizer.Commands
     [AuthorizedCommandAttribute]
     internal sealed class ListMembershipsCommand : TwitterCommand<TwitterListCollection>
     {
+        private readonly string screenname;
+        private readonly decimal userid;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="username">The username.</param>
+        /// <param name="username">The screenname.</param>
         /// <param name="options">The options.</param>
-        public ListMembershipsCommand(OAuthTokens requestTokens, string username, ListMembershipsOptions options)
+        public ListMembershipsCommand(OAuthTokens requestTokens, string screenname, ListMembershipsOptions options)
             : base(
                 HTTPVerb.GET, 
-                string.Format("{0}/lists/memberships.json", username), 
+                "lists/memberships.json", 
                 requestTokens, 
                 options)
         {
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(screenname))
             {
-                throw new ArgumentNullException("username");
+                throw new ArgumentNullException("screenname");
             }
 
             if (Tokens == null)
@@ -69,6 +72,34 @@ namespace Twitterizer.Commands
             }
 
             this.DeserializationHandler = TwitterListCollection.Deserialize;
+            this.screenname = screenname;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
+        /// </summary>
+        /// <param name="requestTokens">The request tokens.</param>
+        /// <param name="username">The screenname.</param>
+        /// <param name="options">The options.</param>
+        public ListMembershipsCommand(OAuthTokens requestTokens, decimal userid, ListMembershipsOptions options)
+            : base(
+                HTTPVerb.GET,
+                "lists/memberships.json",
+                requestTokens,
+                options)
+        {
+            if (userid <= 0)
+            {
+                throw new ArgumentNullException("userid");
+            }
+
+            if (Tokens == null)
+            {
+                throw new ArgumentNullException("requestTokens");
+            }
+
+            this.DeserializationHandler = TwitterListCollection.Deserialize;
+            this.userid = userid;
         }
 
         /// <summary>
@@ -76,14 +107,23 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            ListMembershipsOptions options = this.OptionalProperties as ListMembershipsOptions;
-            if (options == null || options.Cursor <= 0)
-            {
-                this.RequestParameters.Add("cursor", "-1");
+            if (!String.IsNullOrEmpty(screenname))
+                this.RequestParameters.Add("screen_name", screenname);
 
+            if (userid > 0)
+                this.RequestParameters.Add("user_id", userid.ToString());
+
+            ListMembershipsOptions options = this.OptionalProperties as ListMembershipsOptions;
+            if (options != null)
+            {
+                if (options.Cursor <= 0)
+                    this.RequestParameters.Add("cursor", "-1");
+                else
+                    this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
+
+                if (options.FilterToOwnedLists)
+                    this.RequestParameters.Add("filter_to_owned_lists", "true");
             }
-            else
-                this.RequestParameters.Add("cursor", options.Cursor.ToString(CultureInfo.CurrentCulture));
         }
     }
 }

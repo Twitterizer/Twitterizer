@@ -36,6 +36,7 @@ namespace Twitterizer
     using System;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Runtime.Serialization;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -44,6 +45,7 @@ namespace Twitterizer
 #if !SILVERLIGHT
     [Serializable]
 #endif
+    [DataContract]
     public class Coordinate
     {
         /// <summary>
@@ -124,8 +126,7 @@ namespace Twitterizer
                         }
 
                         count++;
-                    }
-
+                    }                    
                     return result;
                 }
                 catch

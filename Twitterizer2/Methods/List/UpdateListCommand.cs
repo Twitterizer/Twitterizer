@@ -47,6 +47,7 @@ namespace Twitterizer.Commands
 #endif
     internal sealed class UpdateListCommand : TwitterCommand<TwitterList>
     {
+        private readonly string id;
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateListCommand"/> class.
@@ -71,6 +72,8 @@ namespace Twitterizer.Commands
             {
                 throw new ArgumentNullException("id");
             }
+
+            this.id = id;
         }
         #endregion
 
@@ -79,6 +82,9 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
+            if (!string.IsNullOrEmpty(id))
+                this.RequestParameters.Add("list_id", id);
+
             UpdateListOptions options = this.OptionalProperties as UpdateListOptions;
 
             if (options == null)
