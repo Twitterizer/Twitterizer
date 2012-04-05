@@ -100,6 +100,11 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("include_entities", "true");
             }
 
+            if (options.IncludeRetweets)
+            {
+                this.RequestParameters.Add("include_rts", "true");
+            }
+
             this.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString(CultureInfo.InvariantCulture) : "1");
         }
     }

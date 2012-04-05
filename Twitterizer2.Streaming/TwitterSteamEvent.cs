@@ -12,7 +12,6 @@ namespace Twitterizer.Streaming
     /// </summary>
     public enum TwitterSteamEvent
     {
-        
         Unknown,
         
         /// <summary>
@@ -97,6 +96,12 @@ namespace Twitterizer.Streaming
         /// The source users profile was updated.
         /// </summary>
         [EnumMemberAttribute(Value = "user_update")]
-        UserUpdated
+        UserUpdated,
+
+        /// <summary>
+        /// The source users profile was updated.
+        /// </summary>
+        [EnumMemberAttribute(Value = "access_revoked")]
+        AccessRevoked
     }
 }

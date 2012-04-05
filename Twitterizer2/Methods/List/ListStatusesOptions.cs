@@ -71,5 +71,11 @@ namespace Twitterizer
         /// </summary>
         /// <value>Boolean.</value>
         public bool IncludeEntites { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to include entities in the request.
+        /// </summary>
+        /// <value>Boolean.</value>
+        public bool IncludeRetweets { get; set; }
     }
 }
