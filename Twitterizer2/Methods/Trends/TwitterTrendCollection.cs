@@ -107,11 +107,7 @@ namespace Twitterizer
 
                 while (reader.Read() && reader.Depth > initialDepth)
                 {
-#if !SILVERLIGHT
-                    if (reader.TokenType == JsonToken.PropertyName && reader.Depth == initialDepth + 1)
-#else
                     if (reader.TokenType == JsonToken.PropertyName && reader.Depth == initialDepth + 2)
-#endif
                     {
                         switch ((string)reader.Value)
                         {
