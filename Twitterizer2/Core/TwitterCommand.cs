@@ -389,7 +389,7 @@ namespace Twitterizer.Core
             }
             else if(!string.IsNullOrEmpty(responseHeaders["Retry-After"]))
             {
-                rateLimiting.ResetDate = DateTime.Now.AddSeconds(Convert.ToInt32(responseHeaders["Retry-After"]));
+                rateLimiting.ResetDate = DateTime.UtcNow.AddSeconds(Convert.ToInt32(responseHeaders["Retry-After"]));
             }
             
             return rateLimiting;
