@@ -321,6 +321,10 @@ namespace Twitterizer.Core
                     twitterResponse.Result = (rateLimiting != null && rateLimiting.Remaining == 0) ? RequestResult.RateLimited : RequestResult.BadRequest;
                     break;
 
+                case (HttpStatusCode)420: //Rate Limited from Search/Trends API
+                    twitterResponse.Result = RequestResult.RateLimited;
+                    break;
+
                 case HttpStatusCode.Unauthorized:
                     twitterResponse.Result = RequestResult.Unauthorized;
                     break;
