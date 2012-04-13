@@ -4,3 +4,6 @@
 *.user
 *.vspscc
 *.vssscc
+_Resharper.*
+Release
+Debug
