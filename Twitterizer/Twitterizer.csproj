@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{51B86530-EF54-4F55-BE4E-A6CDA04BD379}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Twitterizer</RootNamespace>
+    <AssemblyName>Twitterizer</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="Core\OptionalProperties.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\TwitterStatus.xml" />
+    <None Include="Models\TwitterUser.xml" />
+    <None Include="Models\OAuthTokens.xml" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Async\Account.cs" />
+    <Compile Include="Async\Block.cs" />
+    <Compile Include="Async\DirectMessages.cs" />
+    <Compile Include="Async\Favourites.cs" />
+    <Compile Include="Async\FriendsFollowers.cs" />
+    <Compile Include="Async\Geo.cs" />
+    <Compile Include="Async\Lists.cs" />
+    <Compile Include="Async\Notification.cs" />
+    <Compile Include="Async\OAuth.cs" />
+    <Compile Include="Async\SavedSearches.cs" />
+    <Compile Include="Async\Spam.cs" />
+    <Compile Include="Async\SuggestedUsers.cs" />
+    <Compile Include="Async\Timelines.cs" />
+    <Compile Include="Async\Trends.cs" />
+    <Compile Include="Async\Tweets.cs" />
+    <Compile Include="Async\Users.cs" />
+    <Compile Include="Attributes\AuthorizedCommandAttribute.cs" />
+    <Compile Include="Attributes\RateLimitedAttribute.cs" />
+    <Compile Include="Core\AccessLevel.cs" />
+    <Compile Include="Core\CommandPerformer.cs" />
+    <Compile Include="Core\ConversionUtility.cs" />
+    <Compile Include="Core\ICommand.cs" />
+    <Compile Include="Core\Information.cs" />
+    <Compile Include="Core\ITwitterObject.cs" />
+    <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\OptionalProperties.cs" />
+    <Compile Include="Core\RateLimit.cs" />
+    <Compile Include="Core\RequestResult.cs" />
+    <Compile Include="Core\SerializationHelper.cs" />
+    <Compile Include="Core\TwitterCollection.cs" />
+    <Compile Include="Core\TwitterCommand.cs" />
+    <Compile Include="Core\TwitterCursorPagedIdCollection.cs" />
+    <Compile Include="Core\TwitterDictionary.cs" />
+    <Compile Include="Core\TwitterIdCollection.cs" />
+    <Compile Include="Core\WebRequestBuilder.cs" />
+    <Compile Include="Methods\Block\BlockingCommand.cs" />
+    <Compile Include="Methods\Block\BlockingIdsCommand.cs" />
+    <Compile Include="Methods\Block\BlockingOptions.cs" />
+    <Compile Include="Methods\Block\CreateBlockCommand.cs" />
+    <Compile Include="Methods\Block\DestroyBlockCommand.cs" />
+    <Compile Include="Methods\Block\ExistsBlockCommand.cs" />
+    <Compile Include="Methods\DirectMessage\DeleteDirectMessageCommand.cs" />
+    <Compile Include="Methods\DirectMessage\DirectMessagesCommand.cs" />
+    <Compile Include="Methods\DirectMessage\DirectMessagesOptions.cs" />
+    <Compile Include="Methods\DirectMessage\DirectMessagesSentCommand.cs" />
+    <Compile Include="Methods\DirectMessage\DirectMessagesSentOptions.cs" />
+    <Compile Include="Methods\DirectMessage\SendDirectMessageCommand.cs" />
+    <Compile Include="Methods\DirectMessage\ShowDirectMessageCommand.cs" />
+    <Compile Include="Methods\Favorites\CreateFavoriteCommand.cs" />
+    <Compile Include="Methods\Favorites\DeleteFavoriteCommand.cs" />
+    <Compile Include="Methods\Favorites\ListFavoritesCommand.cs" />
+    <Compile Include="Methods\Favorites\ListFavoritesOptions.cs" />
+    <Compile Include="Methods\Friendship\CreateFriendshipCommand.cs" />
+    <Compile Include="Methods\Friendship\CreateFriendshipOptions.cs" />
+    <Compile Include="Methods\Friendship\DeleteFriendshipCommand.cs" />
+    <Compile Include="Methods\Friendship\FollowersIdsCommand.cs" />
+    <Compile Include="Methods\Friendship\FriendsIdsCommand.cs" />
+    <Compile Include="Methods\Friendship\IncomingFriendshipsCommand.cs" />
+    <Compile Include="Methods\Friendship\IncomingFriendshipsOptions.cs" />
+    <Compile Include="Methods\Friendship\NoRetweetIDsCommand.cs" />
+    <Compile Include="Methods\Friendship\OutgoingFriendshipsCommand.cs" />
+    <Compile Include="Methods\Friendship\OutgoingFriendshipsOptions.cs" />
+    <Compile Include="Methods\Friendship\ShowFriendshipCommand.cs" />
+    <Compile Include="Methods\Friendship\UpdateFriendshipCommand.cs" />
+    <Compile Include="Methods\Friendship\UpdateFriendshipOptions.cs" />
+    <Compile Include="Methods\SuggestedUsers\SuggestedUserCategoriesCommand.cs" />
+    <Compile Include="Methods\SuggestedUsers\SuggestedUsersCommand.cs" />
+    <Compile Include="Methods\Friendship\UsersIdsOptions.cs" />
+    <Compile Include="Models\TwitterStatusBase.cs" />
+    <Compile Include="Models\TwitterRelationship.cs" />
+    <Compile Include="Models\TwitterRelationshipUser.cs" />
+    <Compile Include="Models\TwitterUserCategory.cs" />
+    <Compile Include="Models\TwitterDirectMessage.cs" />
+    <Compile Include="Models\TwitterDirectMessageCollection.cs" />
+    <Compile Include="Methods\Geo\ReverseGeocodeCommand.cs" />
+    <Compile Include="Methods\Geo\TwitterPlaceLookupOptions.cs" />
+    <Compile Include="Methods\List\AddListMemberCommand.cs" />
+    <Compile Include="Methods\List\CreateListCommand.cs" />
+    <Compile Include="Methods\List\CreateListSubscriberCommand.cs" />
+    <Compile Include="Methods\List\DeleteListCommand.cs" />
+    <Compile Include="Methods\List\DestroyListSubscriber.cs" />
+    <Compile Include="Methods\List\GetListCommand.cs" />
+    <Compile Include="Methods\List\GetListMembersCommand.cs" />
+    <Compile Include="Methods\List\GetListMembersOptions.cs" />
+    <Compile Include="Methods\List\GetListsCommand.cs" />
+    <Compile Include="Methods\List\GetListsOptions.cs" />
+    <Compile Include="Methods\List\GetListSubscriptionsCommand.cs" />
+    <Compile Include="Methods\List\GetListSubscriptionsOptions.cs" />
+    <Compile Include="Methods\List\ListMembershipsCommand.cs" />
+    <Compile Include="Methods\List\ListMembershipsOptions.cs" />
+    <Compile Include="Methods\List\ListStatusesCommand.cs" />
+    <Compile Include="Methods\List\ListStatusesOptions.cs" />
+    <Compile Include="Methods\List\RemoveListMemberCommand.cs" />
+    <Compile Include="Methods\List\UpdateListCommand.cs" />
+    <Compile Include="Methods\List\UpdateListOptions.cs" />
+    <Compile Include="Models\TwitterList.cs" />
+    <Compile Include="Models\TwitterListCollection.cs" />
+    <Compile Include="Methods\Notification\NotificationFollowCommand.cs" />
+    <Compile Include="Methods\Notification\NotificationLeaveCommand.cs" />
+    <Compile Include="Methods\SavedSearches\CreateSavedSearchCommand.cs" />
+    <Compile Include="Methods\SavedSearches\DeleteSavedSearchCommand.cs" />
+    <Compile Include="Methods\SavedSearches\SavedSearchesCommand.cs" />
+    <Compile Include="Models\TwitterSavedSearch.cs" />
+    <Compile Include="Models\TwitterSavedSearchCollection.cs" />
+    <Compile Include="Methods\Spam\ReportSpamCommand.cs" />
+    <Compile Include="Methods\Timeline\HomeTimelineCommand.cs" />
+    <Compile Include="Methods\Timeline\MentionsCommand.cs" />
+    <Compile Include="Methods\Timeline\PagedTimelineCommand.cs" />
+    <Compile Include="Methods\Timeline\RetweetedByMeCommand.cs" />
+    <Compile Include="Methods\Timeline\RetweetedToMeCommand.cs" />
+    <Compile Include="Methods\Timeline\RetweetsOfMeCommand.cs" />
+    <Compile Include="Methods\Timeline\RetweetsOfMeOptions.cs" />
+    <Compile Include="Methods\Timeline\UserTimelineCommand.cs" />
+    <Compile Include="Methods\Timeline\UserTimelineOptions.cs" />
+    <Compile Include="Methods\Trends\AvailableTrendsCommand.cs" />
+    <Compile Include="Methods\Trends\AvailableTrendsOptions.cs" />
+    <Compile Include="Methods\Trends\DailyTrendsCommand.cs" />
+    <Compile Include="Methods\Trends\LocalTrendsOptions.cs" />
+    <Compile Include="Methods\Trends\TrendsCommand.cs" />
+    <Compile Include="Methods\Trends\TrendsOptions.cs" />
+    <Compile Include="Methods\Trends\WeeklyTrendsCommand.cs" />
+    <Compile Include="Models\TwitterTrendDictionary.cs" />
+    <Compile Include="Models\TwitterTrendLocation.cs" />
+    <Compile Include="Models\TwitterTrendLocationCollection.cs" />
+    <Compile Include="Models\TwitterTrendLocationPlaceType.cs" />
+    <Compile Include="Models\TwitterTrend.cs" />
+    <Compile Include="Models\TwitterTrendCollection.cs" />
+    <Compile Include="Methods\Tweets\DeleteStatusCommand.cs" />
+    <Compile Include="Methods\Tweets\RelatedResultsCommand.cs" />
+    <Compile Include="Methods\Tweets\RetweetCommand.cs" />
+    <Compile Include="Methods\Tweets\RetweetsCommand.cs" />
+    <Compile Include="Methods\Tweets\RetweetsOptions.cs" />
+    <Compile Include="Methods\Tweets\ShowStatusCommand.cs" />
+    <Compile Include="Methods\Tweets\StatusUpdateOptions.cs" />
+    <Compile Include="Methods\Tweets\UpdateStatusCommand.cs" />
+    <Compile Include="Methods\Tweets\UpdateWithmediaCommand.cs" />
+    <Compile Include="Models\TwitterPlaceCollection.cs" />
+    <Compile Include="Models\TwitterRelatedTweets.cs" />
+    <Compile Include="Models\TwitterRelatedTweetsCollection.cs" />
+    <Compile Include="Models\UserIdCollection.cs" />
+    <Compile Include="Methods\Timeline\TimelineOptions.cs" />
+    <Compile Include="Methods\Tweets\RetweetedByCommand.cs" />
+    <Compile Include="Methods\Tweets\RetweetedByIdsCommand.cs" />
+    <Compile Include="Methods\Tweets\RetweetedByIdsOptions.cs" />
+    <Compile Include="Methods\Tweets\RetweetedByOptions.cs" />
+    <Compile Include="Methods\Users\LookupUsersCommand.cs" />
+    <Compile Include="Methods\Users\LookupUsersOptions.cs" />
+    <Compile Include="Methods\Users\ShowUserCommand.cs" />
+    <Compile Include="Methods\Users\UserSearchCommand.cs" />
+    <Compile Include="Methods\Users\UserSearchOptions.cs" />
+    <Compile Include="Models\TwitterStatusCollection.cs" />
+    <Compile Include="Models\TwitterUserCollection.cs" />
+    <Compile Include="Models\TwitterObject.cs" />
+    <Compile Include="Models\TwitterResponse.cs" />
+    <Compile Include="Models\TwitterErrorDetails.cs" />
+    <Compile Include="Exceptions\TwitterizerException.cs" />
+    <Compile Include="Core\TwitterResultTypeEnum.cs" />
+    <Compile Include="Methods\Account\RateLimitStatusCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileBackgroundImageCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileBackgroundImageOptions.cs" />
+    <Compile Include="Methods\Account\UpdateProfileColorsCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileColorsOptions.cs" />
+    <Compile Include="Methods\Account\UpdateProfileCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileImageCommand.cs" />
+    <Compile Include="Methods\Account\UpdateProfileOptions.cs" />
+    <Compile Include="Methods\Account\VerifyCredentialsCommand.cs" />
+    <Compile Include="Methods\Account\VerifyCredentialsOptions.cs" />
+    <Compile Include="Models\TwitterRateLimitStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Coordinate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterBoundingBox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterGeo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterPlace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Methods\Search\SearchCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Methods\Search\SearchOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Async\Search.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterSearchResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterSearchResultCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Entities\TwitterEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Entities\TwitterEntityCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Entities\TwitterHashTagEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Entities\TwitterMediaEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Entities\TwitterMentionEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Entities\TwitterUrlEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TwitterUser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\OAuthTokenResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\OAuthTokens.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Async\XAuth.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\winrt45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
+    <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

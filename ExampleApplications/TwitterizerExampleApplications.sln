@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Twitterizer-Web", "Twitterizer-Web\", "{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/Twitterizer-Web"
+		Debug.AspNetCompiler.PhysicalPath = "Twitterizer-Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Twitterizer-Web\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Twitterizer-Web"
+		Release.AspNetCompiler.PhysicalPath = "Twitterizer-Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Twitterizer-Web\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "59813"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Mono-Debug|Any CPU = Mono-Debug|Any CPU
+		Mono-Debug|Mixed Platforms = Mono-Debug|Mixed Platforms
+		Mono-Debug|x86 = Mono-Debug|x86
+		Mono-Release|Any CPU = Mono-Release|Any CPU
+		Mono-Release|Mixed Platforms = Mono-Release|Mixed Platforms
+		Mono-Release|x86 = Mono-Release|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Debug|x86.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Release|Any CPU.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Mono-Release|x86.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3BFC9CDA-CF65-4313-B8B4-86A9CC8F4B50}.Release|x86.ActiveCfg = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

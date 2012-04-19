@@ -1,0 +1,129 @@
+﻿body 
+{
+    font-family: Verdana, Helvetica, MS Sans Serif;
+    font-size: small;
+    background-color: #E6E6DC;
+    margin: 0 0 0 0;
+}
+
+.MenuBar 
+{
+    background-color: #81A594;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: large;
+    padding-left: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.MenuBar a
+{
+    color: #FFFFFF;
+}
+
+.CenterColumn
+{
+    padding: 16px 16px 16px 16px;
+    background-color: #FFFFFF;
+    width: 800px;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.GridView
+{
+    background-color: #FFFFFF;
+}
+
+.GridView .Header
+{
+    background-color: #00628B;
+    color: #FFFFFF;
+}
+
+.GridView .Row td
+{
+    padding: 3px 3px 3px 3px;
+}
+
+.DataList
+{
+}
+
+.DataList Header
+{
+    background-color: #00628B;
+    color: #FFFFFF;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.DataList .Item
+{
+    padding: 6px 6px 6px 6px;
+}
+
+.DetailsView
+{
+    margin: auto auto;
+}
+
+.DetailsView Header
+{
+    white-space: nowrap;
+}
+
+.DetailsView FieldHeader
+{
+    background-color: #00628B;
+    color: #FFFFFF;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.DetailsView .Row
+{
+    padding: 6px 6px 6px 6px;
+}
+.Footer
+{
+    padding-left: 16px;
+    font-size: smaller;
+    font-style: italic;
+}
+
+.ProfilePictureSmall
+{
+    max-width: 80px;
+    max-height: 80px;
+}
+
+a.Title
+{
+    text-decoration: none;
+}
+
+div.codesample
+{
+    padding: 8px 8px;
+    margin: 16px 8px;
+    border: 1px solid #E8E8E8;
+}
+
+.ResultLabelSuccess
+.ResultLabelFailed
+{
+    margin-left: 16px;
+    font-weight: bold;
+}
+
+.ResultLabelFailed
+{
+    color:Red;
+}
+
+.ResultLabelSuccess
+{
+    color:Green;
+}

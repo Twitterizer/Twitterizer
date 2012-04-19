@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="15ff9b6b-e665-44c5-bbb8-62c2e7e14973" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <para>
+        Bugs happen, it's a fact, but before you rush to fire off a
+        nasty email or submit a bug report, we ask that you first make sure you've
+        exhausted a basic level of exploration into the issue. If I've done my job
+        the way I hope, you should have the tools you need to troubleshoot most
+        issues.
+      </para>
+      <autoOutline />
+    </introduction>
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section address="Exceptions">
+      <title>Handling Exceptions</title>
+      <content>
+        <para>
+          As a rule of thumb, exceptions are bad things. Twitterizer does
+          not take them lightly. The library should handle most scenarios, but
+          some unexpected things are bound to happen.
+        </para>
+        <para>
+          Some exceptions are caused by unexpected results returned by the Twitter API.
+          For example, exceptions will be thrown when the Twitter API is overloaded (known as a fail-whale), your application cannot access data it's requesting (invalid access token), or your application is being rate limited.
+        </para>
+        <para>
+          When exceptions happen, the
+          <codeEntityReference>T:Twitterizer.TwitterizerException</codeEntityReference>
+          should be your best friend. In it, you'll find many useful properties.
+        </para>
+        <para>
+          The <codeEntityReference>P:Twitterizer.TwitterizerException.Result</codeEntityReference>
+          property provides an enumeration with the common status codes returned
+          by the Twitter API.
+        </para>
+        <para>The <codeEntityReference>P:Twitterizer.TwitterizerException.ResponseBody</codeEntityReference> 
+          property provides the raw result content. The content could be JSON, 
+          XML, HTML or even plain text data. So you shouldn't rely on parsing it.
+        </para>
+        <para><codeEntityReference>P:Twitterizer.TwitterizerException.ErrorDetails</codeEntityReference>
+          contains a more complex type that, when possible, will parse error messages returned by the Twitter API.
+        </para>
+        <para>It's a good idea to catch these exceptions and attempt to do something useful with them. Here's a quick (and untested) example:
+          <code language="cs">
+          try
+          {
+          	// Attempt to get a user
+          	TwitterUser myUser = TwitterUser.Show(myOAuthTokens, "JimmyCrackCorn");
+          }
+          catch (TwitterizerException ex)
+          {
+          	// Check if Twitterizer was able to obtain an error message.
+          	if (ex.ErrorDetails != null)
+          	{
+          		// Display the error message.
+          		// Hint: ShowErrorMessage is a method you would need to create.
+          		ShowErrorMessage(ex.ErrorDetails.ErrorMessage);
+          	}
+          	
+          	// Log the error. This is another method you would need to create.
+          	LogError(ex.Message, ex.StackTrace, ex.ResponseBody);
+          }
+          </code>
+          <code language="vb">
+          Try
+          	'-- Attempt to get a user
+          	Dim myUser As TwitterUser = TwitterUser.Show(myOAuthTokens, "JimmyCrackCorn")
+          Catch (TwitterizerException ex)
+          	'-- Check if Twitterizer was able to obtain an error message.
+          	If Not ex.ErrorDetails Is Nothing Then
+          		'-- Display the error message.
+          		'-- Hint: ShowErrorMessage is a method you would need to create.
+          		ShowErrorMessage(ex.ErrorDetails.ErrorMessage)
+          	End If
+          	
+          	'-- Log the error. This is another method you would need to create.
+          	LogError(ex.Message, ex.StackTrace, ex.ResponseBody);
+          End Try
+          </code>
+          If you are new to development, or exception handling, you should read through  
+      <externalLink>
+          <linkText>Microsoft's guide to exception handling</linkText>
+          <linkUri>http://msdn.microsoft.com/en-us/library/ms173160.aspx</linkUri>
+      </externalLink>.
+        </para>
+      </content>
+    </section>
+    <section address="Debugging">
+      <title>Gathering Debug Information</title>
+      <content>
+        <para>
+         In some cases, exceptions are not thrown, but the result of a method 
+         still seems unexpected. For example, a <c>null</c> (or <c>Nothing</c>) 
+         returned, when you're sure you should get results.
+         In these scenarios, there is another very useful tool available to you 
+         to find out what happened behind the scenes: the 
+         <codeEntityReference>T:Twitterizer.RequestStatus</codeEntityReference> 
+         class.
+        </para>
+        <para>
+          At any time you can obtain details about the last request made to 
+          Twitter within the same application domain (I'll explain what I mean 
+          here a bit later). To get these details, simply get 
+          <codeEntityReference>P:Twitterizer.RequestStatus.LastRequestStatus</codeEntityReference>
+          property.
+        </para>
+        <para>
+          The 
+          <codeEntityReference>T:Twitterizer.RequestStatus</codeEntityReference> 
+          class contains many of the properties you'll find in the 
+          <codeEntityReference>T:Twitterizer.TwitterizerException</codeEntityReference> 
+          objects, like
+          <codeEntityReference>P:Twitterizer.RequestStatus.ErrorDetails</codeEntityReference>
+          and
+          <codeEntityReference>P:Twitterizer.RequestStatus.ResponseBody</codeEntityReference>.
+          These properties should allow you to explore the results of a request
+          long after control has been returned to your application.
+        </para>
+        <para>
+          It is important to understand that the value stored in the
+          <codeEntityReference>P:Twitterizer.RequestStatus.LastRequestStatus</codeEntityReference>
+          property will be overwritten to reflect the most recent request to the
+          Twitter API. Because of this, in any threaded environment, such as an ASP.NET 
+          application, the value could be overwritten before you ever have the 
+          opportunity to retrieve it.
+        </para>
+        <para>It's also important to know that the value may not always be 
+          available, or may not yield the correct results, under certain 
+          situations. Situations such as ASP.NET applications hosted in Web
+          Farm or Web Garden environments, applications utilizing .NET Remoting,
+          or multi-threaded applications.
+        </para>
+        <para>
+          In addition to the special
+          <codeEntityReference>P:Twitterizer.RequestStatus.LastRequestStatus</codeEntityReference>
+          property, every major object 
+          (<codeEntityReference>T:Twitterizer.TwitterUser</codeEntityReference>
+          and 
+          <codeEntityReference>T:Twitterizer.TwitterStatus</codeEntityReference>,
+          for example) also contain a <codeInline>RequestStatus</codeInline> 
+          property that should contain a 
+          <codeEntityReference>T:Twitterizer.RequestStatus</codeEntityReference> 
+          object with information about the request that created it.
+          Only <legacyItalic>root</legacyItalic> objects will contain this value.
+          So, for example, when the <codeInline>TwitterUser</codeInline> object 
+          contains a <codeInline>TwitterStatus</codeInline> object in the 
+          <codeInline>Status</codeInline> property, only the 
+          <codeInline>TwitterUser</codeInline> object will have its
+          <codeInline>RequestStatus</codeInline> property populated.
+        </para>
+      </content>
+    </section>
+    <section address="BugSubmission">
+      <title>When All Hope Is Lost</title>
+      <content>
+        <para>
+          At some point, you may encounter a legitimate bug, or a problem that 
+          you cannot seem to find a solution for. When you do, I only ask that 
+          you provide as much detail as possible when you ask questions or 
+          report bugs. Failure to provide me with some basic information will
+          only cause me to ask you for it and makes it take longer to solve your
+          problem.
+        </para>
+        <para>
+          If you have question, feel free to drop by our <externalLink>
+            <linkText>forums</linkText>
+            <linkUri>http://forums.twitterizer.net/</linkUri></externalLink>.
+          Registration is <legacyUnderline>not</legacyUnderline> required.
+        </para>
+        <para>
+          If you have an exception that you are fairly certain is caused by the
+          library, you can <externalLink>
+            <linkText>submit a bug report</linkText>
+            <linkUri>http://pm.twitterizer.net/</linkUri></externalLink>.
+          Submitting a bug report is important. I don't want to forget to fix a 
+          bug, or have information about an issue spread out across different
+          sites.
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

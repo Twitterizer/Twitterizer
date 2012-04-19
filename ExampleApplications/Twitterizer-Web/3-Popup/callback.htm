@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+if (window.opener != null)
+{
+    window.opener.location = "http://localhost:59813/Twitterizer-Web/3-Popup/Default.aspx?oauth_token=" + getQuerystring('oauth_token') + "&oauth_verifier=" + getQuerystring('oauth_verifier');
+    window.close();
+}
+
+function getQuerystring(key, default_)
+{
+  if (default_==null) default_=""; 
+  key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regex = new RegExp("[\\?&]"+key+"=([^&#]*)");
+  var qs = regex.exec(window.location.href);
+  if(qs == null)
+    return default_;
+  else
+    return qs[1];
+}
+</script>
+</body>
+</html>

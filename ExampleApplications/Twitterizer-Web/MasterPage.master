@@ -1,0 +1,34 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="Twitterizer.ExampleWeb.MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Twitterizer Example Website</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+    <asp:ScriptManager runat="server" />
+    <div class="MenuBar">
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/" Text="Home" />
+        |
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/1-SingleUser/" Text="Single User" />
+        |
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/2-MultipleUser/" Text="Basic" />
+        |
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/3-Popup/" Text="In a Popup" />
+        |
+        <asp:HyperLink runat="server" EnableViewState="false" NavigateUrl="~/Verify.aspx" Text="Verify Token" />
+    </div>
+    <div class="CenterColumn">
+        <asp:ContentPlaceHolder ID="PageBodyContentPlaceHolder" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    <div class="Footer">
+        
+    </div>
+    </form>
+</body>
+</html>

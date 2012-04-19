@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="10603e84-bf3e-400a-a04c-bffc15a0a560" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>The Twitterizer library aims to make Twitter integration as easy as possible.</para>
+    </introduction>
+    <section address="Purpose">
+      <title>Purpose</title>
+      <content>
+        <para>This documentation should give you the technical specifications on the structure and use of the Twitterizer library.</para>
+        <para>This is intended for developers with at least basic programming experience using any .NET language. Code examples should be included for methods that are regularly misunderstood, or that has usage that differs from the rest of the library.</para>
+      </content>
+    </section>
+    <section address="WhereToStart">
+      <title>Things To Remember</title>
+      <content>
+        <para>
+          Here are some useful things to remember when using the Twitterizer library:
+          <list class="bullet">
+            <listItem>You should never have the need to instantiate an object to execute a method.</listItem>
+            <listItem>An overload is provided for each method that allows the smallest number of parameters to satisfy the requirements.</listItem>
+            <listItem>
+              Required values are expressed as a parameter of a method, whereas optional values are supplied in a class derived from <codeEntityReference>T:Twitterizer.OptionalProperties</codeEntityReference>.
+            </listItem>
+            <listItem>
+              Runtime configuration parameters are set by supplying an <codeEntityReference>T:Twitterizer.OptionalProperties</codeEntityReference> class, or a class that is derived from it.
+            </listItem>
+            <listItem>
+              Twitterizer does <legacyItalic>not</legacyItalic> handle or interpret error messages returned by Twitter, or any other API.
+            </listItem>
+            <listItem>
+              All methods in the main library now return a generic wrapper class, <codeEntityReference qualifyHint="false">T:Twitterizer.TwitterResponse`1</codeEntityReference>, which aims to provide immediate and reliable access to request details, especially for determining the cause of failures.
+            </listItem>
+          </list>
+        </para>
+
+        <para>
+          Here are the high-level classes, the ones you will be most concerned with:
+
+          <list class="bullet">
+            <listItem>
+              <codeEntityReference>T:Twitterizer.OAuthUtility</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterUser</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterStatus</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterDirectMessage</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterList</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterSearch</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterFriendship</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterFavorite</codeEntityReference>
+            </listItem>
+            <listItem>
+              <codeEntityReference>T:Twitterizer.TwitterTimeline</codeEntityReference>
+            </listItem>
+          </list>
+        </para>
+        <para>
+          To get a good feel of the 'best case' for our documentation effort, go look at the <codeEntityReference>M:Twitterizer.TwitterUser.Show(Twitterizer.OAuthTokens,System.String,Twitterizer.OptionalProperties)</codeEntityReference> method.
+        </para>
+      </content>
+    </section>
+    <relatedTopics>
+      <externalLink>
+        <linkText>Official Twitterizer website</linkText>
+        <linkAlternateText>Go to Twitterizer.net</linkAlternateText>
+        <linkUri>http://www.twitterizer.net/</linkUri>
+      </externalLink>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
