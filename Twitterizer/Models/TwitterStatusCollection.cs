@@ -36,12 +36,14 @@ namespace Twitterizer.Models
 {
     using System;
     using System.Runtime.Serialization;
+    using Newtonsoft.Json;
     using Twitterizer.Core;
 
     /// <summary>
     /// The TwitterStatusCollection class.
     /// </summary>
     [DataContract]
+    [JsonArray]
     public class TwitterStatusCollection : TwitterCollection<TwitterStatus>, ITwitterObject
     {
         /// <summary>
@@ -49,6 +51,6 @@ namespace Twitterizer.Models
         /// </summary>
         /// <value>The current page number.</value>
         [DataMember]
-        public int Page { get; set; }
+        public int Page { get; set; }       
     }
 }

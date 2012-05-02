@@ -85,11 +85,16 @@ using System.Linq.Expressions;
                 TwitterEntity entity = null;
                 try
                 {
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         if (reader.TokenType == JsonToken.PropertyName && reader.Depth == startDepth + 1)
                         {
-                            entityType = (string)reader.Value;
+                            entityType = (string)reader.Value;                            
+                            continue;
+                        }
+
+                        if (reader.TokenType == JsonToken.StartArray || reader.TokenType == JsonToken.EndArray)
+                        {
                             continue;
                         }
 

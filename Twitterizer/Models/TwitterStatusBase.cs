@@ -9,6 +9,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Twitterizer.Models
 {
+    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
     public partial class TwitterStatusBase : TwitterObject
     {
         public TwitterStatusBase() { }
@@ -33,7 +34,7 @@ namespace Twitterizer.Models
         /// <value>The created date.</value>
         [DataMember]
         [JsonProperty(PropertyName = "created_at")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>

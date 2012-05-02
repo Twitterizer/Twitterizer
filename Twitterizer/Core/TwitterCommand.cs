@@ -171,7 +171,7 @@ namespace Twitterizer.Core
             twitterResponse.RequestUrl = this.Uri.AbsoluteUri;
             RateLimiting rateLimiting = null;
             AccessLevel accessLevel;
-            byte[] responseData = null;
+            string responseData = null;
             HttpResponseMessage response = null;
 
             try
@@ -183,7 +183,14 @@ namespace Twitterizer.Core
                     requestBuilder.Parameters.Add(item.Key, item.Value);
                 }
 
-                response = await requestBuilder.ExecuteRequestAsync();
+                try
+                {
+                    response = await requestBuilder.ExecuteRequestAsync();
+                }
+                catch
+                {
+                    ;
+                }
 
                 if (response == null)
                 {
@@ -191,8 +198,8 @@ namespace Twitterizer.Core
                     return twitterResponse;
                 }
 
-                responseData = ConversionUtility.ReadStream(await response.Content.ReadAsStreamAsync());
-                twitterResponse.Content = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
+                responseData = await response.Content.ReadAsStringAsync(); // ConversionUtility.ReadStream(await response.Content.ReadAsStreamAsync());
+                twitterResponse.Content = responseData; // Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
                 twitterResponse.RequestUrl = requestBuilder.RequestUri.AbsoluteUri;
 

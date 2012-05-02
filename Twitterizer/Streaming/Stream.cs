@@ -46,6 +46,7 @@ namespace Twitterizer.Streaming
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Twitterizer.Core;
+    using Twitterizer.Models;
     using Windows.System.Threading;
 
     /// <summary>
@@ -80,7 +81,7 @@ namespace Twitterizer.Streaming
     /// <summary>
     ///   The TwitterStream class. Provides an interface to real-time status changes.
     /// </summary>
-    public class TwitterStream : IDisposable
+    public class Stream : IDisposable
     {
         private DirectMessageCreatedCallback directMessageCreatedCallback;
         private DirectMessageDeletedCallback directMessageDeletedCallback;
@@ -100,17 +101,23 @@ namespace Twitterizer.Streaming
         /// </summary>
         private bool stopReceived;
 
-        private HttpClient request;
+        private static HttpClient client = new HttpClient(new HttpClientHandler
+        {
+            AutomaticDecompression = DecompressionMethods.GZip
+                                     | DecompressionMethods.Deflate
+        });
+
+        private HttpRequestMessage request;
 
         private StreamStoppedCallback streamStoppedCallback;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "TwitterStream" /> class.
+        ///   Initializes a new instance of the <see cref = "Stream" /> class.
         /// </summary>
         /// <param name = "tokens">The tokens.</param>
         /// <param name = "userAgent">The user agent string which shall include the version of your client.</param>
         /// <param name = "streamoptions">The stream or user stream options to intially use when starting the stream.</param>
-        public TwitterStream(OAuthTokens tokens, string userAgent, StreamOptions streamoptions)
+        public Stream(OAuthTokens tokens, string userAgent, StreamOptions streamoptions)
         {
             // No non-silverlight user-agent as Assembly.GetName() isn't supported and setting the request.UserAgent is also not supported.
             if (string.IsNullOrEmpty(userAgent))
@@ -175,7 +182,7 @@ namespace Twitterizer.Streaming
         /// <summary>
         ///   Starts the user stream.
         /// </summary>
-        public IAsyncResult StartUserStream(
+        public async void StartUserStream(
             InitUserStreamCallback friendsCallback,
             StreamStoppedCallback streamStoppedCallback,
             StatusCreatedCallback statusCreatedCallback,
@@ -192,7 +199,7 @@ namespace Twitterizer.Streaming
             }
 
             WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"),
-                                                              HTTPVerb.GET, Tokens, userAgent);
+                                                              HttpMethod.Get, Tokens, userAgent);
 
             PrepareStreamOptions(builder);
 
@@ -202,7 +209,7 @@ namespace Twitterizer.Streaming
                     builder.Parameters.Add("replies", "all");
             }
 
-            request = builder.PrepareRequest();
+            request = await builder.PrepareRequestAsync();
             this.friendsCallback = friendsCallback;
             this.streamStoppedCallback = streamStoppedCallback;
             this.statusCreatedCallback = statusCreatedCallback;
@@ -213,7 +220,7 @@ namespace Twitterizer.Streaming
             this.rawJsonCallback = rawJsonCallback;
             stopReceived = false;
             //request.DefaultRequestHeaders.Timeout = 10000;
-            //return request.BeginGetResponse(StreamCallback, request);
+            return client.GetAsync(request);..BeginGetResponse(StreamCallback, request);
             return null;
         }
 
@@ -243,7 +250,7 @@ namespace Twitterizer.Streaming
                                                 HTTPVerb.POST, Tokens, userAgent);
             PrepareStreamOptions(builder);
 
-            request = builder.PrepareRequest();
+            request = builder.PrepareRequestAsync();
 
             this.streamStoppedCallback = streamStoppedCallback;
             this.statusCreatedCallback = statusCreatedCallback;

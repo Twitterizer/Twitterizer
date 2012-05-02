@@ -37,12 +37,13 @@ namespace Twitterizer.Core
     using System;
     using System.Collections.ObjectModel;
     using System.Runtime.Serialization;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The base class for object collections.
     /// </summary>
     /// <typeparam name="T">The type of object stored in the collection.</typeparam>
-    [DataContract]
+    [JsonArray]
     public abstract class TwitterCollection<T> : Collection<T>
         where T : class, ITwitterObject
     {

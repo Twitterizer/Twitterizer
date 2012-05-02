@@ -96,7 +96,7 @@ namespace Twitterizer.Models
         /// </summary>
         /// <value>The created date.</value>
         [JsonProperty(PropertyName = "created_at")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         [DataMember]
         public DateTime? CreatedDate { get; set; }
 

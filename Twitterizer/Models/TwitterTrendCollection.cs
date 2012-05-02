@@ -51,14 +51,14 @@ namespace Twitterizer
         /// Gets or sets the as of date.
         /// </summary>
         [JsonProperty(PropertyName = "as_of")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime AsOf { get; set; }
 
         /// <summary>
         /// Gets or sets the created at date.
         /// </summary>
         [JsonProperty(PropertyName = "created_at")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
@@ -109,13 +109,13 @@ namespace Twitterizer
                             //TODO these two datetime converters don't seem to convert.
                             case "as_of":
                                 reader.Read();
-                                var c = new IsoDateTimeConverter();
+                                var c = new TwitterizerDateConverter();
                                 result.AsOf = (DateTime)c.ReadJson(reader, typeof(DateTime), null, serializer);
                                 continue;
 
                             case "created_at":
                                 reader.Read();
-                                var d = new IsoDateTimeConverter();
+                                var d = new TwitterizerDateConverter();
                                 result.CreatedAt = (DateTime)d.ReadJson(reader, typeof(DateTime), null, serializer);
                                 continue;
                             case "locations":

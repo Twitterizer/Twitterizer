@@ -52,7 +52,7 @@ namespace Twitterizer
         /// Gets or sets as of date.
         /// </summary>
         [JsonProperty(PropertyName = "as_of")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
         public DateTime AsOf { get; set; }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Twitterizer
                             //TODO these two datetime converters don't seem to convert.
                             case "as_of":
                                 reader.Read();
-                                var c = new IsoDateTimeConverter();
+                                var c = new TwitterizerDateConverter();
                                 result.AsOf = (DateTime)c.ReadJson(reader, typeof(DateTime), null, serializer);
                                 continue;
 

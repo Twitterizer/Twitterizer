@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterRateLimitStatus.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterizerDateConverter.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,43 +29,59 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter rate limit status class.</summary>
+// <summary>The date converter for Twitter API dates</summary>
 //-----------------------------------------------------------------------
-namespace Twitterizer.Models
+
+namespace Twitterizer
 {
     using System;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using Twitterizer.Core;
+    using System.Globalization;
 
     /// <summary>
-    /// The Twitter Rate Limit Status class
+    /// Converts date strings returned by the Twitter API into <see cref="System.DateTime"/>
     /// </summary>
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
-    public class TwitterRateLimitStatus : TwitterObject
+    public class TwitterizerDateConverter : Newtonsoft.Json.Converters.DateTimeConverterBase
     {
-        #region API Properties
         /// <summary>
-        /// Gets or sets the remaining hits.
+        /// The date pattern for most dates returned by the API
         /// </summary>
-        /// <value>The remaining hits.</value>
-        [JsonProperty(PropertyName = "remaining_hits")]
-        public int RemainingHits { get; set; }
+        protected const string DateFormat = "ddd MMM dd HH:mm:ss zz00 yyyy";
 
         /// <summary>
-        /// Gets or sets the hourly limit.
+        /// Reads the json.
         /// </summary>
-        /// <value>The hourly limit.</value>
-        [JsonProperty(PropertyName = "hourly_limit")]
-        public int HourlyLimit { get; set; }
+        /// <param name="reader">The reader.</param>
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="existingValue">The existing value.</param>
+        /// <param name="serializer">The serializer.</param>
+        /// <returns>The parsed value as a DateTime, or null.</returns>
+        public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+        {
+            if (reader.Value == null || reader.Value.GetType() != typeof(string))
+                return new DateTime();
+
+            DateTime parsedDate;
+
+            return DateTime.TryParseExact(
+                (string)reader.Value,
+                DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out parsedDate) ? parsedDate : new DateTime();
+        }
 
         /// <summary>
-        /// Gets or sets the UTC string value of the time rate limiting will reset.
+        /// Writes the json.
         /// </summary>
-        /// <value>The reset time string.</value>
-        [JsonProperty(PropertyName = "reset_time")]
-        [JsonConverter(typeof(TwitterizerDateConverter))]
-        public DateTime ResetTime { get; set; }
-        #endregion        
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="serializer">The serializer.</param>
+        public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+        {
+            if (value.GetType() != typeof(DateTime))
+                throw new ArgumentOutOfRangeException("value", "The value provided was not the expected data type.");
+
+            writer.WriteValue(((DateTime)value).ToString(DateFormat, CultureInfo.InvariantCulture));
+        }
     }
 }

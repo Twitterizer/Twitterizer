@@ -72,36 +72,36 @@ namespace Twitterizer
         public TwitterizerException(string message, Exception innerException) :
             base(message, innerException)
         {
-            if (innerException.GetType() == typeof(WebException))
-            {
-                HttpWebResponse response = (HttpWebResponse)((WebException)innerException).Response;
+            //if (innerException.GetType() == typeof(WebException))
+            //{
+            //    HttpWebResponse response = (HttpWebResponse)((WebException)innerException).Response;
 
-                if (response == null)
-                    return;
+            //    if (response == null)
+            //        return;
 
-                Stream responseStream = response.GetResponseStream();
-                if (responseStream == null)
-                    return;
+            //    Stream responseStream = response.GetResponseStream();
+            //    if (responseStream == null)
+            //        return;
 
-                byte[] responseData = ConversionUtility.ReadStream(responseStream);
+            //    string responseData = ConversionUtility.ReadStream(responseStream);
 
-                this.ResponseBody = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
+            //    this.ResponseBody = Encoding.UTF8.GetString(responseData, 0, responseData.Length);
 
-                this.ParseRateLimitHeaders(response);
+            //    this.ParseRateLimitHeaders(response);
 
-                if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
-                {
-                    this.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
-                }
-                else if (response.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
-                {
-                    // Try to deserialize as XML (specifically OAuth requests)
-                    System.Xml.Serialization.XmlSerializer ds =
-                        new System.Xml.Serialization.XmlSerializer(typeof(TwitterErrorDetails));
+            //    if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        this.ErrorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
+            //    }
+            //    else if (response.ContentType.StartsWith("text/xml", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        // Try to deserialize as XML (specifically OAuth requests)
+            //        System.Xml.Serialization.XmlSerializer ds =
+            //            new System.Xml.Serialization.XmlSerializer(typeof(TwitterErrorDetails));
 
-                    this.ErrorDetails = ds.Deserialize(new MemoryStream(responseData)) as TwitterErrorDetails;
-                }
-            }
+            //        this.ErrorDetails = ds.Deserialize(new MemoryStream(responseData)) as TwitterErrorDetails;
+            //    }
+            //}
         }
         #endregion
 

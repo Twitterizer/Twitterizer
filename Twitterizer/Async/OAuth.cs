@@ -214,14 +214,14 @@ namespace Twitterizer
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="tokens">The tokens.</param>
-        public static async Task<HttpRequestMessage> AddOAuthEchoHeaderAsync(HttpRequestMessage request, OAuthTokens tokens)
+        public static HttpRequestMessage AddOAuthEchoHeader(HttpRequestMessage request, OAuthTokens tokens)
         {
             WebRequestBuilder builder = new WebRequestBuilder(
                 new Uri("https://api.twitter.com/1/account/verify_credentials.json"), 
                 HttpMethod.Post,
 				tokens);
 
-            await builder.PrepareRequest();
+            builder.PrepareRequest();
 
             request.Headers.Add("X-Verify-Credentials-Authorization", builder.GenerateAuthorizationHeader());
             request.Headers.Add("X-Auth-Service-Provider", "https://api.twitter.com/1/account/verify_credentials.json");

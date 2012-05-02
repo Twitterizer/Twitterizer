@@ -57,11 +57,6 @@ namespace Twitterizer
     public sealed class WebRequestBuilder
     {
         /// <summary>
-        /// Holds file data form performing multipart form posts.
-        /// </summary>
-        private byte[] formData;
-
-        /// <summary>
         /// The HTTP Authorization realm.
         /// </summary>
         public const string Realm = "Twitter API";
@@ -221,57 +216,42 @@ namespace Twitterizer
         public async Task<HttpResponseMessage> ExecuteRequestAsync()
         {
             if (request == null)
-                await PrepareRequest();
+                PrepareRequest();
 
             HttpResponseMessage response;
-            response = await client.SendAsync(this.request);
-            return response;            
+            try
+            {
+                response = await client.SendAsync(this.request);
+                return response;
+            }
+            catch
+            {
+                return null;
+            }
+
+            
         }
 
         /// <summary>
         /// Prepares the request. It is not nessisary to call this method unless additional configuration is required.
         /// </summary>
         /// <returns>A <see cref="HttpClient"/> object fully configured and ready for execution.</returns>
-        public async Task<HttpRequestMessage> PrepareRequest()
+        public HttpRequestMessage PrepareRequest()
         {
             SetupOAuth();
-
-			formData = null;
-			string contentType = string.Empty;
 
             if (!Multipart)
 			{	//We don't add the parameters to the query if we are multipart-ing
 				AddQueryStringParametersToUri();
-			}
-			else
-			{
-				string dataBoundary = "--------------------r4nd0m";
-				contentType = "multipart/form-data; boundary=" + dataBoundary;
-
-				formData = GetMultipartFormData(Parameters, dataBoundary);
-
-				this.Verb = HttpMethod.Post;
-			}
-
-            if (Multipart)
-            {	
-                //Parameters are not added to the query string, post them in the request body instead
-                MultipartFormDataContent content = new MultipartFormDataContent();
-
-                content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-
-                using (Stream requestStream = new MemoryStream())
-                {
-                    if (formData != null)
-                    {
-                        requestStream.Write(formData, 0, formData.Length);
-                    }
-                    await content.CopyToAsync(requestStream);
-                }
-            }
+			}			
 
             request = new HttpRequestMessage(this.Verb, this.RequestUri);
-            
+
+            if (Multipart)
+			{                
+                request.Content = GetMultipartFormData();
+            }
+
             request.Headers.ExpectContinue = false;
 
             if (!this.UseOAuth && this.networkCredentials != null)
@@ -280,7 +260,7 @@ namespace Twitterizer
             }
 
             request.Headers.Add("User-Agent", (string.IsNullOrEmpty(userAgent)) ? string.Format(CultureInfo.InvariantCulture, "Twitterizer/{0}", Information.AssemblyVersion()) : userAgent);
-            
+
             if (this.UseOAuth)
             {
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("OAuth", GenerateAuthorizationHeader());
@@ -315,54 +295,29 @@ namespace Twitterizer
             this.RequestUri = new Uri(requestParametersBuilder.ToString());
         }
 
-		private byte[] GetMultipartFormData(Dictionary<string, object> param, string boundary)
+        private MultipartFormDataContent GetMultipartFormData()
 		{
-            byte[] returndata;
+            //Parameters are not added to the query string, post them in the request body instead
+            MultipartFormDataContent returnval = new MultipartFormDataContent();
 
-            using (Stream formDataStream = new MemoryStream())
+            Dictionary<string, object> fieldsToInclude = new Dictionary<string, object>(this.Parameters.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
+                                !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
+
+            foreach (KeyValuePair<string, object> kvp in fieldsToInclude)
             {
-                Encoding encoding = Encoding.UTF8;
-
-                Dictionary<string, object> fieldsToInclude = new Dictionary<string, object>(param.Where(p => !OAuthParametersToIncludeInHeader.Contains(p.Key) &&
-                                 !SecretParameters.Contains(p.Key)).ToDictionary(p => p.Key, p => p.Value));
-
-                foreach (KeyValuePair<string, object> kvp in fieldsToInclude)
-                {
-                    if (kvp.Value.GetType() == typeof(byte[]))
-                    {	//assume this to be a byte stream
-                        byte[] data = (byte[])kvp.Value;
-
-                        string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\";\r\nContent-Type: application/octet-stream\r\n\r\n",
-                            boundary,
-                            kvp.Key,
-                            kvp.Key);
-
-                        byte[] headerBytes = encoding.GetBytes(header);
-
-                        formDataStream.Write(headerBytes, 0, headerBytes.Length);
-                        formDataStream.Write(data, 0, data.Length);
-                    }
-                    else
-                    {	//this is normal text data
-                        string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}\r\n",
-                            boundary,
-                            kvp.Key,
-                            kvp.Value);
-
-                        byte[] headerBytes = encoding.GetBytes(header);
-
-                        formDataStream.Write(headerBytes, 0, headerBytes.Length);
-                    }
+                if (kvp.Value.GetType() == typeof(byte[]))
+                {	//assume this to be a byte stream
+                    var stream = new StreamContent(new MemoryStream((byte[])kvp.Value));
+                    stream.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    returnval.Add(stream, kvp.Key, kvp.Key);                        
                 }
-
-                string footer = string.Format("\r\n--{0}--\r\n", boundary);
-                formDataStream.Write(encoding.GetBytes(footer), 0, footer.Length);
-                formDataStream.Position = 0;
-                returndata = new byte[formDataStream.Length];
-
-                formDataStream.Read(returndata, 0, returndata.Length);
+                else
+                {	//this is normal text data
+                    returnval.Add(new StringContent(kvp.Value.ToString()), kvp.Key);
+                }
             }
-			return returndata;
+
+            return returnval;
 		}
 
         #region OAuth Helper Methods

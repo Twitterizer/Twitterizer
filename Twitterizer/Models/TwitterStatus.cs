@@ -85,7 +85,7 @@ namespace Twitterizer.Models
         /// <c>true</c> if this instance is favorited; otherwise, <c>false</c>.
         /// </value>
         [DataMember, JsonProperty(PropertyName = "favorited")]
-        public bool? IsFavorited { get; set; }        
+        public bool? IsFavorited { get; set; }
 
         /// <summary>
         /// Gets or sets the user.

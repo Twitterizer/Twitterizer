@@ -61,18 +61,18 @@ namespace Twitterizer.Core
         /// <returns>
         /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
         /// </returns>
-        public static T Deserialize(byte[] webResponseData, DeserializationHandler deserializationHandler)
+        public static T Deserialize(string webResponseData, DeserializationHandler deserializationHandler)
         {
             T resultObject;
 
             // Deserialize the results.
             if (deserializationHandler == null)
             {
-                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length));
+                resultObject = JsonConvert.DeserializeObject<T>(webResponseData);
             }
             else
             {
-                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length)));
+                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(webResponseData));
             }
 
             return resultObject;
@@ -85,7 +85,7 @@ namespace Twitterizer.Core
         /// <returns>
         /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
         /// </returns>
-        public static T Deserialize(byte[] webResponseData)
+        public static T Deserialize(string webResponseData)
         {
             return Deserialize(webResponseData, null);
         }
