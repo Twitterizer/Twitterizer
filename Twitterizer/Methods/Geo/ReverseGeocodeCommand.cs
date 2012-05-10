@@ -43,7 +43,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The reverse geocode command class. Performs a reverse geocode lookup.
     /// </summary>
-    internal class ReverseGeocodeCommand : TwitterCommand<TwitterPlaceCollection>
+    internal class ReverseGeocodeCommand : TwitterCommand<PlaceCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReverseGeocodeCommand"/> class.

@@ -249,9 +249,9 @@ namespace Twitterizer.Core
                 twitterResponse.Result = RequestResult.Unknown;
                 return twitterResponse;
             }
-            catch (Newtonsoft.Json.JsonSerializationException)
+            catch (Newtonsoft.Json.JsonSerializationException jse)
             {
-                twitterResponse.ErrorMessage = "Unable to parse JSON";
+                twitterResponse.ErrorMessage = String.Format("Unable to parse JSON: {0}", jse.Message);
                 twitterResponse.Result = RequestResult.Unknown;
                 return twitterResponse;
             }

@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// 
     /// </summary>
-    internal sealed class UpdateProfileBackgroundImageCommand : TwitterCommand<TwitterUser>
+    internal sealed class UpdateProfileBackgroundImageCommand : TwitterCommand<User>
     {
         private readonly byte[] imageData;
 

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterGeo.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterUrl.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,59 +29,32 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The geo location class.</summary>
+// <summary>The twitter url entity class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Models
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using Newtonsoft.Json;
-
     /// <summary>
-    /// Lists the possible types of geographic boundaries.
+    /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
     /// </summary>
-    public enum TwitterGeoShapeType
+    public class UrlEntity : Entity
     {
         /// <summary>
-        /// A single point. Expect one coordinate.
+        /// Gets or sets the URL parsed from the tweet text.
         /// </summary>
-        Point,
+        /// <value>The parsed URL.</value>
+        public string Url { get; set; }
 
         /// <summary>
-        /// A line, or multiple lines joined end-to-end.
+        /// Gets or sets the Display URL parsed from the tweet text.
         /// </summary>
-        LineString,
+        /// <value>The parsed Display URL.</value>
+        public string DisplayUrl { get; set; }
 
         /// <summary>
-        /// A polygon-shaped area.
+        /// Gets or sets the Expanded URL parsed from the tweet text.
         /// </summary>
-        Polygon,
-
-        /// <summary>
-        /// A circle represented by a single point (the center) and the radius.
-        /// </summary>
-        CircleByCenterPoint
-    }
-
-    /// <summary>
-    /// Represents a geological area
-    /// </summary>
-    public class TwitterGeo
-    {
-        /// <summary>
-        /// Gets or sets the type of the shape.
-        /// </summary>
-        /// <value>The type of the shape.</value>
-        [JsonProperty(PropertyName = "type")]
-        public TwitterGeoShapeType ShapeType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the coordinates.
-        /// </summary>
-        /// <value>The coordinates.</value>
-        [JsonProperty(PropertyName = "coordinates")]
-        [JsonConverter(typeof(Coordinate.Converter))]
-        public Collection<Coordinate> Coordinates { get; set; }
+        /// <value>The parsed Expanded URL.</value>
+        public string ExpandedUrl { get; set; }
     }
 }

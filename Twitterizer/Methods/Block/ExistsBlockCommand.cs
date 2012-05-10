@@ -46,7 +46,7 @@ namespace Twitterizer.Commands
     /// The exists block command class.
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/post/blocks/exists</remarks>
-    internal class ExistsBlockCommand : TwitterCommand<TwitterUser>
+    internal class ExistsBlockCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExistsBlockCommand"/> class.

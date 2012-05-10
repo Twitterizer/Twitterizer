@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterEntity.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterGeo.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,35 +29,59 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter entity class</summary>
+// <summary>The geo location class.</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Models
 {
     using System;
+    using System.Collections.ObjectModel;
+    using Newtonsoft.Json;
 
     /// <summary>
-    /// The base class for twitter entities that describe tweet text. 
+    /// Lists the possible types of geographic boundaries.
     /// </summary>
-    public class TwitterEntity
+    public enum CoordinateType
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TwitterEntity"/> class.
+        /// A single point. Expect one coordinate.
         /// </summary>
-        internal TwitterEntity()
-        {
-        }
+        Point,
 
         /// <summary>
-        /// Gets or sets the start index.
+        /// A line, or multiple lines joined end-to-end.
         /// </summary>
-        /// <value>The start index.</value>
-        public int StartIndex { get; set; }
+        LineString,
 
         /// <summary>
-        /// Gets or sets the end index.
+        /// A polygon-shaped area.
         /// </summary>
-        /// <value>The end index.</value>
-        public int EndIndex { get; set; }
+        Polygon,
+
+        /// <summary>
+        /// A circle represented by a single point (the center) and the radius.
+        /// </summary>
+        CircleByCenterPoint
+    }
+
+    /// <summary>
+    /// Represents a geological area
+    /// </summary>
+    public class Coordinates
+    {
+        /// <summary>
+        /// Gets or sets the type of the shape.
+        /// </summary>
+        /// <value>The type of the shape.</value>
+        [JsonProperty(PropertyName = "type")]
+        public CoordinateType ShapeType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the coordinates.
+        /// </summary>
+        /// <value>The coordinates.</value>
+        [JsonProperty(PropertyName = "coordinates")]
+        [JsonConverter(typeof(Coordinate.Converter))]
+        public Collection<Coordinate> Coordinate { get; set; }
     }
 }

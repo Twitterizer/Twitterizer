@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterHashTagEntity.cs" company="Patrick 'Ricky' Smith">
-//  This file is part of the Twitterizer library (http://www.twitterizer.net)
+// <copyright file="TwitterBoundingBox.cs" company="Patrick 'Ricky' Smith">
+//  This file is part of the Twitterizer library (http://www.twitterizer.net/)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
 //  All rights reserved.
@@ -29,20 +29,35 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter hash tag entity class</summary>
+// <summary>The twitter bounding box class.</summary>
 //-----------------------------------------------------------------------
-
 namespace Twitterizer.Models
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using Newtonsoft.Json;
+    using Twitterizer.Core;
+    using Twitterizer.Models;
+
     /// <summary>
-    /// Represents a pre-parsed hash tag in a <see cref="Twitterizer.TwitterStatus.Text"/> value.
+    /// The twitter bounding box class. Represents a series of latitude and longitude coordinates that represents an area.
     /// </summary>
-    public class TwitterHashTagEntity : TwitterEntity
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    public class BoundingBox : TwitterObject
     {
         /// <summary>
-        /// Gets or sets the hash tag text.
+        /// Gets or sets the type.
         /// </summary>
-        /// <value>The hash tag text.</value>
-        public string Text { get; set; }
+        /// <value>The type of bounding box.</value>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the coordinates.
+        /// </summary>
+        /// <value>The coordinates.</value>
+        [JsonProperty(PropertyName = "coordinates")]
+        [JsonConverter(typeof(Coordinate.Converter))]
+        public Collection<Coordinate> Coordinates { get; set; }
     }
 }

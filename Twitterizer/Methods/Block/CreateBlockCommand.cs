@@ -46,7 +46,7 @@ namespace Twitterizer.Commands
     /// The create block command class.
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/post/blocks/create</remarks>
-    internal class CreateBlockCommand : TwitterCommand<TwitterUser>
+    internal class CreateBlockCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateBlockCommand"/> class.

@@ -46,7 +46,7 @@ namespace Twitterizer.Commands
     /// The destroy block command class.
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/post/blocks/destroy</remarks>
-    internal class DestroyBlockCommand : TwitterCommand<TwitterUser>
+    internal class DestroyBlockCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DestroyBlockCommand"/> class.

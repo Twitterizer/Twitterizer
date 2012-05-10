@@ -109,8 +109,8 @@
     <None Include="Core\OptionalProperties.xml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Models\TwitterStatus.xml" />
-    <None Include="Models\TwitterUser.xml" />
+    <None Include="Models\Status.xml" />
+    <None Include="Models\User.xml" />
     <None Include="Models\OAuthTokens.xml" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -184,7 +184,10 @@
     <Compile Include="Methods\SuggestedUsers\SuggestedUserCategoriesCommand.cs" />
     <Compile Include="Methods\SuggestedUsers\SuggestedUsersCommand.cs" />
     <Compile Include="Methods\Friendship\UsersIdsOptions.cs" />
-    <Compile Include="Models\TwitterStatusBase.cs" />
+    <Compile Include="Models\Contributors.cs" />
+    <Compile Include="Models\CurrentUserRetweet.cs" />
+    <Compile Include="Models\PlaceAttributes.cs" />
+    <Compile Include="Models\StatusBase.cs" />
     <Compile Include="Models\TwitterRelationship.cs" />
     <Compile Include="Models\TwitterRelationshipUser.cs" />
     <Compile Include="Models\TwitterUserCategory.cs" />
@@ -252,7 +255,7 @@
     <Compile Include="Methods\Tweets\StatusUpdateOptions.cs" />
     <Compile Include="Methods\Tweets\UpdateStatusCommand.cs" />
     <Compile Include="Methods\Tweets\UpdateWithmediaCommand.cs" />
-    <Compile Include="Models\TwitterPlaceCollection.cs" />
+    <Compile Include="Models\PlaceCollection.cs" />
     <Compile Include="Models\TwitterRelatedTweets.cs" />
     <Compile Include="Models\TwitterRelatedTweetsCollection.cs" />
     <Compile Include="Models\UserIdCollection.cs" />
@@ -289,13 +292,13 @@
     <Compile Include="Models\Coordinate.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\TwitterBoundingBox.cs">
+    <Compile Include="Models\BoundingBox.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\TwitterGeo.cs">
+    <Compile Include="Models\Coordinates.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\TwitterPlace.cs">
+    <Compile Include="Models\Place.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Methods\Search\SearchCommand.cs">
@@ -313,28 +316,28 @@
     <Compile Include="Models\TwitterSearchResultCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Entities\TwitterEntity.cs">
+    <Compile Include="Models\Entities\Entity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Entities\TwitterEntityCollection.cs">
+    <Compile Include="Models\Entities\EntityCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Entities\TwitterHashTagEntity.cs">
+    <Compile Include="Models\Entities\HashTagEntity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Entities\TwitterMediaEntity.cs">
+    <Compile Include="Models\Entities\MediaEntity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Entities\TwitterMentionEntity.cs">
+    <Compile Include="Models\Entities\MentionEntity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Entities\TwitterUrlEntity.cs">
+    <Compile Include="Models\Entities\UrlEntity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\TwitterStatus.cs">
+    <Compile Include="Models\Status.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\TwitterUser.cs">
+    <Compile Include="Models\User.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\OAuthTokenResponse.cs">
@@ -346,6 +349,7 @@
     <Compile Include="Async\XAuth.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\WithheldScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

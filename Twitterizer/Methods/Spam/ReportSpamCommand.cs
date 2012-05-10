@@ -39,7 +39,7 @@ namespace Twitterizer.Commands
     using Twitterizer.Models;
     using System.Net.Http;
 
-    internal class ReportSpamCommand : TwitterCommand<TwitterUser>
+    internal class ReportSpamCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Gets or sets the user id.

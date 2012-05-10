@@ -46,7 +46,7 @@ namespace Twitterizer.Commands
     /// Returns the un-favorited status in the requested format when successful.
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class DeleteFavoriteCommand : TwitterCommand<TwitterStatus>
+    internal sealed class DeleteFavoriteCommand : TwitterCommand<Status>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteFavoriteCommand"/> class.

@@ -39,15 +39,6 @@ namespace Twitterizer.Models
     using Twitterizer.Core;
 
     /// <summary>
-    /// Represents the callback signature for asynchronous methods.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="result">The result.</param>
-    /// <remarks></remarks>
-    public delegate void TwitterAsyncCallback<T>(T result)
-            where T : ITwitterObject;
-
-    /// <summary>
     /// The base object class
     /// </summary>
     public class TwitterObject : ITwitterObject, INotifyPropertyChanged

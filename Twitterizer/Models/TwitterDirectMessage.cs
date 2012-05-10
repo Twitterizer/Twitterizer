@@ -43,7 +43,7 @@ namespace Twitterizer.Models
     /// The Direct Message Entity Class
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
-    public class TwitterDirectMessage : TwitterStatusBase
+    public class TwitterDirectMessage : StatusBase
     {
         #region Properties
         /// <summary>
@@ -79,14 +79,14 @@ namespace Twitterizer.Models
         /// </summary>
         /// <value>The sender.</value>
         [JsonProperty(PropertyName = "sender")]
-        public TwitterUser Sender { get; set; }
+        public User Sender { get; set; }
 
         /// <summary>
         /// Gets or sets the recipient.
         /// </summary>
         /// <value>The recipient.</value>
         [JsonProperty(PropertyName = "recipient")]
-        public TwitterUser Recipient { get; set; }
+        public User Recipient { get; set; }
 
         #endregion          
     }

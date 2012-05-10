@@ -101,7 +101,7 @@ namespace Twitterizer.Models
                     //int depth = reader.Depth + 1;
                     double count = 1;
 
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         if (new[] { JsonToken.StartArray, JsonToken.EndArray }.Contains(reader.TokenType))
                             continue;

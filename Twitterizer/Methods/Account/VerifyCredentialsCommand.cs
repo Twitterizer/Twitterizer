@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// The verify credentials command class.
     /// </summary>
     [AuthorizedCommand]
-    internal class VerifyCredentialsCommand : TwitterCommand<TwitterUser>
+    internal class VerifyCredentialsCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RateLimitStatusCommand"/> class.

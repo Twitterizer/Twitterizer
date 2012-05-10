@@ -44,7 +44,7 @@ namespace Twitterizer.Commands
     /// The Create Favorite Command class. Favorites the status specified in the ID parameter as the authenticating user. Returns the favorite status when successful.
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class CreateFavoriteCommand : TwitterCommand<TwitterStatus>
+    internal sealed class CreateFavoriteCommand : TwitterCommand<Status>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateFavoriteCommand"/> class.

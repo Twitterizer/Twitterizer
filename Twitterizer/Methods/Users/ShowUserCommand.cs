@@ -45,7 +45,7 @@ namespace Twitterizer.Commands
     /// The Show User Command
     /// </summary>
     /// <remarks>http://dev.twitter.com/doc/get/users/show</remarks>
-    internal sealed class ShowUserCommand : TwitterCommand<TwitterUser>
+    internal sealed class ShowUserCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowUserCommand"/> class.
@@ -54,7 +54,7 @@ namespace Twitterizer.Commands
         /// <param name="userId">The user id.</param>
         /// <param name="username">The username.</param>
         /// <param name="options">The options.</param>
-        public ShowUserCommand(OAuthTokens tokens, long userId, string username, OptionalProperties options)
+        public ShowUserCommand(OAuthTokens tokens, decimal userId, string username, OptionalProperties options)
             : base(HttpMethod.Get, "users/show.json", tokens, options)
         {
             if ((userId <= 0 && string.IsNullOrEmpty(username)) || (userId > 0 && !string.IsNullOrEmpty(username)))
@@ -70,7 +70,7 @@ namespace Twitterizer.Commands
         /// Gets or sets the user ID.
         /// </summary>
         /// <value>The user ID.</value>
-        public long UserId { get; set; }
+        public decimal UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.

@@ -48,7 +48,7 @@ namespace Twitterizer
         /// <param name="userId">The user id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns></returns>
-        public static async Task<TwitterResponse<TwitterUser>> FollowAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> FollowAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.NotificationFollowCommand(tokens, userId, string.Empty, options));
         }
@@ -60,7 +60,7 @@ namespace Twitterizer
         /// <param name="screenName">The user's screen name.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns></returns>
-        public static async Task<TwitterResponse<TwitterUser>> FollowAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> FollowAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.NotificationFollowCommand(tokens, 0, screenName, options));
         }
@@ -72,7 +72,7 @@ namespace Twitterizer
         /// <param name="userId">The user id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns></returns>
-        public static async Task<TwitterResponse<TwitterUser>> LeaveAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> LeaveAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.NotificationLeaveCommand(tokens, userId, string.Empty, options));
         }
@@ -84,7 +84,7 @@ namespace Twitterizer
         /// <param name="screenName">The user's screen name.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns></returns>
-        public static async Task<TwitterResponse<TwitterUser>> LeaveAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> LeaveAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.NotificationLeaveCommand(tokens, 0, screenName, options));
         }      

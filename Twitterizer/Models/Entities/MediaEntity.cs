@@ -41,7 +41,7 @@ namespace Twitterizer.Models
     /// Represents a pre-parsed media entity located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
     /// </summary>
     /// <remarks></remarks>
-    public class TwitterMediaEntity : TwitterUrlEntity
+    public class MediaEntity : UrlEntity
     {
         /// <summary>
         /// The list of currently available and supported media types.

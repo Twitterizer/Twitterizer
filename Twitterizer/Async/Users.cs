@@ -33,14 +33,14 @@ namespace Twitterizer
         
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByIDWithTokensAndOptions"]/*'/>
-        public static async Task<TwitterResponse<TwitterUser>> ShowAsync(long id, OAuthTokens tokens = null, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> ShowAsync(decimal id, OAuthTokens tokens = null, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.ShowUserCommand(tokens, id, string.Empty, options));
         }        
 
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="Common"]/*'/>
         /// <include file='TwitterUser.xml' path='TwitterUser/Show[@name="ByUsernameWithTokensAndOptions"]/*'/>
-        public static async Task<TwitterResponse<TwitterUser>> ShowAsync(string username, OAuthTokens tokens = null, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> ShowAsync(string username, OAuthTokens tokens = null, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.ShowUserCommand(tokens, 0, username, options));
         }                

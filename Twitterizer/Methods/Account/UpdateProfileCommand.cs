@@ -41,7 +41,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The update profile command class.
     /// </summary>
-    sealed class UpdateProfileCommand : TwitterCommand<TwitterUser>
+    sealed class UpdateProfileCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateProfileCommand"/> class.

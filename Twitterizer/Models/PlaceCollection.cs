@@ -41,14 +41,14 @@ namespace Twitterizer.Models
     using Newtonsoft.Json.Converters;
 
     /// <summary>
-    /// The Twitter Place Collection class. A collection of <see cref="TwitterPlace"/> objects.
+    /// The Twitter Place Collection class. A collection of <see cref="Place"/> objects.
     /// </summary>
-    [JsonConverter(typeof(TwitterPlaceCollection.Converter))]
+    [JsonConverter(typeof(PlaceCollection.Converter))]
     [JsonObject]
-    public class TwitterPlaceCollection : TwitterCollection<TwitterPlace>, ITwitterObject
+    public class PlaceCollection : TwitterCollection<Place>, ITwitterObject
     {
         /// <summary>
-        /// Converts json data to a <see cref="TwitterPlaceCollection"/>.
+        /// Converts json data to a <see cref="PlaceCollection"/>.
         /// </summary>
         internal class Converter : JsonConverter
         {
@@ -61,7 +61,7 @@ namespace Twitterizer.Models
             /// </returns>
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof(TwitterPlaceCollection);
+                return objectType == typeof(PlaceCollection);
             }
 
             /// <summary>
@@ -74,7 +74,7 @@ namespace Twitterizer.Models
             /// <returns>The object value.</returns>
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
-                TwitterPlaceCollection result = new TwitterPlaceCollection();
+                PlaceCollection result = new PlaceCollection();
 
                 reader.Read();
                 reader.Read();
@@ -93,7 +93,7 @@ namespace Twitterizer.Models
 
                     if (reader.TokenType == JsonToken.StartObject)
                     {
-                        result.Add(serializer.Deserialize<TwitterPlace>(reader));
+                        result.Add(serializer.Deserialize<Place>(reader));
                     }
                 }
 

@@ -18,7 +18,7 @@ namespace Twitterizer
         /// </overloads>
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
-        /// <returns>A collection of <see cref="TwitterStatus"/> items.</returns>
+        /// <returns>A collection of <see cref="Status"/> items.</returns>
         public static async Task<TwitterResponse<TwitterStatusCollection>> HomeTimelineAsync(OAuthTokens tokens, TimelineOptions options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.HomeTimelineCommand(tokens, options));

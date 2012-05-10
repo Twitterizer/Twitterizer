@@ -44,7 +44,7 @@ namespace Twitterizer.Models
     /// </summary>
     [DataContract]
     [JsonArray]
-    public class TwitterStatusCollection : TwitterCollection<TwitterStatus>, ITwitterObject
+    public class TwitterStatusCollection : TwitterCollection<Status>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the current page number.

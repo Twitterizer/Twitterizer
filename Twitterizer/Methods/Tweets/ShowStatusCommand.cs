@@ -44,7 +44,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The Show Status Command
     /// </summary>
-    internal sealed class ShowStatusCommand : TwitterCommand<TwitterStatus>
+    internal sealed class ShowStatusCommand : TwitterCommand<Status>
     {
         #region Constructors
         /// <summary>

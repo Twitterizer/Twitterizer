@@ -42,16 +42,58 @@ namespace Twitterizer.Models
     /// <summary>
     /// The twitter place class. Represents a place or area.
     /// </summary>
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization.OptIn)]
     [System.Diagnostics.DebuggerDisplay("{FullName} ({Id})")]
-    public sealed class TwitterPlace : TwitterObject
+    public sealed class Place : TwitterObject
     {
+        /// <summary>
+        /// Contains a hash of variant information about the place.
+        /// </summary>
+        /// <value>The attributes.</value>
+        [JsonProperty(PropertyName = "attributes")]
+        public PlaceAttributes Attributes { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the bounding box.
+        /// </summary>
+        /// <value>The bounding box.</value>
+        [JsonProperty(PropertyName = "bounding_box")]
+        public BoundingBox BoundingBox { get; set; }
+
+        /// <summary>
+        /// Gets or sets the country.
+        /// </summary>
+        /// <value>The country.</value>
+        [JsonProperty(PropertyName = "country")]
+        public string Country { get; set; }
+
         /// <summary>
         /// Gets or sets the country code.
         /// </summary>
         /// <value>The country code.</value>
         [JsonProperty(PropertyName = "country_code")]
         public string CountryCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full name.
+        /// </summary>
+        /// <value>The full name.</value>
+        [JsonProperty(PropertyName = "full_name")]
+        public string FullName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the place id.
+        /// </summary>
+        /// <value>The place id.</value>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the place.
+        /// </summary>
+        /// <value>The name of the place.</value>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the place.
@@ -65,95 +107,6 @@ namespace Twitterizer.Models
         /// </summary>
         /// <value>The address of the data.</value>
         [JsonProperty(PropertyName = "url")]
-        public string DataAddress { get; set; }
-
-        /// <summary>
-        /// Gets or sets the country.
-        /// </summary>
-        /// <value>The country.</value>
-        [JsonProperty(PropertyName = "country")]
-        public string Country { get; set; }
-
-        /// <summary>
-        /// Gets or sets the address of the street.
-        /// </summary>
-        /// <value>The address of the street.</value>
-        [JsonProperty(PropertyName = "street_address")]
-        public string StreetAddress { get; set; }
-
-        /// <summary>
-        /// Gets or sets the postal code.
-        /// </summary>
-        /// <value>The postal code.</value>
-        /// <remarks></remarks>
-        [JsonProperty(PropertyName = "postal_code")]
-        public string PostalCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the phone number in the preferred local format for the place, include long distance code.
-        /// </summary>
-        /// <value>The phone number.</value>
-        /// <remarks></remarks>
-        [JsonProperty(PropertyName = "phone")]
-        public string Phone { get; set; }
-
-        /// <summary>
-        /// Gets or sets the locality.
-        /// </summary>
-        /// <value>The locality.</value>
-        /// <remarks></remarks>
-        [JsonProperty(PropertyName = "locality")]
-        public string Locality { get; set; }
-
-        /// <summary>
-        /// Gets or sets the region.
-        /// </summary>
-        /// <value>The region.</value>
-        /// <remarks></remarks>
-        [JsonProperty(PropertyName = "region")]
-        public string Region { get; set; }
-
-        /// <summary>
-        /// Gets or sets the iso3 country code.
-        /// </summary>
-        /// <value>The iso3 country code.</value>
-        /// <remarks></remarks>
-        [JsonProperty(PropertyName = "iso3")]
-        public string Iso3CountryCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the full name.
-        /// </summary>
-        /// <value>The full name.</value>
-        [JsonProperty(PropertyName = "full_name")]
-        public string FullName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the place.
-        /// </summary>
-        /// <value>The name of the place.</value>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the place id.
-        /// </summary>
-        /// <value>The place id.</value>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets an ID or comma separated list of IDs representing the place in the applications place database.
-        /// </summary>
-        /// <value>The app ids.</value>
-        [JsonProperty(PropertyName = "app:id")]
-        public string AppIds { get; set; }
-
-        /// <summary>
-        /// Gets or sets the bounding box.
-        /// </summary>
-        /// <value>The bounding box.</value>
-        [JsonProperty(PropertyName = "bounding_box")]
-        public TwitterBoundingBox BoundingBox { get; set; }        
+        public string Url { get; set; }
     }
 }

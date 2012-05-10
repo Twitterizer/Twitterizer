@@ -20,7 +20,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns>The favorite status when successful.</returns>
-        public static async Task<TwitterResponse<TwitterStatus>> CreateAsync(OAuthTokens tokens, decimal statusId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<Status>> CreateAsync(OAuthTokens tokens, decimal statusId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.CreateFavoriteCommand(tokens, statusId, options));
         }
@@ -32,7 +32,7 @@ namespace Twitterizer
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns>The un-favorited status in the requested format when successful.</returns>
-        public static async Task<TwitterResponse<TwitterStatus>> DeleteAsync(OAuthTokens tokens, decimal statusId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<Status>> DeleteAsync(OAuthTokens tokens, decimal statusId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.DeleteFavoriteCommand(tokens, statusId, options));
         }

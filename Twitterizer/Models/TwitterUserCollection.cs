@@ -42,7 +42,7 @@ namespace Twitterizer.Models
     /// The TwitterUserCollection class.
     /// </summary>
     [DataContract]
-    public class TwitterUserCollection : TwitterCollection<TwitterUser>, ITwitterObject
+    public class TwitterUserCollection : TwitterCollection<User>, ITwitterObject
     {
         /// <summary>
         /// Gets or sets the next cursor.

@@ -9,11 +9,34 @@ using Newtonsoft.Json.Converters;
 
 namespace Twitterizer.Models
 {
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
-    public partial class TwitterStatusBase : TwitterObject
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class StatusBase : TwitterObject
     {
-        public TwitterStatusBase() { }
+        /// <summary>
+        /// Gets or sets the geo location data.
+        /// </summary>
+        /// <value>The geo location data.</value>
+        [DataMember, JsonProperty(PropertyName = "coordinates")]
+        public Coordinates Coordinates { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created date.
+        /// </summary>
+        /// <value>The created date.</value>
+        [DataMember]
+        [JsonProperty(PropertyName = "created_at")]
+        [JsonConverter(typeof(TwitterizerDateConverter))]
+        public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entities.
+        /// </summary>
+        /// <value>The entities.</value>
+        [DataMember]
+        [JsonProperty(PropertyName = "entities")]
+        [JsonConverter(typeof(EntityCollection.Converter))]
+        public EntityCollection Entities { get; set; }
+        
         /// <summary>
         /// Gets or sets the status id.
         /// </summary>
@@ -27,15 +50,6 @@ namespace Twitterizer.Models
         /// <value>The string id.</value>
         [DataMember, JsonProperty(PropertyName = "id_str")]
         public string StringId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created date.
-        /// </summary>
-        /// <value>The created date.</value>
-        [DataMember]
-        [JsonProperty(PropertyName = "created_at")]
-        [JsonConverter(typeof(TwitterizerDateConverter))]
-        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
@@ -52,22 +66,6 @@ namespace Twitterizer.Models
         public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets the entities.
-        /// </summary>
-        /// <value>The entities.</value>
-        [DataMember]
-        [JsonProperty(PropertyName = "entities")]
-        [JsonConverter(typeof(TwitterEntityCollection.Converter))]
-        public TwitterEntityCollection Entities { get; set; }
-
-        /// <summary>
-        /// Gets or sets the geo location data.
-        /// </summary>
-        /// <value>The geo location data.</value>
-        [DataMember, JsonProperty(PropertyName = "geo")]
-        public TwitterGeo Geo { get; set; }    
-
-        /// <summary>
         /// Returns the status text with HTML links to users, urls, and hashtags.
         /// </summary>
         /// <returns></returns>
@@ -76,7 +74,7 @@ namespace Twitterizer.Models
             return LinkifiedText(Entities, Text);
         }
 
-        internal static string LinkifiedText(TwitterEntityCollection entities, string text)
+        internal static string LinkifiedText(EntityCollection entities, string text)
         {
             if (entities == null || entities.Count == 0)
             {
@@ -87,11 +85,11 @@ namespace Twitterizer.Models
 
             var entitiesSorted = entities.OrderBy(e => e.StartIndex).Reverse();
 
-            foreach (TwitterEntity entity in entitiesSorted)
+            foreach (Entity entity in entitiesSorted)
             {
-                if (entity is TwitterHashTagEntity)
+                if (entity is HashTagEntity)
                 {
-                    TwitterHashTagEntity tagEntity = (TwitterHashTagEntity)entity;
+                    HashTagEntity tagEntity = (HashTagEntity)entity;
 
                     linkedText = string.Format(
                         "{0}<a href=\"http://twitter.com/search?q=%23{1}\">{1}</a>{2}",
@@ -100,9 +98,9 @@ namespace Twitterizer.Models
                         linkedText.Substring(entity.EndIndex));
                 }
 
-                if (entity is TwitterUrlEntity)
+                if (entity is UrlEntity)
                 {
-                    TwitterUrlEntity urlEntity = (TwitterUrlEntity)entity;
+                    UrlEntity urlEntity = (UrlEntity)entity;
 
                     linkedText = string.Format(
                         "{0}<a href=\"{1}\">{1}</a>{2}",
@@ -111,9 +109,9 @@ namespace Twitterizer.Models
                         linkedText.Substring(entity.EndIndex));
                 }
 
-                if (entity is TwitterMentionEntity)
+                if (entity is MentionEntity)
                 {
-                    TwitterMentionEntity mentionEntity = (TwitterMentionEntity)entity;
+                    MentionEntity mentionEntity = (MentionEntity)entity;
 
                     linkedText = string.Format(
                         "{0}<a href=\"http://twitter.com/{1}\">@{1}</a>{2}",

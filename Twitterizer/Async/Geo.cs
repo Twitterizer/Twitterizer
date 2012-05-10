@@ -20,7 +20,7 @@ namespace Twitterizer
         /// <param name="longitude">The longitude.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns>A collection of matched <see cref="Twitterizer.TwitterPlace"/> items.</returns>
-        public static async Task<TwitterResponse<TwitterPlaceCollection>> ReverseGeocodeAsync(double latitude, double longitude, TwitterPlaceLookupOptions options = null)
+        public static async Task<TwitterResponse<PlaceCollection>> ReverseGeocodeAsync(double latitude, double longitude, TwitterPlaceLookupOptions options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Twitterizer.Commands.ReverseGeocodeCommand(latitude, longitude, options));
         }        

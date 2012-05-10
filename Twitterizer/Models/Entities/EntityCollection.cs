@@ -47,10 +47,10 @@ using System.Linq.Expressions;
     /// <summary>
     /// Represents multiple <see cref="Twitterizer.Entities.TwitterEntity"/> objects.
     /// </summary>
-    public class TwitterEntityCollection : Collection<TwitterEntity>
+    public class EntityCollection : Collection<Entity>
     {
         /// <summary>
-        /// The Json converter for <see cref="TwitterEntityCollection"/> data.
+        /// The Json converter for <see cref="EntityCollection"/> data.
         /// </summary>
         internal class Converter : JsonConverter
         {
@@ -63,7 +63,7 @@ using System.Linq.Expressions;
             /// </returns>
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof(TwitterEntityCollection);
+                return objectType == typeof(EntityCollection);
             }
 
             /// <summary>
@@ -76,13 +76,13 @@ using System.Linq.Expressions;
             /// <returns>The object value.</returns>
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
-                TwitterEntityCollection result = existingValue as TwitterEntityCollection;
+                EntityCollection result = existingValue as EntityCollection;
                 if (result == null)
-                    result = new TwitterEntityCollection();
+                    result = new EntityCollection();
 
                 int startDepth = reader.Depth;
                 string entityType = string.Empty;
-                TwitterEntity entity = null;
+                Entity entity = null;
                 try
                 {
                     while (reader.Read() && reader.Depth > startDepth)
@@ -102,9 +102,9 @@ using System.Linq.Expressions;
                         {
                             case "urls":
                                 if (reader.TokenType == JsonToken.StartObject)
-                                    entity = new TwitterUrlEntity();
+                                    entity = new UrlEntity();
 
-                                TwitterUrlEntity tue = entity as TwitterUrlEntity;
+                                UrlEntity tue = entity as UrlEntity;
                                 if (tue != null)
                                 {
                                     ReadFieldValue(reader, "url", entity, () => tue.Url);
@@ -115,9 +115,9 @@ using System.Linq.Expressions;
 
                             case "user_mentions":
                                 if (reader.TokenType == JsonToken.StartObject)
-                                    entity = new TwitterMentionEntity();
+                                    entity = new MentionEntity();
 
-                                TwitterMentionEntity tme = entity as TwitterMentionEntity;
+                                MentionEntity tme = entity as MentionEntity;
                                 if (tme != null)
                                 {
                                     ReadFieldValue(reader, "screen_name", entity, () => tme.ScreenName);
@@ -128,9 +128,9 @@ using System.Linq.Expressions;
 
                             case "hashtags":
                                 if (reader.TokenType == JsonToken.StartObject)
-                                    entity = new TwitterHashTagEntity();
+                                    entity = new HashTagEntity();
 
-                                TwitterHashTagEntity the = entity as TwitterHashTagEntity;
+                                HashTagEntity the = entity as HashTagEntity;
                                 if (the != null)
                                 {
                                     ReadFieldValue(reader, "text", entity, () => the.Text);
@@ -155,7 +155,7 @@ using System.Linq.Expressions;
                             entity.EndIndex = Convert.ToInt32((long)reader.Value);
                         }
 
-                        if ((reader.TokenType == JsonToken.EndObject && entity != null) || entity is TwitterMediaEntity)
+                        if ((reader.TokenType == JsonToken.EndObject && entity != null) || entity is MediaEntity)
                         {
                             result.Add(entity);
                             entity = null;
@@ -176,17 +176,17 @@ using System.Linq.Expressions;
             /// <remarks>This is a best attempt to recreate the structure created by the Twitter API.</remarks>
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                TwitterEntityCollection entities = (TwitterEntityCollection)value;
+                EntityCollection entities = (EntityCollection)value;
 
                 writer.WriteStartObject();
                 {
-                    WriteEntity(writer, entities.OfType<TwitterHashTagEntity>().ToList(), "hashtags", (w, e) =>
+                    WriteEntity(writer, entities.OfType<HashTagEntity>().ToList(), "hashtags", (w, e) =>
                         {
                             w.WritePropertyName("text");
                             w.WriteValue(e.Text);
                         });
 
-                    WriteEntity(writer, entities.OfType<TwitterMentionEntity>().ToList(), "user_mentions", (w, e) =>
+                    WriteEntity(writer, entities.OfType<MentionEntity>().ToList(), "user_mentions", (w, e) =>
                         {
                             w.WritePropertyName("screen_name");
                             w.WriteValue(e.ScreenName);
@@ -198,7 +198,7 @@ using System.Linq.Expressions;
                             w.WriteValue(e.UserId);
                         });
 
-                    WriteEntity(writer, entities.OfType<TwitterUrlEntity>().ToList(), "urls", (w, e) =>
+                    WriteEntity(writer, entities.OfType<UrlEntity>().ToList(), "urls", (w, e) =>
                         {
                             w.WritePropertyName("url");
                             w.WriteValue(e.Url);
@@ -210,7 +210,7 @@ using System.Linq.Expressions;
                             w.WriteValue(e.ExpandedUrl);
                         });
 
-                    WriteEntity(writer, entities.OfType<TwitterMediaEntity>().ToList(), "media", WriteMediaEntity);
+                    WriteEntity(writer, entities.OfType<MediaEntity>().ToList(), "media", WriteMediaEntity);
 
                     writer.WriteEndObject();
                 }
@@ -221,15 +221,15 @@ using System.Linq.Expressions;
             /// </summary>
             /// <param name="w">The w.</param>
             /// <param name="e">The e.</param>
-            private static void WriteMediaEntity(JsonWriter w, TwitterMediaEntity e)
+            private static void WriteMediaEntity(JsonWriter w, MediaEntity e)
             {
                 w.WritePropertyName("type");
                 switch (e.MediaType)
                 {
-                    case TwitterMediaEntity.MediaTypes.Unknown:
+                    case MediaEntity.MediaTypes.Unknown:
                         w.WriteNull();
                         break;
-                    case TwitterMediaEntity.MediaTypes.Photo:
+                    case MediaEntity.MediaTypes.Photo:
                         w.WriteValue("photo");
                         break;
                     default:
@@ -251,7 +251,7 @@ using System.Linq.Expressions;
                             w.WriteValue(item.Width);
 
                             w.WritePropertyName("resize");
-                            w.WriteValue(item.Resize == TwitterMediaEntity.MediaSize.MediaSizeResizes.Fit ? "fit" : "crop");
+                            w.WriteValue(item.Resize == MediaEntity.MediaSize.MediaSizeResizes.Fit ? "fit" : "crop");
                             w.WriteEndObject();
                         }
                     }
@@ -290,7 +290,7 @@ using System.Linq.Expressions;
             /// <param name="entityName">Name of the entity.</param>
             /// <param name="detailsAction">The details action.</param>
             private static void WriteEntity<T>(JsonWriter writer, IEnumerable<T> entities, string entityName, Action<JsonWriter, T> detailsAction)
-                where T : TwitterEntity
+                where T : Entity
             {
                 // Note to people reading this code: Extra brackets exist to group code by json hierarchy. You're welcome.
                 writer.WritePropertyName(entityName);
@@ -323,14 +323,14 @@ using System.Linq.Expressions;
             /// </summary>
             /// <param name="reader">The reader.</param>
             /// <returns></returns>
-            public TwitterMediaEntity parseMediaEntity(JsonReader reader)
+            public MediaEntity parseMediaEntity(JsonReader reader)
             {
                 try
                 {
                     if (reader.TokenType != JsonToken.StartObject)
                         return null;
 
-                    TwitterMediaEntity entity = new TwitterMediaEntity();
+                    MediaEntity entity = new MediaEntity();
 
                     int startDepth = reader.Depth;
 
@@ -353,12 +353,12 @@ using System.Linq.Expressions;
                         {
                             case "type":
                                 entity.MediaType = string.IsNullOrEmpty((string)reader.Value) ?
-                                    TwitterMediaEntity.MediaTypes.Unknown :
-                                    TwitterMediaEntity.MediaTypes.Photo;
+                                    MediaEntity.MediaTypes.Unknown :
+                                    MediaEntity.MediaTypes.Photo;
                                 break;
 
                             case "sizes":
-                                entity.Sizes = new List<TwitterMediaEntity.MediaSize>();
+                                entity.Sizes = new List<MediaEntity.MediaSize>();
                                 break;
 
                             case "large":
@@ -370,21 +370,21 @@ using System.Linq.Expressions;
                                     break;
                                 }
 
-                                TwitterMediaEntity.MediaSize newSize = new TwitterMediaEntity.MediaSize();
+                                MediaEntity.MediaSize newSize = new MediaEntity.MediaSize();
 
                                 switch ((string)reader.Value)
                                 {
                                     case "large":
-                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Large;
+                                        newSize.Size = MediaEntity.MediaSize.MediaSizes.Large;
                                         break;
                                     case "medium":
-                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Medium;
+                                        newSize.Size = MediaEntity.MediaSize.MediaSizes.Medium;
                                         break;
                                     case "small":
-                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Small;
+                                        newSize.Size = MediaEntity.MediaSize.MediaSizes.Small;
                                         break;
                                     case "thumb":
-                                        newSize.Size = TwitterMediaEntity.MediaSize.MediaSizes.Thumb;
+                                        newSize.Size = MediaEntity.MediaSize.MediaSizes.Thumb;
                                         break;
                                     default:
                                         break;
@@ -406,8 +406,8 @@ using System.Linq.Expressions;
                                     {
                                         reader.Read();
                                         newSize.Resize = string.IsNullOrEmpty((string)reader.Value) ?
-                                            TwitterMediaEntity.MediaSize.MediaSizeResizes.Unknown : 
-                                            ((string)reader.Value == "fit" ? TwitterMediaEntity.MediaSize.MediaSizeResizes.Fit : TwitterMediaEntity.MediaSize.MediaSizeResizes.Crop);
+                                            MediaEntity.MediaSize.MediaSizeResizes.Unknown : 
+                                            ((string)reader.Value == "fit" ? MediaEntity.MediaSize.MediaSizeResizes.Fit : MediaEntity.MediaSize.MediaSizeResizes.Crop);
                                     }
                                 }
 

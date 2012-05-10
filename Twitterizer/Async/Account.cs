@@ -66,7 +66,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns></returns>
-        public static async Task<TwitterResponse<TwitterUser>> VerifyCredentialsAsync(OAuthTokens tokens, VerifyCredentialsOptions options = null)
+        public static async Task<TwitterResponse<User>> VerifyCredentialsAsync(OAuthTokens tokens, VerifyCredentialsOptions options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.VerifyCredentialsCommand(tokens, options));
         }
@@ -78,7 +78,7 @@ namespace Twitterizer
         /// <param name="options">The options.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public static async Task<TwitterResponse<TwitterUser>> UpdateProfileAsync(OAuthTokens tokens, UpdateProfileOptions options)
+        public static async Task<TwitterResponse<User>> UpdateProfileAsync(OAuthTokens tokens, UpdateProfileOptions options)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.UpdateProfileCommand(tokens, options));
         }
@@ -90,7 +90,7 @@ namespace Twitterizer
         /// <param name="imageData">The image data.</param>
         /// <param name="options">The options.</param>
         /// <returns></returns>
-        public static async Task<TwitterResponse<TwitterUser>> UpdateProfileBackgroundImageAsync(OAuthTokens tokens, byte[] imageData = null, UpdateProfileBackgroundImageOptions options = null)
+        public static async Task<TwitterResponse<User>> UpdateProfileBackgroundImageAsync(OAuthTokens tokens, byte[] imageData = null, UpdateProfileBackgroundImageOptions options = null)
         {
             if (imageData == null && options == null)
             {
@@ -106,9 +106,9 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         /// <returns>
-        /// The user, with updated data, as a <see cref="TwitterUser"/>
+        /// The user, with updated data, as a <see cref="User"/>
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> UpdateProfileColorsAsync(OAuthTokens tokens, UpdateProfileColorsOptions options)
+        public static async Task<TwitterResponse<User>> UpdateProfileColorsAsync(OAuthTokens tokens, UpdateProfileColorsOptions options)
         {
             return await Core.CommandPerformer.PerformAction(new Twitterizer.Commands.UpdateProfileColorsCommand(tokens, options));
         }
@@ -120,9 +120,9 @@ namespace Twitterizer
         /// <param name="imageData">The image data.</param>
         /// <param name="options">The options.</param>
         /// <returns>
-        /// The user, with updated data, as a <see cref="TwitterUser"/>
+        /// The user, with updated data, as a <see cref="User"/>
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> UpdateProfileImageAsync(OAuthTokens tokens, byte[] imageData, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> UpdateProfileImageAsync(OAuthTokens tokens, byte[] imageData, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Twitterizer.Commands.UpdateProfileImageCommand(tokens, imageData, options));
         }

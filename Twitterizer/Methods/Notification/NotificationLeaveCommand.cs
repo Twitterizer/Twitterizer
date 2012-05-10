@@ -42,7 +42,7 @@ namespace Twitterizer.Commands
     /// <summary>
     /// The notification leave command class.
     /// </summary>
-    sealed class NotificationLeaveCommand : TwitterCommand<TwitterUser>
+    sealed class NotificationLeaveCommand : TwitterCommand<User>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationFollowCommand"/> class.

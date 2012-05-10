@@ -44,7 +44,7 @@ namespace Twitterizer.Commands
     /// The delete friendship command class.
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class DeleteFriendshipCommand : Core.TwitterCommand<TwitterUser>
+    internal sealed class DeleteFriendshipCommand : Core.TwitterCommand<User>
     {
         /// <summary>
         /// The base address to the API method.

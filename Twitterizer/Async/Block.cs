@@ -21,7 +21,7 @@ namespace Twitterizer
         /// <returns>
         /// The blocked user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> CreateAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> CreateAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.CreateBlockCommand(tokens, string.Empty, userId, options));
         }
@@ -35,7 +35,7 @@ namespace Twitterizer
         /// <returns>
         /// The blocked user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> CreateAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> CreateAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.CreateBlockCommand(tokens, screenName, -1, options));
         }
@@ -49,7 +49,7 @@ namespace Twitterizer
         /// <returns>
         /// The unblocked user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> DestroyAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> DestroyAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.DestroyBlockCommand(tokens, string.Empty, userId, options));
         }
@@ -63,7 +63,7 @@ namespace Twitterizer
         /// <returns>
         /// The unblocked user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> DestroyAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> DestroyAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.DestroyBlockCommand(tokens, screenName, -1, options));
         }
@@ -77,7 +77,7 @@ namespace Twitterizer
         /// <returns>
         /// The blocked user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> ExistsAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> ExistsAsync(OAuthTokens tokens, decimal userId, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.ExistsBlockCommand(tokens, string.Empty, userId, options));
         }
@@ -91,7 +91,7 @@ namespace Twitterizer
         /// <returns>
         /// The blocked user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> ExistsAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> ExistsAsync(OAuthTokens tokens, string screenName, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.ExistsBlockCommand(tokens, screenName, -1, options));
         }

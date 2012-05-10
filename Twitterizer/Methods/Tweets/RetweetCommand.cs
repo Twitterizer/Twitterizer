@@ -44,7 +44,7 @@ namespace Twitterizer.Commands
     /// The retweet command class.
     /// </summary>
     [AuthorizedCommandAttribute]
-    internal sealed class RetweetCommand : TwitterCommand<TwitterStatus>
+    internal sealed class RetweetCommand : TwitterCommand<Status>
     {
         /// <summary>
         /// The base address to the API method.

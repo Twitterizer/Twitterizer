@@ -39,7 +39,7 @@ namespace Twitterizer.Commands
     using Twitterizer.Models;
     using System.Net.Http;
 
-    internal class UpdateProfileImageCommand : TwitterCommand<TwitterUser>
+    internal class UpdateProfileImageCommand : TwitterCommand<User>
     {
         private readonly byte[] imageData;
 

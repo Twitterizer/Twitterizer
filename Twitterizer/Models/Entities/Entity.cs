@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TwitterUrl.cs" company="Patrick 'Ricky' Smith">
+// <copyright file="TwitterEntity.cs" company="Patrick 'Ricky' Smith">
 //  This file is part of the Twitterizer library (http://www.twitterizer.net)
 // 
 //  Copyright (c) 2010, Patrick "Ricky" Smith (ricky@digitally-born.com)
@@ -29,32 +29,35 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 // </copyright>
 // <author>Ricky Smith</author>
-// <summary>The twitter url entity class</summary>
+// <summary>The twitter entity class</summary>
 //-----------------------------------------------------------------------
 
 namespace Twitterizer.Models
 {
+    using System;
+
     /// <summary>
-    /// Represents a pre-parsed url located within the body of a <see cref="Twitterizer.TwitterStatus.Text"/>.
+    /// The base class for twitter entities that describe tweet text. 
     /// </summary>
-    public class TwitterUrlEntity : TwitterEntity
+    public class Entity
     {
         /// <summary>
-        /// Gets or sets the URL parsed from the tweet text.
+        /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
-        /// <value>The parsed URL.</value>
-        public string Url { get; set; }
+        internal Entity()
+        {
+        }
 
         /// <summary>
-        /// Gets or sets the Display URL parsed from the tweet text.
+        /// Gets or sets the start index.
         /// </summary>
-        /// <value>The parsed Display URL.</value>
-        public string DisplayUrl { get; set; }
+        /// <value>The start index.</value>
+        public int StartIndex { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expanded URL parsed from the tweet text.
+        /// Gets or sets the end index.
         /// </summary>
-        /// <value>The parsed Expanded URL.</value>
-        public string ExpandedUrl { get; set; }
+        /// <value>The end index.</value>
+        public int EndIndex { get; set; }
     }
 }

@@ -127,7 +127,7 @@ namespace Twitterizer.Models
         /// <value>The owning user.</value>
         [JsonProperty(PropertyName = "user")]
         [DataMember]
-        public TwitterUser User { get; set; }
+        public User User { get; set; }
         #endregion
 
         #region Calculated Properties

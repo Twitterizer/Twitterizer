@@ -57,8 +57,8 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id. Leave null for unauthenticated request.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
-        /// <returns>A <see cref="TwitterStatus"/> instance.</returns>
-        public static async Task<TwitterResponse<TwitterStatus>> ShowAsync(decimal statusId, OAuthTokens tokens = null, OptionalProperties options = null)
+        /// <returns>A <see cref="Status"/> instance.</returns>
+        public static async Task<TwitterResponse<Status>> ShowAsync(decimal statusId, OAuthTokens tokens = null, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.ShowStatusCommand(tokens, statusId, options));
         }
@@ -70,9 +70,9 @@ namespace Twitterizer
         /// <param name="id">The status id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns>
-        /// A <see cref="TwitterStatus"/> object of the deleted status.
+        /// A <see cref="Status"/> object of the deleted status.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterStatus>> DeleteAsync(decimal id, OAuthTokens tokens, OptionalProperties options = null)
+        public static async Task<TwitterResponse<Status>> DeleteAsync(decimal id, OAuthTokens tokens, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Twitterizer.Commands.DeleteStatusCommand(tokens, id, options));
         }
@@ -83,8 +83,8 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
-        /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
-        public static async Task<TwitterResponse<TwitterStatus>> RetweetAsync(decimal statusId, OAuthTokens tokens, OptionalProperties options = null)
+        /// <returns>A <see cref="Status"/> representing the newly created tweet.</returns>
+        public static async Task<TwitterResponse<Status>> RetweetAsync(decimal statusId, OAuthTokens tokens, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.RetweetCommand(tokens, statusId, options));
         }
@@ -96,9 +96,9 @@ namespace Twitterizer
         /// <param name="text">The status text.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns>
-        /// A <see cref="TwitterStatus"/> object of the newly created status.
+        /// A <see cref="Status"/> object of the newly created status.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterStatus>> UpdateAsync(string text, OAuthTokens tokens, StatusUpdateOptions options = null)
+        public static async Task<TwitterResponse<Status>> UpdateAsync(string text, OAuthTokens tokens, StatusUpdateOptions options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.UpdateStatusCommand(tokens, text, options));
         }
@@ -111,9 +111,9 @@ namespace Twitterizer
         /// <param name="fileData">The file to upload, as a byte array.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
         /// <returns>
-        /// A <see cref="TwitterStatus"/> object of the newly created status.
+        /// A <see cref="Status"/> object of the newly created status.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterStatus>> UpdateWithMediaAsync(string text, byte[] fileData, OAuthTokens tokens, StatusUpdateOptions options = null)
+        public static async Task<TwitterResponse<Status>> UpdateWithMediaAsync(string text, byte[] fileData, OAuthTokens tokens, StatusUpdateOptions options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.UpdateWithMediaCommand(tokens, text, fileData, options));
         }
@@ -124,7 +124,7 @@ namespace Twitterizer
         /// <param name="tokens">The tokens.</param>
         /// <param name="statusId">The status id.</param>
         /// <param name="options">The options. Leave null for defaults.</param>
-        /// <returns>A <see cref="TwitterStatus"/> representing the newly created tweet.</returns>
+        /// <returns>A <see cref="Status"/> representing the newly created tweet.</returns>
         public static async Task<TwitterResponse<TwitterRelatedTweetsCollection>> RelatedResultsShowAsync(decimal statusId, OAuthTokens tokens, OptionalProperties options = null)
         {
             return await Core.CommandPerformer.PerformAction(new Commands.RelatedResultsCommand(tokens, statusId, options));

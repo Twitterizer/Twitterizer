@@ -128,7 +128,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the followed user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> CreateAsync(decimal userId, OAuthTokens tokens, CreateFriendshipOptions options = null)
+        public static async Task<TwitterResponse<User>> CreateAsync(decimal userId, OAuthTokens tokens, CreateFriendshipOptions options = null)
         {
             return await CommandPerformer.PerformAction(new Commands.CreateFriendshipCommand(tokens, userId, options));
         }
@@ -142,7 +142,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the followed user in the requested format when successful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> CreateAsync(string userName, OAuthTokens tokens, CreateFriendshipOptions options)
+        public static async Task<TwitterResponse<User>> CreateAsync(string userName, OAuthTokens tokens, CreateFriendshipOptions options)
         {
             return await CommandPerformer.PerformAction(new Commands.CreateFriendshipCommand(tokens, userName, options));
         }
@@ -157,7 +157,7 @@ namespace Twitterizer
         /// <returns>
         /// Returns the unfollowed user in the requested format when successful. Returns a string describing the failure condition when unsuccessful.
         /// </returns>
-        public static async Task<TwitterResponse<TwitterUser>> DeleteAsync(OAuthTokens tokens, decimal TargetID = 0, string Screenname = "", OptionalProperties options = null)
+        public static async Task<TwitterResponse<User>> DeleteAsync(OAuthTokens tokens, decimal TargetID = 0, string Screenname = "", OptionalProperties options = null)
         {
             return await CommandPerformer.PerformAction(new Twitterizer.Commands.DeleteFriendshipCommand(tokens, TargetID, Screenname, options));
         }

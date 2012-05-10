@@ -35,9 +35,9 @@
 namespace Twitterizer.Models
 {
     /// <summary>
-    /// Represents mention of a user within a <see cref="TwitterStatus.Text"/> value.
+    /// Represents mention of a user within a <see cref="Status.Text"/> value.
     /// </summary>
-    public class TwitterMentionEntity : TwitterEntity
+    public class MentionEntity : Entity
     {
         /// <summary>
         /// Gets or sets the user's screen name.

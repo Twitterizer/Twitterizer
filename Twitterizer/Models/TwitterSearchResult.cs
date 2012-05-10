@@ -42,7 +42,7 @@ namespace Twitterizer.Models
     /// The Twitter Search Result class.
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
-    public class TwitterSearchResult : TwitterStatusBase
+    public class TwitterSearchResult : StatusBase
     {
         /// <summary>
         /// Gets or sets the profile image URL.

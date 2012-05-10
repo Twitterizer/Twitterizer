@@ -145,7 +145,7 @@ namespace Twitterizer
         {
             AutomaticDecompression = DecompressionMethods.GZip
                                      | DecompressionMethods.Deflate
-        });
+        }) { MaxResponseContentBufferSize = int.MaxValue };
 
         private HttpRequestMessage request = null;
 
