@@ -62,7 +62,14 @@ namespace Twitterizer
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of from user screen.
+        /// Gets or sets the display name of the from user.
+        /// </summary>
+        /// <value>The name of from user screen.</value>
+        [JsonProperty(PropertyName = "from_user_name")]
+        public string FromUserDisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screen name of the from user.
         /// </summary>
         /// <value>The name of from user screen.</value>
         [JsonProperty(PropertyName = "from_user")]
@@ -76,7 +83,14 @@ namespace Twitterizer
         public long? FromUserId { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of to user screen.
+        /// Gets or sets the display name of the to user.
+        /// </summary>
+        /// <value>The name of to user screen.</value>
+        [JsonProperty(PropertyName = "to_user_name")]
+        public string ToUserDisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screen name of to user.
         /// </summary>
         /// <value>The name of to user screen.</value>
         [JsonProperty(PropertyName = "to_user")]
