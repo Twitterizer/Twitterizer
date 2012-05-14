@@ -63,7 +63,7 @@ namespace Twitterizer.Commands
                 throw new ArithmeticException("Image data cannot be null or zero length.");
             }
 
-            if (image.Length > 89600)
+            if (image.Length > 716800)
             {
                 throw new ArithmeticException("Image cannot exceed 700Kb in size.");
             }
