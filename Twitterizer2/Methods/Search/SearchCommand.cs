@@ -138,7 +138,7 @@ namespace Twitterizer.Commands
 
             if (options.UntilDate > new DateTime())
             {
-                this.RequestParameters.Add("until", options.UntilDate.ToString("{0:yyyy-MM-dd}", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("until", options.UntilDate.ToString("yyyy-MM-dd", unitedStatesEnglishCulture));
             }
 
             switch (options.ResultType)
