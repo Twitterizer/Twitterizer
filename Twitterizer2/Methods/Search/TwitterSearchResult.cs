@@ -80,7 +80,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>From user id.</value>
         [JsonProperty(PropertyName = "from_user_id")]
-        public long? FromUserId { get; set; }
+        public decimal? FromUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the display name of the to user.
@@ -101,7 +101,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>To user id.</value>
         [JsonProperty(PropertyName = "to_user_id")]
-        public long? ToUserId { get; set; }
+        public decimal? ToUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status text.
@@ -125,7 +125,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The status id.</value>
         [JsonProperty(PropertyName = "id")]
-        public long Id { get; set; }
+        public decimal Id { get; set; }
 
         /// <summary>
         /// Gets or sets the source.

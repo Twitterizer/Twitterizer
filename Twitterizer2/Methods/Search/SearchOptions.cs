@@ -93,7 +93,7 @@ namespace Twitterizer
         /// Gets or sets the max id.
         /// </summary>
         /// <value>The max id.</value>
-        public long MaxId { get; set; }
+        public decimal MaxId { get; set; }
 
         /// <summary>
         /// Gets or sets the number per page.
@@ -117,7 +117,7 @@ namespace Twitterizer
         /// Gets or sets the since id.
         /// </summary>
         /// <value>The since id.</value>
-        public long SinceId { get; set; }
+        public decimal SinceId { get; set; }
 
         /// <summary>
         /// Gets or sets the geo code string. 
