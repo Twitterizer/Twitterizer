@@ -118,11 +118,11 @@ namespace Twitterizer
                         if (count % 2 > 0)
                         {
                             result.Add(new Coordinate());
-                            result[itemIndex].Latitude = (double)reader.Value;
+                            result[itemIndex].Latitude = Convert.ToDouble(reader.Value);
                         }
                         else
                         {
-                            result[itemIndex].Longitude = (double)reader.Value;
+                            result[itemIndex].Longitude = Convert.ToDouble(reader.Value);
                         }
 
                         count++;
