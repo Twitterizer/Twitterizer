@@ -7,6 +7,9 @@ Requirements:
 
 Depending on your target application, you may want (or need) to remove the silverlight projects from the solution.
 
+== New in 2.4.1 ==
+The Twitterizer library is now built for the .NET 4.0 Client Profile. To do this, built-in support for caching has been removed. I highly suggest you cache data and limit requests made to Twitter, especially in high-traffic situations.
+
 == Build for .NET 3.5 ==
 Twitterizer (as of this writing) is built for .NET 4.0 primarily. It is possible to build the library for .NET 3.5 by selecting it as the target framework in Visual Studio. VS2010 should build this will few changes needed. VS2008 may require more changes.
 

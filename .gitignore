@@ -7,3 +7,4 @@
 _Resharper.*
 Release
 Debug
+*.nupkg
