@@ -38,6 +38,7 @@ namespace Twitterizer
     using System.Linq;
     using System.Runtime.Serialization;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Represents a single point on planet earth.
@@ -105,10 +106,12 @@ namespace Twitterizer
                         return null;
                     }
 
+                    if (reader.TokenType == JsonToken.StartArray)
+                        reader.Read();
+
                     //int depth = reader.Depth + 1;
                     double count = 1;
-
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         if (new[] { JsonToken.StartArray, JsonToken.EndArray }.Contains(reader.TokenType))
                             continue;
