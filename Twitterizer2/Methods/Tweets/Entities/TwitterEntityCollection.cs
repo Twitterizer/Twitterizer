@@ -94,6 +94,9 @@ using System.Linq.Expressions;
                 {
                     while (reader.Read() && reader.Depth >= startDepth)
                     {
+                        if (reader.Depth == startDepth && reader.TokenType == JsonToken.EndObject)
+                            break;
+
                         if (reader.TokenType == JsonToken.PropertyName && reader.Depth == startDepth + 1)
                         {
                             entityType = (string)reader.Value;
