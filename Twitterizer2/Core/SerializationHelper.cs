@@ -42,7 +42,7 @@ namespace Twitterizer.Core
     /// The Serialization Helper class. Provides a simple interface for common serialization tasks.
     /// </summary>
     /// <typeparam name="T">The type of object to be deserialized</typeparam>
-    internal static class SerializationHelper<T>
+    public static class SerializationHelper<T>
         where T : ITwitterObject
     {
         /// <summary>
@@ -63,16 +63,41 @@ namespace Twitterizer.Core
         /// </returns>
         public static T Deserialize(byte[] webResponseData, DeserializationHandler deserializationHandler)
         {
+            return Deserialize(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length), deserializationHandler);
+        }
+
+        /// <summary>
+        /// Deserializes the specified web response.
+        /// </summary>
+        /// <param name="webResponseData">The web response data.</param>
+        /// <returns>
+        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+        /// </returns>
+        public static T Deserialize(byte[] webResponseData)
+        {
+            return Deserialize(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length), null);
+        }
+
+        /// <summary>
+        /// Deserializes the specified web response.
+        /// </summary>
+        /// <param name="webResponseData">The web response data.</param>
+        /// <param name="deserializationHandler">The deserialization handler.</param>
+        /// <returns>
+        /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+        /// </returns>
+        public static T Deserialize(string webResponseData, DeserializationHandler deserializationHandler)
+        {
             T resultObject;
 
             // Deserialize the results.
             if (deserializationHandler == null)
             {
-                resultObject = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length));
+                resultObject = JsonConvert.DeserializeObject<T>(webResponseData);
             }
             else
             {
-                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(webResponseData, 0, webResponseData.Length)));
+                resultObject = deserializationHandler((JObject)JsonConvert.DeserializeObject(webResponseData));
             }
 
             return resultObject;
@@ -85,7 +110,7 @@ namespace Twitterizer.Core
         /// <returns>
         /// A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
         /// </returns>
-        public static T Deserialize(byte[] webResponseData)
+        public static T Deserialize(string webResponseData)
         {
             return Deserialize(webResponseData, null);
         }
