@@ -92,7 +92,10 @@ using System.Linq.Expressions;
                 TwitterEntity entity = null;
                 try
                 {
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    if (reader.TokenType == JsonToken.StartArray)
+                        reader.Read();
+
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         if (reader.TokenType == JsonToken.PropertyName && reader.Depth == startDepth + 1)
                         {
