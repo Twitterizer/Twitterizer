@@ -8,7 +8,7 @@
     <projectUrl>http://www.twitterizer.net</projectUrl>
     <iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="[4.5.5]" />
+      <dependency id="Newtonsoft.Json" version="[4.5.5,5.0.0)" />
     </dependencies>
     <id>twitterizer</id>
     <title>Twitterizer</title>
