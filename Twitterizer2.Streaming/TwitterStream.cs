@@ -322,6 +322,12 @@ namespace Twitterizer.Streaming
                     builder.Parameters.Add("track", string.Join(",", StreamOptions.Track.ToArray()));
 
                 builder.UseCompression = StreamOptions.UseCompression;
+                
+#if !SILVERLIGHT        
+
+            if (this.StreamOptions != null)
+                builder.Proxy = this.StreamOptions.Proxy;
+#endif
             }
         }
 
