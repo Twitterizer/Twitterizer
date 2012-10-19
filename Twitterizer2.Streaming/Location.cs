@@ -6,13 +6,13 @@
         /// Gets or sets the latitude.
         /// </summary>
         /// <value>The latitude.</value>
-        public int Latitude { get; set; }
+        public double Latitude { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude.
         /// </summary>
         /// <value>The longitude.</value>
-        public int Longitude { get; set; }
+        public double Longitude { get; set; }
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
@@ -22,7 +22,7 @@
         /// </returns>
         public override string ToString()
         {
-            return string.Format("{0},{1}", this.Latitude, this.Longitude);
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0},{1}", this.Longitude, this.Latitude);
         }
     }
 }
