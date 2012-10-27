@@ -291,7 +291,7 @@ namespace Twitterizer
 
 				this.Verb = HTTPVerb.POST;
 			}
-
+            
             HttpWebRequest request;
 #if SILVERLIGHT
             request = (HttpWebRequest)WebRequestCreator.ClientHttp.Create(this.RequestUri);
@@ -302,6 +302,7 @@ namespace Twitterizer
                 request.CookieContainer.Add(this.RequestUri, new Cookie("k", "Twitterizer hack for bad twitter cookie"));
             }
 #else
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
             request = (HttpWebRequest)WebRequest.Create(this.RequestUri);
             
             if (this.UseCompression == true)

@@ -218,6 +218,7 @@ namespace Twitterizer.Core
 
                 twitterResponse.RateLimiting = rateLimiting;
                 twitterResponse.AccessLevel = accessLevel;
+                response.Close();
             }
             catch (WebException wex)
             {
@@ -276,6 +277,8 @@ namespace Twitterizer.Core
 
                 if (wex.Status == WebExceptionStatus.UnknownError)
                     throw;
+
+                exceptionResponse.Close();
 
                 return twitterResponse;
             }
