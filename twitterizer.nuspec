@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>2.4.1.1</version>
+    <authors>digitallyborn</authors>
+    <owners>Ricky Smith</owners>
+    <licenseUrl>http://www.twitterizer.net/license/</licenseUrl>
+    <projectUrl>http://www.twitterizer.net</projectUrl>
+    <iconUrl>http://www.twitterizer.net/twitterizer-icon-draft1.png</iconUrl>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="[4.5.5]" />
+    </dependencies>
+    <id>twitterizer</id>
+    <title>Twitterizer</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Twitter integration library</description>
+    <summary>Twitterizer attempts to make Twitter integration easy on the average developer.</summary>
+    <releaseNotes>Now built for the .NET 4.0 client profile.</releaseNotes>
+    <copyright>Copyright 2012 Patrick "Ricky" Smith</copyright>
+    <language>en-US</language>
+    <tags>twitterizer twitter</tags>
+  </metadata>
+  <files>
+    <file src="Release\net40\GettingStarted.txt" target="content\GettingStarted.txt" />
+    <file src="Release\net40\Twitterizer2.license.txt" target="content\Twitterizer2.license.txt" />
+    <file src="Release\net40\Newtonsoft.Json.dll" target="lib\net40\Newtonsoft.Json.dll" />
+    <file src="Release\net40\Newtonsoft.Json.xml" target="lib\net40\Newtonsoft.Json.xml" />
+    <file src="Release\net40\Twitterizer2.Asynchronous.dll" target="lib\net40\Twitterizer2.Asynchronous.dll" />
+    <file src="Release\net40\Twitterizer2.Asynchronous.XML" target="lib\net40\Twitterizer2.Asynchronous.XML" />
+    <file src="Release\net40\Twitterizer2.dll" target="lib\net40\Twitterizer2.dll" />
+    <file src="Release\net40\Twitterizer2.Streaming.dll" target="lib\net40\Twitterizer2.Streaming.dll" />
+    <file src="Release\net40\Twitterizer2.Streaming.XML" target="lib\net40\Twitterizer2.Streaming.XML" />
+    <file src="Release\net40\Twitterizer2.XML" target="lib\net40\Twitterizer2.XML" />
+    <file src="Release\sl4\Twitterizer2.Async.Silverlight.dll" target="lib\sl40\Twitterizer2.Async.Silverlight.dll" />
+    <file src="Release\sl4\Twitterizer2.Async.Silverlight.XML" target="lib\sl40\Twitterizer2.Async.Silverlight.XML" />
+    <file src="Release\sl4\Twitterizer2.Silverlight.dll" target="lib\sl40\Twitterizer2.Silverlight.dll" />
+    <file src="Release\sl4\Twitterizer2.Silverlight.XML" target="lib\sl40\Twitterizer2.Silverlight.XML" />
+    <file src="Release\sl4\Twitterizer2.Streaming.Silverlight.dll" target="lib\sl40\Twitterizer2.Streaming.Silverlight.dll" />
+    <file src="Release\sl4\Twitterizer2.Streaming.Silverlight.XML" target="lib\sl40\Twitterizer2.Streaming.Silverlight.XML" />
+  </files>
+</package>

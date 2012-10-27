@@ -7,6 +7,14 @@ Requirements:
 
 Depending on your target application, you may want (or need) to remove the silverlight projects from the solution.
 
+== Contribute ==
+So, you want to give something back, eh? Awesome! I'll try to stay out of your way.
+
+# Here's what you should do. First, [https://github.com/Twitterizer/Twitterizer/fork_select fork] the Develop branch of the Twitterizer project.
+# Check out your new repository and go nuts on it. Fix all the bugs! Seriously, make it sweet.
+# Submit a [https://github.com/Twitterizer/Twitterizer/pull/new/develop pull request]. This will tell me that you've laid down some award-worthy code that I need to look at.
+# Profit!
+
 == Build for .NET 3.5 ==
 Twitterizer (as of this writing) is built for .NET 4.0 primarily. It is possible to build the library for .NET 3.5 by selecting it as the target framework in Visual Studio. VS2010 should build this will few changes needed. VS2008 may require more changes.
 

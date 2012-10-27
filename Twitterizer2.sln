@@ -6,6 +6,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CustomDictionary.xml = CustomDictionary.xml
 		GettingStarted.txt = GettingStarted.txt
+		NugetPackage.bat = NugetPackage.bat
+		NugetPublish.bat = NugetPublish.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0069E24B-470C-43E4-A6D0-536D3A6A1E6F}"

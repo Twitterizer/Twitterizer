@@ -324,6 +324,10 @@ namespace Twitterizer.Core
                     twitterResponse.Result = (rateLimiting != null && rateLimiting.Remaining == 0) ? RequestResult.RateLimited : RequestResult.BadRequest;
                     break;
 
+                case (HttpStatusCode)420: //Rate Limited from Search/Trends API
+                    twitterResponse.Result = RequestResult.RateLimited;
+                    break;
+
                 case HttpStatusCode.Unauthorized:
                     twitterResponse.Result = RequestResult.Unauthorized;
                     break;
@@ -386,6 +390,11 @@ namespace Twitterizer.Core
                 rateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
                     .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
             }
+            else if(!string.IsNullOrEmpty(responseHeaders["Retry-After"]))
+            {
+                rateLimiting.ResetDate = DateTime.UtcNow.AddSeconds(Convert.ToInt32(responseHeaders["Retry-After"]));
+            }
+            
             return rateLimiting;
         }
 

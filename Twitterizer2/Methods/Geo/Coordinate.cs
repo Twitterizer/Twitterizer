@@ -105,10 +105,13 @@ namespace Twitterizer
                         return null;
                     }
 
+                    if (reader.TokenType == JsonToken.StartArray)
+                        reader.Read();
+
                     //int depth = reader.Depth + 1;
                     double count = 1;
 
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         if (new[] { JsonToken.StartArray, JsonToken.EndArray }.Contains(reader.TokenType))
                             continue;
@@ -118,11 +121,11 @@ namespace Twitterizer
                         if (count % 2 > 0)
                         {
                             result.Add(new Coordinate());
-                            result[itemIndex].Latitude = (double)reader.Value;
+                            result[itemIndex].Latitude = Convert.ToDouble(reader.Value);
                         }
                         else
                         {
-                            result[itemIndex].Longitude = (double)reader.Value;
+                            result[itemIndex].Longitude = Convert.ToDouble(reader.Value);
                         }
 
                         count++;

@@ -62,7 +62,14 @@ namespace Twitterizer
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of from user screen.
+        /// Gets or sets the display name of the from user.
+        /// </summary>
+        /// <value>The name of from user screen.</value>
+        [JsonProperty(PropertyName = "from_user_name")]
+        public string FromUserDisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screen name of the from user.
         /// </summary>
         /// <value>The name of from user screen.</value>
         [JsonProperty(PropertyName = "from_user")]
@@ -73,10 +80,17 @@ namespace Twitterizer
         /// </summary>
         /// <value>From user id.</value>
         [JsonProperty(PropertyName = "from_user_id")]
-        public long? FromUserId { get; set; }
+        public decimal? FromUserId { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of to user screen.
+        /// Gets or sets the display name of the to user.
+        /// </summary>
+        /// <value>The name of to user screen.</value>
+        [JsonProperty(PropertyName = "to_user_name")]
+        public string ToUserDisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screen name of to user.
         /// </summary>
         /// <value>The name of to user screen.</value>
         [JsonProperty(PropertyName = "to_user")]
@@ -87,7 +101,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>To user id.</value>
         [JsonProperty(PropertyName = "to_user_id")]
-        public long? ToUserId { get; set; }
+        public decimal? ToUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status text.
@@ -111,7 +125,7 @@ namespace Twitterizer
         /// </summary>
         /// <value>The status id.</value>
         [JsonProperty(PropertyName = "id")]
-        public long Id { get; set; }
+        public decimal Id { get; set; }
 
         /// <summary>
         /// Gets or sets the source.

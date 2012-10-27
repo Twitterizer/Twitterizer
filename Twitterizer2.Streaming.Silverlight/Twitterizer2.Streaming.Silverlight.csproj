@@ -40,13 +40,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Release\Twitterizer2\Silverlight\</OutputPath>
+    <OutputPath>..\Release\sl4\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Release\Twitterizer2\Silverlight\Twitterizer2.Streaming.Silverlight.XML</DocumentationFile>
+    <DocumentationFile>..\Release\sl4\Twitterizer2.Streaming.Silverlight.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
