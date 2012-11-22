@@ -1,6 +1,5 @@
 ﻿namespace Twitterizer
 {
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     /// <summary>
