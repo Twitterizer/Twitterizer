@@ -34,6 +34,7 @@
 namespace Twitterizer.Streaming
 {
     using System.Collections.Generic;
+    using System.Net;
 
     public class StreamOptions
     {

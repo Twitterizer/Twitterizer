@@ -53,7 +53,7 @@ namespace Twitterizer.Commands
         /// <param name="options">The options.</param>
         /// <remarks></remarks>
         public ListStatusesCommand(OAuthTokens requestTokens, string username, string listIdOrSlug, ListStatusesOptions options)
-            : base(HTTPVerb.GET, string.Format("{0}/lists/{1}/statuses.json", username, listIdOrSlug), requestTokens, options)
+            : base(HTTPVerb.GET, string.Format("lists/statuses.json?owner_screen_name={0}&slug={1}", username, listIdOrSlug), requestTokens, options)
         {
             if (string.IsNullOrEmpty(username))
             {
