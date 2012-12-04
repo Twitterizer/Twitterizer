@@ -106,10 +106,17 @@ namespace Twitterizer
 
                             case "placeType":
                                 int placetypeDepth = reader.Depth;
-                                while (reader.Read() && reader.Depth > placetypeDepth)
+                                while (reader.Read() && reader.Depth >= placetypeDepth)
                                 {
-                                    if (reader.TokenType == JsonToken.StartObject && reader.Depth >= 2)
+                                    if (reader.TokenType == JsonToken.StartObject && reader.Depth == placetypeDepth)
+                                    {
                                         result[result.Count - 1].PlaceType = new TwitterTrendLocationPlaceType();
+                                        continue;
+                                    }
+                                    if (reader.TokenType == JsonToken.EndObject)
+                                    {
+                                        break;
+                                    }
 
                                     if (reader.TokenType == JsonToken.PropertyName)
                                     {
