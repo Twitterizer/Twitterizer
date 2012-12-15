@@ -261,6 +261,45 @@ namespace Twitterizer.Streaming
         }
 
         /// <summary>
+        ///   Starts the sample stream.
+        /// </summary>
+        public IAsyncResult StartSampleStream(
+            StreamStoppedCallback streamStoppedCallback,
+            StatusCreatedCallback statusCreatedCallback,
+            StatusDeletedCallback statusDeletedCallback,
+            EventCallback eventCallback,
+            RawJsonCallback rawJsonCallback = null
+            )
+        {
+            if (request != null)
+            {
+                throw new InvalidOperationException("Stream is already open");
+            }
+
+            WebRequestBuilder builder;
+            if (Tokens == null)
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/sample.json"),
+                                                HTTPVerb.POST, userAgent, NetworkCredentials);
+            else
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/sample.json"),
+                                                HTTPVerb.POST, Tokens, userAgent);
+            PrepareStreamOptions(builder);
+
+            request = builder.PrepareRequest();
+
+            this.streamStoppedCallback = streamStoppedCallback;
+            this.statusCreatedCallback = statusCreatedCallback;
+            this.statusDeletedCallback = statusDeletedCallback;
+            this.eventCallback = eventCallback;
+            this.rawJsonCallback = rawJsonCallback;
+            stopReceived = false;
+#if SILVERLIGHT
+            request.AllowReadStreamBuffering = false;
+#endif
+            return request.BeginGetResponse(StreamCallback, request);
+        }
+
+        /// <summary>
         ///   Prepares the stream options.
         /// </summary>
         /// <param name = "builder">The builder.</param>
@@ -283,6 +322,12 @@ namespace Twitterizer.Streaming
                     builder.Parameters.Add("track", string.Join(",", StreamOptions.Track.ToArray()));
 
                 builder.UseCompression = StreamOptions.UseCompression;
+                
+#if !SILVERLIGHT        
+
+            if (this.StreamOptions != null)
+                builder.Proxy = this.StreamOptions.Proxy;
+#endif
             }
         }
 
