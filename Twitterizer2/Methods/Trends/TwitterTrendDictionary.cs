@@ -98,7 +98,10 @@ namespace Twitterizer
 
                 int initialDepth = reader.Depth;
 
-                while (reader.Read() && reader.Depth >= initialDepth)
+                if (reader.TokenType == JsonToken.StartArray)
+                    reader.Read();
+
+                while (reader.Read() && reader.Depth > initialDepth)
                 {
                     if (reader.TokenType == JsonToken.PropertyName && reader.Depth == 1)
                     {
