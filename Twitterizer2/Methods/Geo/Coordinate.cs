@@ -105,9 +105,6 @@ namespace Twitterizer
                         return null;
                     }
 
-                    if (reader.TokenType == JsonToken.StartArray)
-                        reader.Read();
-
                     //int depth = reader.Depth + 1;
                     double count = 1;
 
