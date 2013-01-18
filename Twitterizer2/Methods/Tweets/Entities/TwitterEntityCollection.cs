@@ -92,7 +92,7 @@ using System.Linq.Expressions;
                 TwitterEntity entity = null;
                 try
                 {
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         if (reader.TokenType == JsonToken.PropertyName && reader.Depth == startDepth + 1)
                         {
@@ -337,7 +337,7 @@ using System.Linq.Expressions;
                     int startDepth = reader.Depth;
 
                     // Start looping through all of the child nodes
-                    while (reader.Read() && reader.Depth >= startDepth)
+                    while (reader.Read() && reader.Depth > startDepth)
                     {
                         // If the current node isn't a property, skip it
                         if (reader.TokenType != JsonToken.PropertyName)
