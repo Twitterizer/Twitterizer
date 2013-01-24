@@ -52,13 +52,13 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="username">The screenname.</param>
+        /// <param name="screenname">The screenname.</param>
         /// <param name="options">The options.</param>
         public ListMembershipsCommand(OAuthTokens requestTokens, string screenname, ListMembershipsOptions options)
             : base(
-                HTTPVerb.GET, 
-                "lists/memberships.json", 
-                requestTokens, 
+                HTTPVerb.GET,
+                "lists/memberships.json",
+                requestTokens,
                 options)
         {
             if (string.IsNullOrEmpty(screenname))
@@ -79,7 +79,7 @@ namespace Twitterizer.Commands
         /// Initializes a new instance of the <see cref="ListMembershipsCommand"/> class.
         /// </summary>
         /// <param name="requestTokens">The request tokens.</param>
-        /// <param name="username">The screenname.</param>
+        /// <param name="userid">The screenname.</param>
         /// <param name="options">The options.</param>
         public ListMembershipsCommand(OAuthTokens requestTokens, decimal userid, ListMembershipsOptions options)
             : base(

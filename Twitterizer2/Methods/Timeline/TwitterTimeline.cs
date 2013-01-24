@@ -34,7 +34,6 @@
 
 namespace Twitterizer
 {
-    using System;
     using Twitterizer.Core;
 
     /// <summary>

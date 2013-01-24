@@ -30,10 +30,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security;
 
 // Uncomment this line for building a .NET 4.0 assembly
 // [assembly: SecurityRules(SecurityRuleSet.Level1)]

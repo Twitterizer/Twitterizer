@@ -49,10 +49,10 @@ namespace Twitterizer2.TestCases
             TwitterStatus deletedStatus = newStatus.Delete(tokens).ResponseObject;
             Assert.That(newStatus.Id == deletedStatus.Id);
         }
-        
+
         [Category("Core")]
         [Test]
-        [ExpectedException(ExpectedException=typeof(ArgumentException))]
+        [ExpectedException(ExpectedException = typeof(ArgumentException))]
         public static void TestTokenValidation()
         {
             OAuthTokens fakeTokens = new OAuthTokens();
@@ -112,8 +112,8 @@ namespace Twitterizer2.TestCases
             TwitterResponse<TwitterStatusCollection> timelineResult = TwitterTimeline.PublicTimeline();
 
             // Get the first tweet with entities
-            TwitterStatus tweet = timelineResult.ResponseObject.Where(x => x.Entities != null && x.Entities.OfType<TwitterMentionEntity>().Count() > 0).First();
-            
+            TwitterStatus tweet = timelineResult.ResponseObject.First(x => x.Entities != null && x.Entities.OfType<TwitterMentionEntity>().Any());
+
             // Make sure that we got the tweet successfully
             Assert.IsNotNull(tweet);
 
@@ -123,7 +123,7 @@ namespace Twitterizer2.TestCases
 
             // Get the mentions (@screenname within the text)
             var mentions = from entities in tweet.Entities.OfType<TwitterMentionEntity>()
-                            select entities;
+                           select entities;
 
             // Get urls
             //var urls = from entities in tweet.Entities.OfType<TwitterUrlEntity>()
