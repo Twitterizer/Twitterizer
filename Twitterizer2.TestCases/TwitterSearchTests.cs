@@ -26,6 +26,13 @@
             Assert.That(request.Result == RequestResult.Success, request.ErrorMessage);
             Assert.IsNotNull(request.ResponseObject);
 
+            Assert.Greater(request.ResponseObject.MaxId, 0);
+            Assert.Greater(request.ResponseObject.CompletedIn, 0);
+            Assert.IsNotNullOrEmpty(request.ResponseObject.MaxIdStr);
+            Assert.IsNotNullOrEmpty(request.ResponseObject.NextPage);
+            Assert.Greater(request.ResponseObject.Page, 0);
+            Assert.AreEqual("twitter", request.ResponseObject.Query);
+            Assert.IsNotNullOrEmpty(request.ResponseObject.RefreshUrl);
         }
 
         [Test]
