@@ -1,5 +1,12 @@
 For most applications, Twitterizer2 is the project that will create the assembly you want.
 
+== The end of the project? ==
+I've been avoiding killing off the project, but [https://dev.twitter.com/blog/planning-for-api-v1-retirement major breaking changes] to the Twitter API are fast approaching. I planned on using this scenario as another excuse to completely restructure the application and roll out v3, but it's now painfully clear that my life and a complete burn-out on the project are going to stand in my way.
+
+A while ago, I began to shop around for a few interested parties to take over huge parts of the project. I found a few, but none that were willing to stick around for the long haul.
+
+As of this moment, I am inclined to stick a fork in this thing, unless some serious people show up and start taking over. If that's you, please contact me.
+
 == Build From Source ==
 Requirements:
 * Visual Studio 2010 / Mono
