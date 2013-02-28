@@ -1,28 +1,7 @@
-For most applications, Twitterizer2 is the project that will create the assembly you want.
+Twitterizer started in May of 2008 as an excuse for me to explore design patterns, have a little fun coding, and stretch out my architectural legs. I never set out to create an open source library, much less a popular one (in the last 30 days of its life, Twitterizer.net pulled 8,560 unique visitors and nearly 52k views). 
 
-== The end of the project? ==
-I've been avoiding killing off the project, but [https://dev.twitter.com/blog/planning-for-api-v1-retirement major breaking changes] to the Twitter API are fast approaching. I planned on using this scenario as another excuse to completely restructure the application and roll out v3, but it's now painfully clear that my life and a complete burn-out on the project are going to stand in my way.
+After 4 years of maintenance, a complete rewrite, two addon projects, lots of mistakes (some never fixed), and thousands of questions answered, I grew tired. I had always intended to take a break and pull myself back into it, but the longer time has gone on, the harder it has been to even consider dedicating the time required to get the project to a useful state again (hint: the library was never 'feature complete'). 
 
-A while ago, I began to shop around for a few interested parties to take over huge parts of the project. I found a few, but none that were willing to stick around for the long haul.
+In the end, I got far more out of this project than I ever hoped. I've worked along side absolutely amazing people and gained some insight into a few breathtaking projects. If not for those people and those projects, I doubt I would have lasted as long as I had.
 
-As of this moment, I am inclined to stick a fork in this thing, unless some serious people show up and start taking over. If that's you, please contact me.
-
-== Build From Source ==
-Requirements:
-* Visual Studio 2010 / Mono
-* [http://www.nuget.org/ NuGet]
-
-Depending on your target application, you may want (or need) to remove the silverlight projects from the solution.
-
-== Contribute ==
-So, you want to give something back, eh? Awesome! I'll try to stay out of your way.
-
-# Here's what you should do. First, [https://github.com/Twitterizer/Twitterizer/fork_select fork] the Develop branch of the Twitterizer project.
-# Check out your new repository and go nuts on it. Fix all the bugs! Seriously, make it sweet.
-# Submit a [https://github.com/Twitterizer/Twitterizer/pull/new/develop pull request]. This will tell me that you've laid down some award-worthy code that I need to look at.
-# Profit!
-
-== Build for .NET 3.5 ==
-Twitterizer (as of this writing) is built for .NET 4.0 primarily. It is possible to build the library for .NET 3.5 by selecting it as the target framework in Visual Studio. VS2010 should build this will few changes needed. VS2008 may require more changes.
-
-I understand that this might put you in a bad spot, but I have a hard time keeping up with code changes and bug fixes just keeping the library working at all. I really don't have the time to make sure that the code I'm writing is backward compatible.
+If you find yourself interesting in taking full ownership of Twitterizer, please shout out. @DigitallyBorn
