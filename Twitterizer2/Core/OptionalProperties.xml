@@ -36,12 +36,12 @@
         <![CDATA[<configuration>
   <appSettings>
     <!-- Set or change this value to interface with a non-twitter API (like Wordpress) -->
-    <add key="Twitterizer2.APIBaseAddress" value="http://api.twitter.com/1/" />
+    <add key="Twitterizer2.APIBaseAddress" value="http://api.twitter.com/1.1/" />
   </appSettings>
 <configuration>]]>
       </code>
     </remarks>
-    <value>The API end point base address. Default: "http://api.twitter.com/1/"</value>
+    <value>The API end point base address. Default: "http://api.twitter.com/1.1/"</value>
   </Property>
 
   <Property name="CacheOutput">
