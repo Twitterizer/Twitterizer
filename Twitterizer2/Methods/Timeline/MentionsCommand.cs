@@ -52,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The request tokens.</param>
         /// <param name="options">The options.</param>
         public MentionsCommand(OAuthTokens tokens, TimelineOptions options)
-            : base(HTTPVerb.GET, "statuses/mentions.json", tokens, options)
+            : base(HTTPVerb.GET, "statuses/mentions_timeline.json", tokens, options)
         {
             if (tokens == null)
             {
