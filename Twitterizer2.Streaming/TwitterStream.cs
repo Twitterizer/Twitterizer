@@ -192,7 +192,7 @@ namespace Twitterizer.Streaming
             }
 
             WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"),
-                                                              HTTPVerb.GET, Tokens, userAgent);
+                                                              HTTPVerb.POST, Tokens, userAgent);
 
             PrepareStreamOptions(builder);
 

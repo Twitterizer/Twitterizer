@@ -86,6 +86,9 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CoordinateBoundaries.cs" />
+    <Compile Include="CoordinateValidator.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="TwitterSteamEvent.cs" />
     <Compile Include="UserStreamOptions.cs" />
     <Compile Include="TwitterStreamDeletedEvent.cs" />
