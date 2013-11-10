@@ -191,7 +191,7 @@ namespace Twitterizer.Streaming
                 throw new InvalidOperationException("Stream is already open");
             }
 
-            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/2/user.json"),
+            WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/1.1/user.json"),
                                                               HTTPVerb.GET, Tokens, userAgent);
 
             PrepareStreamOptions(builder);
@@ -239,10 +239,10 @@ namespace Twitterizer.Streaming
 
             WebRequestBuilder builder;
             if (Tokens == null)
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"),
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1.1/statuses/filter.json"),
                                                 HTTPVerb.POST, userAgent, NetworkCredentials);
             else
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/filter.json"),
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1.1/statuses/filter.json"),
                                                 HTTPVerb.POST, Tokens, userAgent);
             PrepareStreamOptions(builder);
 
@@ -278,10 +278,10 @@ namespace Twitterizer.Streaming
 
             WebRequestBuilder builder;
             if (Tokens == null)
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/sample.json"),
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1.1/statuses/sample.json"),
                                                 HTTPVerb.POST, userAgent, NetworkCredentials);
             else
-                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1/statuses/sample.json"),
+                builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1.1/statuses/sample.json"),
                                                 HTTPVerb.POST, Tokens, userAgent);
             PrepareStreamOptions(builder);
 
