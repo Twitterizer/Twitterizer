@@ -152,6 +152,14 @@ namespace Twitterizer.Streaming
         /// <value>The Basic Auth Credentials.</value>
         public NetworkCredential NetworkCredentials { get; set; }
 
+#if !SILVERLIGHT
+        /// <summary>
+        /// Gets or sets the proxy.
+        /// </summary>
+        /// <value>The proxy.</value>
+        public WebProxy Proxy { get; set; }
+#endif
+
         #region IDisposable Members
 
         /// <summary>
@@ -193,7 +201,9 @@ namespace Twitterizer.Streaming
 
             WebRequestBuilder builder = new WebRequestBuilder(new Uri("https://userstream.twitter.com/1.1/user.json"),
                                                               HTTPVerb.GET, Tokens, userAgent);
-
+#if !SILVERLIGHT
+            builder.Proxy = Proxy;
+#endif
             PrepareStreamOptions(builder);
 
             if (StreamOptions != null && StreamOptions is UserStreamOptions)
@@ -244,6 +254,9 @@ namespace Twitterizer.Streaming
             else
                 builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1.1/statuses/filter.json"),
                                                 HTTPVerb.POST, Tokens, userAgent);
+#if !SILVERLIGHT
+            builder.Proxy = Proxy;
+#endif
             PrepareStreamOptions(builder);
 
             request = builder.PrepareRequest();
@@ -283,6 +296,9 @@ namespace Twitterizer.Streaming
             else
                 builder = new WebRequestBuilder(new Uri("https://stream.twitter.com/1.1/statuses/sample.json"),
                                                 HTTPVerb.POST, Tokens, userAgent);
+#if !SILVERLIGHT
+            builder.Proxy = Proxy;
+#endif
             PrepareStreamOptions(builder);
 
             request = builder.PrepareRequest();
