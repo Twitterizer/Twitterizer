@@ -287,7 +287,6 @@
     <Compile Include="Methods\Friendship\TwitterRelationshipUser.cs" />
     <Compile Include="Methods\TwitterResultTypeEnum.cs" />
     <Compile Include="Methods\Search\TwitterSearch.cs" />
-    <Compile Include="Methods\Search\TwitterSearchResult.cs" />
     <Compile Include="Methods\Search\TwitterSearchResultCollection.cs" />
     <Compile Include="Methods\Tweets\TwitterStatus.cs" />
     <Compile Include="Methods\Tweets\TwitterStatusCollection.cs" />

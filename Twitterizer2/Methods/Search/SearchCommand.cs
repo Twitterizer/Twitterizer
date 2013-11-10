@@ -42,6 +42,7 @@ namespace Twitterizer.Commands
 #if !SILVERLIGHT
     [Serializable]
 #endif
+    [AuthorizedCommandAttribute]
     internal sealed class SearchCommand : TwitterCommand<TwitterSearchResultCollection>
     {
         #region Constructors
@@ -52,7 +53,7 @@ namespace Twitterizer.Commands
         /// <param name="query">The query.</param>
         /// <param name="options">The options.</param>
         public SearchCommand(OAuthTokens requestTokens, string query, SearchOptions options)
-            : base(HTTPVerb.GET, "search.json", requestTokens, options)
+            : base(HTTPVerb.GET, "search/tweets.json", requestTokens, options)
         {
             if (string.IsNullOrEmpty(query))
             {
@@ -106,19 +107,9 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("max_id", options.MaxId.ToString(unitedStatesEnglishCulture));
             }
 
-            if (options.NumberPerPage > 0)
+            if (options.Count > 0)
             {
-                this.RequestParameters.Add("rpp", options.NumberPerPage.ToString(unitedStatesEnglishCulture));
-            }
-
-            if (options.PageNumber > 0)
-            {
-                this.RequestParameters.Add("page", options.PageNumber.ToString(unitedStatesEnglishCulture));
-            }
-
-            if (options.SinceDate > new DateTime())
-            {
-                this.RequestParameters.Add("since", options.SinceDate.ToString("yyyy-MM-dd", unitedStatesEnglishCulture));
+                this.RequestParameters.Add("count", options.Count.ToString(unitedStatesEnglishCulture));
             }
 
             if (options.SinceId > 0)
@@ -129,11 +120,6 @@ namespace Twitterizer.Commands
             if (!string.IsNullOrEmpty(options.GeoCode))
             {
                 this.RequestParameters.Add("geocode", options.GeoCode);
-            }
-
-            if (options.PrefixUsername)
-            {
-                this.RequestParameters.Add("show_user", "true");
             }
 
             if (options.UntilDate > new DateTime())
@@ -153,9 +139,6 @@ namespace Twitterizer.Commands
                     this.RequestParameters.Add("result_type", "popular");
                     break;
             }
-
-            if (options.WithTwitterUserID)
-                this.RequestParameters.Add("with_twitter_user_id", "true");
 
             if (options.IncludeEntities)
                 this.RequestParameters.Add("include_entities", "true");
