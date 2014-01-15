@@ -251,7 +251,7 @@ namespace Twitterizer
                     TwitterHashTagEntity tagEntity = (TwitterHashTagEntity)entity;
 
                     linkedText = string.Format(
-                        "{0}<a href=\"http://twitter.com/search?q=%23{1}\">{1}</a>{2}",
+                        "{0}<a href=\"https://twitter.com/search?q=%23{1}\">{1}</a>{2}",
                         linkedText.Substring(0, entity.StartIndex),
                         tagEntity.Text,
                         linkedText.Substring(entity.EndIndex));
@@ -273,7 +273,7 @@ namespace Twitterizer
                     TwitterMentionEntity mentionEntity = (TwitterMentionEntity)entity;
 
                     linkedText = string.Format(
-                        "{0}<a href=\"http://twitter.com/{1}\">@{1}</a>{2}",
+                        "{0}<a href=\"https://twitter.com/{1}\">@{1}</a>{2}",
                         linkedText.Substring(0, entity.StartIndex),
                         mentionEntity.ScreenName,
                         linkedText.Substring(entity.EndIndex));
