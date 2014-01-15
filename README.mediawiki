@@ -1,4 +1,4 @@
-== This is the end ==
+== This is (not) the end ==
 Twitterizer started in May of 2008 as an excuse for me to explore design patterns, have a little fun coding, and stretch out my architectural legs. I never set out to create an open source library, much less a popular one (in the last 30 days of its life, Twitterizer.net pulled 8,560 unique visitors and nearly 52k views). 
 
 After 4 years of maintenance, a complete rewrite, two addon projects, lots of mistakes (some never fixed), and thousands of questions answered, I grew tired. I had always intended to take a break and pull myself back into it, but the longer time has gone on, the harder it has been to even consider dedicating the time required to get the project to a useful state again (hint: the library was never 'feature complete'). 
@@ -7,15 +7,9 @@ In the end, I got far more out of this project than I ever hoped. I've worked al
 
 If you find yourself interesting in taking full ownership of Twitterizer, please shout out. @DigitallyBorn
 
-== FAQ ==
-I've gotten a few questions since announcing end of development, here are a few ...
+In 2009 the [Smuxi] project made use of the Twitterizer library to support Twitter as a built-in feature in their popular IRC client. As of 2013 Twitterizer is part of the Smuxi project umbrella and thus actively maintained. In August 2013 Twitterizer was ported to the Twitter v1.1 API, in November 2013 proxy support was added to the Streaming API, and in Janary 2014 Twitterizer was ported to enforced HTTPS.
 
-=== Will applications using Twitterizer stop working? ===
-Not right away, no. I have no power to stop the code or binaries that are already in use from working, nor would I want to. However, the current version of Twitterizer uses version 1.0 of the Twitter API which is scheduled for death in March 2013. At that time, I cannot speak to any functionality.
+ [Smuxi]: https://github.com/meebey/smuxi
 
-=== What am I supposed to do now? ===
-As I see it, you have three options: jump to a new library, make Twitterizer your own, or roll your own.
-
-Twitterizer source code will remain available in its current state. I encourage you to download the source and make it your own.
-
-If you'd rather not take that on, there are a couple of other fantastic libraries. For example: [http://linqtotwitter.codeplex.com/ Linq2Twitter] and [https://github.com/danielcrenna/tweetsharp TweetSharp]
+=== Twitterizer Alternatives ===
+There are a couple of other fantastic Twitter libraries. For example: [http://linqtotwitter.codeplex.com/ Linq2Twitter] and [https://github.com/danielcrenna/tweetsharp TweetSharp]
