@@ -173,64 +173,6 @@ namespace Twitterizer
         {
             return Available(null, null);
         }
-
-
-        /// <summary>
-        /// Gets the daily global trends
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="options">The options.</param>
-        public static TwitterResponse<TwitterTrendDictionary> Daily(OAuthTokens tokens, TrendsOptions options)
-        {
-            Commands.DailyTrendsCommand command = new Twitterizer.Commands.DailyTrendsCommand(tokens, options);
-
-            return Core.CommandPerformer.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets the daily global trends
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public static TwitterResponse<TwitterTrendDictionary> Daily(TrendsOptions options)
-        {
-            return Daily(null, options);
-        }
-
-        /// <summary>
-        /// Gets the daily global trends
-        /// </summary>
-        public static TwitterResponse<TwitterTrendDictionary> Daily()
-        {
-            return Daily(null, null);
-        }
-
-        /// <summary>
-        /// Gets the weekly global trends
-        /// </summary>
-        /// <param name="tokens">The request tokens.</param>
-        /// <param name="options">The options.</param>
-        public static TwitterResponse<TwitterTrendDictionary> Weekly(OAuthTokens tokens, TrendsOptions options)
-        {
-            Commands.WeeklyTrendsCommand command = new Twitterizer.Commands.WeeklyTrendsCommand(tokens, options);
-
-            return Core.CommandPerformer.PerformAction(command);
-        }
-
-        /// <summary>
-        /// Gets the weekly global trends
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public static TwitterResponse<TwitterTrendDictionary> Weekly(TrendsOptions options)
-        {
-            return Weekly(null, options);
-        }
-
-        /// <summary>
-        /// Gets the weekly global trends
-        /// </summary>
-        public static TwitterResponse<TwitterTrendDictionary> Weekly()
-        {
-            return Weekly(null, null);
-        }
+        
     }
 }
