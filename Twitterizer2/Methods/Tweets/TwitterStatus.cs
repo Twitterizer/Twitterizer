@@ -119,7 +119,16 @@ namespace Twitterizer
         /// </value>
         [DataMember, JsonProperty(PropertyName = "favorited")]
         public bool? IsFavorited { get; set; }
-
+        
+        /// <summary>
+        /// Gets the favorite count.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is favorited; otherwise, <c>false</c>.
+        /// </value>
+        [DataMember, JsonProperty(PropertyName = "favorite_count")]
+        public string FavoriteCount { get; set; }
+        
         /// <summary>
         /// Gets or sets the text of the status.
         /// </summary>
