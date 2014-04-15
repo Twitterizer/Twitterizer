@@ -388,20 +388,20 @@ namespace Twitterizer.Core
         {
             RateLimiting rateLimiting = new RateLimiting();
 
-            if (responseHeaders.AllKeys.Any(x => x.Equals("X-RateLimit-Limit", StringComparison.InvariantCultureIgnoreCase)))
+            if (responseHeaders.AllKeys.Any(x => x.Equals("X-Rate-Limit-Limit", StringComparison.InvariantCultureIgnoreCase)))
             {
-                rateLimiting.Total = int.Parse(responseHeaders["X-RateLimit-Limit"], CultureInfo.InvariantCulture);
+                rateLimiting.Total = int.Parse(responseHeaders["X-Rate-Limit-Limit"], CultureInfo.InvariantCulture);
             }
 
-            if (responseHeaders.AllKeys.Any(x => x.Equals("X-RateLimit-Remaining", StringComparison.InvariantCultureIgnoreCase)))
+            if (responseHeaders.AllKeys.Any(x => x.Equals("X-Rate-Limit-Remaining", StringComparison.InvariantCultureIgnoreCase)))
             {
-                rateLimiting.Remaining = int.Parse(responseHeaders["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
+                rateLimiting.Remaining = int.Parse(responseHeaders["X-Rate-Limit-Remaining"], CultureInfo.InvariantCulture);
             }
 
-            if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
+            if (!string.IsNullOrEmpty(responseHeaders["X-Rate-Limit-Reset"]))
             {
                 rateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
+                    .AddSeconds(double.Parse(responseHeaders["X-Rate-Limit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
             }
             else if(!string.IsNullOrEmpty(responseHeaders["Retry-After"]))
             {
