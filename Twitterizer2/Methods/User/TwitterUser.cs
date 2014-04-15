@@ -63,7 +63,7 @@ namespace Twitterizer
         /// Gets or sets the string id.
         /// </summary>
         /// <value>The string id.</value>
-        [DataMember, JsonProperty(PropertyName = "str_id")]
+        [DataMember, JsonProperty(PropertyName = "id_str")]
         public string StringId { get; set; }
 
         /// <summary>
