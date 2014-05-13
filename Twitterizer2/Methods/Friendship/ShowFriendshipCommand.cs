@@ -119,7 +119,7 @@ namespace Twitterizer.Commands
         {
             if (this.SourceId > 0)
             {
-                this.RequestParameters.Add("source_id", this.SourceId.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("source_id", this.SourceId.ToString("#"));
             }
             else if (!string.IsNullOrEmpty(this.SourceScreenName))
             {
@@ -128,7 +128,7 @@ namespace Twitterizer.Commands
 
             if (this.TargetId > 0)
             {
-                this.RequestParameters.Add("target_id", this.TargetId.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("target_id", this.TargetId.ToString("#"));
             }
             else if (!string.IsNullOrEmpty(this.TargetScreenName))
             {
