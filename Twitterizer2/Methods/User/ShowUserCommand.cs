@@ -85,7 +85,7 @@ namespace Twitterizer.Commands
         public override void Init()
         {
             if (this.UserId > 0)
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.CurrentCulture));
+                this.RequestParameters.Add("user_id", this.UserId.ToString("#"));
             
             if (!string.IsNullOrEmpty(this.Username))
                 this.RequestParameters.Add("screen_name", this.Username);

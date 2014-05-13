@@ -104,7 +104,7 @@ namespace Twitterizer.Commands
 
             if (options.MaxId > 0)
             {
-                this.RequestParameters.Add("max_id", options.MaxId.ToString(unitedStatesEnglishCulture));
+                this.RequestParameters.Add("max_id", options.MaxId.ToString("#"));
             }
 
             if (options.Count > 0)
@@ -114,7 +114,7 @@ namespace Twitterizer.Commands
 
             if (options.SinceId > 0)
             {
-                this.RequestParameters.Add("since_id", options.SinceId.ToString(unitedStatesEnglishCulture));
+                this.RequestParameters.Add("since_id", options.SinceId.ToString("#"));
             }
 
             if (!string.IsNullOrEmpty(options.GeoCode))

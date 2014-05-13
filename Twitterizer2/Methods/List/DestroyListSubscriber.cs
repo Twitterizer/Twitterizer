@@ -29,7 +29,7 @@
         /// <remarks></remarks>
         public override void Init()
         {
-            this.RequestParameters.Add("list_id", this.ListId.ToString());
+            this.RequestParameters.Add("list_id", this.ListId.ToString("#"));
         }
     }
 }

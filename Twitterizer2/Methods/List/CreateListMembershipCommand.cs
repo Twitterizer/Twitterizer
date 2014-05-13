@@ -34,7 +34,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("list_id", this.listId.ToString());
+            this.RequestParameters.Add("list_id", this.listId.ToString("#"));
         }
     }
 }
