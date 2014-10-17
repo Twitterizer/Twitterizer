@@ -240,14 +240,6 @@ namespace Twitterizer
         {
             HttpWebRequest request = PrepareRequest();
 
-            if (request.RequestUri != null && !string.IsNullOrEmpty(request.RequestUri.Scheme) &&
-                request.RequestUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase))
-            {
-                ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-                request.ProtocolVersion = HttpVersion.Version11;
-            }
-
 #if !SILVERLIGHT
             return (HttpWebResponse)request.GetResponse();
 #else
