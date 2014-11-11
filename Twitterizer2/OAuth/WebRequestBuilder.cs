@@ -112,13 +112,13 @@ namespace Twitterizer
         /// Gets or sets the UserAgent.
         /// </summary>
         /// <value>The User Agent.</value>
-        private string userAgent;
+        private readonly string userAgent;
 
         /// <summary>
         /// Gets or sets the Basic Auth Credentials.
         /// </summary>
         /// <value>The Basic Auth Credentials.</value>
-        private NetworkCredential networkCredentials;
+        private readonly NetworkCredential networkCredentials;
 
         /// <summary>
         /// Gets or sets the Multipart config

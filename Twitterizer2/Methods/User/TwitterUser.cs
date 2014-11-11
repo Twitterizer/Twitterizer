@@ -63,7 +63,7 @@ namespace Twitterizer
         /// Gets or sets the string id.
         /// </summary>
         /// <value>The string id.</value>
-        [DataMember, JsonProperty(PropertyName = "str_id")]
+        [DataMember, JsonProperty(PropertyName = "id_str")]
         public string StringId { get; set; }
 
         /// <summary>
@@ -86,6 +86,27 @@ namespace Twitterizer
         /// <value>The description.</value>
         [DataMember, JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user has not altered the theme or background of their profile.
+        /// </summary>
+        /// <value><c>false</c> if the user has altered the theme or background of their profile; otherwise, <c>true</c>.</value>
+        [DataMember, JsonProperty(PropertyName = "default_profile")]
+        public bool IsDefaultProfile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user has not uploaded their own avatar and a default egg avatar is used instead.
+        /// </summary>
+        /// <value><c>false</c> if the user has uploaded their own avatar and a default egg avatar is used instead; otherwise, <c>true</c>.</value>
+        [DataMember, JsonProperty(PropertyName = "default_profile_image")]
+        public bool IsDefaultProfileImage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this user is a translator.
+        /// </summary>
+        /// <value><c>true</c> if this user is translator; otherwise, <c>false</c>.</value>
+        [DataMember, JsonProperty(PropertyName = "is_translator")]
+        public bool IsTranslator { get; set; }
 
         /// <summary>
         /// Gets or sets the status.
@@ -146,36 +167,11 @@ namespace Twitterizer
         public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the user receives notifications.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the user receives notifications; otherwise, <c>false</c>.
-        /// </value>
-        [DataMember, JsonProperty(PropertyName = "notifications")]
-        public bool? DoesReceiveNotifications { get; set; }
-
-        /// <summary>
         /// Gets or sets the screenname.
         /// </summary>
         /// <value>The screenname.</value>
         [DataMember, JsonProperty(PropertyName = "screen_name")]
         public string ScreenName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the authenticated user is following this user.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the authenticated user is following this user; otherwise, <c>false</c>.
-        /// </value>
-        [DataMember, JsonProperty(PropertyName = "following")]
-        public bool? IsFollowing { get; set; }
-
-        /// <summary>
-        /// Gets or sets the a value indicating whether the authenticated user is followed by this user.
-        /// </summary>
-        /// <value>The is followed by.</value>
-        [DataMember, JsonProperty(PropertyName = "followed_by")]
-        public bool? IsFollowedBy { get; set; }
 
         /// <summary>
         /// Gets or sets the number of favorites.
@@ -201,6 +197,22 @@ namespace Twitterizer
         /// </value>
         [DataMember, JsonProperty(PropertyName = "geo_enabled")]
         public bool? IsGeoEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the countries the user is withheld from.
+        /// </summary>
+        /// <value>The countries withheld from.</value>
+        /// <remarks>See also: https://dev.twitter.com/blog/new-withheld-content-fields-api-responses </remarks>
+        [DataMember, JsonProperty(PropertyName = "withheld_in_countries")]
+        public string CountriesWithheld { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether the content being withheld is the "status" or a "user."
+        /// </summary>
+        /// <value>The withheld scope.</value>
+        /// <remarks>See also: https://dev.twitter.com/blog/new-withheld-content-fields-api-responses </remarks>
+        [DataMember, JsonProperty(PropertyName = "withheld_scope")]
+        public string WithheldScope { get; set; }
 
         /// <summary>
         /// Gets or sets the time zone offset.
@@ -299,6 +311,21 @@ namespace Twitterizer
         public string ProfileBackgroundImageLocation { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the user wants their uploaded background image to be used.
+        /// </summary>
+        /// <value><c>true</c> if the user wants their uploaded background image to be used; otherwise, <c>false</c>.</value>
+        [DataMember, JsonProperty(PropertyName = "profile_use_background_image")]
+        public bool UseProfileBackgroundImage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTPS-based URL pointing to the standard web representation of the user's uploaded profile banner.
+        /// </summary>
+        /// <remarks>By adding a final path element of the URL, you can obtain different image sizes optimized for specific displays. See also: https://dev.twitter.com/docs/user-profile-images-and-banners </remarks>
+        /// <value>The profile banner location.</value>
+        [DataMember, JsonProperty(PropertyName = "profile_banner_url")]
+        public string ProfileBannerLocation { get; set; }
+
+        /// <summary>
         /// Gets or sets the color of the profile text.
         /// </summary>
         /// <value>The color of the profile text.</value>
@@ -352,6 +379,28 @@ namespace Twitterizer
             get
             {
                 return ConversionUtility.FromTwitterString(this.ProfileSidebarBorderColorString);
+            }
+        }
+#endif
+
+        /// <summary>
+        /// Gets or sets the profile sidebar fill color string.
+        /// </summary>
+        /// <value>The profile sidebar fill color string.</value>
+        [DataMember, JsonProperty(PropertyName = "profile_sidebar_fill_color")]
+        public string ProfileSidebarFillColorString { get; set; }
+
+#if !SILVERLIGHT
+        /// <summary>
+        /// Gets the color of the profile sidebar fill.
+        /// </summary>
+        /// <value>The color of the profile sidebar fill.</value>
+        [DataMember]
+        public Color ProfileSidebarFillColor
+        {
+            get
+            {
+                return ConversionUtility.FromTwitterString(this.ProfileSidebarFillColorString);
             }
         }
 #endif

@@ -34,8 +34,6 @@
 
 namespace Twitterizer
 {
-    using System;
-
     /// <summary>
     /// The Twitter Search Class
     /// </summary>

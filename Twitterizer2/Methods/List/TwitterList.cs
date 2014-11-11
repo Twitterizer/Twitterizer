@@ -199,7 +199,7 @@ namespace Twitterizer
             return New(tokens, name, isPublic, description, null);
         }
 
-         /// <summary>
+        /// <summary>
         /// Updates the specified list.
         /// </summary>
         /// <param name="tokens">The oauth tokens.</param>
@@ -329,7 +329,7 @@ namespace Twitterizer
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The screenname.</param>
+        /// <param name="screenname">The screenname.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
@@ -344,7 +344,7 @@ namespace Twitterizer
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The screenname.</param>
+        /// <param name="screenname">The screenname.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>
@@ -357,7 +357,7 @@ namespace Twitterizer
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The userid.</param>
+        /// <param name="userid">The userid.</param>
         /// <param name="options">The options.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
@@ -372,7 +372,7 @@ namespace Twitterizer
         /// List the lists the specified user has been added to.
         /// </summary>
         /// <param name="tokens">The tokens.</param>
-        /// <param name="username">The userid.</param>
+        /// <param name="userid">The userid.</param>
         /// <returns>
         /// A <see cref="TwitterListCollection"/> instance.
         /// </returns>

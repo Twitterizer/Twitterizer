@@ -84,7 +84,7 @@ namespace Twitterizer.Streaming
         /// <value>
         /// The proxy.
         /// </value>
-        public WebProxy Proxy { get; set; }
+        public System.Net.WebProxy Proxy { get; set; }
 #endif
     }
 }

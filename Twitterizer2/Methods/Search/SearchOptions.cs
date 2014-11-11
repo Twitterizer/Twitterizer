@@ -74,7 +74,7 @@ namespace Twitterizer
         /// </summary>
         public SearchOptions()
         {
-            this.APIBaseAddress = "http://search.twitter.com/";
+            UseSSL = true;
         }
 
         /// <summary>
@@ -99,19 +99,7 @@ namespace Twitterizer
         /// Gets or sets the number per page.
         /// </summary>
         /// <value>The number per page.</value>
-        public int NumberPerPage { get; set; }
-
-        /// <summary>
-        /// Gets or sets the page number.
-        /// </summary>
-        /// <value>The page number.</value>
-        public int PageNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets the since date.
-        /// </summary>
-        /// <value>The since date.</value>
-        public DateTime SinceDate { get; set; }
+        public int Count { get; set; }
 
         /// <summary>
         /// Gets or sets the since id.
@@ -127,14 +115,6 @@ namespace Twitterizer
         public string GeoCode { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to prefix the user name to the tweet.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> to prefix the user name to the tweet; otherwise, <c>false</c>.
-        /// </value>
-        public bool PrefixUsername { get; set; }
-
-        /// <summary>
         /// Gets or sets the until date.
         /// </summary>
         /// <value>The until date.</value>
@@ -145,12 +125,6 @@ namespace Twitterizer
         /// </summary>
         /// <value>The type of the result.</value>
         public SearchOptionsResultType ResultType { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether to use Twitter.com user ids in the result.
-        /// </summary>
-        /// <value>The type of the result.</value>
-        public bool WithTwitterUserID { get; set; }
 
         /// <summary>
         /// Gets or sets whether to include some entities in the result.

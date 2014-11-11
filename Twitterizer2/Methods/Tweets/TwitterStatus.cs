@@ -119,7 +119,48 @@ namespace Twitterizer
         /// </value>
         [DataMember, JsonProperty(PropertyName = "favorited")]
         public bool? IsFavorited { get; set; }
+        
+         /// <summary>
+        /// Gets the favorite count string.
+        /// </summary>
+        /// <value>
+        /// The Number of favorites.
+        /// </value>
+        [DataMember, JsonProperty(PropertyName = "favorite_count")]
+        public string FavoriteCountString { get; set; }
 
+        /// <summary>
+        /// Gets the Favorite count.
+        /// </summary>
+        /// <value>
+        /// The Number of favorites.
+        /// </value>
+        [DataMember]
+        public int? FavoriteCount
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.FavoriteCountString)) return null;
+
+                int parsedResult;
+
+                if (
+                    this.FavoriteCountString.EndsWith("+") &&
+                    !int.TryParse(this.FavoriteCountString.Substring(0, this.FavoriteCountString.Length - 1), out parsedResult)
+                    )
+                {
+                    return null;
+                }
+
+                if (!int.TryParse(this.FavoriteCountString, out parsedResult))
+                {
+                    return null;
+                }
+
+                return parsedResult;
+            }
+        }
+        
         /// <summary>
         /// Gets or sets the text of the status.
         /// </summary>
@@ -251,7 +292,7 @@ namespace Twitterizer
                     TwitterHashTagEntity tagEntity = (TwitterHashTagEntity)entity;
 
                     linkedText = string.Format(
-                        "{0}<a href=\"http://twitter.com/search?q=%23{1}\">{1}</a>{2}",
+                        "{0}<a href=\"https://twitter.com/search?q=%23{1}\">{1}</a>{2}",
                         linkedText.Substring(0, entity.StartIndex),
                         tagEntity.Text,
                         linkedText.Substring(entity.EndIndex));
@@ -273,7 +314,7 @@ namespace Twitterizer
                     TwitterMentionEntity mentionEntity = (TwitterMentionEntity)entity;
 
                     linkedText = string.Format(
-                        "{0}<a href=\"http://twitter.com/{1}\">@{1}</a>{2}",
+                        "{0}<a href=\"https://twitter.com/{1}\">@{1}</a>{2}",
                         linkedText.Substring(0, entity.StartIndex),
                         mentionEntity.ScreenName,
                         linkedText.Substring(entity.EndIndex));

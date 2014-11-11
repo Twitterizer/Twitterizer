@@ -52,7 +52,7 @@ namespace Twitterizer.Commands
         /// <param name="tokens">The tokens.</param>
         /// <param name="options">The options.</param>
         public ListFavoritesCommand(OAuthTokens tokens, ListFavoritesOptions options)
-            : base(HTTPVerb.GET, "favorites.json", tokens, options)
+            : base(HTTPVerb.GET, "favorites/list.json", tokens, options)
         {
             if (tokens == null && (options == null || string.IsNullOrEmpty(options.UserNameOrId)))
             {
