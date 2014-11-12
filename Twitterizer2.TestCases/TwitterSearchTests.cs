@@ -12,7 +12,7 @@
         public static void Search()
         {
             SearchOptions options = new SearchOptions();
-            options.NumberPerPage = 19;
+            options.Count = 19;
 
             TwitterResponse<TwitterSearchResultCollection> searchResponse = TwitterSearch.Search("twitter", options);
 
@@ -29,8 +29,7 @@
             Assert.Greater(request.ResponseObject.MaxId, 0);
             Assert.Greater(request.ResponseObject.CompletedIn, 0);
             Assert.IsNotNullOrEmpty(request.ResponseObject.MaxIdStr);
-            Assert.IsNotNullOrEmpty(request.ResponseObject.NextPage);
-            Assert.Greater(request.ResponseObject.Page, 0);
+            Assert.IsNotNullOrEmpty(request.ResponseObject.NextResults);
             Assert.AreEqual("twitter", request.ResponseObject.Query);
             Assert.IsNotNullOrEmpty(request.ResponseObject.RefreshUrl);
         }

@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.TestCases", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Streaming", "Twitterizer2.Streaming\Twitterizer2.Streaming.csproj", "{AFDC57ED-C013-4581-9D06-54D8A42D696D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer.OAuth", "Twitterizer.OAuth\Twitterizer.OAuth.csproj", "{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Async", "Twitterizer2.Async\Twitterizer2.Async.csproj", "{566E5F16-088A-4AB5-967A-A05BA636AF75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Addon Assemblies", "Addon Assemblies", "{5AE22138-EA40-48EF-AC38-6370D7F1F9E1}"
@@ -88,19 +86,6 @@ Global
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D}.Release|x86-Only.ActiveCfg = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D35A1CEB-096B-4A2C-9F58-04ADBA31BCE6}.Release|x86-Only.ActiveCfg = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.CCNET|Any CPU.Build.0 = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.CCNET|x86-Only.ActiveCfg = Release|Any CPU

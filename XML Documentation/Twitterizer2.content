@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Topics defaultTopic="10603e84-bf3e-400a-a04c-bffc15a0a560" splitTOCTopic="15ff9b6b-e665-44c5-bbb8-62c2e7e14973">
-  <Topic id="10603e84-bf3e-400a-a04c-bffc15a0a560" visible="True" title="Welcome" tocTitle="Welcome" />
-  <Topic id="008da98c-7349-46d6-b09e-af9f8906eb47" visible="True" title="How Do I?" />
-  <Topic id="6d32fcd8-2036-42bf-a261-8e91ae45e8d3" visible="True" />
-  <Topic id="15ff9b6b-e665-44c5-bbb8-62c2e7e14973" visible="True" />
-</Topics>
