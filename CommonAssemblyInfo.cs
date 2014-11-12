@@ -55,9 +55,7 @@ using System.Security;
 [assembly: AssemblyFileVersion("2.4.2.0")]
 [assembly: AssemblyInformationalVersion("2.4.2")]
 
-#if !SILVERLIGHT
 [assembly: AllowPartiallyTrustedCallers]
-#endif
 
 [assembly: CLSCompliant(true)]
 

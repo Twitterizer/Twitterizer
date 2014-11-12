@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{09A4B653-29C4-467A-A1FE-BA74C0D70978}"
 	ProjectSection(SolutionItems) = preProject
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
@@ -8,16 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 		GettingStarted.txt = GettingStarted.txt
 		NugetPackage.bat = NugetPackage.bat
 		NugetPublish.bat = NugetPublish.bat
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0069E24B-470C-43E4-A6D0-536D3A6A1E6F}"
-	ProjectSection(SolutionItems) = preProject
-		XML Documentation\Desktop Authorization.aml = XML Documentation\Desktop Authorization.aml
-		XML Documentation\OAuth.aml = XML Documentation\OAuth.aml
-		XML Documentation\Troubleshooting.aml = XML Documentation\Troubleshooting.aml
-		XML Documentation\Twitterizer2.content = XML Documentation\Twitterizer2.content
-		XML Documentation\Web Authorization.aml = XML Documentation\Web Authorization.aml
-		XML Documentation\WelcomeTopic.aml = XML Documentation\WelcomeTopic.aml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2", "Twitterizer2\Twitterizer2.csproj", "{2FDC3492-6B9E-4771-9755-7892C9CB1E96}"
@@ -31,12 +23,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Async", "Twitterizer2.Async\Twitterizer2.Async.csproj", "{566E5F16-088A-4AB5-967A-A05BA636AF75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Addon Assemblies", "Addon Assemblies", "{5AE22138-EA40-48EF-AC38-6370D7F1F9E1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Silverlight", "Twitterizer2.Silverlight\Twitterizer2.Silverlight.csproj", "{73DA9258-F437-4948-A15E-F775B72A4923}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Streaming.Silverlight", "Twitterizer2.Streaming.Silverlight\Twitterizer2.Streaming.Silverlight.csproj", "{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitterizer2.Async.Silverlight", "Twitterizer2.Async.Silverlight\Twitterizer2.Async.Silverlight.csproj", "{764B161E-BC98-4C48-A2D7-89AF92D467B9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7CD7E564-2FF7-4C7A-BC49-BB06A59BD771}"
 	ProjectSection(SolutionItems) = preProject
@@ -130,59 +116,12 @@ Global
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{566E5F16-088A-4AB5-967A-A05BA636AF75}.Release|x86-Only.ActiveCfg = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|Any CPU.Build.0 = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73DA9258-F437-4948-A15E-F775B72A4923}.Release|x86-Only.ActiveCfg = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.CCNET|Any CPU.Build.0 = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91}.Release|x86-Only.ActiveCfg = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.CCNET|Any CPU.ActiveCfg = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.CCNET|Any CPU.Build.0 = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.CCNET|x86-Only.ActiveCfg = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Mono-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Mono-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Mono-Debug|x86-Only.ActiveCfg = Debug|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Mono-Release|Any CPU.ActiveCfg = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Mono-Release|Any CPU.Build.0 = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Mono-Release|x86-Only.ActiveCfg = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9}.Release|x86-Only.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{566E5F16-088A-4AB5-967A-A05BA636AF75} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
 		{AFDC57ED-C013-4581-9D06-54D8A42D696D} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
-		{1709C1AA-00A0-434A-A53C-DF2BA3BCCA91} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
-		{764B161E-BC98-4C48-A2D7-89AF92D467B9} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
+		{566E5F16-088A-4AB5-967A-A05BA636AF75} = {5AE22138-EA40-48EF-AC38-6370D7F1F9E1}
 	EndGlobalSection
 EndGlobal

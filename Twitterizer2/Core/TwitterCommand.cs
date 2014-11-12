@@ -39,9 +39,7 @@ namespace Twitterizer.Core
     using System.Net;
     using System.Linq;
     using System.Text;
-#if !SILVERLIGHT
     using System.Web;
-#endif
     using Twitterizer;
     using Newtonsoft.Json;
 
@@ -49,9 +47,7 @@ namespace Twitterizer.Core
     /// The base command class.
     /// </summary>
     /// <typeparam name="T">The business object the command should return.</typeparam>
-#if !SILVERLIGHT
     [Serializable]
-#endif
     internal abstract class TwitterCommand<T> : ICommand<T>
         where T : ITwitterObject
     {
@@ -179,10 +175,8 @@ namespace Twitterizer.Core
             {
 				WebRequestBuilder requestBuilder = new WebRequestBuilder(this.Uri, this.Verb, this.Tokens) { Multipart = this.Multipart };
 
-#if !SILVERLIGHT
                 if (this.OptionalProperties != null)
                     requestBuilder.Proxy = this.OptionalProperties.Proxy;
-#endif
 
                 foreach (var item in queryParameters)
                 {
@@ -202,17 +196,11 @@ namespace Twitterizer.Core
 
                 twitterResponse.RequestUrl = requestBuilder.RequestUri.AbsoluteUri;
 
-#if !SILVERLIGHT
                 // Parse the rate limiting HTTP Headers
                 rateLimiting = ParseRateLimitHeaders(response.Headers);
 
                 // Parse Access Level
                 accessLevel = ParseAccessLevel(response.Headers);
-#else
-                rateLimiting = null;
-                accessLevel = AccessLevel.Unknown;
-
-#endif
 
                 // Lookup the status code and set the status accordingly
                 SetStatusCode(twitterResponse, response.StatusCode, rateLimiting);
@@ -224,10 +212,8 @@ namespace Twitterizer.Core
             {
                 if (new[]
                         {
-#if !SILVERLIGHT
                             WebExceptionStatus.Timeout, 
                             WebExceptionStatus.ConnectionClosed,
-#endif
                             WebExceptionStatus.ConnectFailure
                         }.Contains(wex.Status))
                 {
@@ -261,15 +247,10 @@ namespace Twitterizer.Core
                     }
                 }
 
-#if !SILVERLIGHT
                 rateLimiting = ParseRateLimitHeaders(exceptionResponse.Headers);
 
                 // Parse Access Level
                 accessLevel = ParseAccessLevel(exceptionResponse.Headers);
-#else
-                rateLimiting = null;
-                accessLevel = AccessLevel.Unknown;
-#endif
 
                 // Try to read the error message, if there is one.
                 try

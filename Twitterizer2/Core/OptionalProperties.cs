@@ -39,9 +39,7 @@ namespace Twitterizer
     using System.Net;
 
     /// <include file='OptionalProperties.xml' path='OptionalProperties/OptionalProperties/*'/>
-#if !SILVERLIGHT
     [Serializable]
-#endif
     public class OptionalProperties
     {
         /// <summary>
@@ -65,9 +63,7 @@ namespace Twitterizer
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="APIBaseAddress"]/*'/>
         public string APIBaseAddress { get; set; }
 
-#if !SILVERLIGHT
         /// <include file='OptionalProperties.xml' path='OptionalProperties/Property[@name="Proxy"]/*'/>
         public WebProxy Proxy { get; set; }
-#endif
     }
 }
