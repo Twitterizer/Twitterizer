@@ -107,12 +107,12 @@ namespace Twitterizer
                 command.RequestParameters.Add("include_rts", "true");
 
             if (options.MaxStatusId > 0)
-                command.RequestParameters.Add("max_id", options.MaxStatusId.ToString());
+                command.RequestParameters.Add("max_id", options.MaxStatusId.ToString("#"));
 
             command.RequestParameters.Add("page", options.Page > 0 ? options.Page.ToString() : "1");
 
             if (options.SinceStatusId > 0)
-                command.RequestParameters.Add("since_id", options.SinceStatusId.ToString());
+                command.RequestParameters.Add("since_id", options.SinceStatusId.ToString("#"));
 
             if (options.SkipUser)
                 command.RequestParameters.Add("trim_user", "true");

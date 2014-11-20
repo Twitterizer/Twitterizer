@@ -92,7 +92,7 @@ namespace Twitterizer.Commands
         /// </summary>
         public override void Init()
         {
-            this.RequestParameters.Add("id", this.UserId.ToString(CultureInfo.InvariantCulture.NumberFormat));
+            this.RequestParameters.Add("id", this.UserId.ToString("#"));
         }
     }
 }

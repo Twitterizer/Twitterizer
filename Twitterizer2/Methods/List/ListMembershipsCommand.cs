@@ -111,7 +111,7 @@ namespace Twitterizer.Commands
                 this.RequestParameters.Add("screen_name", screenname);
 
             if (userid > 0)
-                this.RequestParameters.Add("user_id", userid.ToString());
+                this.RequestParameters.Add("user_id", userid.ToString("#"));
 
             ListMembershipsOptions options = this.OptionalProperties as ListMembershipsOptions;
             if (options != null)

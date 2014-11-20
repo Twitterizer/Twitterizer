@@ -76,7 +76,7 @@ namespace Twitterizer.Commands
         {
             if (this.UserId > 0)
             {
-                this.RequestParameters.Add("user_id", this.UserId.ToString(CultureInfo.InvariantCulture));
+                this.RequestParameters.Add("user_id", this.UserId.ToString("#"));
             }
             else if (!string.IsNullOrEmpty(this.ScreenName))
             {
