@@ -84,7 +84,6 @@ namespace Twitterizer.Commands
 				throw new ArgumentException("file");
 			}
 
-            this.OptionalProperties.APIBaseAddress = "https://upload.twitter.com/1/";
             this.SetCommandUri("statuses/update_with_media.json");
 
 			this.Text = text;
