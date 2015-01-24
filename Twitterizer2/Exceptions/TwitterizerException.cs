@@ -38,6 +38,9 @@ namespace Twitterizer
     using System.Linq;
     using System.Net;
     using System.Text;
+#if !SILVERLIGHT
+    using System.Runtime.Serialization;
+#endif
     using Core;
 
     /// <summary>
@@ -107,6 +110,18 @@ namespace Twitterizer
 #endif
             }
         }
+
+#if !SILVERLIGHT
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterizerException"/> class.
+        /// </summary>
+        /// <param name="info">The serialization info.</param>
+        /// <param name="context">The streaming context.</param>
+        protected TwitterizerException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
         #endregion
 
         /// <summary>
