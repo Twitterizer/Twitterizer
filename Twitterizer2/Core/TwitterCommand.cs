@@ -274,7 +274,7 @@ namespace Twitterizer.Core
                 // Try to read the error message, if there is one.
                 try
                 {
-                    TwitterErrorDetails errorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(responseData);
+                    var errorDetails = SerializationHelper<TwitterErrorDetails>.Deserialize(twitterResponse.Content);
                     twitterResponse.ErrorMessage = errorDetails.ErrorMessage;
                 }
                 catch (Exception)
