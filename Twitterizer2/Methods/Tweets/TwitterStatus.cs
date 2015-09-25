@@ -263,6 +263,27 @@ namespace Twitterizer
         /// <value><c>true</c> if retweeted; otherwise, <c>false</c>.</value>
         [DataMember, JsonProperty(PropertyName = "retweeted")]
         public bool Retweeted { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quoted tweet.
+        /// </summary>
+        /// <value>The quoted tweet.</value>
+        [DataMember, JsonProperty(PropertyName = "quoted_status")]
+        public TwitterStatus QuotedStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quoted tweet id.
+        /// </summary>
+        /// <value>The status id.</value>
+        [DataMember, JsonProperty(PropertyName = "quoted_status_id")]
+        public decimal? QuotedStatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quoted tweet string id.
+        /// </summary>
+        /// <value>The string id.</value>
+        [DataMember, JsonProperty(PropertyName = "quoted_status_id_str")]
+        public string QuotedStatusStringId { get; set; }
         #endregion
 
         /// <summary>
