@@ -418,8 +418,9 @@ namespace Twitterizer.Core
         /// <returns>An enum of the current access level of the OAuth Token being used.</returns>
         private AccessLevel ParseAccessLevel(WebHeaderCollection responseHeaders)
         {
-            if (responseHeaders.AllKeys.Contains("X-Access-Level"))
-            {
+            if (responseHeaders.AllKeys.Any(
+                x => x.Equals("X-Access-Level",
+                              StringComparison.InvariantCultureIgnoreCase))) {
                 switch (responseHeaders["X-Access-Level"].ToLower())
                 {
                     case "read":
