@@ -1,5 +1,6 @@
 Twitterizer
-==========
+===========
+
 Example
 -------
 	var response = TwitterStatus.Update(credentials, "Twitterizer is fantastic!");
@@ -20,7 +21,7 @@ History
 -------
 Twitterizer started in May of 2008 as an excuse for me to explore design patterns, have a little fun coding, and stretch out my architectural legs. I never set out to create an open source library, much less a popular one (in the last 30 days of its life, Twitterizer.net pulled 8,560 unique visitors and nearly 52k views). 
 
-In 2009 the [https://github.com/meebey/smuxi Smuxi] project made use of the Twitterizer library to support Twitter as a built-in feature in their popular IRC client. As of 2013 Twitterizer is part of the Smuxi project umbrella and thus actively maintained. In August 2012 Smuxi ported Twitterizer to Newtonson.Json 4.5.8, in August 2013 Twitterizer was ported to the Twitter v1.1 API, in November 2013 proxy support was added to the Streaming API, and in Janary 2014 Twitterizer was ported to enforced HTTPS.
+In 2009 the [Smuxi](https://github.com/meebey/smuxi) project made use of the Twitterizer library to support Twitter as a built-in feature in their popular IRC client. As of 2013 Twitterizer is part of the Smuxi project umbrella and thus actively maintained. In August 2012 Smuxi ported Twitterizer to Newtonson.Json 4.5.8, in August 2013 Twitterizer was ported to the Twitter v1.1 API, in November 2013 proxy support was added to the Streaming API, and in Janary 2014 Twitterizer was ported to enforced HTTPS.
 
 Plans for the future
 ---------
