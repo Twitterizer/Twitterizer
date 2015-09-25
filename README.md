@@ -48,6 +48,6 @@ Contribute
 6. Watch for comments or questions about your changes
 
 ### Branch Naming
-From now on, all work will be performed in feature or bug branches. The will follow this pattern: <issue_type>/<issue_number>-<short-description>.
+From now on, all work will be performed in feature or bug branches. The will follow this pattern: \<issue_type>/\<issue_number>-\<short-description>.
 
 For example, say I was working on issue #63, the branch would be called `bug/63-fix-unit-tests`
