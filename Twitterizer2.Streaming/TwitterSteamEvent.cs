@@ -102,6 +102,12 @@ namespace Twitterizer.Streaming
         /// The source users profile was updated.
         /// </summary>
         [EnumMemberAttribute(Value = "access_revoked")]
-        AccessRevoked
+        AccessRevoked,
+
+        /// <summary>
+        /// The source users tweet was quoted.
+        /// </summary>
+        [EnumMemberAttribute(Value = "quoted_tweet")]
+        QuotedTweet
     }
 }
